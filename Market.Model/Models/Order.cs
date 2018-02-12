@@ -25,5 +25,7 @@ namespace Market.Model.Models
         public virtual Offer Offer { get; set; }
         public virtual string UserProfileId { get; set; }
         public virtual UserProfile UserProfile { get; set; }
+
+        public DateTime? DateCreated { get; set; } = DateTime.Now;
     }
 }

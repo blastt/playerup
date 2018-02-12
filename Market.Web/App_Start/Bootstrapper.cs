@@ -27,7 +27,8 @@ namespace Market.Web.App_Start
             builder.RegisterType<UnitOfWork>().As<IUnitOfWork>().InstancePerRequest();
             builder.RegisterType<DbFactory>().As<IDbFactory>().InstancePerRequest();
 
-            // Repositories
+            #region Repositories
+
             builder.RegisterAssemblyTypes(typeof(OfferRepository).Assembly)
                 .Where(t => t.Name.EndsWith("Repository"))
                 .AsImplementedInterfaces().InstancePerRequest();
@@ -43,7 +44,11 @@ namespace Market.Web.App_Start
             builder.RegisterAssemblyTypes(typeof(UserProfileRepository).Assembly)
                 .Where(t => t.Name.EndsWith("Repository"))
                 .AsImplementedInterfaces().InstancePerRequest();
-            // Services
+
+            #endregion
+
+            #region Services
+
             builder.RegisterAssemblyTypes(typeof(OfferService).Assembly)
                .Where(t => t.Name.EndsWith("Service"))
                .AsImplementedInterfaces().InstancePerRequest();
@@ -59,6 +64,9 @@ namespace Market.Web.App_Start
             builder.RegisterAssemblyTypes(typeof(UserProfileService).Assembly)
                .Where(t => t.Name.EndsWith("Service"))
                .AsImplementedInterfaces().InstancePerRequest();
+
+            #endregion
+
 
             IContainer container = builder.Build();
             DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
