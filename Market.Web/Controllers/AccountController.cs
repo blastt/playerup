@@ -9,13 +9,16 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Market.Web.Models;
-using Marketplace.Data;
+using Market.Model.Models;
+using Market.Service;
 
 namespace Market.Web.Controllers
 {
     [Authorize]
     public class AccountController : Controller
     {
+
+        private readonly IUserProfileService _userProfileService;
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
 
@@ -157,12 +160,23 @@ namespace Market.Web.Controllers
                 if (result.Succeeded)
                 {
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
+
                     // Дополнительные сведения о включении подтверждения учетной записи и сброса пароля см. на странице https://go.microsoft.com/fwlink/?LinkID=320771.
                     // Отправка сообщения электронной почты с этой ссылкой
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Подтверждение учетной записи", "Подтвердите вашу учетную запись, щелкнув <a href=\"" + callbackUrl + "\">здесь</a>");
+                    byte[] imageData = System.IO.File.ReadAllBytes(Server.MapPath("~/Content/Images/noavatar.png"));
+
+                    UserProfile profile = new UserProfile
+                    {
+                        Id = user.Id,
+                        Avatar = imageData
+                    };
+                    _userProfileService.CreateUserProfile(profile);                    
+                    user.UserProfile = profile;
+                    _userProfileService.SaveUserProfile();
+
 
                     return RedirectToAction("Index", "Home");
                 }

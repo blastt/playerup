@@ -12,6 +12,7 @@ using Microsoft.Owin;
 using Microsoft.Owin.Security;
 using Market.Web.Models;
 using Marketplace.Data;
+using Market.Model.Models;
 
 namespace Market.Web
 {

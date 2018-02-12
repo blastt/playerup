@@ -15,7 +15,7 @@ namespace Market.Web.Mappings
             get { return "ViewModelToDomainMappings"; }
         }
 
-        protected ViewModelToDomainMappingProfile()
+        public ViewModelToDomainMappingProfile()
         {
             #region Offer
 
@@ -23,7 +23,8 @@ namespace Market.Web.Mappings
                .ForMember(o => o.Header, map => map.MapFrom(vm => vm.Header))
                .ForMember(o => o.Filter, map => map.MapFrom(vm => vm.Filter))
                .ForMember(o => o.Game, map => map.MapFrom(vm => vm.Game))
-               .ForMember(o => o.UserProfile.Name, map => map.MapFrom(vm => vm.UserName))
+               .ForPath(o => o.UserProfile.Name, map => map.MapFrom(vm => vm.UserName))
+               
                .ForMember(o => o.Price, map => map.MapFrom(vm => vm.Price));
 
             CreateMap<CreateOfferViewModel, Offer>()
@@ -47,11 +48,11 @@ namespace Market.Web.Mappings
                .ForMember(o => o.Discription, map => map.MapFrom(vm => vm.Discription))
                .ForMember(o => o.Filter, map => map.MapFrom(vm => vm.Filter))
                .ForMember(o => o.Game, map => map.MapFrom(vm => vm.Game))
-               .ForMember(o => o.UserProfile.Name, map => map.MapFrom(vm => vm.UserName))
+               .ForPath(o => o.UserProfile.Name, map => map.MapFrom(vm => vm.UserName))
                .ForMember(o => o.Views, map => map.MapFrom(vm => vm.Views))
                .ForMember(o => o.DateCreated, map => map.MapFrom(vm => vm.DateCreated))
                .ForMember(o => o.Price, map => map.MapFrom(vm => vm.Price))
-               .ForMember(o => o.UserProfile.Feedbacks, map => map.MapFrom(vm => vm.Feedbacks));
+               .ForPath(o => o.UserProfile.Feedbacks, map => map.MapFrom(vm => vm.Feedbacks));
 
             #endregion
 
@@ -60,10 +61,10 @@ namespace Market.Web.Mappings
             CreateMap<OrderViewModel, Order>()
                 .ForMember(o => o.IsFeedbacked, map => map.MapFrom(vm => vm.IsFeedbacked))
                .ForMember(o => o.OrderStatus, map => map.MapFrom(vm => vm.OrderStatus))
-               .ForMember(o => o.UserProfile.Name, map => map.MapFrom(vm => vm.OrderUserName))
-               .ForMember(o => o.Offer.Id, map => map.MapFrom(vm => vm.OfferId))
-               .ForMember(o => o.Offer.Header, map => map.MapFrom(vm => vm.OfferName))
-               .ForMember(o => o.Offer.UserProfile.Name, map => map.MapFrom(vm => vm.OfferUserName))
+               .ForPath(o => o.UserProfile.Name, map => map.MapFrom(vm => vm.OrderUserName))
+               .ForPath(o => o.Offer.Id, map => map.MapFrom(vm => vm.OfferId))
+               .ForPath(o => o.Offer.Header, map => map.MapFrom(vm => vm.OfferName))
+               .ForPath(o => o.Offer.UserProfile.Name, map => map.MapFrom(vm => vm.OfferUserName))
                .ForMember(o => o.DateCreated, map => map.MapFrom(vm => vm.DateCreated));
 
             #endregion
@@ -75,8 +76,10 @@ namespace Market.Web.Mappings
                .ForMember(o => o.MessageBody, map => map.MapFrom(vm => vm.MessageBody))
                .ForMember(o => o.ReceiverDeleted, map => map.MapFrom(vm => vm.ReceiverDeleted))
                .ForMember(o => o.SenderDeleted, map => map.MapFrom(vm => vm.SenderDeleted))
-               .ForMember(o => o.UserProfiles.FirstOrDefault().Name, map => map.MapFrom(vm => vm.SenderName))
-               .ForMember(o => o.UserProfiles.LastOrDefault().Name, map => map.MapFrom(vm => vm.ReceiverName))
+               .ReverseMap()
+               .ForPath(o => o.SenderName, map => map.MapFrom(vm => vm.UserProfiles.FirstOrDefault().Name))              
+               .ForPath(o => o.ReceiverName, map => map.MapFrom(vm => vm.UserProfiles.LastOrDefault().Name))
+               .ReverseMap()
                .ForMember(o => o.CreatedDate, map => map.MapFrom(vm => vm.CreatedDate))
                .ForMember(o => o.Subject, map => map.MapFrom(vm => vm.Subject));
 
@@ -87,8 +90,10 @@ namespace Market.Web.Mappings
             CreateMap<DetailsMessageViewModel, Message>()
                .ForMember(o => o.Subject, map => map.MapFrom(vm => vm.Subject))
                .ForMember(o => o.MessageBody, map => map.MapFrom(vm => vm.MessageBody))
-               .ForMember(o => o.UserProfiles.FirstOrDefault().Name, map => map.MapFrom(vm => vm.SenderName))
-               .ForMember(o => o.UserProfiles.LastOrDefault().Name, map => map.MapFrom(vm => vm.ReceiverName))
+               .ReverseMap()
+               .ForPath(o => o.SenderName, map => map.MapFrom(vm => vm.UserProfiles.FirstOrDefault().Name))
+               .ForPath(o => o.ReceiverName, map => map.MapFrom(vm => vm.UserProfiles.LastOrDefault().Name))
+               .ReverseMap()
                .ForMember(o => o.CreatedDate, map => map.MapFrom(vm => vm.CreatedDate));
 
             #endregion

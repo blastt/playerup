@@ -7,6 +7,7 @@ using Microsoft.Owin.Security.Google;
 using Owin;
 using Market.Web.Models;
 using Marketplace.Data;
+using Market.Model.Models;
 
 namespace Market.Web
 {

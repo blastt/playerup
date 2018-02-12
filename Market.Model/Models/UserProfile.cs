@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 
 using System.Linq;
@@ -21,6 +22,7 @@ namespace Market.Model.Models
 
         public string Name { get; set; }
 
+        public virtual ApplicationUser ApplicationUser { get; set; }
         public virtual ICollection<Message> Messages { get; set; } = new List<Message>();
         public virtual ICollection<Offer> Offers { get; set; } = new List<Offer>();
         public virtual ICollection<Order> Orders { get; set; } = new List<Order>();

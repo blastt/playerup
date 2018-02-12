@@ -20,6 +20,6 @@ namespace Market.Model.Models
         public bool SenderDeleted { get; set; }
         public bool ReceiverDeleted { get; set; }
         public DateTime CreatedDate { get; set; }
-        public virtual ICollection<UserProfile> UserProfiles { get; set; } = new List<UserProfile>();
+        public virtual IList<UserProfile> UserProfiles { get; set; } = new List<UserProfile>();
     }
 }

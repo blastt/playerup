@@ -3,6 +3,7 @@ using Autofac.Integration.Mvc;
 using Market.Data.Infrastructure;
 using Market.Data.Repositories;
 using Market.Service;
+using Market.Web.Mappings;
 using Marketplace.Data.Infrastructure;
 using System;
 using System.Collections.Generic;
@@ -18,6 +19,7 @@ namespace Market.Web.App_Start
         public static void Run()
         {
             SetAutofacContainer();
+            AutoMapperConfiguration.Configure();
         }
 
         private static void SetAutofacContainer()
@@ -72,5 +74,4 @@ namespace Market.Web.App_Start
             DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
         }
     }
-}
 }

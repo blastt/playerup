@@ -15,7 +15,7 @@ namespace Market.Web.Mappings
             get { return "DomainToViewModelMappings"; }
         }
 
-        protected DomainToViewModelMappingProfile()
+        public DomainToViewModelMappingProfile()
         {
             CreateMap<Offer, OfferViewModel>();
             CreateMap<Order, OrderViewModel>();

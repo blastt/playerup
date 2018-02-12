@@ -15,7 +15,7 @@ namespace Market.Service
         UserProfile GetUserProfileById(string id);
         UserProfile GetUserProfileByName(string name);
         void CreateUserProfile(UserProfile userProfile);
-        void SaveOrder();
+        void SaveUserProfile();
     }
 
     public class UserProfileService : IUserProfileService
@@ -55,7 +55,7 @@ namespace Market.Service
             userProfilesRepository.Add(userProfile);
         }
 
-        public void SaveOrder()
+        public void SaveUserProfile()
         {
             unitOfWork.Commit();
         }
