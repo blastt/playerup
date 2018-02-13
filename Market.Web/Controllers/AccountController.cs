@@ -22,14 +22,16 @@ namespace Market.Web.Controllers
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
 
-        public AccountController()
+        public AccountController(IUserProfileService userProfileService)
         {
+            _userProfileService = userProfileService;
         }
 
         public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
         {
             UserManager = userManager;
             SignInManager = signInManager;
+            
         }
 
         public ApplicationSignInManager SignInManager
@@ -171,7 +173,8 @@ namespace Market.Web.Controllers
                     UserProfile profile = new UserProfile
                     {
                         Id = user.Id,
-                        Avatar = imageData
+                        Avatar = imageData,
+                        Name = user.UserName
                     };
                     _userProfileService.CreateUserProfile(profile);                    
                     user.UserProfile = profile;

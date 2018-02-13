@@ -44,6 +44,7 @@ namespace Marketplace.Data
             modelBuilder.Configurations.Add(new OrderConfiguration());
             modelBuilder.Configurations.Add(new FeedbackConfiguration());
             modelBuilder.Configurations.Add(new MessageConfiguration());
+            base.OnModelCreating(modelBuilder);
         }
         public virtual DbSet<UserProfile> UserProfiles { get; set; }
         public virtual DbSet<Offer> Offers { get; set; }

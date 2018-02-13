@@ -13,7 +13,7 @@ namespace Market.Data.Configuration
             ToTable("UserProfiles");
             HasMany(u => u.Offers).WithRequired(u => u.UserProfile);
             HasMany(u => u.Orders).WithRequired(u => u.UserProfile);
-            HasRequired(o => o.ApplicationUser).WithOptional(o => o.UserProfile);
+            HasRequired(o => o.ApplicationUser).WithRequiredDependent(o => o.UserProfile);
         }
     }
 }

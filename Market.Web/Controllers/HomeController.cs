@@ -2,6 +2,7 @@
 using Market.Model.Models;
 using Market.Service;
 using Market.Web.ViewModels;
+using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,7 +30,22 @@ namespace Market.Web.Controllers
         public ActionResult Index(CreateOfferViewModel model)
         {
             var offer = Mapper.Map<CreateOfferViewModel, Offer>(model);
+            offer.UserProfileId = User.Identity.GetUserId();
+            _offerService.CreateOffer(offer);
+            _offerService.SaveOffer();
+            return View();
+        }
 
+        [Authorize]
+        public ActionResult Details()
+        {
+            var offer = _offerService.GetOffers().FirstOrDefault();
+            if(offer != null)
+            {
+                var detailsOfferViewModel = Mapper.Map<Offer, DetailsOfferViewModel>(offer);
+
+                return View(detailsOfferViewModel);
+            }
             return View();
         }
 

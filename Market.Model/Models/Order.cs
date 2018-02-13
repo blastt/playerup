@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,7 +17,7 @@ namespace Market.Model.Models
     }
     public class Order
     {
-
+        [Key]
         public int Id { get; set; }
         public Status OrderStatus { get; set; }
         public bool IsFeedbacked { get; set; }
