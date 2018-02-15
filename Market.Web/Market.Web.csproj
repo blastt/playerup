@@ -203,8 +203,11 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\Admin\GameController.cs" />
+    <Compile Include="Controllers\GodController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\OfferController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -217,12 +220,14 @@
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\Feedback\FeedbackViewModel.cs" />
     <Compile Include="ViewModels\Feedback\NewFeedbackViewModel.cs" />
+    <Compile Include="ViewModels\Filter\FilterViewModel.cs" />
     <Compile Include="ViewModels\Message\DetailsMessageViewModel.cs" />
     <Compile Include="ViewModels\Message\MessageViewModel.cs" />
     <Compile Include="ViewModels\Message\NewMessageViewModel.cs" />
     <Compile Include="ViewModels\Offer\CreateOfferViewModel.cs" />
     <Compile Include="ViewModels\Offer\DetailsOfferViewModel.cs" />
     <Compile Include="ViewModels\Offer\EditOfferViewModel.cs" />
+    <Compile Include="ViewModels\Offer\OfferListViewModel.cs" />
     <Compile Include="ViewModels\Offer\OfferViewModel.cs" />
     <Compile Include="ViewModels\Order\DetailsOrderViewModel.cs" />
     <Compile Include="ViewModels\Order\OrderViewModel.cs" />
@@ -334,6 +339,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Game\" />
+    <Folder Include="Views\God\" />
+    <Folder Include="Views\Offer\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

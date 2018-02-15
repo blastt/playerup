@@ -1,0 +1,25 @@
+﻿@*@model string
+
+@{
+
+    var ranks = Enum.GetNames(typeof(Trader.DAL.Entities.RanksCsgo));
+    var rankList = new List<SelectListItem>();
+    foreach (var rank in ranks)
+    {
+        rankList.Add(new SelectListItem() { Text =  rank});
+    }
+}
+@Html.DropDownList("Rank", rankList, new { @class = "form-control", id = "rank" })*@
+
+@model string
+@{
+    var ranks = (IEnumerable<SelectListItem>)ViewData["ranks"];
+    foreach (var rank in ranks)
+    {
+        if (rank.Value == Model)
+        {
+            rank.Selected = true;
+        }
+    }
+}
+@Html.DropDownList("Rank", ranks, new { @class = "form-control", id = "rank"})

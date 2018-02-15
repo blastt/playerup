@@ -1,0 +1,35 @@
+﻿@model IEnumerable<string>
+
+
+@foreach (var link in Model)
+{
+    @*@Html.RouteLink(link, new
+{
+    controller = "Offer",
+    action = "List",
+    category = link,
+    orderByList = ViewBag.OrderByList,
+    searchString = ViewBag.SearchString,
+    page = 1
+}
+    , new
+    {
+        @class = "btn btn-block btn-default btn-md"
+                + (link == ViewBag.SelectedCategory ? " btn-primary" : "")
+    })*@
+    @Ajax.ActionLink(link, "OfferList", "Offer", new
+{
+    game = link,
+    orderByList = ViewBag.OrderByList,
+    searchString = ViewBag.SearchString,
+    page = 1
+}
+              , new AjaxOptions { UpdateTargetId = "list" }
+              , new
+              {
+                  @class = "btn btn-block btn-default btn-md"
+                          + (link == ViewBag.SelectedCategory ? " btn-primary" : "")
+              });
+}
+
+

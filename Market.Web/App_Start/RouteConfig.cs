@@ -11,12 +11,57 @@ namespace Market.Web
     {
         public static void RegisterRoutes(RouteCollection routes)
         {
+            routes.LowercaseUrls = true;
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapRoute(
+                name: null,
+                url: "{prof}",
+                defaults: new { controller = "Profile", action = "Info" }
+            );
+
+
+            //routes.MapRoute(
+            //   name: "ListRoute",
+            //   url: "List/{searchString}/Page{page}",
+            //   defaults: new { controller = "Offer", action = "List", category = (string)null }
+            //);
+
+
+
+
+
+
+            //routes.MapRoute(
+            //    name: "ListRoute2",
+            //    url: "{category}/{searchString}/Page{page}",
+            //    defaults: new { controller = "Offer", action = "List" }
+            //);
+            //routes.MapRoute(
+            //    name: null,
+            //    url: "{category}/Page{page}",
+            //    defaults: new { controller = "Offer", action = "List" }
+            //);
+            routes.MapRoute(
+                name: null,
+                url: "Buy/{game}",
+                defaults: new { controller = "Offer", action = "List" }
+            );
+
+
+
+
+
+
+            routes.MapRoute(
                 name: "Default",
-                url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
+                url: "{controller}/{action}/{game}",
+                defaults: new { controller = "Offer", action = "List", game = "csgo" }
+            );
+            routes.MapRoute(
+                name: null,
+                url: "myaccount/{controller}/{action}",
+                defaults: new { controller = "Offer", action = "All" }
             );
         }
     }

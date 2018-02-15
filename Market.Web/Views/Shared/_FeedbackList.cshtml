@@ -1,0 +1,75 @@
+﻿@using System.Globalization
+@using Microsoft.AspNet.Identity
+@using Trader.WEB.Models
+@using Trader.DAL.Entities
+@model IEnumerable<Feedback>
+
+@*<table class="table table-striped">
+        @foreach (var feedback in Model)
+        {
+            <tr>
+                @if (feedback.Grade == Emotions.Good)
+                {
+                    <td><img src="~/Content/Images/smile-pos.png" style="width: 25px; height: 25px; vertical-align:bottom"/></td>
+                }
+                else
+                {
+                    <td><img src="~/Content/Images/smile-neg.png" style="width: 25px; height: 25px" /></td>
+                }
+                <td align="center">
+                    <div>
+                        @Html.ActionLink(feedback.WhoLeftName, "Info", "Profile", new {prof = feedback.WhoLeftName}, null)
+                    </div>
+                </td>
+                <td align="center">@feedback.Comment</td>
+                <td align="center">@feedback.Date.ToShortDateString()</td>
+            </tr>
+        }
+    </table>*@
+
+
+@foreach (var feedback in Model)
+{
+
+
+    <div class="col-lg-5">
+        <div class="feed-item">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="feed-item-header">@feedback.OfferHeader</div>
+                    <div class="feed-item-comment">@feedback.Comment</div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-sm-12">
+                    <hr class="feed-item-line" />
+                    <div class="feed-item-info">
+                        @if (feedback.Grade == Emotions.Good)
+                        {
+                            <i class="positive-feedback"></i>
+                        }
+                        else
+                        {
+                            <i class="negative-feedback"></i>
+                        }
+
+                        <div class="feed-item-date">@Html.Date(feedback.Date)</div>
+                        <div class="feed-item-leftby">Оставлен пользователем: @Html.ActionLink(feedback.SenderName, "Info", "Profile", new { prof = feedback.SenderName }, null)</div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+    <div class="col-lg-7">
+
+    </div>
+
+
+}
+
+
+
+

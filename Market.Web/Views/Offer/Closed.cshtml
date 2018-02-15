@@ -1,0 +1,41 @@
+﻿@model Trader.WEB.Models.OfferListViewModel
+@{
+    ViewBag.Title = "All";
+
+}
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="page-info">
+                <h2>Предложения</h2>
+                <p class="lead">Здесь отображается информация по предложениям</p>
+            </div>
+            @{Html.RenderAction("AccountMenu", "Account"); }
+            <div class="account-offer-container">
+                @{Html.RenderPartial("_AccountOffersMenu"); }
+                <table class="table table-hover">
+                    <tr>
+                        <th>Предложение</th>
+                        <th>Сообщение</th>
+                        <th>Отправитель</th>
+                        <th>Дата</th>
+                    </tr>
+                    @foreach (var offer in Model.Offers)
+            {
+                <tr>
+                    <td>@offer.Game</td>
+                    <td>@offer.Header</td>
+                    <td>@offer.Discription</td>
+                    <td>@offer.Price</td>
+                </tr>
+    }
+
+                </table>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+

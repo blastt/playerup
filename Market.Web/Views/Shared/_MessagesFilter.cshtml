@@ -1,0 +1,11 @@
+﻿<div class="col-lg-12">
+    @Html.TextBox("searchString","",new { @class= "form-control form-control-sm" })
+    <input type="submit" value="поиск" />
+</div>
+<div class="col-lg-12">
+    <ul>
+        <li>@Html.ActionLink("все", "action", "controller")</li>
+        <li>@Html.ActionLink("прочитанные", "action", "controller")</li>
+        <li>@Html.ActionLink("непрочитанные", "action", "controller")</li>
+    </ul>
+</div>

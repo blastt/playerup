@@ -54,6 +54,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration\FeedbackConfiguration.cs" />
+    <Compile Include="Configuration\FilterConfiguration.cs" />
+    <Compile Include="Configuration\FilterItemConfiguration.cs" />
+    <Compile Include="Configuration\GameConfiguration.cs" />
     <Compile Include="Configuration\MessageConfiguration.cs" />
     <Compile Include="Configuration\OfferConfiguration.cs" />
     <Compile Include="Configuration\OrderConfiguration.cs" />
@@ -68,6 +71,9 @@
     <Compile Include="MarketEntities.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\FeedbackRepository.cs" />
+    <Compile Include="Repositories\FilterItemRepository.cs" />
+    <Compile Include="Repositories\FilterRepository.cs" />
+    <Compile Include="Repositories\GameRepository.cs" />
     <Compile Include="Repositories\MessageRepository.cs" />
     <Compile Include="Repositories\OfferRepository.cs" />
     <Compile Include="Repositories\OrderRepository.cs" />

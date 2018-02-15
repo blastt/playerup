@@ -1,0 +1,109 @@
+﻿@using System.Globalization
+@using Microsoft.AspNet.Identity
+@model Trader.DAL.Entities.ClientProfile
+
+@{
+    ViewBag.Title = "Profile";
+}
+<div style="background-color:#fbfbfb">
+
+    <div class="container">
+
+        <div class="col-md-3">
+            <div class="well" style="text-align:center">
+                <img class="img-thumbnail" src="@Url.Action("Photo", "Profile" , new { UserId=Model.Id })" alt="Alternate Text" style="width:220px; height:220px" />
+                @if (Model.NickName == User.Identity.Name)
+                {
+                    @Html.ActionLink("Обновить фотографию", "Upload", "Profile", null, new { @class = "btn btn-default", style = "width:220px;" })
+                }
+                <div>
+                    <h2 class="text-center">@Model.NickName</h2>
+                    @Html.HiddenFor(m => m.Id)
+                    @Html.LabelFor(m => m.Positive)
+                    <span style="color:limegreen">@Model.Positive</span>
+                    <br />
+                    @Html.LabelFor(m => m.Negative)
+                    @Model.Negative
+                    <br />
+                    @Html.LabelFor(m => m.Rating)
+                    @Model.Rating
+                </div>
+            </div>
+
+        </div>
+        <div class="col-md-9">
+
+            <div class="col-lg-12  well">
+                @if (Model.ApplicationUser.UserName != User.Identity.Name)
+                {
+                    @Model.Discription
+                }
+                else
+                {
+                    using (Html.BeginForm())
+                    {
+                        <div id="discription">
+                            @Html.DisplayFor(m => m.Discription)
+                            @Html.HiddenFor(m => m.Discription, new { name = "discription" })
+                            <input type="submit" name="edit" value="Редактировать" />
+                        </div>
+                    }
+
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <ul class="nav nav-tabs">
+            <li>
+                <a href="#offers" data-toggle="tab" aria-expanded="true">Предложения <span style="color:darkorange">@Model.Offers.Count</span></a>
+            </li>
+            <li class="active">
+                <a href="#feedbacks" data-toggle="tab" aria-expanded="true">Отзывы <span style="color:darkorange">@Model.Feedbacks.Count</span></a>
+            </li>
+        </ul>
+
+
+
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade" id="offers">
+                <div>
+                    <table class="table table-striped">
+                        @foreach (var offer in Model.Offers)
+                        {
+                            using (Ajax.BeginForm("Delete", "Offer", new { id = offer.Id }, null, null))
+                            {
+                                <tr>
+                                    @Html.Hidden("Id", offer.Id)
+                                    <td>@offer.Header</td>
+                                    <td>@offer.StartDate.ToShortDateString()</td>
+                                    <td>@offer.Price.ToString("C", CultureInfo.CreateSpecificCulture("ru-RUS"))</td>
+                                    <td>@Html.ActionLink("Детали", "Details", "Offer", new { id = offer.Id }, null)</td>
+                                    @if (Model.ApplicationUser.UserName == User.Identity.Name)
+                                    {
+                                        <td>@Html.ActionLink("Редактировать", "Edit", "Offer", new { id = offer.Id }, null)</td>
+                                        <td><input class="btn btn-group-sm" type="submit" value="Удалить" /></td>
+                                    }
+                                </tr>
+                            }
+                        }
+                    </table>
+
+                </div>
+            </div>
+            <div class="tab-pane fade active in" id="feedbacks">
+                @Html.Partial("~/Views/Shared/_FeedbackList.cshtml", Model.Feedbacks)
+                @if (Model.ApplicationUser.UserName != User.Identity.Name && User.Identity.IsAuthenticated)
+                {
+                    @Html.ActionLink("Оставить отзыв", "Comment", "Profile", new { name = Model.ApplicationUser.UserName }, null)
+                }
+            </div>
+        </div>
+    </div>
+
+</div>
+    @section scripts
+{
+        <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    }

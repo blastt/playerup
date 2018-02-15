@@ -1,0 +1,35 @@
+﻿@model string
+@{
+    var games = (IEnumerable<SelectListItem>)ViewData["games"];
+
+    foreach (var game in games)
+    {
+        if(game.Value == Model)
+        {
+            game.Selected = true;
+        }
+    }
+}
+<select name="Game" onchange="ajaxRanks(value, true)" class="form-control">
+    @{        
+        foreach (var game in games)
+        {
+            if (game.Value == Model)
+            {
+                <option value="@game.Value" selected="selected">@game.Text</option>
+            }
+            else
+            {
+                <option value="@game.Value">@game.Text</option>
+            }
+        }
+    }
+</select>
+
+@section scripts
+                {
+    @*Ненавязивый JavaScript для выполнения запроса на сервер без полного обновления страницы*@
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/Scripts/myScripts.js"></script>
+
+}

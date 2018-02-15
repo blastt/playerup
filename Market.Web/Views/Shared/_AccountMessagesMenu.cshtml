@@ -1,0 +1,9 @@
+﻿@{
+    ViewBag.Title = "AccountMenu";
+    Layout = null;
+}
+
+<ul class="account-inner-list" id="account-inner-list">
+    <li class="account-inner-menu-item">@Html.ActionLink("Все", "Inbox", "Message",null, new { @class = "account-inner-menu-link" })</li>
+    <li class="account-inner-menu-item">@Html.ActionLink("Отправленные", "Sent", "Message",null, new { @class = "account-inner-menu-link" })</li>
+</ul>

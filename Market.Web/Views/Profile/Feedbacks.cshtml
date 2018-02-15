@@ -1,0 +1,8 @@
+﻿@model Trader.WEB.Models.FeedbackListViewModel
+@{
+    ViewBag.Title = "Feedbacks";
+}
+
+<h2>Feedbacks</h2>
+
+@Html.Partial("_FeedbackList", Model.Feedbacks);

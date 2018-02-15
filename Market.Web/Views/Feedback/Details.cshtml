@@ -1,0 +1,82 @@
+﻿@model Trader.DAL.Entities.Feedback
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Feedback</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.UserProfile.Discription)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UserProfile.Discription)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Grade)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Grade)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Comment)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Comment)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Date)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.WhoLeftId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.WhoLeftId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.WhoLeftName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.WhoLeftName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.OfferId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.OfferId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.OfferHeader)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.OfferHeader)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

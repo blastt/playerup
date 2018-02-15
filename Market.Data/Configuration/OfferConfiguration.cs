@@ -16,6 +16,7 @@ namespace Market.Data.Configuration
             Property(o => o.Discription).IsRequired().HasMaxLength(1000);
             Property(o => o.Price).IsRequired().HasPrecision(8,2);
             Property(o => o.SteamLogin).IsRequired().HasMaxLength(50);
+            HasRequired(o => o.Game).WithMany(o => o.Offers);
         }
     }
 }

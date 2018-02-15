@@ -1,0 +1,96 @@
+﻿@using System.Globalization
+@model Trader.DAL.Entities.OfferViewModel
+@{
+    ViewBag.Title = "Create";
+}
+
+
+<div class="container">
+    <div class="col-lg-12" style="align-items: center; display: flex; justify-content: center">
+        <div class="col-lg-8 " style="margin-top:30px">
+            @using (Html.BeginForm("Create", "Offer", FormMethod.Post, new { id = "createForm" }))
+            {
+                @*@Html.HiddenFor(m => m.ClientProfileId)*@
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Games, new { @class = "control-label" })
+                    @Html.DropDownListFor(m => m.Game, Model.Games, new { @class = "form-control", onchange = "ajaxRanks(value, false)" })
+
+                </div>
+                <div id="rank"></div>
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.SteamLogin, new { @class = "control-label" })
+
+                    @Html.TextBoxFor(m => m.SteamLogin, "", new { @class = "form-control", @for = "textBox" })
+
+                    @Html.ValidationMessageFor(m => m.SteamLogin)
+
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Header, new { @class = "control-label" })
+
+                    @Html.TextBoxFor(m => m.Header, "", new { @class = "form-control", @for = "textBox" })
+
+                    @Html.ValidationMessageFor(m => m.Header)
+
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Discription, new { @class = "control-label" })
+
+                    @Html.TextArea("Discription", "", 10, 0, new { @class = "form-control", style = "resize: none" })
+
+                </div>
+
+                <div class="form-group">
+
+                    <div class="col-md-4" style="padding: 0px; margin-right: 40px">
+                        @Html.LabelFor(m => m.Price, new { @class = "control-label" })
+                        <div class="input-group">
+
+
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">$</span>
+                            </div>
+
+                            @Html.TextBoxFor(m => m.Price, "", new { @class = "form-control", onchange = "CalcPrice(value)", id = "ListingPrice", autocomplete = "off" })
+                            @Html.ValidationMessageFor(m => m.Price)
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-4" style="padding: 0px">
+                        @Html.Label("Получите:", new { @class = "control-label" })
+                        <div class="input-group">
+
+
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">$</span>
+                            </div>
+                            @Html.TextBox("EstPayout", "", new { @class = "form-control", id = "EstimatedPayout", @readonly = "" })
+                        </div>
+                    </div>
+                </div>
+                <div class="confirm-buton">
+                    <div class="form-group">
+                        <input class="btn" type="submit" name="create" value="Разместить" />
+                    </div>
+                </div>
+
+            }
+        </div>
+    </div>
+</div>
+
+
+
+
+
+@section scripts
+                {
+    @*Ненавязивый JavaScript для выполнения запроса на сервер без полного обновления страницы*@
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/myScripts.js"></script>
+}

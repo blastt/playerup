@@ -1,0 +1,105 @@
+﻿@using System.Globalization
+@using Microsoft.AspNet.Identity
+@using Trader.DAL.Entities
+@using Trader.WEB.Models
+@using Trader.WEB.HtmlHelpers
+@model OfferListViewModel
+
+
+<div class="row mb-3 sort">
+    <div class="col-md-5 sort-counter">
+        Найдено предложений: <span style="font-weight:700">@Model.PagingInfo.TotalItems</span>
+    </div>
+    <div class="col-md-5">
+        @Html.DropDownList("OrderBy", Model.SearchingInfo.OrderByList, new { @class = "form-control", onchange = "submitSort(value);" } )
+    </div>
+    <div class="col-md-2">
+        @{
+            var currencyList = new List<SelectListItem>() {
+            new SelectListItem()
+            {
+                Text = "USD",
+                Value = "USD",
+                Selected = true
+            },
+            new SelectListItem()
+            {
+                Text = "RUR",
+                Value = "RUR"
+            },
+            new SelectListItem()
+            {
+                Text = "EUR",
+                Value = "EUR"
+            }
+        };
+        }
+
+        @Html.DropDownList("currency", currencyList, new { @class = "form-control", onchange = "submitAjaxForm(1);" })
+    </div>
+</div>
+
+
+
+<div class="row">
+    @foreach (var offer in Model.Offers)
+    {
+        <div class="col-lg-12">
+            <div class="card mb-3">
+
+
+
+                <div class="card-body">
+                    <div class="card-title" style="text-overflow: ellipsis">
+                        @offer.Header
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="item-rating">
+                                <img class="img-circle" align="left" src="@Url.Action("Photo", "Profile" , new { UserId = offer.User.Id })" alt="Alternate Text" style="width:40px; height: 40px; margin-top:10px; margin-top:0px; margin-right:10px" />
+                                @Html.ActionLink(offer.User.ApplicationUser.UserName, "Info", "Profile", new { prof = offer.User.ApplicationUser.UserName }, null)
+
+                                <br />
+                                Рейтинг <span style="font-weight:700">@offer.User.Rating</span>
+                                <br />
+                                <div class="status">
+                                    @if (offer.User.IsOnline)
+                                    {
+                                        <span class="badge badge-pill badge-info">Online</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge badge-pill badge-light">Offline</span>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 text-center">
+                            <div class="item-rank">
+                                <div class="row">
+                                    @Html.RankImages(offer.Game, offer.Filter, width: 100)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 text-right">
+                            <div class="mb-2">
+                                <span id="offer_price" style="font-weight: 400; font-size: 24px">@offer.Price.ToString("0.#####") USD</span>
+                            </div>
+                            <div class="mb-2">
+                                @Html.ActionLink("Подробнее", "Details", new { id = offer.Id }, new { @class = "btn btn-secondary" })
+                            </div>
+                            <div>
+                                @Html.ActionLink("Купить", "Details", new { id = offer.Id }, new { @class = "btn btn-info" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+<div class="row">
+    <div class="col-md-12">
+        @Html.PageLinks(Model.PagingInfo)
+    </div>
+</div>

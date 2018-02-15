@@ -41,6 +41,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Feedbacks.cs" />
+    <Compile Include="Filter.cs" />
+    <Compile Include="FilterItem.cs" />
+    <Compile Include="Game.cs" />
     <Compile Include="Message.cs" />
     <Compile Include="Offer.cs" />
     <Compile Include="Order.cs" />

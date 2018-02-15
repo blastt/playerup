@@ -15,10 +15,10 @@ namespace Market.Model.Models
         [Key]
         public int Id { get; set; }
         public string Header { get; set; }
-        public string Game { get; set; }
+        public Game Game { get; set; }
         public string Discription { get; set; }
         public string SteamLogin { get; set; }
-        public string Filter { get; set; }
+        
         public decimal Price { get; set; }
         public int Views { get; set; }
         public DateTime? DateCreated { get; set; } = DateTime.Now;
@@ -27,5 +27,7 @@ namespace Market.Model.Models
         public virtual Order Order { get; set; }
         public virtual string UserProfileId { get; set; }
         public virtual UserProfile UserProfile { get; set; }
+        public IEnumerable<Filter> Filters { get; set; }
+        public IEnumerable<FilterItem> FilterItems { get; set; }
     }
 }

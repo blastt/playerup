@@ -1,0 +1,232 @@
+﻿@using System.Globalization
+@using Trader.DAL.Entities
+@model Trader.DAL.Entities.OfferViewModel
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<link rel="stylesheet" href="/resources/demos/style.css">
+<div class="container">
+    <div class="">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="offer-full" style="height: 300px">
+                    <div class="seller-details">
+                        <img class="img-circle" src="@Url.Action("Photo", "Profile" , new { UserId = Model.User.Id })" alt="Alternate Text" style="width:80px; height:80px" />
+
+
+                        <ul class="ul-seller-info">
+                            <li>
+                                @Html.ActionLink(Model.User.ApplicationUser.UserName, "Info", "Profile", new { prof = Model.User.ApplicationUser.UserName }, null)
+                            </li>
+                            <li>
+                                Рейтинг <span style="font-weight:700">@ViewData["Rating"]</span>
+                            </li>
+                            <li>
+                                <input id="contact" type="button" value="Связаться" class="btn btn-info" />
+
+                            </li>
+                            <li>
+                                @if (Model.User.IsOnline)
+                                {
+                                    <span class="badge badge-pill badge-light">Online</span>
+                                }
+                                else
+                                {
+                                    <span class="badge badge-pill badge-dark">Offline</span>
+                                }
+                            </li>
+                        </ul>
+
+
+                        <table style="margin:auto; width: 100px">
+                            <tr>
+                                <td align="center">
+                                    <div class="feedback-score-pos">
+                                        <img src="~/Content/Images/smile-pos.png" style="width:16px; height:16px" />
+                                    </div>
+                                </td>
+
+                                <td align="center">
+                                    <div class="feedback-score-neg">
+                                        <img src="~/Content/Images/smile-neg.png" style="width:16px; height:16px" />
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    @Model.User.Positive
+                                </td>
+                                <td>
+                                    @Model.User.Negative
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+
+
+
+
+                    <div class="offer-details">
+                        <ul class="ul-details">
+                            <li class="li-details">
+                                @Html.LabelFor(m => m.Game, new { @class = "label-details" })
+                                @Html.GameIcons(Model.Game, 25)
+                            </li>
+                            <li class="li-details">
+                                @Html.LabelFor(m => m.Views, new { @class = "label-details" })
+                                <span>@Model.Views</span>
+                            </li>
+                            <li class="li-details">
+                                @Html.LabelFor(m => m.EndDate, new { @class = "label-details" })
+                                <span>@Model.EndDate.ToShortDateString()</span>
+
+                            </li>
+                        </ul>
+                        <div class="col-sm-12">
+
+                            <div class="row offer-details-rank">
+                                @Html.RankImages(Model.Game, Model.Filter, width: 100)
+                            </div>
+
+                        </div>
+
+
+
+                    </div>
+
+
+
+                </div>
+
+
+
+            </div>
+
+
+
+
+            <div class="col-md-4">
+                <div class="card" style="height: 300px">
+                    <div style="text-align:center">
+                        <h3>@Html.DisplayFor(m => m.Price)</h3>
+                    </div>
+                    <div style="text-align:center">
+                        @Html.ActionLink("Купить", "Pay", "Checkout", null, new { });
+                        @using (Html.BeginForm("Pay", "Checkout"))
+                        {
+                            @Html.HiddenFor(m => m.Id)
+                            <input type="submit" name="buy" value="Купить" class=" btn btn-success" />
+                        }
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 offer-description">
+            <div class="">
+                <h4>Детальное описание</h4>
+                <div class="card" style="height: 300px">
+                    <div class="card-header">@Model.Header</div>
+                    <div class="card-body">
+                        <span>@Model.Discription</span>
+                    </div>
+
+
+
+                </div>
+            </div>
+
+
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <span style="font-weight:700; font-size: 30px">Отзывы</span>
+        </div>
+    </div>
+    <div class="row">
+
+        @Html.Partial("_FeedbackList", Model.Feedbacks)
+
+    </div>
+    @using (Html.BeginForm("Give", "Feedback", new { userProfileId = "3" }, FormMethod.Get, null))
+    {
+        @Html.HiddenFor(m => m.User.Id)
+        @Html.HiddenFor(m => m.Id)
+        <input class="btn btn-success" type="submit" value="Оставить отзыв" />
+    }
+
+    @*@if (ViewBag.CurrentProfileOffers != null && ((ICollection<Offer>)ViewData["Offers"]).Contains(Model.))
+        {*@
+    @Html.ActionLink("Редактировать", "Edit", "Offer", new { id = Model.Id }, null)
+    @*}*@
+</div>
+
+<div id="modal-dialog" class="modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 class="modal-title">Написать сообщение</h6>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span id="close" aria-hidden="true">×</span>
+                </button>
+            </div>
+            @using (Html.BeginForm("New", "Message", FormMethod.Post, new { }))
+            {
+                @Html.Hidden("ReceiverId", Model.User.Id)
+                @Html.Hidden("Subject", Model.Id)
+                @Html.AntiForgeryToken()
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        <img class="img-circle avatar-small" src="@Url.Action("Photo", "Profile" , new { UserId = Model.User.Id })" style="float:left; margin-right: 20px" alt="Alternate Text" />
+                        <div>
+
+                            @Html.ActionLink(Model.User.ApplicationUser.UserName, "Info", new { })
+
+                            <p>
+                                @if (Model.User.IsOnline)
+                                {
+                                    <span class="badge badge-pill badge-light">Online</span>
+                                }
+                                else
+                                {
+                                    <span class="badge badge-pill badge-dark">Offline</span>
+                                }
+                            </p>
+
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.TextBox("OfferHeader", Model.Header + " " + "(" + Model.Id + ")", new { @class = "form-control", @readonly = "readonly" })
+                    </div>
+                    <div class="form-group">
+                        <textarea name="MessageBody" class="form-control" rows="5"></textarea>
+                    </div>
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-info">Отправить</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+
+
+@section scripts
+{
+    <script type="text/javascript" src="~/Scripts/jquery-ui.min.js"></script>
+
+    <script type="text/javascript" src="~/Scripts/jquery-modal.js"></script>
+}

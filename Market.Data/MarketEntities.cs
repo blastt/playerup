@@ -44,6 +44,9 @@ namespace Marketplace.Data
             modelBuilder.Configurations.Add(new OrderConfiguration());
             modelBuilder.Configurations.Add(new FeedbackConfiguration());
             modelBuilder.Configurations.Add(new MessageConfiguration());
+            modelBuilder.Configurations.Add(new GameConfiguration());
+            modelBuilder.Configurations.Add(new FilterConfiguration());
+            modelBuilder.Configurations.Add(new FilterItemConfiguration());
             base.OnModelCreating(modelBuilder);
         }
         public virtual DbSet<UserProfile> UserProfiles { get; set; }
@@ -51,5 +54,8 @@ namespace Marketplace.Data
         public virtual DbSet<Order> Orders { get; set; }
         public virtual DbSet<Feedback> Feedbacks { get; set; }
         public virtual DbSet<Message> Messages { get; set; }
+        public virtual DbSet<Game> Games { get; set; }
+        public virtual DbSet<Filter> Filters { get; set; }
+        public virtual DbSet<FilterItem> FilterItems { get; set; }
     }
 }

@@ -1,0 +1,50 @@
+﻿@using System.Globalization
+@using Microsoft.AspNet.Identity
+@using Trader.DAL.Entities
+@using Trader.WEB.Models
+@using Trader.WEB.HtmlHelpers
+@model OfferListViewModel
+
+
+
+
+    <div class="col-md-12">
+
+        <table>
+
+
+            <tbody>
+
+                @foreach (var offer in Model.Offers)
+                {
+                    <tr class="item" style="height: 80px; font-weight: 400; font-size:14px">
+                        <td>
+                            @Html.GameIcons(offer.Game)
+                        </td>
+                        <td>
+                            @Html.ActionLink(offer.Header, "Details", "Offer", new { id = offer.Id }, new { style = "color:#000000" })
+                        </td>
+                        <td>
+                            @Html.RankImages(offer.Game, offer.Rank, 50)
+                        </td>
+                        <td>
+                            @offer.Price.ToString("C", CultureInfo.CurrentCulture)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Просмотреть", "Details", "Offer", new { id = offer.Id }, new { })
+                        </td>
+                        <td>
+                            @Html.ActionLink("Редактировать", "Edit", "Offer", new { id = offer.Id }, new { })
+                        </td>
+                        <td>
+                            @Html.ActionLink("Удалить", "Delete", "Offer", new { id = offer.Id }, new { })
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    @*@Html.PageLinks(Model.PagingInfo)*@
+
+
+

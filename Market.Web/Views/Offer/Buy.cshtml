@@ -1,0 +1,32 @@
+﻿
+@using Trader.DAL.Entities
+@model IEnumerable<SelectListItem>
+
+@{
+    ViewBag.Title = "Buy";
+}
+<div class="modal-header" style="background-image:url(../../Content/Images/bgv.jpg)">
+    <div class="container">
+        <h2>ATrade</h2>
+        <h3 style="color:#cacaca; font-weight:700; font-size:26px">
+            Сервис <br>для безопасной покупки<br>
+            и продажи <br>игровых аккаунтов
+        </h3>
+        <input class="btn btn-registration" type="button" value="Регистрация"/>
+    </div>
+</div>
+    <div class="container">
+        <ul class="list-inline">
+            @foreach (var game in Model)
+            {
+                <li class="li-games" style="font-weight:700; font-size:large; color:#a8a8a8">
+
+                    @Html.GameIcons(game.Value, 30)
+                    @Html.ActionLink(game.Text, "List", new { game = game.Value })
+                </li>
+            }
+        </ul>
+
+    </div>
+
+

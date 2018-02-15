@@ -1,0 +1,3 @@
+﻿@model decimal
+
+<input type="text" name="Price" value="@Model.ToString("#.00#",System.Globalization.CultureInfo.InvariantCulture)" class="form-control" onchange = "CalcPrice(value)"  id = "ListingPrice" autocomplete = "off" @Html.GetEditTemplateValidationAttrs(ViewData) />

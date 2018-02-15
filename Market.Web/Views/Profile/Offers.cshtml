@@ -1,0 +1,32 @@
+﻿@model Trader.WEB.Models.OfferListViewModel
+@{
+    ViewBag.Title = "Offers";
+    var options = new AjaxOptions()
+    {
+        UpdateTargetId = "list",
+        LoadingElementId = "loading"
+
+    };
+}
+<div style="background-color: #fbfbfb">
+    <div class="container">
+        <div class="col-md-12" style="padding: 0px">
+
+            @using (Ajax.BeginForm("OfferList", "Offer", new { Page = 1 }, options, new { @class = "search-form", id = "ajaxForm" }))
+            {
+                @*@Html.HiddenFor(m => m.SearchingInfo.Page)
+                    <div class="col-md-3">
+                        @Html.TextBoxFor(m => m.SearchingInfo.SearchString, "", new { @class = "form-control", placeholder = "Поиск...", onchange = "submitAjaxForm(1);" })
+                    </div>*@
+
+                <div id="list">@Html.Partial("_OfferListLite", Model)</div>
+            }
+
+        </div>
+    </div>
+</div>
+@section scripts
+            {
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/myScripts.js"></script>
+}

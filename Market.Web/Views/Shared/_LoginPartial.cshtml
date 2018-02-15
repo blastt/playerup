@@ -1,22 +1,51 @@
 ﻿@using Microsoft.AspNet.Identity
-@if (Request.IsAuthenticated)
-{
-    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
-    {
-    @Html.AntiForgeryToken()
 
-    <ul class="nav navbar-nav navbar-right">
-        <li>
-            @Html.ActionLink("Здравствуйте, " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
-        </li>
-        <li><a href="javascript:document.getElementById('logoutForm').submit()">Выйти</a></li>
-    </ul>
+<ul class="nav navbar-nav ml-auto">
+
+    @if (Request.IsAuthenticated)
+    {
+        using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "nav navbar-nav navbar-right" }))
+        {
+            @Html.AntiForgeryToken()
+            <li class="nav-item">
+                @Html.ActionLink("Продать аккаунт", "Create", new { controller = "Offer" }, new { @class = "btn btn-sell" })
+            </li>
+            <li class="nav-item">
+                <img class="img-messages" src="~/Content/Images/messages.png" style="width:32px" />
+            </li>
+            <li class="nav-item">
+                <img class="img-circle avatar-small" src="@Url.Action("Photo", "Profile" , new { UserId = User.Identity.GetUserId() })" alt="Alternate Text" />
+            </li>
+            <li class="nav-item dropdown">
+                <a class="dropdown-toggle nav-link" data-toggle="dropdown" href="#" id="download" aria-expanded="true" aria-atomic="true">
+                    @User.Identity.Name
+                    <span class="caret"></span>
+                </a>
+                <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 45px, 0px); top: 0px; left: 0px; will-change: transform;">
+                    @Html.ActionLink("Предложения", "All", "Offer", null, new { @class = "dropdown-item" })
+                    @Html.ActionLink("Заказы", "All", "Order", null, new { @class = "dropdown-item" })
+                    @Html.ActionLink("Сообщения", "Inbox", "Message", null, new { @class = "dropdown-item" })
+                    @Html.ActionLink("Настройки", "Settings", "Account", null, new { @class = "dropdown-item" })
+                    @Html.ActionLink("Отзывы", "All", "Feedback", null, new { @class = "dropdown-item" })
+                    @Html.ActionLink("Фото", "Upload", "Profile", null, new { @class = "dropdown-item" })
+                </div>
+                @* @Html.ActionLink(User.Identity.GetUserName(), "Info", "Profile", routeValues: new { prof = User.Identity.GetUserName() }, htmlAttributes: new { title = "Manage"  })*@
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="javascript:document.getElementById('logoutForm').submit()">Выйти</a>
+
+            </li>
+
+        }
     }
-}
-else
-{
-    <ul class="nav navbar-nav navbar-right">
-        <li>@Html.ActionLink("Регистрация", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
-        <li>@Html.ActionLink("Выполнить вход", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
-    </ul>
-}
+    else
+    {
+        <li>
+            @Html.ActionLink("Регистрация", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })
+        </li>
+        <li>
+            @Html.ActionLink("Выполнить вход", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })
+        </li>
+
+    }
+</ul>
