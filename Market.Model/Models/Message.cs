@@ -10,7 +10,6 @@ namespace Market.Model.Models
 {
     public class Message
     {
-        [Key]
         public int Id { get; set; }
         public string Subject { get; set; }
         public string MessageBody { get; set; }

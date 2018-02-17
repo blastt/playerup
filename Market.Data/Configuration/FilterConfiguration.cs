@@ -15,7 +15,7 @@ namespace Market.Data.Configuration
             ToTable("Filters");
 
             Property(o => o.Value).IsRequired();
-            HasRequired(o => o.Game).WithMany(o => o.Filters);
+            HasRequired(o => o.Game).WithMany(o => o.Filters).WillCascadeOnDelete(false);
             HasMany(f => f.Offers).WithMany(o => o.Filters);
             HasMany(f => f.FilterItems).WithMany(f => f.Filters);
 

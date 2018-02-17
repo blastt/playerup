@@ -17,7 +17,6 @@ namespace Market.Model.Models
     }
     public class Order
     {
-        [Key]
         public int Id { get; set; }
         public Status OrderStatus { get; set; }
         public bool IsFeedbacked { get; set; }

@@ -39,6 +39,8 @@ namespace Marketplace.Data
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
+            //this.Configuration.LazyLoadingEnabled = false;
+            //this.Configuration.ProxyCreationEnabled = false;
             modelBuilder.Configurations.Add(new UserProfileConfiguration());
             modelBuilder.Configurations.Add(new OfferConfiguration());
             modelBuilder.Configurations.Add(new OrderConfiguration());

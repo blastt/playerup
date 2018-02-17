@@ -11,6 +11,7 @@ namespace Market.Model.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public string Value { get; set; }
+        public string Image { get; set; }
 
         public virtual ICollection<Offer> Offers { get; set; }
         public virtual ICollection<Filter> Filters { get; set; }

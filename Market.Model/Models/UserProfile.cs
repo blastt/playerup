@@ -11,7 +11,6 @@ namespace Market.Model.Models
 {
     public class UserProfile
     {
-        [Key]
         public string Id { get; set; }
         public byte[] Avatar { get; set; }
         public int Rating { get; set; }

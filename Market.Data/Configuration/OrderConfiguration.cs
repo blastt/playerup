@@ -13,7 +13,8 @@ namespace Market.Data.Configuration
             ToTable("Orders");
             Property(o => o.IsFeedbacked).IsRequired();
             Property(o => o.OrderStatus).IsRequired();
-            HasRequired(o => o.Offer).WithOptional(o => o.Order);
+            HasRequired(o => o.Offer).WithOptional(o => o.Order).WillCascadeOnDelete(false);
+
 
         }
     }

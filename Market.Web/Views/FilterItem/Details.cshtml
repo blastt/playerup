@@ -1,0 +1,35 @@
+﻿@model Market.Web.ViewModels.DetailsFilterItemViewModel
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+<ul>
+    @foreach (var game in Model.Games)
+    {
+
+        <li>
+            @game.Name (@game.Value)
+            <ul>
+                @foreach (var filter in game.Filters)
+                {
+                    <li>
+                        @filter.Text (@filter.Value)
+                        <ul>
+                            @foreach (var filterItem in filter.FilterItems)
+                            {
+                                <li>
+                                    @filterItem.Name (@filterItem.Value)
+                                    <ul></ul>
+                                </li>
+                            }
+                        </ul>
+                    </li>
+                }
+            </ul>
+
+        </li>
+    }
+</ul>
+

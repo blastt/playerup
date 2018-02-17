@@ -69,6 +69,15 @@
     <Compile Include="Infrastructure\RepositoryBase.cs" />
     <Compile Include="Infrastructure\UnitOfWork.cs" />
     <Compile Include="MarketEntities.cs" />
+    <Compile Include="Migrations\201802151502381_New5.cs" />
+    <Compile Include="Migrations\201802151502381_New5.Designer.cs">
+      <DependentUpon>201802151502381_New5.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802171624406_Images.cs" />
+    <Compile Include="Migrations\201802171624406_Images.Designer.cs">
+      <DependentUpon>201802171624406_Images.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\FeedbackRepository.cs" />
     <Compile Include="Repositories\FilterItemRepository.cs" />
@@ -89,6 +98,13 @@
       <Name>Market.Model</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201802151502381_New5.resx">
+      <DependentUpon>201802151502381_New5.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802171624406_Images.resx">
+      <DependentUpon>201802171624406_Images.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

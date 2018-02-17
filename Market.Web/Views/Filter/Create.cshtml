@@ -1,0 +1,22 @@
+﻿@model Market.Web.ViewModels.CreateFilterViewModel
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<h2>Create Filter</h2>
+
+<div class="row">
+    <div class="col-12">
+        @using (Html.BeginForm("Create", "Filter"))
+        {
+            @Html.DropDownListFor(m => m.Game.Value, Model.Games, new { @class = "form-control" })
+            @Html.LabelFor(m => m.Name)
+            @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+            @Html.LabelFor(m => m.Value)
+            @Html.TextBoxFor(m => m.Value, new { @class = "form-control" })
+            <input type="submit" name="Two" value="Создать2" />
+        }
+    </div>
+</div>
+

@@ -12,10 +12,9 @@ namespace Market.Model.Models
 
     public class Offer
     {
-        [Key]
         public int Id { get; set; }
         public string Header { get; set; }
-        public Game Game { get; set; }
+       
         public string Discription { get; set; }
         public string SteamLogin { get; set; }
         
@@ -24,10 +23,13 @@ namespace Market.Model.Models
         public DateTime? DateCreated { get; set; } = DateTime.Now;
         public DateTime? DateDeleted { get; set; }
 
+
+
+        public virtual Game Game { get; set; }
         public virtual Order Order { get; set; }
         public virtual string UserProfileId { get; set; }
         public virtual UserProfile UserProfile { get; set; }
-        public IEnumerable<Filter> Filters { get; set; }
-        public IEnumerable<FilterItem> FilterItems { get; set; }
+        public ICollection<Filter> Filters { get; set; }
+        public ICollection<FilterItem> FilterItems { get; set; }
     }
 }

@@ -16,7 +16,9 @@ namespace Market.Data.Configuration
 
             Property(o => o.Name).IsRequired().HasMaxLength(100);
             Property(o => o.Value).IsRequired();
-
+            
+            HasMany(g => g.Offers).WithRequired(o => o.Game).WillCascadeOnDelete(false);
+            
         }
     }
 }

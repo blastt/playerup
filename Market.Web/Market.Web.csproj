@@ -203,6 +203,9 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\Admin\AdminController.cs" />
+    <Compile Include="Controllers\Admin\FilterController.cs" />
+    <Compile Include="Controllers\Admin\FilterItemController.cs" />
     <Compile Include="Controllers\Admin\GameController.cs" />
     <Compile Include="Controllers\GodController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -220,7 +223,10 @@
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\Feedback\FeedbackViewModel.cs" />
     <Compile Include="ViewModels\Feedback\NewFeedbackViewModel.cs" />
-    <Compile Include="ViewModels\Filter\FilterViewModel.cs" />
+    <Compile Include="ViewModels\FilterItem\CreateFilterItemViewModel.cs" />
+    <Compile Include="ViewModels\FilterItem\DetailsFilterItemViewModel.cs" />
+    <Compile Include="ViewModels\Filter\CreateFilterViewModel.cs" />
+    <Compile Include="ViewModels\Game\CreateGameViewModel.cs" />
     <Compile Include="ViewModels\Message\DetailsMessageViewModel.cs" />
     <Compile Include="ViewModels\Message\MessageViewModel.cs" />
     <Compile Include="ViewModels\Message\NewMessageViewModel.cs" />
@@ -251,6 +257,7 @@
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\Custom.js" />
     <Content Include="Scripts\esm\popper-utils.js" />
     <Content Include="Scripts\esm\popper-utils.min.js" />
     <Content Include="Scripts\esm\popper.js" />
@@ -336,12 +343,36 @@
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
     <Content Include="Views\Home\Details.cshtml" />
+    <Content Include="Views\Offer\Create.cshtml" />
+    <Content Include="Views\Offer\_SearchContainer.cshtml" />
+    <Content Include="Views\Message\Create.cshtml" />
+    <Content Include="Views\Message\Delete.cshtml" />
+    <Content Include="Views\Message\Details.cshtml" />
+    <Content Include="Views\Message\Edit.cshtml" />
+    <Content Include="Views\Message\Inbox.cshtml" />
+    <Content Include="Views\Message\Index.cshtml" />
+    <Content Include="Views\Message\Info.cshtml" />
+    <Content Include="Views\Message\New.cshtml" />
+    <Content Include="Views\Message\Sent.cshtml" />
+    <Content Include="Views\Message\Story.cshtml" />
+    <Content Include="Views\Nav\Menu.cshtml" />
+    <Content Include="Views\Order\Active.cshtml" />
+    <Content Include="Views\Order\All.cshtml" />
+    <Content Include="Views\Order\Closed.cshtml" />
+    <Content Include="Views\Profile\Feedbacks.cshtml" />
+    <Content Include="Views\Profile\Info.cshtml" />
+    <Content Include="Views\Profile\Offers.cshtml" />
+    <Content Include="Views\Profile\Upload.cshtml" />
+    <Content Include="Views\Game\Create.cshtml" />
+    <Content Include="Views\Filter\Create.cshtml" />
+    <Content Include="Views\FilterItem\Create.cshtml" />
+    <Content Include="Views\Admin\Panel.cshtml" />
+    <Content Include="Views\FilterItem\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Game\" />
+    <Folder Include="Content\Images\Csgo\Ranks\" />
     <Folder Include="Views\God\" />
-    <Folder Include="Views\Offer\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

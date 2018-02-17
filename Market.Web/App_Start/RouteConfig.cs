@@ -14,11 +14,11 @@ namespace Market.Web
             routes.LowercaseUrls = true;
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
-            routes.MapRoute(
-                name: null,
-                url: "{prof}",
-                defaults: new { controller = "Profile", action = "Info" }
-            );
+            //routes.MapRoute(
+            //    name: null,
+            //    url: "{prof}",
+            //    defaults: new { controller = "Profile", action = "Info" }
+            //);
 
 
             //routes.MapRoute(
@@ -42,27 +42,31 @@ namespace Market.Web
             //    url: "{category}/Page{page}",
             //    defaults: new { controller = "Offer", action = "List" }
             //);
-            routes.MapRoute(
-                name: null,
-                url: "Buy/{game}",
-                defaults: new { controller = "Offer", action = "List" }
-            );
-
-
-
+            //routes.MapRoute(
+            //    name: null,
+            //    url: "Buy/{game}",
+            //    defaults: new { controller = "Offer", action = "List" }
+            //);
 
 
 
             routes.MapRoute(
                 name: "Default",
-                url: "{controller}/{action}/{game}",
-                defaults: new { controller = "Offer", action = "List", game = "csgo" }
+                url: "{controller}/{action}",
+                defaults: new { controller = "controller", action = "action" }
             );
-            routes.MapRoute(
-                name: null,
-                url: "myaccount/{controller}/{action}",
-                defaults: new { controller = "Offer", action = "All" }
-            );
+
+
+            //routes.MapRoute(
+            //    name: "Default",
+            //    url: "{controller}/{action}/{game}",
+            //    defaults: new { controller = "Offer", action = "List", game = "csgo" }
+            //);
+            //routes.MapRoute(
+            //    name: null,
+            //    url: "myaccount/{controller}/{action}",
+            //    defaults: new { controller = "Offer", action = "All" }
+            //);
         }
     }
 }

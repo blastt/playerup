@@ -19,40 +19,40 @@ namespace Market.Web.Mappings
         {
             #region Offer
 
-            CreateMap<OfferViewModel, Offer>()
-               .ForMember(o => o.Header, map => map.MapFrom(vm => vm.Header))
-               .ForMember(o => o.Filter, map => map.MapFrom(vm => vm.Filter))
-               .ForMember(o => o.Game, map => map.MapFrom(vm => vm.Game))
-               .ForPath(o => o.UserProfile.Name, map => map.MapFrom(vm => vm.UserName))
+            //CreateMap<OfferViewModel, Offer>()
+            //   .ForMember(o => o.Header, map => map.MapFrom(vm => vm.Header))
+            //   .ForMember(o => o.Filters, map => map.MapFrom(vm => vm.Filters))
+            //   .ForMember(o => o.Game, map => map.MapFrom(vm => vm.Game))
+            //   .ForPath(o => o.UserProfile.Name, map => map.MapFrom(vm => vm.UserName))
                
-               .ForMember(o => o.Price, map => map.MapFrom(vm => vm.Price));
+            //   .ForMember(o => o.Price, map => map.MapFrom(vm => vm.Price));
 
             CreateMap<CreateOfferViewModel, Offer>()
                 .ForMember(o => o.Header, map => map.MapFrom(vm => vm.Header))
                 .ForMember(o => o.Discription, map => map.MapFrom(vm => vm.Discription))
-                .ForMember(o => o.Filter, map => map.MapFrom(vm => vm.Filter))
+                .ForMember(o => o.Filters, map => map.MapFrom(vm => vm.Filters))
                 .ForMember(o => o.Game, map => map.MapFrom(vm => vm.Game))
                 .ForMember(o => o.SteamLogin, map => map.MapFrom(vm => vm.SteamLogin))
                 .ForMember(o => o.Price, map => map.MapFrom(vm => vm.Price));
 
-            CreateMap<EditOfferViewModel, Offer>()
-                .ForMember(o => o.Header, map => map.MapFrom(vm => vm.Header))
-                .ForMember(o => o.Discription, map => map.MapFrom(vm => vm.Discription))
-                .ForMember(o => o.Filter, map => map.MapFrom(vm => vm.Filter))
-                .ForMember(o => o.Game, map => map.MapFrom(vm => vm.Game))
-                .ForMember(o => o.SteamLogin, map => map.MapFrom(vm => vm.SteamLogin))
-                .ForMember(o => o.Price, map => map.MapFrom(vm => vm.Price));
+            //CreateMap<EditOfferViewModel, Offer>()
+            //    .ForMember(o => o.Header, map => map.MapFrom(vm => vm.Header))
+            //    .ForMember(o => o.Discription, map => map.MapFrom(vm => vm.Discription))
+            //    .ForMember(o => o.Filters, map => map.MapFrom(vm => vm.Filters))
+            //    .ForMember(o => o.Game, map => map.MapFrom(vm => vm.Game))
+            //    .ForMember(o => o.SteamLogin, map => map.MapFrom(vm => vm.SteamLogin))
+            //    .ForMember(o => o.Price, map => map.MapFrom(vm => vm.Price));
 
-            CreateMap<DetailsOfferViewModel, Offer>()
-               .ForMember(o => o.Header, map => map.MapFrom(vm => vm.Header))
-               .ForMember(o => o.Discription, map => map.MapFrom(vm => vm.Discription))
-               .ForMember(o => o.Filter, map => map.MapFrom(vm => vm.Filter))
-               .ForMember(o => o.Game, map => map.MapFrom(vm => vm.Game))
-               .ForPath(o => o.UserProfile.Name, map => map.MapFrom(vm => vm.UserName))
-               .ForMember(o => o.Views, map => map.MapFrom(vm => vm.Views))
-               .ForMember(o => o.DateCreated, map => map.MapFrom(vm => vm.DateCreated))
-               .ForMember(o => o.Price, map => map.MapFrom(vm => vm.Price))
-               .ForPath(o => o.UserProfile.Feedbacks, map => map.MapFrom(vm => vm.Feedbacks));
+            //CreateMap<DetailsOfferViewModel, Offer>()
+            //   .ForMember(o => o.Header, map => map.MapFrom(vm => vm.Header))
+            //   .ForMember(o => o.Discription, map => map.MapFrom(vm => vm.Discription))
+            //   .ForMember(o => o.Filters, map => map.MapFrom(vm => vm.Filters))
+            //   .ForMember(o => o.Game, map => map.MapFrom(vm => vm.Game))
+            //   .ForPath(o => o.UserProfile.Name, map => map.MapFrom(vm => vm.UserName))
+            //   .ForMember(o => o.Views, map => map.MapFrom(vm => vm.Views))
+            //   .ForMember(o => o.DateCreated, map => map.MapFrom(vm => vm.DateCreated))
+            //   .ForMember(o => o.Price, map => map.MapFrom(vm => vm.Price))
+            //   .ForPath(o => o.UserProfile.Feedbacks, map => map.MapFrom(vm => vm.Feedbacks));
 
             #endregion
 
@@ -115,7 +115,27 @@ namespace Market.Web.Mappings
 
             #endregion
 
-            #region UserProfile            
+            #region Game            
+
+            CreateMap<CreateGameViewModel, Game>()
+                .ForMember(o => o.Name, map => map.MapFrom(vm => vm.Name))
+               .ForMember(o => o.Value, map => map.MapFrom(vm => vm.Value));
+
+            #endregion
+
+            #region Game            
+
+            CreateMap<CreateFilterViewModel, Filter>()
+                .ForMember(o => o.Text, map => map.MapFrom(vm => vm.Name))
+               .ForMember(o => o.Value, map => map.MapFrom(vm => vm.Value));
+
+            #endregion
+
+            #region Game            
+
+            CreateMap<CreateFilterItemViewModel, FilterItem>()
+                .ForMember(o => o.Name, map => map.MapFrom(vm => vm.Name))
+               .ForMember(o => o.Value, map => map.MapFrom(vm => vm.Value));
 
             #endregion
 

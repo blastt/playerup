@@ -1,4 +1,5 @@
-﻿using Market.Model.Models;
+﻿using AutoMapper;
+using Market.Model.Models;
 using Market.Service;
 using Market.Web.ViewModels;
 using Market.Web.ViewModels.Offer;
@@ -7,51 +8,58 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Script.Serialization;
 
 namespace Market.Web.Controllers
 {
     public class OfferController : Controller
     {
         private readonly IOfferService _offerService;
+        private readonly IGameService _gameService;
+        private readonly IFilterService _filterService;
+        private readonly IFilterItemService _filterItemService;
         public int pageSize = 7;
-        public OfferController(IOfferService offerService)
+        public OfferController(IOfferService offerService, IGameService gameService, IFilterService filterService, IFilterItemService filterItemService)
         {
             _offerService = offerService;
+            _gameService = gameService;
+            _filterService = filterService;
+            _filterItemService = filterItemService;
         }
 
         // GET: Offer
-        public ViewResult List(string game)
-        {
-            decimal minPrice = 0;
-            decimal maxPrice = 0;
-            IEnumerable<Offer> offers = _offerService.GetOffers();
-            if (game != "all")
-            {
-                offers = offers.Where(m => m.Game == game);
-            }
-            if (offers.Count() != 0 && offers != null)
-            {
-                minPrice = offers.Min(m => m.Price);
-                maxPrice = offers.Max(m => m.Price);
-            }
-            IList<SelectListItem> ranks = new List<SelectListItem>
-            {
-                new SelectListItem() { Text = "Все ранги", Value = "none", Selected = true }
-            };
-            foreach (var rank in (Dictionary<string, string>)(GetRanksJson(game).Data))
-            {
-                ranks.Add(new SelectListItem() { Text = rank.Value, Value = rank.Key });
-            }
-            var model = OfferList(new SearchingInfo()
-            {
-                MinPrice = minPrice,
-                MaxPrice = maxPrice,
-                Game = game,
-                FilterByList = ranks
-            }).Model;
+        //public ViewResult List(string game)
+        //{
+        //    decimal minPrice = 0;
+        //    decimal maxPrice = 0;
+        //    IEnumerable<Offer> offers = _offerService.GetOffers();
+        //    if (game != "all")
+        //    {
+        //        offers = offers.Where(m => m.Game == game);
+        //    }
+        //    if (offers.Count() != 0 && offers != null)
+        //    {
+        //        minPrice = offers.Min(m => m.Price);
+        //        maxPrice = offers.Max(m => m.Price);
+        //    }
+        //    IList<SelectListItem> ranks = new List<SelectListItem>
+        //    {
+        //        new SelectListItem() { Text = "Все ранги", Value = "none", Selected = true }
+        //    };
+        //    foreach (var rank in (Dictionary<string, string>)(GetRanksJson(game).Data))
+        //    {
+        //        ranks.Add(new SelectListItem() { Text = rank.Value, Value = rank.Key });
+        //    }
+        //    var model = OfferList(new SearchingInfo()
+        //    {
+        //        MinPrice = minPrice,
+        //        MaxPrice = maxPrice,
+        //        Game = game,
+        //        FilterByList = ranks
+        //    }).Model;
 
-            return View((OfferListViewModel)model);
-        }
+        //    return View((OfferListViewModel)model);
+        //}
 
         //public ViewResult All()
         //{
@@ -137,67 +145,67 @@ namespace Market.Web.Controllers
         //    }
         //    return View(model);
         //}
-        public PartialViewResult OfferList(OfferListViewModel model)
-        {
-            // parse filter array to string for storing it in the database
+        //public PartialViewResult OfferList(OfferListViewModel model)
+        //{
+        //    // parse filter array to string for storing it in the database
             
 
 
-            IEnumerable<Offer> offers = _offerService.GetOffers().Where(o => o.Game.Value == model.Game.Value).Where(o => o);
+        //    IEnumerable<Offer> offers = _offerService.GetOffers().Where(o => o.Game.Value == model.Game.Value).Where(o => o);
                       
 
-            //if (searchInfo.IsOnline)
-            //{
-            //    offers = from offer in offers
-            //             where offer.UserProfile.IsOnline == true
-            //             select offer;
-            //}
-            //if (searchInfo.MaxPrice != 0)
-            //{
-            //    offers = from offer in offers
-            //             where offer.Price >= searchInfo.MinPrice &&
-            //                    offer.Price <= searchInfo.MaxPrice
-            //             select offer;
-            //}
+        //    //if (searchInfo.IsOnline)
+        //    //{
+        //    //    offers = from offer in offers
+        //    //             where offer.UserProfile.IsOnline == true
+        //    //             select offer;
+        //    //}
+        //    //if (searchInfo.MaxPrice != 0)
+        //    //{
+        //    //    offers = from offer in offers
+        //    //             where offer.Price >= searchInfo.MinPrice &&
+        //    //                    offer.Price <= searchInfo.MaxPrice
+        //    //             select offer;
+        //    //}
 
 
-            //if (!string.IsNullOrEmpty(searchInfo.SearchString))
-            //{
-            //    offers = _offerService.Search(searchInfo.SearchString, searchInfo.SearchInDescription, offers);
-            //}
+        //    //if (!string.IsNullOrEmpty(searchInfo.SearchString))
+        //    //{
+        //    //    offers = _offerService.Search(searchInfo.SearchString, searchInfo.SearchInDescription, offers);
+        //    //}
 
-            //var model = new OfferListViewModel
-            //{
-            //    Offers = new List<OfferViewModel>(),
-            //    //Offers = offers.Skip((searchInfo.Page - 1) * pageSize).Take(pageSize),
-            //    SearchingInfo = searchInfo,
-            //    PagingInfo = new PagingInfo
-            //    {
-            //        CurrentPage = searchInfo.Page,
-            //        PageSize = pageSize,
-            //        TotalItems = offers.Count()
-            //    }
-            //};
-            foreach (var offer in offers)
-            {
-                model.Offers.Add(new OfferViewModel
-                {
-                    Id = offer.Id,
-                    Discription = offer.Discription,
-                    EndDate = offer.EndDate,
-                    Filter = offer.Filter,
-                    Game = offer.Game,
-                    Header = offer.Header,
-                    Price = offer.Price,
-                    StartDate = offer.StartDate,
-                    SteamLogin = offer.SteamLogin,
-                    User = offer.UserProfile,
-                    Views = offer.Views
-                });
-            }
-            //model.Offers = model.Offers.Skip((searchInfo.Page - 1) * pageSize).Take(pageSize).ToList();
-            return PartialView("_OfferList", model);
-        }
+        //    //var model = new OfferListViewModel
+        //    //{
+        //    //    Offers = new List<OfferViewModel>(),
+        //    //    //Offers = offers.Skip((searchInfo.Page - 1) * pageSize).Take(pageSize),
+        //    //    SearchingInfo = searchInfo,
+        //    //    PagingInfo = new PagingInfo
+        //    //    {
+        //    //        CurrentPage = searchInfo.Page,
+        //    //        PageSize = pageSize,
+        //    //        TotalItems = offers.Count()
+        //    //    }
+        //    //};
+        //    foreach (var offer in offers)
+        //    {
+        //        model.Offers.Add(new OfferViewModel
+        //        {
+        //            Id = offer.Id,
+        //            Discription = offer.Discription,
+        //            EndDate = offer.EndDate,
+        //            Filter = offer.Filter,
+        //            Game = offer.Game,
+        //            Header = offer.Header,
+        //            Price = offer.Price,
+        //            StartDate = offer.StartDate,
+        //            SteamLogin = offer.SteamLogin,
+        //            User = offer.UserProfile,
+        //            Views = offer.Views
+        //        });
+        //    }
+        //    //model.Offers = model.Offers.Skip((searchInfo.Page - 1) * pageSize).Take(pageSize).ToList();
+        //    return PartialView("_OfferList", model);
+        
         // Get Ajax offer list
         //public PartialViewResult OfferList(Game game, string[] Filters = null)
         //{
@@ -283,45 +291,49 @@ namespace Market.Web.Controllers
         [Authorize]
         public ActionResult Create()
         {
-
-
-            return View();
+            CreateOfferViewModel model = new CreateOfferViewModel();
+            SelectList selectList = new SelectList(_gameService.GetGames());
+            model.Games = selectList;
+            model.Filters = new SelectList(_filterService.GetFilters());
+            model.FilterItems = new SelectList(_filterItemService.GetFilterItems());
+            return View(model);
         }
 
         [HttpPost]
-        public ActionResult Create(CreateOfferViewModel model, string[] Filters)
+        public ActionResult Create(CreateOfferViewModel model)
         {
-            bool isGameExists = model.Games.Any(m => m.Value == model.Game);
+            //bool isGameExists = model.Games.Any(m => m.Value == model.Game);
 
-            if (!ModelState.IsValid || !isGameExists || !(bool)(IsSteamLoginExists(model.SteamLogin).Data))
-            {
-                return View(model);
-            }
-            UserProfile currentUserProfile = _db.UserProfiles.Get(User.Identity.GetUserId<string>());
-            if (currentUserProfile != null)
-            {
-                var offer = new Offer
-                {
-                    Game = model.Game,
-                    UserProfile = currentUserProfile,
-                    UserProfileId = currentUserProfile.Id,
-                    Header = model.Header,
-                    Discription = model.Discription,
-                    EndDate = DateTime.Now.AddDays(30),
-                    Price = model.Price,
-                    Filter = model.Filter,
-                    SteamLogin = model.SteamLogin,
-                    StartDate = DateTime.Now
-                };
-                foreach (var filter in Filters)
-                {
-                    offer.Filter += $"{filter},";
-                }
-                offer.Filter = offer.Filter.TrimEnd(',');
-                currentUserProfile.Offers.Add(offer);
-                _db.Offers.Create(offer);
-                _db.Save();
-            }
+            //if (!ModelState.IsValid || !isGameExists || !(bool)(IsSteamLoginExists(model.SteamLogin).Data))
+            //{
+            //    return View(model);
+            //}
+            //Offer offer = Mapper.Map<CreateOfferViewModel, Offer>(model);
+            //UserProfile currentUserProfile = _db.UserProfiles.Get(User.Identity.GetUserId<string>());
+            //if (currentUserProfile != null)
+            //{
+            //    var offer = new Offer
+            //    {
+            //        Game = model.Game,
+            //        UserProfile = currentUserProfile,
+            //        UserProfileId = currentUserProfile.Id,
+            //        Header = model.Header,
+            //        Discription = model.Discription,
+            //        EndDate = DateTime.Now.AddDays(30),
+            //        Price = model.Price,
+            //        Filter = model.Filter,
+            //        SteamLogin = model.SteamLogin,
+            //        StartDate = DateTime.Now
+            //    };
+            //    foreach (var filter in Filters)
+            //    {
+            //        offer.Filter += $"{filter},";
+            //    }
+            //    offer.Filter = offer.Filter.TrimEnd(',');
+            //    currentUserProfile.Offers.Add(offer);
+            //    _db.Offers.Create(offer);
+            //    _db.Save();
+            //}
 
             return RedirectToAction("Buy");
         }
@@ -527,16 +539,15 @@ namespace Market.Web.Controllers
         //}
 
 
-        //[HttpPost]
-        //public JsonResult GetRanksJson(string game)
-        //{
-        //    Dictionary<string, string> ranks = new Dictionary<string, string>();
-        //    foreach (var rank in new OfferViewModel().GetRanks(game))
-        //    {
-        //        ranks.Add(rank.Value, rank.Text);
-        //    }
-        //    //check if any of the UserName matches the UserName specified in the Parameter using the ANY extension method.  
-        //    return Json(ranks, JsonRequestBehavior.AllowGet);
-        //}
+        [HttpPost]
+        public JsonResult GetFiltersJson(string game)
+        {
+            //Dictionary<string, string> ranks = new Dictionary<string, string>();
+
+            // Сделать проверку на налл
+            var json = new JavaScriptSerializer().Serialize(_gameService.GetGameByValue(game).Filters);
+            //check if any of the UserName matches the UserName specified in the Parameter using the ANY extension method.  
+            return Json(json, JsonRequestBehavior.AllowGet);
+        }
     }
 }

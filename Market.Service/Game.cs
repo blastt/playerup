@@ -13,6 +13,7 @@ namespace Market.Service
     {
         IEnumerable<Game> GetGames();
         Game GetGame(int id);
+        Game GetGameByValue(string name);
         void CreateGame(Game message);
         void SaveGame();
     }
@@ -52,6 +53,11 @@ namespace Market.Service
         public void SaveGame()
         {
             unitOfWork.Commit();
+        }
+
+        public Game GetGameByValue(string name)
+        {
+            return gamesRepository.GetGameByValue(name);
         }
 
         #endregion

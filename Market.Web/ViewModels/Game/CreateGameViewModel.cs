@@ -5,8 +5,9 @@ using System.Web;
 
 namespace Market.Web.ViewModels
 {
-    public class FilterViewModel
+    public class CreateGameViewModel
     {
+        public string Name { get; set; }
         public string Value { get; set; }
     }
 }
