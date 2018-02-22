@@ -1,5 +1,5 @@
 ﻿@using System.Globalization
-@using Trader.WEB.Models
+@using Market.Web.ViewModels
 @model OfferListViewModel
 
 @{
@@ -12,72 +12,68 @@
     };
 }
 
-@*
-    d9e8f5 - light blue
-    91bed4 - blue
-
-*@
-
 <div class="container">
     <div class="row">
         <div class="col-lg-12">
             <div class="game-filter" id="game-filter">
                 <div class="game-filter-item">
-                    <a class="all-games" href='@Url.Action("List", new { game = "all" })'>
-                        <span>Все</span>                        
-                    </a>
-                </div>
-                
-                <div class="game-filter-item">
-                    <a href='@Url.Action("List", new { game = "csgo" })'>
-                        @Html.GameIcons("csgo", 40)
-                    </a>
                     
-                </div>
-                <div class="game-filter-item">
-                    <a href='@Url.Action("List", new { game = "dota2" })'>
-                        @Html.GameIcons("dota2", 40)
+                    <a class="all-games" href='@Url.Action("List", new { game = "all" })'>
+                        <span>Все</span>
                     </a>
+                </div>
 
-                </div>
-                <div class="game-filter-item">
-                    <a href='@Url.Action("List", new { game = "warface" })'>
-                        @Html.GameIcons("warface", 40)
-                    </a>
-                </div>
-                <div class="game-filter-item">
-                    <a href='@Url.Action("List", new { game = "lol" })'>
-                        @Html.GameIcons("lol", 40)
-                    </a>
-                </div>
-                <div class="game-filter-item">
-                    <a href='@Url.Action("List", new { game = "wot" })'>
-                        @Html.GameIcons("wot", 40)
-                    </a>
-                </div>
-                <div class="game-filter-item">
-                    <a href='@Url.Action("List", new { game = "hearthstone" })'>
-                        @Html.GameIcons("hearthstone", 40)
-                    </a>
-                </div>
-                <div class="game-filter-item">
-                    <a href='@Url.Action("List", new { game = "wow" })'>
-                        @Html.GameIcons("wow", 40)
-                    </a>
-                </div>
+                @*<div class="game-filter-item">
+                        <a href='@Url.Action("List", new { game = "csgo" })'>
+                            @Html.GameIcons("csgo", 40)
+                        </a>
+
+                    </div>
+                    <div class="game-filter-item">
+                        <a href='@Url.Action("List", new { game = "dota2" })'>
+                            @Html.GameIcons("dota2", 40)
+                        </a>
+
+                    </div>
+                    <div class="game-filter-item">
+                        <a href='@Url.Action("List", new { game = "warface" })'>
+                            @Html.GameIcons("warface", 40)
+                        </a>
+                    </div>
+                    <div class="game-filter-item">
+                        <a href='@Url.Action("List", new { game = "lol" })'>
+                            @Html.GameIcons("lol", 40)
+                        </a>
+                    </div>
+                    <div class="game-filter-item">
+                        <a href='@Url.Action("List", new { game = "wot" })'>
+                            @Html.GameIcons("wot", 40)
+                        </a>
+                    </div>
+                    <div class="game-filter-item">
+                        <a href='@Url.Action("List", new { game = "hearthstone" })'>
+                            @Html.GameIcons("hearthstone", 40)
+                        </a>
+                    </div>
+                    <div class="game-filter-item">
+                        <a href='@Url.Action("List", new { game = "wow" })'>
+                            @Html.GameIcons("wow", 40)
+                        </a>
+                    </div>*@
             </div>
         </div>
     </div>
     <div class="row">
         <div class="col-lg-3">
             <div class="bs-component">
+                
                 @using (Ajax.BeginForm("OfferList", new { Page = 1 }, options, new { @class = "search-form", id = "ajaxForm" }))
                 {
 
 
 
 
-                    @Html.Partial("_SearchPanel", Model.SearchingInfo)
+                    //@Html.Partial("_SearchPanel", Model.SearchingInfo)
 
 
 
@@ -90,7 +86,7 @@
         </div>
         <div class="col-lg-9">
             <div class="bs-component">
-                
+
                 <div id="list">@Html.Partial("_OfferList", Model)</div>
             </div>
         </div>
@@ -100,27 +96,27 @@
 {
 
     <script>
-        //function test() {
-        //    alert(
-        //    $(this.parentNode).addClass("active");
-        //}
+    //function test() {
+    //    alert(
+    //    $(this.parentNode).addClass("active");
+    //}
 
-        function submitSort(val) {
+    function submitSort(val) {
 
-            //var form = $('#ajaxForm');
+        //var form = $('#ajaxForm');
 
-            $('#orderBy').val(val);
-            $('#ajaxForm').submit();
+        $('#orderBy').val(val);
+        $('#ajaxForm').submit();
 
-        }
-        function submitPage(val) {
+    }
+    function submitPage(val) {
 
-            //var form = $('#ajaxForm');
+        //var form = $('#ajaxForm');
 
-            $('#Page').val(val);
-            $('#ajaxForm').submit();
+        $('#Page').val(val);
+        $('#ajaxForm').submit();
 
-        }
+    }
     </script>
     <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
 
@@ -128,44 +124,45 @@
     <script type="text/javascript" src="~/Scripts/myScripts.js"></script>
 
     <script>
-        $(document).ready(function () {
+    $(document).ready(function () {
 
-            $("#game-filter a").each(function () {
-                if (this.href == window.location.href) {
-                    $(this.parentNode).addClass("active");
-                    return;
-                }                               
-            });
-
-            
+        $("#game-filter a").each(function () {
+            if (this.href == window.location.href) {
+                $(this.parentNode).addClass("active");
+                return;
+            }
         });
-        $(function () {
-    var minPrice = parseInt('@Model.SearchingInfo.MinPrice');
-    var maxPrice = parseInt('@Model.SearchingInfo.MaxPrice');
 
-    $("#slider_price").slider({
 
-        range: true,
-        min: minPrice,
-        max: maxPrice,
-        values: [minPrice, maxPrice],
-        slide: function (event, ui) {
-
-            //Поле минимального значения
-            $("#price").val(ui.values[0]);
-            //Поле максимального значения
-            $("#price2").val(ui.values[1]);
-        }
     });
-    //Записываем значения ползунков в момент загрузки страницы
-    //То есть значения по умолчанию
-    $("#price").val($("#slider_price").slider("values", 0));
-    $("#price2").val($("#slider_price").slider("values", 1 ));
-            });
+    @*$(function () {
+        var minPrice = parseInt('@Model.SearchingInfo.MinPrice');
+        var maxPrice = parseInt('@Model.SearchingInfo.MaxPrice');
 
-            $(document).ready(ajaxRanks('@Model.SearchingInfo.Game', true));
+        $("#slider_price").slider({
+
+            range: true,
+            min: minPrice,
+            max: maxPrice,
+            values: [minPrice, maxPrice],
+            slide: function (event, ui) {
+
+                //Поле минимального значения
+                $("#price").val(ui.values[0]);
+                //Поле максимального значения
+                $("#price2").val(ui.values[1]);
+            }
+        });
+        //Записываем значения ползунков в момент загрузки страницы
+        //То есть значения по умолчанию
+        $("#price").val($("#slider_price").slider("values", 0));
+        $("#price2").val($("#slider_price").slider("values", 1));
+    });*@
+
+    //$(document).ready(ajaxRanks('Model.SearchingInfo.Game', true));
     </script>
 }
+
 
 
 

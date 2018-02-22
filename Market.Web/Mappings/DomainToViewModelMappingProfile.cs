@@ -25,13 +25,13 @@ namespace Market.Web.Mappings
 
             #region Offer
 
-            //CreateMap<Offer, OfferViewModel>()
-            //   .ForMember(o => o.Header, map => map.MapFrom(vm => vm.Header))
-            //   .ForMember(o => o.Filter, map => map.MapFrom(vm => vm.Filter))
-            //   .ForMember(o => o.Game, map => map.MapFrom(vm => vm.Game))
-            //   .ForPath(o => o.UserName, map => map.MapFrom(vm => vm.UserProfile.Name))
-
-            //   .ForMember(o => o.Price, map => map.MapFrom(vm => vm.Price));
+            CreateMap<Offer, OfferViewModel>()
+               .ForMember(o => o.Header, map => map.MapFrom(vm => vm.Header))
+               .ForMember(o => o.Filters, map => map.MapFrom(vm => vm.Filters))
+               .ForMember(o => o.DateCreated, map => map.MapFrom(vm => vm.DateCreated))
+               .ForMember(o => o.Price, map => map.MapFrom(vm => vm.Price))
+               .ForMember(o => o.Game, map => map.MapFrom(vm => vm.Game))
+               .ForPath(o => o.User, map => map.MapFrom(vm => vm.UserProfile));
 
             CreateMap<Offer, CreateOfferViewModel > ()
                 .ForMember(o => o.Header, map => map.MapFrom(vm => vm.Header))

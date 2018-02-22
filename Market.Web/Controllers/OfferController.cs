@@ -2,8 +2,9 @@
 using Market.Model.Models;
 using Market.Service;
 using Market.Web.ViewModels;
-using Market.Web.ViewModels.Offer;
+
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -28,38 +29,43 @@ namespace Market.Web.Controllers
         }
 
         // GET: Offer
-        //public ViewResult List(string game)
-        //{
-        //    decimal minPrice = 0;
-        //    decimal maxPrice = 0;
-        //    IEnumerable<Offer> offers = _offerService.GetOffers();
-        //    if (game != "all")
-        //    {
-        //        offers = offers.Where(m => m.Game == game);
-        //    }
-        //    if (offers.Count() != 0 && offers != null)
-        //    {
-        //        minPrice = offers.Min(m => m.Price);
-        //        maxPrice = offers.Max(m => m.Price);
-        //    }
-        //    IList<SelectListItem> ranks = new List<SelectListItem>
-        //    {
-        //        new SelectListItem() { Text = "Все ранги", Value = "none", Selected = true }
-        //    };
-        //    foreach (var rank in (Dictionary<string, string>)(GetRanksJson(game).Data))
-        //    {
-        //        ranks.Add(new SelectListItem() { Text = rank.Value, Value = rank.Key });
-        //    }
-        //    var model = OfferList(new SearchingInfo()
-        //    {
-        //        MinPrice = minPrice,
-        //        MaxPrice = maxPrice,
-        //        Game = game,
-        //        FilterByList = ranks
-        //    }).Model;
+        public ViewResult List()
+        {
+            decimal minPrice = 0;
+            decimal maxPrice = 0;
+            IEnumerable<Offer> offers = _offerService.GetOffers();
 
-        //    return View((OfferListViewModel)model);
-        //}
+
+            if (offers.Count() != 0 && offers != null)
+            {
+                offers = offers.Where(m => m.Game.Value == "csgo");
+                minPrice = offers.Min(m => m.Price);
+                maxPrice = offers.Max(m => m.Price);
+            }
+            IList<SelectListItem> ranks = new List<SelectListItem>
+            {
+                new SelectListItem() { Text = "Все ранги", Value = "none", Selected = true }
+            };
+            foreach (var rank in (Dictionary<string, string>)(GetFiltersJson("csgo").Data))
+            {
+                ranks.Add(new SelectListItem() { Text = rank.Value, Value = rank.Key });
+            }
+            IList<OfferViewModel> offerList = new List<OfferViewModel>();
+            foreach (var offer in _offerService.GetOffers().Where(m => m.Game.Value == "csgo"))
+            {
+                offerList.Add(Mapper.Map<Offer, OfferViewModel>(offer));
+            }
+            var model = new OfferListViewModel()
+            {
+                Filters = _filterService.GetFilters().Where(m => m.Game.Value == "csgo"),
+                Game = _gameService.GetGameByValue("csgo"),
+                Offers = offerList
+            };
+            
+            
+
+            return View(model);
+        }
 
         //public ViewResult All()
         //{
@@ -148,11 +154,11 @@ namespace Market.Web.Controllers
         //public PartialViewResult OfferList(OfferListViewModel model)
         //{
         //    // parse filter array to string for storing it in the database
-            
+
 
 
         //    IEnumerable<Offer> offers = _offerService.GetOffers().Where(o => o.Game.Value == model.Game.Value).Where(o => o);
-                      
+
 
         //    //if (searchInfo.IsOnline)
         //    //{
@@ -205,7 +211,7 @@ namespace Market.Web.Controllers
         //    }
         //    //model.Offers = model.Offers.Skip((searchInfo.Page - 1) * pageSize).Take(pageSize).ToList();
         //    return PartialView("_OfferList", model);
-        
+
         // Get Ajax offer list
         //public PartialViewResult OfferList(Game game, string[] Filters = null)
         //{
@@ -293,14 +299,30 @@ namespace Market.Web.Controllers
         {
             CreateOfferViewModel model = new CreateOfferViewModel();
             SelectList selectList = new SelectList(_gameService.GetGames());
-            model.Games = selectList;
-            model.Filters = new SelectList(_filterService.GetFilters());
-            model.FilterItems = new SelectList(_filterItemService.GetFilterItems());
+            
+            IList<SelectListItem> games = new List<SelectListItem>();
+            foreach (var game in _gameService.GetGames())
+            {
+                games.Add(new SelectListItem { Value = game.Value, Text = game.Name });
+            }
+            IList<SelectListItem> filters = new List<SelectListItem>();
+            foreach (var filter in _filterService.GetFilters())
+            {
+                filters.Add(new SelectListItem { Value = filter.Value, Text = filter.Text });
+            }
+            IList<SelectListItem> filterItems = new List<SelectListItem>();
+            foreach (var filterItem in _filterItemService.GetFilterItems())
+            {
+                filterItems.Add(new SelectListItem { Value = filterItem.Value, Text = filterItem.Name });
+            }
+            model.Games = games;
+            model.Filters = filters;
+            model.FilterItems = filterItems;
             return View(model);
         }
 
         [HttpPost]
-        public ActionResult Create(CreateOfferViewModel model)
+        public ActionResult Create(CreateOfferViewModel model, string test)
         {
             //bool isGameExists = model.Games.Any(m => m.Value == model.Game);
 

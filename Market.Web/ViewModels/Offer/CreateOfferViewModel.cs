@@ -13,9 +13,9 @@ namespace Market.Web.ViewModels
         public string Discription { get; set; }
         public string SteamLogin { get; set; }
         public Game Game { get; set; }
-        public SelectList Games { get; set; }
-        public SelectList Filters { get; set; }
-        public SelectList FilterItems { get; set; }
+        public IEnumerable<SelectListItem> Games { get; set; }
+        public IEnumerable<SelectListItem> Filters { get; set; }
+        public IEnumerable<SelectListItem> FilterItems { get; set; }
         public decimal Price { get; set; }
     }
 }

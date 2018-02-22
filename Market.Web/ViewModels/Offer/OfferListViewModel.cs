@@ -5,12 +5,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace Market.Web.ViewModels.Offer
+namespace Market.Web.ViewModels
 {
     public class OfferListViewModel
     {
         public Game Game { get; set; }
-        public ICollection<CreateFilterViewModel> Filters { get; set; }
+        public IEnumerable<Filter> Filters { get; set; }
         public ICollection<OfferViewModel> Offers { get; set; }
     }
 }

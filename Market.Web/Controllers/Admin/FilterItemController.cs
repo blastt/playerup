@@ -49,6 +49,7 @@ namespace Market.Web.Controllers.Admin
             {
                 model.Game = game;
             }
+            
             var filter = game.Filters.FirstOrDefault(m => m.Value == model.Filter.Value);
             if(filter != null)
             {
@@ -115,7 +116,8 @@ namespace Market.Web.Controllers.Admin
             {
                 Text = m.Text,
                 Value = m.Value,
-                FilterItems = m.FilterItems
+                FilterItems = m.FilterItems,
+                GameValue = m.Game.Value
             });
             var jsonSerializerSettings = new JsonSerializerSettings();
             jsonSerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;

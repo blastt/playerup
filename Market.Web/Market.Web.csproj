@@ -246,7 +246,44 @@
     <Content Include="Content\bootstrap-reboot.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Images\Csgo\Icons\large.png" />
+    <Content Include="Content\Images\Csgo\Icons\small.png" />
+    <Content Include="Content\Images\Csgo\Ranks\dmg.png" />
+    <Content Include="Content\Images\Csgo\Ranks\ge.png" />
+    <Content Include="Content\Images\Csgo\Ranks\gn1.png" />
+    <Content Include="Content\Images\Csgo\Ranks\gn2.png" />
+    <Content Include="Content\Images\Csgo\Ranks\gn3.png" />
+    <Content Include="Content\Images\Csgo\Ranks\gn4.png" />
+    <Content Include="Content\Images\Csgo\Ranks\le.png" />
+    <Content Include="Content\Images\Csgo\Ranks\lem.png" />
+    <Content Include="Content\Images\Csgo\Ranks\mg1.png" />
+    <Content Include="Content\Images\Csgo\Ranks\mg2.png" />
+    <Content Include="Content\Images\Csgo\Ranks\mge.png" />
+    <Content Include="Content\Images\Csgo\Ranks\s1.png" />
+    <Content Include="Content\Images\Csgo\Ranks\s2.png" />
+    <Content Include="Content\Images\Csgo\Ranks\s3 %281%29.svg" />
+    <Content Include="Content\Images\Csgo\Ranks\s3.png" />
+    <Content Include="Content\Images\Csgo\Ranks\s3.svg" />
+    <Content Include="Content\Images\Csgo\Ranks\s4.png" />
+    <Content Include="Content\Images\Csgo\Ranks\se.png" />
+    <Content Include="Content\Images\Csgo\Ranks\sem.png" />
+    <Content Include="Content\Images\Csgo\Ranks\smfc.png" />
+    <Content Include="Content\Images\Csgo\Ranks\unranked.png" />
+    <Content Include="Content\Images\Dota2\Icons\small.png" />
+    <Content Include="Content\Images\Dota2\Ranks\ancient.png" />
+    <Content Include="Content\Images\Dota2\Ranks\archon.png" />
+    <Content Include="Content\Images\Dota2\Ranks\crusader.png" />
+    <Content Include="Content\Images\Dota2\Ranks\divine.png" />
+    <Content Include="Content\Images\Dota2\Ranks\guardian.png" />
+    <Content Include="Content\Images\Dota2\Ranks\herald.png" />
+    <Content Include="Content\Images\Dota2\Ranks\legend.png" />
+    <Content Include="Content\Images\Dota2\Ranks\listedOnLeaderboards.png" />
+    <Content Include="Content\Images\Dota2\Ranks\top100OnLeaderboards.png" />
+    <Content Include="Content\Images\Dota2\Ranks\top10OnLeaderboards.png" />
+    <Content Include="Content\Images\Dota2\Ranks\unranked.png" />
     <Content Include="Content\Images\noavatar.png" />
+    <Content Include="Content\jquery-ui.css" />
+    <Content Include="Content\jquery-ui.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
@@ -282,6 +319,8 @@
     <Content Include="Scripts\jquery-3.3.1.slim.js" />
     <Content Include="Scripts\jquery-3.3.1.slim.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery-ui.js" />
+    <Content Include="Scripts\jquery-ui.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
@@ -306,7 +345,9 @@
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
-    <Content Include="Views\Web.config" />
+    <Content Include="Views\Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
@@ -368,10 +409,11 @@
     <Content Include="Views\FilterItem\Create.cshtml" />
     <Content Include="Views\Admin\Panel.cshtml" />
     <Content Include="Views\FilterItem\Details.cshtml" />
+    <Content Include="Views\Offer\List.cshtml" />
+    <Content Include="Views\Shared\_OfferList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Content\Images\Csgo\Ranks\" />
     <Folder Include="Views\God\" />
   </ItemGroup>
   <ItemGroup>

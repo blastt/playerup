@@ -10,6 +10,7 @@
     {
 
         <li>
+            <img src="../../Content/Images/@game.Value/Icons/@game.Image" style="height:20px" alt="Alternate Text" />
             @game.Name (@game.Value)
             <ul>
                 @foreach (var filter in game.Filters)
@@ -20,6 +21,7 @@
                             @foreach (var filterItem in filter.FilterItems)
                             {
                                 <li>
+                                    <img src="../../Content/Images/@game.Value/Ranks/@filterItem.Image" alt="Alternate Text" style="width: 80px" />
                                     @filterItem.Name (@filterItem.Value)
                                     <ul></ul>
                                 </li>
