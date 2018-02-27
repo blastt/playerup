@@ -12,10 +12,13 @@ namespace Market.Web.ViewModels
         public string Header { get; set; }
         public string Discription { get; set; }
         public string SteamLogin { get; set; }
-        public Game Game { get; set; }
+        public string Game { get; set; }
+        public string[] FilterValues { get; set; }
+        public string[] FilterItemValues { get; set; }
         public IEnumerable<SelectListItem> Games { get; set; }
         public IEnumerable<SelectListItem> Filters { get; set; }
         public IEnumerable<SelectListItem> FilterItems { get; set; }
+        public Dictionary<Model.Models.Filter, FilterItem> FilterPairs { get; set; }
         public decimal Price { get; set; }
     }
 }

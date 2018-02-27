@@ -10,11 +10,12 @@ namespace Market.Web.ViewModels
     {
         public int Id { get; set; }
         public string Header { get; set; }
-        public string Game { get; set; }        
+        public Game Game { get; set; }        
         public decimal Price { get; set; }
         public DateTime? DateCreated { get; set; } = DateTime.Now;
         public UserProfile User { get; set; }
+        
         public ICollection<Filter> Filters { get; set; }
-
+        public ICollection<FilterItem> FilterItems { get; set; }
     }
 }

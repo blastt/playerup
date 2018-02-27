@@ -2,7 +2,8 @@
 using Market.Model.Models;
 using Market.Service;
 using Market.Web.ViewModels;
-
+using Microsoft.AspNet.Identity;
+using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -15,30 +16,42 @@ namespace Market.Web.Controllers
 {
     public class OfferController : Controller
     {
+        private readonly IUserProfileService _userProfileService;
         private readonly IOfferService _offerService;
         private readonly IGameService _gameService;
         private readonly IFilterService _filterService;
         private readonly IFilterItemService _filterItemService;
         public int pageSize = 7;
-        public OfferController(IOfferService offerService, IGameService gameService, IFilterService filterService, IFilterItemService filterItemService)
+        public OfferController(IOfferService offerService, IGameService gameService, IFilterService filterService, IFilterItemService filterItemService, IUserProfileService userProfileService)
         {
             _offerService = offerService;
             _gameService = gameService;
             _filterService = filterService;
             _filterItemService = filterItemService;
+            _userProfileService = userProfileService;
         }
 
         // GET: Offer
         public ViewResult List()
         {
+
+            IEnumerable<Game> games = _gameService.GetGames();
+
+            OfferListViewModel model = new OfferListViewModel();
+            model.Games = games;
+            return View(model);
+        }
+
+        public PartialViewResult OfferList(string game = "csgo")
+        {
             decimal minPrice = 0;
             decimal maxPrice = 0;
-            IEnumerable<Offer> offers = _offerService.GetOffers();
+            IEnumerable<Offer> offers = _offerService.GetOffers().Where(m => m.Game.Value == game);
 
 
             if (offers.Count() != 0 && offers != null)
             {
-                offers = offers.Where(m => m.Game.Value == "csgo");
+
                 minPrice = offers.Min(m => m.Price);
                 maxPrice = offers.Max(m => m.Price);
             }
@@ -46,25 +59,22 @@ namespace Market.Web.Controllers
             {
                 new SelectListItem() { Text = "Все ранги", Value = "none", Selected = true }
             };
-            foreach (var rank in (Dictionary<string, string>)(GetFiltersJson("csgo").Data))
-            {
-                ranks.Add(new SelectListItem() { Text = rank.Value, Value = rank.Key });
-            }
+            
             IList<OfferViewModel> offerList = new List<OfferViewModel>();
-            foreach (var offer in _offerService.GetOffers().Where(m => m.Game.Value == "csgo"))
+            foreach (var offer in _offerService.GetOffers().Where(m => m.Game.Value == game))
             {
                 offerList.Add(Mapper.Map<Offer, OfferViewModel>(offer));
             }
             var model = new OfferListViewModel()
             {
-                Filters = _filterService.GetFilters().Where(m => m.Game.Value == "csgo"),
-                Game = _gameService.GetGameByValue("csgo"),
+                Filters = _filterService.GetFilters().Where(m => m.Game.Value == game),
+                Game = _gameService.GetGameByValue(game),
                 Offers = offerList
             };
             
-            
 
-            return View(model);
+
+            return PartialView("_OfferList", offerList);
         }
 
         //public ViewResult All()
@@ -324,6 +334,65 @@ namespace Market.Web.Controllers
         [HttpPost]
         public ActionResult Create(CreateOfferViewModel model, string test)
         {
+
+            Game game = _gameService.GetGameByValue(model.Game);
+            Offer offer = Mapper.Map<CreateOfferViewModel, Offer>(model);
+            offer.Game = game;
+            offer.Filters = new List<Model.Models.Filter>();
+            offer.FilterItems = new List<FilterItem>();
+            offer.UserProfile = _userProfileService.GetUserProfileById(User.Identity.GetUserId());
+            foreach (var filterValue in model.FilterValues)
+            {
+               var filter =  _filterService.GetFilters().Where(m => m.Value == filterValue).FirstOrDefault();
+                offer.Filters.Add(filter);
+                _filterService.SaveFilter();
+            }
+
+            foreach (var filterItemValue in model.FilterItemValues)
+            {
+                var filterItem = _filterItemService.GetFilterItems().Where(m => m.Value == filterItemValue).FirstOrDefault();
+                offer.FilterItems.Add(filterItem);
+                _filterItemService.SaveFilterItem();
+            }
+            _offerService.CreateOffer(offer);
+            _offerService.SaveOffer();
+            //var q2 = from item in offer.FilterItems
+            //         join filter in offer.Filters on item. equals filter.Id
+            //         select new { itemValue = item.Value, filterValue = filter.Value };
+
+
+
+
+
+
+            //if(game.Filters.Count() == model.FilterValues.Count() && game != null)
+            //{
+            //    foreach (var filter in game.Filters)
+            //    {
+            //        var contains = model.FilterValues.Contains(filter.Value);
+            //        if (!contains)
+            //        {
+            //            return HttpNotFound("Filter is not found!");
+            //        }
+            //        else
+            //        {
+            //            var f = game.Filters.FirstOrDefault(m => m.Value == filter.Value);
+
+            //            offer.Filters.Add(f,f.FilterItems.Where(m => m.Value == ));
+
+            //        }
+            //    }
+            //    foreach (var item in model.FilterItemValues)
+            //    {
+            //        var fitems = _filterItemService.GetFilterItems().Where(m => m.Value == item).FirstOrDefault(); ;
+
+            //        offer.FilterItems = fitems.ToList();
+            //    }
+
+            //}
+
+
+
             //bool isGameExists = model.Games.Any(m => m.Value == model.Game);
 
             //if (!ModelState.IsValid || !isGameExists || !(bool)(IsSteamLoginExists(model.SteamLogin).Data))
@@ -359,6 +428,15 @@ namespace Market.Web.Controllers
 
             return RedirectToAction("Buy");
         }
+
+        public ActionResult Details(int? id = 2)
+        {
+            Offer offer = _offerService.GetOffer(id.Value);
+            var model = Mapper.Map<Offer, DetailsOfferViewModel>(offer);
+            return View(model);
+
+        }
+
 
         //[Authorize]
         //[HttpPost]
@@ -565,7 +643,8 @@ namespace Market.Web.Controllers
         public JsonResult GetFiltersJson(string game)
         {
             //Dictionary<string, string> ranks = new Dictionary<string, string>();
-
+            var jsonSerializerSettings = new JsonSerializerSettings();
+            jsonSerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
             // Сделать проверку на налл
             var json = new JavaScriptSerializer().Serialize(_gameService.GetGameByValue(game).Filters);
             //check if any of the UserName matches the UserName specified in the Parameter using the ANY extension method.  

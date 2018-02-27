@@ -17,56 +17,32 @@
         <div class="col-lg-12">
             <div class="game-filter" id="game-filter">
                 <div class="game-filter-item">
-                    
+
                     <a class="all-games" href='@Url.Action("List", new { game = "all" })'>
                         <span>Все</span>
                     </a>
                 </div>
 
-                @*<div class="game-filter-item">
-                        <a href='@Url.Action("List", new { game = "csgo" })'>
-                            @Html.GameIcons("csgo", 40)
+                
+                @foreach (var g in Model.Games)
+                {
+                    var url = "../../Content/Images/" + g.Value + "/Icons/" + g.Image;
+                    <div class="game-filter-item">
+                        <a href='@Url.Action("List", new { game = g.Value })'>
+                            <img src="@url" style="width:40px" alt="Alternate Text" title="@g.Name" />
                         </a>
 
                     </div>
-                    <div class="game-filter-item">
-                        <a href='@Url.Action("List", new { game = "dota2" })'>
-                            @Html.GameIcons("dota2", 40)
-                        </a>
+                    
+                }
 
-                    </div>
-                    <div class="game-filter-item">
-                        <a href='@Url.Action("List", new { game = "warface" })'>
-                            @Html.GameIcons("warface", 40)
-                        </a>
-                    </div>
-                    <div class="game-filter-item">
-                        <a href='@Url.Action("List", new { game = "lol" })'>
-                            @Html.GameIcons("lol", 40)
-                        </a>
-                    </div>
-                    <div class="game-filter-item">
-                        <a href='@Url.Action("List", new { game = "wot" })'>
-                            @Html.GameIcons("wot", 40)
-                        </a>
-                    </div>
-                    <div class="game-filter-item">
-                        <a href='@Url.Action("List", new { game = "hearthstone" })'>
-                            @Html.GameIcons("hearthstone", 40)
-                        </a>
-                    </div>
-                    <div class="game-filter-item">
-                        <a href='@Url.Action("List", new { game = "wow" })'>
-                            @Html.GameIcons("wow", 40)
-                        </a>
-                    </div>*@
             </div>
         </div>
     </div>
     <div class="row">
         <div class="col-lg-3">
             <div class="bs-component">
-                
+
                 @using (Ajax.BeginForm("OfferList", new { Page = 1 }, options, new { @class = "search-form", id = "ajaxForm" }))
                 {
 
@@ -87,36 +63,99 @@
         <div class="col-lg-9">
             <div class="bs-component">
 
-                <div id="list">@Html.Partial("_OfferList", Model)</div>
+                <div id="list">@Html.Action("OfferList")</div>
             </div>
         </div>
     </div>
 </div>
 @section scripts
 {
+    <script>
+
+        function GetOfferList() {
+            $.ajax({
+                url: "/Offer/OfferList",
+                contentType: "application/json",
+                dataType: "json",
+                type: "POST",
+                data: JSON.stringify({ game: g }),
+                
+
+                success: function (ranks) {
+                    var label, hidden;
+                    var select;
+                    var div;
+                    var mainDiv = $("#filter-item");
+                    mainDiv.empty();
+                    for (var rank in ranks) {
+                        div = $("<div></div>");
+                        div.addClass("image-select");
+                        hidden = $('<input type="hidden" name="FilterValues" value="' + ranks[rank].Value + '">');
+                        label = $("<label for='Filter.Value'>" + ranks[rank].Text + "</label>")
+                        select = $("<select name='FilterItemValues'></select>");
+                        var defaultOption = $('<option>Выберите ранг</option>').val('empty');
+                        select.append(defaultOption);
+                        for (var item in ranks[rank].FilterItems) {
+                            var url = "../../Content/Images/" + ranks[rank].GameValue + "/Ranks/" + ranks[rank].FilterItems[item].Image;
+                            var option = $('<option data-url="' + url + '"></option>').val(ranks[rank].FilterItems[item].Value).text(ranks[rank].FilterItems[item].Name);
+
+                            select.append(option);
+                        }
+                        div.append(select);
+                        div.append(hidden);
+                        mainDiv.append(label).append(div);
+
+                    }
+                    myfunction();
+                    //var div = $('#rank');
+                    //var divRank = $('<div></div>');
+                    //div.empty();
+
+                    //if (Object.keys(data).length != 0) {
+
+                    //    divRank.addClass('form-group');
+
+
+                    //    if (g == 'dota2') {
+                    //        AddDota2RankFields(divRank, data, isListView);
+                    //    }
+                    //    else if (g == 'csgo') {
+                    //        AddCsgoRankFields(divRank, data, isListView);
+                    //    }
+                    //    div.append(divRank);
+
+                    //}
+                },
+                error: function myfunction() {
+                    alert("hi");
+                }
+            });
+        }
+    </script>
+
 
     <script>
-    //function test() {
-    //    alert(
-    //    $(this.parentNode).addClass("active");
-    //}
+        //function test() {
+        //    alert(
+        //    $(this.parentNode).addClass("active");
+        //}
 
-    function submitSort(val) {
+        function submitSort(val) {
 
-        //var form = $('#ajaxForm');
+            //var form = $('#ajaxForm');
 
-        $('#orderBy').val(val);
-        $('#ajaxForm').submit();
+            $('#orderBy').val(val);
+            $('#ajaxForm').submit();
 
-    }
-    function submitPage(val) {
+        }
+        function submitPage(val) {
 
-        //var form = $('#ajaxForm');
+            //var form = $('#ajaxForm');
 
-        $('#Page').val(val);
-        $('#ajaxForm').submit();
+            $('#Page').val(val);
+            $('#ajaxForm').submit();
 
-    }
+        }
     </script>
     <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
 

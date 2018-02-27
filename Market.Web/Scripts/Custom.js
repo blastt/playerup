@@ -1,4 +1,26 @@
-﻿
+﻿function SearchOffers() {
+    var message = {
+        "page": p,
+        "sort": sort,
+        "online": online,
+        "search": searchString,
+        "filterItems": filters,
+        "game": game,
+        "priceFrom": priceFrom,
+        "priceTo": priceTo
+    };
+    $.ajax({
+        type: "POST",
+        data: { action: "OfferList", data: message },
+        dataType: "Json",
+        success: function (response) {
+
+        }
+    });
+}
+
+
+
 function ajaxFilters(g, isListView) {
 
     $.ajax({

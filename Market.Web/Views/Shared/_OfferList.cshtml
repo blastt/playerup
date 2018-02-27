@@ -1,15 +1,14 @@
 ﻿@using System.Globalization
 
-
 @model ICollection<Market.Web.ViewModels.OfferViewModel>
 
 
 <div class="row mb-3 sort">
     <div class="col-md-5 sort-counter">
-       @* Найдено предложений: <span style="font-weight:700">@Model.PagingInfo.TotalItems</span>*@
+        @* Найдено предложений: <span style="font-weight:700">@Model.PagingInfo.TotalItems</span>*@
     </div>
     <div class="col-md-5">
-       @* @Html.DropDownList("OrderBy", Model.SearchingInfo.OrderByList, new { @class = "form-control", onchange = "submitSort(value);" })*@
+        @* @Html.DropDownList("OrderBy", Model.SearchingInfo.OrderByList, new { @class = "form-control", onchange = "submitSort(value);" })*@
     </div>
     <div class="col-md-2">
         @{
@@ -73,13 +72,21 @@
                             </div>
                         </div>
                         <div class="col-sm-4 text-center">
-                            <div class="item-rank">
-                                <div class="row">
-                                    @foreach (var filter in offer.Filters)
-                                    {
-                                        filter.FilterItems.FirstOrDefault();
-                                    }
-                                </div>
+                            <div class="row">
+                                @foreach (var filter in offer.Filters)
+                                {
+                                    <div class="col-md-6">
+                                        <span>@filter.Text</span>
+                                    </div>
+                                }
+                                @foreach (var item in offer.FilterItems)
+                                {
+                                    var url = "../../Content/Images/" + offer.Game.Value + "/Ranks/" + item.Image;
+                                    <div class="col-md-6">
+
+                                        <img src="@url" style="width:100px" alt="Alternate Text" />
+                                    </div>
+                                }
                             </div>
                         </div>
                         <div class="col-sm-4 text-right">

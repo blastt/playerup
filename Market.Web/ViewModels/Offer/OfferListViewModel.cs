@@ -10,6 +10,7 @@ namespace Market.Web.ViewModels
     public class OfferListViewModel
     {
         public Game Game { get; set; }
+        public IEnumerable<Game> Games { get; set; }
         public IEnumerable<Filter> Filters { get; set; }
         public ICollection<OfferViewModel> Offers { get; set; }
     }

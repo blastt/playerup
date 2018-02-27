@@ -126,7 +126,7 @@
                 data: JSON.stringify({ game: g }),
 
                 success: function (ranks) {
-                    var label;
+                    var label, hidden;
                     var select;
                     var div;
                     var mainDiv = $("#filter-item");
@@ -134,8 +134,9 @@
                     for (var rank in ranks) {
                         div = $("<div></div>");
                         div.addClass("image-select");
+                        hidden = $('<input type="hidden" name="FilterValues" value="' + ranks[rank].Value +'">');
                         label = $("<label for='Filter.Value'>" + ranks[rank].Text + "</label>")
-                        select = $("<select name='Filter.Value'></select>");
+                        select = $("<select name='FilterItemValues'></select>");
                         var defaultOption = $('<option>Выберите ранг</option>').val('empty');
                         select.append(defaultOption);
                         for (var item in ranks[rank].FilterItems) {
@@ -145,6 +146,7 @@
                             select.append(option);
                         }
                         div.append(select);
+                        div.append(hidden);
                         mainDiv.append(label).append(div);
                         
                     }

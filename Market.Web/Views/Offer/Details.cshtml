@@ -1,6 +1,5 @@
 ﻿@using System.Globalization
-@using Trader.DAL.Entities
-@model Trader.DAL.Entities.OfferViewModel
+@model Market.Web.ViewModels.DetailsOfferViewModel
 
 @{
     ViewBag.Title = "Details";
@@ -13,22 +12,22 @@
             <div class="col-md-8">
                 <div class="offer-full" style="height: 300px">
                     <div class="seller-details">
-                        <img class="img-circle" src="@Url.Action("Photo", "Profile" , new { UserId = Model.User.Id })" alt="Alternate Text" style="width:80px; height:80px" />
+                        <img class="img-circle" src="@Url.Action("Photo", "Profile" , new { UserId = Model.UserProfile.Id })" alt="Alternate Text" style="width:80px; height:80px" />
 
 
                         <ul class="ul-seller-info">
                             <li>
-                                @Html.ActionLink(Model.User.ApplicationUser.UserName, "Info", "Profile", new { prof = Model.User.ApplicationUser.UserName }, null)
+                                @Html.ActionLink(Model.UserProfile.ApplicationUser.UserName, "Info", "Profile", new { prof = Model.UserProfile.ApplicationUser.UserName }, null)
                             </li>
                             <li>
-                                Рейтинг <span style="font-weight:700">@ViewData["Rating"]</span>
+                                Рейтинг <span style="font-weight:700">@Model.UserProfile.Rating</span>
                             </li>
                             <li>
                                 <input id="contact" type="button" value="Связаться" class="btn btn-info" />
 
                             </li>
                             <li>
-                                @if (Model.User.IsOnline)
+                                @if (Model.UserProfile.IsOnline)
                                 {
                                     <span class="badge badge-pill badge-light">Online</span>
                                 }
@@ -56,10 +55,10 @@
                             </tr>
                             <tr>
                                 <td>
-                                    @Model.User.Positive
+                                    @Model.UserProfile.Positive
                                 </td>
                                 <td>
-                                    @Model.User.Negative
+                                    @Model.UserProfile.Negative
                                 </td>
                             </tr>
                         </table>
@@ -73,22 +72,35 @@
                         <ul class="ul-details">
                             <li class="li-details">
                                 @Html.LabelFor(m => m.Game, new { @class = "label-details" })
-                                @Html.GameIcons(Model.Game, 25)
+                                @Html.DisplayFor(m => m.Game.Name)
                             </li>
                             <li class="li-details">
                                 @Html.LabelFor(m => m.Views, new { @class = "label-details" })
                                 <span>@Model.Views</span>
                             </li>
                             <li class="li-details">
-                                @Html.LabelFor(m => m.EndDate, new { @class = "label-details" })
-                                <span>@Model.EndDate.ToShortDateString()</span>
+                                @Html.LabelFor(m => m.DateCreated, new { @class = "label-details" })
+                                <span>@Model.DateCreated.Value.ToShortDateString()</span>
 
                             </li>
                         </ul>
                         <div class="col-sm-12">
 
                             <div class="row offer-details-rank">
-                                @Html.RankImages(Model.Game, Model.Filter, width: 100)
+                                @foreach (var filter in Model.Filters)
+                                {
+                                    <div class="col-md-6">
+                                        <span>@filter.Text</span>
+                                    </div>
+                                }
+                                @foreach (var item in Model.FilterItems)
+                                {
+                                    var url = "../../Content/Images/" + Model.Game.Value + "/Ranks/" + item.Image;
+                                    <div class="col-md-6">
+
+                                        <img src = "@url" style="width:100px" alt="Alternate Text" />
+                                    </div>
+                                }
                             </div>
 
                         </div>
@@ -116,10 +128,10 @@
                     <div style="text-align:center">
                         @Html.ActionLink("Купить", "Pay", "Checkout", null, new { });
                         @using (Html.BeginForm("Pay", "Checkout"))
-                        {
-                            @Html.HiddenFor(m => m.Id)
-                            <input type="submit" name="buy" value="Купить" class=" btn btn-success" />
-                        }
+                                                                        {
+                        @Html.HiddenFor(m => m.Id)
+                        <input type="submit" name="buy" value="Купить" class=" btn btn-success" />
+                                                                        }
 
                     </div>
                 </div>
@@ -153,15 +165,15 @@
     </div>
     <div class="row">
 
-        @Html.Partial("_FeedbackList", Model.Feedbacks)
+        @*@Html.Partial("_FeedbackList", Model.Feedbacks)*@
 
     </div>
     @using (Html.BeginForm("Give", "Feedback", new { userProfileId = "3" }, FormMethod.Get, null))
-    {
-        @Html.HiddenFor(m => m.User.Id)
-        @Html.HiddenFor(m => m.Id)
-        <input class="btn btn-success" type="submit" value="Оставить отзыв" />
-    }
+            {
+    @Html.HiddenFor(m => m.UserProfile.Id)
+    @Html.HiddenFor(m => m.Id)
+    <input class="btn btn-success" type="submit" value="Оставить отзыв" />
+            }
 
     @*@if (ViewBag.CurrentProfileOffers != null && ((ICollection<Offer>)ViewData["Offers"]).Contains(Model.))
         {*@
@@ -179,45 +191,45 @@
                 </button>
             </div>
             @using (Html.BeginForm("New", "Message", FormMethod.Post, new { }))
-            {
-                @Html.Hidden("ReceiverId", Model.User.Id)
-                @Html.Hidden("Subject", Model.Id)
-                @Html.AntiForgeryToken()
-                <div class="modal-body">
+                                    {
+            @Html.Hidden("ReceiverId", Model.UserProfile.Id)
+            @Html.Hidden("Subject", Model.Id)
+            @Html.AntiForgeryToken()
+            <div class="modal-body">
 
-                    <div class="form-group">
-                        <img class="img-circle avatar-small" src="@Url.Action("Photo", "Profile" , new { UserId = Model.User.Id })" style="float:left; margin-right: 20px" alt="Alternate Text" />
-                        <div>
+                <div class="form-group">
+                    <img class="img-circle avatar-small" src="@Url.Action("Photo", "Profile" , new { UserId = Model.UserProfile.Id })" style="float:left; margin-right: 20px" alt="Alternate Text" />
+                    <div>
 
-                            @Html.ActionLink(Model.User.ApplicationUser.UserName, "Info", new { })
+                        @Html.ActionLink(Model.UserProfile.ApplicationUser.UserName, "Info", new { })
 
-                            <p>
-                                @if (Model.User.IsOnline)
-                                {
-                                    <span class="badge badge-pill badge-light">Online</span>
-                                }
-                                else
-                                {
-                                    <span class="badge badge-pill badge-dark">Offline</span>
-                                }
-                            </p>
+                        <p>
+                            @if (Model.UserProfile.IsOnline)
+                                                                                        {
+                            <span class="badge badge-pill badge-light">Online</span>
+                                                                                        }
+                                                                                        else
+                                                                                        {
+                            <span class="badge badge-pill badge-dark">Offline</span>
+                                                                                        }
+                        </p>
 
 
-                        </div>
                     </div>
-                    <div class="form-group">
-                        @Html.TextBox("OfferHeader", Model.Header + " " + "(" + Model.Id + ")", new { @class = "form-control", @readonly = "readonly" })
-                    </div>
-                    <div class="form-group">
-                        <textarea name="MessageBody" class="form-control" rows="5"></textarea>
-                    </div>
-
-
                 </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-info">Отправить</button>
+                <div class="form-group">
+                    @Html.TextBox("OfferHeader", Model.Header + " " + "(" + Model.Id + ")", new { @class = "form-control", @readonly = "readonly" })
                 </div>
-            }
+                <div class="form-group">
+                    <textarea name="MessageBody" class="form-control" rows="5"></textarea>
+                </div>
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-info">Отправить</button>
+            </div>
+                                    }
         </div>
     </div>
 </div>

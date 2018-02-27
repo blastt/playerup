@@ -15,6 +15,7 @@ namespace Market.Web.Mappings
                 
                 x.AddProfile<DomainToViewModelMappingProfile>();
                 x.AddProfile<ViewModelToDomainMappingProfile>();
+
             });
         }
     }

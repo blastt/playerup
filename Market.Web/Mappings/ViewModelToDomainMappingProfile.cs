@@ -30,10 +30,9 @@ namespace Market.Web.Mappings
             CreateMap<CreateOfferViewModel, Offer>()
                 .ForMember(o => o.Header, map => map.MapFrom(vm => vm.Header))
                 .ForMember(o => o.Discription, map => map.MapFrom(vm => vm.Discription))
-                .ForMember(o => o.Filters, map => map.MapFrom(vm => vm.Filters))
-                .ForMember(o => o.Game, map => map.MapFrom(vm => vm.Game))
                 .ForMember(o => o.SteamLogin, map => map.MapFrom(vm => vm.SteamLogin))
-                .ForMember(o => o.Price, map => map.MapFrom(vm => vm.Price));
+                .ForMember(o => o.Price, map => map.MapFrom(vm => vm.Price))
+                .ForAllOtherMembers(opt => opt.Ignore());
 
             //CreateMap<EditOfferViewModel, Offer>()
             //    .ForMember(o => o.Header, map => map.MapFrom(vm => vm.Header))

@@ -211,6 +211,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\OfferController.cs" />
+    <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -281,7 +282,14 @@
     <Content Include="Content\Images\Dota2\Ranks\top100OnLeaderboards.png" />
     <Content Include="Content\Images\Dota2\Ranks\top10OnLeaderboards.png" />
     <Content Include="Content\Images\Dota2\Ranks\unranked.png" />
+    <Content Include="Content\Images\Hearthstone\Icons\hearthstone.png" />
+    <Content Include="Content\Images\Lineage2\Icons\lineage2.png" />
     <Content Include="Content\Images\noavatar.png" />
+    <Content Include="Content\Images\Pubg\Icons\pubg.png" />
+    <Content Include="Content\Images\Warface\Icons\warface.png" />
+    <Content Include="Content\Images\Warframe\Icons\warframe.png" />
+    <Content Include="Content\Images\Wot\Icons\wot.png" />
+    <Content Include="Content\Images\Wow\Icons\wow.png" />
     <Content Include="Content\jquery-ui.css" />
     <Content Include="Content\jquery-ui.min.css" />
     <Content Include="favicon.ico" />
@@ -411,6 +419,7 @@
     <Content Include="Views\FilterItem\Details.cshtml" />
     <Content Include="Views\Offer\List.cshtml" />
     <Content Include="Views\Shared\_OfferList.cshtml" />
+    <Content Include="Views\Offer\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
