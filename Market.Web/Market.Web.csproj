@@ -226,7 +226,9 @@
     <Compile Include="ViewModels\Feedback\NewFeedbackViewModel.cs" />
     <Compile Include="ViewModels\FilterItem\CreateFilterItemViewModel.cs" />
     <Compile Include="ViewModels\FilterItem\DetailsFilterItemViewModel.cs" />
+    <Compile Include="ViewModels\FilterItem\FilterItemViewModel.cs" />
     <Compile Include="ViewModels\Filter\CreateFilterViewModel.cs" />
+    <Compile Include="ViewModels\Filter\FilterViewModel.cs" />
     <Compile Include="ViewModels\Game\CreateGameViewModel.cs" />
     <Compile Include="ViewModels\Message\DetailsMessageViewModel.cs" />
     <Compile Include="ViewModels\Message\MessageViewModel.cs" />
@@ -238,6 +240,7 @@
     <Compile Include="ViewModels\Offer\OfferViewModel.cs" />
     <Compile Include="ViewModels\Order\DetailsOrderViewModel.cs" />
     <Compile Include="ViewModels\Order\OrderViewModel.cs" />
+    <Compile Include="ViewModels\SearchViewModel.cs" />
     <Compile Include="ViewModels\UserProfile\UserProfileViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -420,6 +423,7 @@
     <Content Include="Views\Offer\List.cshtml" />
     <Content Include="Views\Shared\_OfferList.cshtml" />
     <Content Include="Views\Offer\Details.cshtml" />
+    <Content Include="Views\Shared\_SearchPanel.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

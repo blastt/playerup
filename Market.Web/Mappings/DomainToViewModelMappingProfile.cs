@@ -63,6 +63,24 @@ namespace Market.Web.Mappings
 
             #endregion
 
+            #region FilterItem
+
+            CreateMap<FilterItem, FilterItemViewModel>()
+               .ForMember(o => o.Name, map => map.MapFrom(vm => vm.Name))
+               .ForMember(o => o.Value, map => map.MapFrom(vm => vm.Value))
+               .ForMember(o => o.Image, map => map.MapFrom(vm => vm.Image));
+
+            #endregion
+
+            #region Filter
+
+            CreateMap<Filter, FilterViewModel>()
+               .ForMember(o => o.Name, map => map.MapFrom(vm => vm.Text))
+               .ForMember(o => o.Value, map => map.MapFrom(vm => vm.Value))
+               .ForPath(o => o.GameValue, map => map.MapFrom(vm => vm.Game.Value));
+
+            #endregion
+
             //#region Order
 
             //CreateMap<OrderViewModel, Order>()

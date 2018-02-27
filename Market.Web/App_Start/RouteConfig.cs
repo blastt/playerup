@@ -53,7 +53,7 @@ namespace Market.Web
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}",
-                defaults: new { controller = "controller", action = "action" }
+                defaults: new { controller = "Offer", action = "List" }
             );
 
 

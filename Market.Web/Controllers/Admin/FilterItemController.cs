@@ -5,7 +5,9 @@ using Market.Web.ViewModels;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Runtime.Serialization.Json;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
@@ -112,6 +114,12 @@ namespace Market.Web.Controllers.Admin
             //[{\"Text\":\"2x2\",\"Value\":\"2x2\",\"FilterItems\":[]},{\"Text\":\"5x5\",\"Value\":\"5x5\",\"FilterItems\":[]}]
             // Сделать проверку на налл
             Game g = _gameService.GetGameByValue(game);
+            IList<FilterViewModel> filters = new List<FilterViewModel>();
+            foreach (var filter in g.Filters)
+            {
+                filters.Add(Mapper.Map<Model.Models.Filter, FilterViewModel>(filter));
+            }
+            
             var ranks = g.Filters.Select(m => new
             {
                 Text = m.Text,
@@ -119,10 +127,14 @@ namespace Market.Web.Controllers.Admin
                 FilterItems = m.FilterItems,
                 GameValue = m.Game.Value
             });
+            var s = new JavaScriptSerializer();
+            s.Serialize(filters);
             var jsonSerializerSettings = new JsonSerializerSettings();
-            jsonSerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-            var str = JsonConvert.SerializeObject(ranks, jsonSerializerSettings);
+
+           
+            var str = JsonConvert.SerializeObject(filters, Formatting.Indented,jsonSerializerSettings);
             //check if any of the UserName matches the UserName specified in the Parameter using the ANY extension method.  
+
             return str;
         }
     }

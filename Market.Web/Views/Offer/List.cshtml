@@ -15,58 +15,40 @@
 <div class="container">
     <div class="row">
         <div class="col-lg-12">
+            <input type="hidden" name="Game" id="game" value="@ViewData["Game"]" />
             <div class="game-filter" id="game-filter">
                 <div class="game-filter-item">
-
-                    <a class="all-games" href='@Url.Action("List", new { game = "all" })'>
-                        <span>Все</span>
-                    </a>
+                    <span class="all-games">Все</span>
                 </div>
 
-                
                 @foreach (var g in Model.Games)
                 {
                     var url = "../../Content/Images/" + g.Value + "/Icons/" + g.Image;
-                    <div class="game-filter-item">
-                        <a href='@Url.Action("List", new { game = g.Value })'>
+                    <div class="game-filter-item" onclick="SelectGame('@g.Value')">
+                       
                             <img src="@url" style="width:40px" alt="Alternate Text" title="@g.Name" />
-                        </a>
+                        
 
                     </div>
-                    
+
                 }
 
             </div>
         </div>
     </div>
     <div class="row">
-        <div class="col-lg-3">
-            <div class="bs-component">
+        <div class="col-lg-12">
 
-                @using (Ajax.BeginForm("OfferList", new { Page = 1 }, options, new { @class = "search-form", id = "ajaxForm" }))
-                {
-
-
-
-
-                    //@Html.Partial("_SearchPanel", Model.SearchingInfo)
-
-
-
-
-
-
-
-                }
+            <div class="row" id="list">
+                @Html.Action("OfferList")
             </div>
         </div>
-        <div class="col-lg-9">
-            <div class="bs-component">
-
-                <div id="list">@Html.Action("OfferList")</div>
-            </div>
-        </div>
+            
     </div>
+</div>
+
+<div id="loader" style="display:none">
+    LOADING...
 </div>
 @section scripts
 {
@@ -79,7 +61,7 @@
                 dataType: "json",
                 type: "POST",
                 data: JSON.stringify({ game: g }),
-                
+
 
                 success: function (ranks) {
                     var label, hidden;
@@ -161,7 +143,7 @@
 
     <script type="text/javascript" src="~/Scripts/jquery-ui.min.js"></script>
     <script type="text/javascript" src="~/Scripts/myScripts.js"></script>
-
+    <script type="text/javascript" src="~/Scripts/Custom.js"></script>
     <script>
     $(document).ready(function () {
 

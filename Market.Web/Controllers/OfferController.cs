@@ -42,12 +42,17 @@ namespace Market.Web.Controllers
             return View(model);
         }
 
-        public PartialViewResult OfferList(string game = "csgo")
+        public PartialViewResult OfferList(SearchViewModel searchInfo)
         {
+            
             decimal minPrice = 0;
             decimal maxPrice = 0;
-            IEnumerable<Offer> offers = _offerService.GetOffers().Where(m => m.Game.Value == game);
-
+            searchInfo.SearchString = searchInfo.SearchString ?? "";
+            searchInfo.Game = searchInfo.Game ?? "csgo";
+            //offer.Header.Replace(" ", "").ToLower().Contains(searchString.Replace(" ", "").ToLower()) || (searchInDescription ? (offer.Discription.Replace(" ", "").ToLower().Contains(searchString.Replace(" ", "").ToLower())) : searchInDescription)
+            IEnumerable<Offer> offers = _offerService.GetOffers().Where(m => m.Game.Value == searchInfo.Game).Where(m => m.Header.Contains(searchInfo.SearchString));
+            ViewData["SerchString"] = searchInfo.SearchString;
+            ViewData["Game"] = searchInfo.Game;
 
             if (offers.Count() != 0 && offers != null)
             {
@@ -61,14 +66,14 @@ namespace Market.Web.Controllers
             };
             
             IList<OfferViewModel> offerList = new List<OfferViewModel>();
-            foreach (var offer in _offerService.GetOffers().Where(m => m.Game.Value == game))
+            foreach (var offer in offers)
             {
                 offerList.Add(Mapper.Map<Offer, OfferViewModel>(offer));
             }
             var model = new OfferListViewModel()
             {
-                Filters = _filterService.GetFilters().Where(m => m.Game.Value == game),
-                Game = _gameService.GetGameByValue(game),
+                Filters = _filterService.GetFilters().Where(m => m.Game.Value == searchInfo.Game),
+                Game = _gameService.GetGameByValue(searchInfo.Game),
                 Offers = offerList
             };
             

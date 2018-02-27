@@ -1,8 +1,4 @@
-﻿@model Trader.WEB.Models.SearchingInfo
-
-@Html.HiddenFor(m => m.Game)
-@Html.HiddenFor(m => m.Page)
-@Html.HiddenFor(m => m.OrderBy, new { id= "orderBy" })
+﻿
 
 
 <div class="filter card">
@@ -10,27 +6,22 @@
     <div class="filter-body">
         <div class="filter-parameters">
             <div class="form-group">
-                @Html.TextBoxFor(m => m.SearchString, "", new { @class = "form-control", placeholder = "Поиск...", onchange = "submitAjaxForm(1);" })
+                @Html.TextBox("SearchString", "", new { @class = "form-control", placeholder = "Поиск...", onchange = "submitAjaxForm(1);" })
             </div>
             <div class="form-group">
                 <div class="custom-control custom-checkbox">
-                    @Html.CheckBoxFor(m => m.SearchInDescription, new { @class = "custom-control-input", onchange = "submitAjaxForm(1);", @checked = "" })
+                    @Html.CheckBox("IsOnline", new { @class = "custom-control-input", onchange = "SearchOffers();", @checked = "" })
                     <label class="custom-control-label" for="SearchInDescription">
 
                         искать также в описании
 
                     </label>
-
                 </div>
-
                 <div class="custom-control custom-checkbox">
-                    @Html.CheckBoxFor(m => m.IsOnline, new { @class = "custom-control-input", onchange = "submitAjaxForm(1);" })
+                    @Html.CheckBox("Discr", new { @class = "custom-control-input", onchange = "SearchOffers();" })
                     <label class="custom-control-label" for="IsOnline">
-
                         только онлайн ползователи
-
                     </label>
-
                 </div>
             </div>
             <div class="form-group">
@@ -38,12 +29,9 @@
                     <span>ЦЕНА</span>
                 </label>
                 <div class="price-slider">
-
-
-
                     <div class="filter-price">
                         <div class="filter-price-from">
-                            @Html.TextBoxFor(m => m.MinPrice, new { @class = "form-control form-control-sm", id = "price" })
+                            @Html.TextBox("PriceFrom", new { @class = "form-control form-control-sm", id = "price" })
 
                         </div>
                         <div class="filter-price-separartor">
@@ -53,23 +41,10 @@
                         </div>
 
                         <div class="filter-price-to">
-                            @Html.TextBoxFor(m => m.MaxPrice, new { @class = "form-control form-control-sm", id = "price2" })
-                        </div>
-                        
-
-
-
-                        
-
-
-                        
-
-
+                            @Html.TextBox("PriceTo", new { @class = "form-control form-control-sm", id = "price2" })
+                        </div>             
                     </div>
                     </div>
-
-
-
                 <div id="slider_price"></div>
             </div>
         </div>
@@ -85,7 +60,7 @@
     </div>
 
     <div class="filter-btn">
-        <input type="button" value="Поиск" class="btn btn-lg btn-outline-info" onclick="submitAjaxForm(1);" />
+        <input type="button" value="Поиск" class="btn btn-lg btn-outline-info" onclick="SearchOffers();" />
     </div>
 </div>
 
