@@ -1,67 +1,71 @@
 ﻿
 
 
-<div class="filter card">
+<div class="col-lg-3">
+    <div class="bs-component">
+        <div class="filter card">
 
-    <div class="filter-body">
-        <div class="filter-parameters">
-            <div class="form-group">
-                @Html.TextBox("SearchString", "", new { @class = "form-control", placeholder = "Поиск...", onchange = "submitAjaxForm(1);" })
-            </div>
-            <div class="form-group">
-                <div class="custom-control custom-checkbox">
-                    @Html.CheckBox("IsOnline", new { @class = "custom-control-input", onchange = "SearchOffers();", @checked = "" })
-                    <label class="custom-control-label" for="SearchInDescription">
+            <div class="filter-body">
+                <div class="filter-parameters">
 
-                        искать также в описании
+                    <div class="form-group">
+                        @Html.TextBox("SearchString", ViewData["SerchString"], new { @class = "form-control", id = "searchString", placeholder = "Поиск...", onchange = "SearchOffers();" })
+                    </div>
+                    <div class="form-group">
+                        <div class="custom-control custom-checkbox">
+                            @Html.CheckBox("IsOnline", new { @class = "custom-control-input", onchange = "SearchOffers();", @checked = "" })
+                            <label class="custom-control-label" for="SearchInDescription">
 
-                    </label>
-                </div>
-                <div class="custom-control custom-checkbox">
-                    @Html.CheckBox("Discr", new { @class = "custom-control-input", onchange = "SearchOffers();" })
-                    <label class="custom-control-label" for="IsOnline">
-                        только онлайн ползователи
-                    </label>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="filter-label">
-                    <span>ЦЕНА</span>
-                </label>
-                <div class="price-slider">
-                    <div class="filter-price">
-                        <div class="filter-price-from">
-                            @Html.TextBox("PriceFrom", new { @class = "form-control form-control-sm", id = "price" })
+                                искать также в описании
 
+                            </label>
                         </div>
-                        <div class="filter-price-separartor">
-                            <div class="range-separate">
-                                &#8211
+                        <div class="custom-control custom-checkbox">
+                            @Html.CheckBox("Discr", new { @class = "custom-control-input", onchange = "SearchOffers();" })
+                            <label class="custom-control-label" for="IsOnline">
+                                только онлайн ползователи
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="filter-label">
+                            <span>ЦЕНА</span>
+                        </label>
+                        <div class="price-slider">
+                            <div class="filter-price">
+                                <div class="filter-price-from">
+                                    @Html.TextBox("PriceFrom", "", new { @class = "form-control form-control-sm", id = "price" })
+
+                                </div>
+                                <div class="filter-price-separartor">
+                                    <div class="range-separate">
+                                        &#8211
+                                    </div>
+                                </div>
+
+                                <div class="filter-price-to">
+                                    @Html.TextBox("PriceTo", "", new { @class = "form-control form-control-sm", id = "price2" })
+                                </div>
                             </div>
                         </div>
+                        <div id="slider_price"></div>
+                    </div>
+                </div>
 
-                        <div class="filter-price-to">
-                            @Html.TextBox("PriceTo", new { @class = "form-control form-control-sm", id = "price2" })
-                        </div>             
-                    </div>
-                    </div>
-                <div id="slider_price"></div>
+            </div>
+            <div class="filter-specific">
+                <label class="filter-label">
+                    <span>РАНГ</span>
+                </label>
+                <div id="filter-item">
+
+                </div>
+            </div>
+
+            <div class="filter-btn">
+                <input type="button" value="Поиск" class="btn btn-lg btn-outline-info" onclick="SearchOffers();" />
             </div>
         </div>
-        
-    </div>
-    <div class="filter-specific">
-        <label class="filter-label">
-            <span>РАНГ</span>
-        </label>
-        <div id="rank">
-
-        </div>
-    </div>
-
-    <div class="filter-btn">
-        <input type="button" value="Поиск" class="btn btn-lg btn-outline-info" onclick="SearchOffers();" />
     </div>
 </div>
-
 

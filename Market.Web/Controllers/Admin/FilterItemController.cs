@@ -114,25 +114,30 @@ namespace Market.Web.Controllers.Admin
             //[{\"Text\":\"2x2\",\"Value\":\"2x2\",\"FilterItems\":[]},{\"Text\":\"5x5\",\"Value\":\"5x5\",\"FilterItems\":[]}]
             // Сделать проверку на налл
             Game g = _gameService.GetGameByValue(game);
+            
             IList<FilterViewModel> filters = new List<FilterViewModel>();
-            foreach (var filter in g.Filters)
+            if (g != null)
             {
-                filters.Add(Mapper.Map<Model.Models.Filter, FilterViewModel>(filter));
+                foreach (var filter in g.Filters)
+                {
+                    filters.Add(Mapper.Map<Model.Models.Filter, FilterViewModel>(filter));
+                }
+
+                var ranks = g.Filters.Select(m => new
+                {
+                    Text = m.Text,
+                    Value = m.Value,
+                    FilterItems = m.FilterItems,
+                    GameValue = m.Game.Value
+                });
             }
             
-            var ranks = g.Filters.Select(m => new
-            {
-                Text = m.Text,
-                Value = m.Value,
-                FilterItems = m.FilterItems,
-                GameValue = m.Game.Value
-            });
             var s = new JavaScriptSerializer();
-            s.Serialize(filters);
+            
             var jsonSerializerSettings = new JsonSerializerSettings();
 
            
-            var str = JsonConvert.SerializeObject(filters, Formatting.Indented,jsonSerializerSettings);
+            var str = s.Serialize(filters);
             //check if any of the UserName matches the UserName specified in the Parameter using the ANY extension method.  
 
             return str;

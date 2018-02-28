@@ -50,7 +50,16 @@ namespace Market.Web.Controllers
             searchInfo.SearchString = searchInfo.SearchString ?? "";
             searchInfo.Game = searchInfo.Game ?? "csgo";
             //offer.Header.Replace(" ", "").ToLower().Contains(searchString.Replace(" ", "").ToLower()) || (searchInDescription ? (offer.Discription.Replace(" ", "").ToLower().Contains(searchString.Replace(" ", "").ToLower())) : searchInDescription)
-            IEnumerable<Offer> offers = _offerService.GetOffers().Where(m => m.Game.Value == searchInfo.Game).Where(m => m.Header.Contains(searchInfo.SearchString));
+            IEnumerable<Offer> offers;
+            if (searchInfo.Game == "all")
+            {
+                offers = _offerService.GetOffers();
+            }
+            else
+            {
+                offers = _offerService.GetOffers().Where(m => m.Game.Value == searchInfo.Game);
+            }
+            offers = offers.Where(m => m.Header.Contains(searchInfo.SearchString));
             ViewData["SerchString"] = searchInfo.SearchString;
             ViewData["Game"] = searchInfo.Game;
 

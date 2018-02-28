@@ -1,12 +1,19 @@
 ﻿
 $(".game-filter-item").each(function (index) {
-    $(this).removeClass('active');
+
     $(this).on("click", function () {
         // For the boolean value
-        $(".game-filter-item").each(function (index) {
-            $(this).removeClass('active');
-        });
-        $(this).addClass('active');
+            $(this).removeClass("active");
+            var url = window.location + this.dataset.url;
+
+            
+            alert(url + "/////////" + this.dataset.game);
+            if (this.dataset.game == window.location.href.split('=')[1]) {
+                $(this).addClass("active");
+                return;
+            }  
+        
+
         // For the mammal value
 
     });
@@ -48,8 +55,7 @@ function SearchOffers() {
             $('#loader').hide();
         },
         success: function (response) {
-            var url = window.location.toString().split('?')[0] + '?game=' + g;
-            window.history.pushState(g, "Title", url);
+            
             $('#list').html(response);
         }
     });
@@ -177,7 +183,7 @@ function SelectFilterItem(g, isListView) {
                 div = $("<div></div>");
                 div.addClass("image-select");
                 hidden = $('<input type="hidden" name="FilterValues" value="' + ranks[rank].Value + '">');
-                label = $("<label for='Filter.Value'>" + ranks[rank].Text + "</label>")
+                label = $("<label for='Filter.Value'>" + ranks[rank].Name + "</label>")
                 select = $("<select name='FilterItemValues'></select>");
                 var defaultOption = $('<option>Выберите ранг</option>').val('empty');
                 select.append(defaultOption);
