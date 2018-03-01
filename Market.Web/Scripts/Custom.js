@@ -1,17 +1,31 @@
 ﻿
 $(".game-filter-item").each(function (index) {
+    if (index == 0 && window.location.href.split('=')[1] == undefined) {
+        $(this).addClass("active");
+    }
+    else if (this.dataset.game == window.location.href.split('=')[1]) {
+        $(this).addClass("active");
+        SelectFilterItem(this.dataset.game, false);
+    }
 
     $(this).on("click", function () {
         // For the boolean value
+        $(".game-filter-item").each(function (index) {
             $(this).removeClass("active");
-            var url = window.location + this.dataset.url;
-
+        });
             
-            alert(url + "/////////" + this.dataset.game);
+            var url = Router.action('offer', 'list', { game: this.dataset.game});
+            window.history.pushState("2", "", url);
+
             if (this.dataset.game == window.location.href.split('=')[1]) {
                 $(this).addClass("active");
                 return;
             }  
+        
+            else if (window.location.href.split('=')[1] == "all") {
+                $(this).addClass("active");
+                return;
+            }
         
 
         // For the mammal value
@@ -34,13 +48,13 @@ function SearchOffers() {
     var g = $('#game').val();
     var message = {
         "page": 1,
-        "sort": "sort",
+        "sort": $('#sort').val(),
         "online": "sort",
         "searchString": $('#searchString').val(),
         "filterItems": "sort",
         "game": g,
-        "priceFrom": "sort",
-        "priceTo": "sort"
+        "priceFrom": $('#priceFrom').val(),
+        "priceTo": $('#priceTo').val()
     };
     $.ajax({       
         url: '/Offer/OfferList',
@@ -50,9 +64,11 @@ function SearchOffers() {
         dataType: "html",
         beforeSend: function () {
             $('#loader').show();
+            $('#lll').css('background-color','#333')
         },
         complete: function () {
             $('#loader').hide();
+            $('#lll').removeAttr('style')
         },
         success: function (response) {
             
@@ -164,6 +180,34 @@ function CustomSelect() {
     document.addEventListener("click", closeAllSelect);
 }
 
+function CreateFilters(ranks) {
+    var label, hidden;
+    var select;
+    var div;
+    var mainDiv = $("#filter-item");
+    mainDiv.empty();
+    for (var rank in ranks) {
+        div = $("<div></div>");
+        div.addClass("image-select");
+        hidden = $('<input type="hidden" name="FilterValues" value="' + ranks[rank].Value + '">');
+        label = $("<label for='Filter.Value'>" + ranks[rank].Name + "</label>")
+        select = $("<select name='FilterItemValues'></select>");
+        var defaultOption = $('<option>Выберите ранг</option>').val('empty');
+        select.append(defaultOption);
+        for (var item in ranks[rank].FilterItems) {
+            var url = "../../Content/Images/" + ranks[rank].GameValue + "/Ranks/" + ranks[rank].FilterItems[item].Image;
+            var option = $('<option data-url="' + url + '"></option>').val(ranks[rank].FilterItems[item].Value).text(ranks[rank].FilterItems[item].Name);
+
+            select.append(option);
+        }
+        div.append(select);
+        div.append(hidden);
+        mainDiv.append(label).append(div);
+
+    }
+    myfunction();
+}
+
 function SelectFilterItem(g, isListView) {
 
     $.ajax({
@@ -174,49 +218,8 @@ function SelectFilterItem(g, isListView) {
         data: JSON.stringify({ game: g }),
 
         success: function (ranks) {
-            var label, hidden;
-            var select;
-            var div;
-            var mainDiv = $("#filter-item");
-            mainDiv.empty();
-            for (var rank in ranks) {
-                div = $("<div></div>");
-                div.addClass("image-select");
-                hidden = $('<input type="hidden" name="FilterValues" value="' + ranks[rank].Value + '">');
-                label = $("<label for='Filter.Value'>" + ranks[rank].Name + "</label>")
-                select = $("<select name='FilterItemValues'></select>");
-                var defaultOption = $('<option>Выберите ранг</option>').val('empty');
-                select.append(defaultOption);
-                for (var item in ranks[rank].FilterItems) {
-                    var url = "../../Content/Images/" + ranks[rank].GameValue + "/Ranks/" + ranks[rank].FilterItems[item].Image;
-                    var option = $('<option data-url="' + url + '"></option>').val(ranks[rank].FilterItems[item].Value).text(ranks[rank].FilterItems[item].Name);
-
-                    select.append(option);
-                }
-                div.append(select);
-                div.append(hidden);
-                mainDiv.append(label).append(div);
-
-            }
-            myfunction();
-            //var div = $('#rank');
-            //var divRank = $('<div></div>');
-            //div.empty();
-
-            //if (Object.keys(data).length != 0) {
-
-            //    divRank.addClass('form-group');
-
-
-            //    if (g == 'dota2') {
-            //        AddDota2RankFields(divRank, data, isListView);
-            //    }
-            //    else if (g == 'csgo') {
-            //        AddCsgoRankFields(divRank, data, isListView);
-            //    }
-            //    div.append(divRank);
-
-            //}
+            CreateFilters(ranks);
+            
         },
         error: function myfunction() {
             alert("hi");

@@ -25,9 +25,9 @@
                 {
                     var url = "../../Content/Images/" + g.Value + "/Icons/" + g.Image;
                     <div class="game-filter-item" data-game="@g.Value" data-url="@Url.Action("List","Offer", new { game = g.Value })" onclick="SelectGame('@g.Value')">
-                       
-                            <img src="@url" style="width:40px" alt="Alternate Text" title="@g.Name" />
-                        
+
+                        <img src="@url" style="width:40px" alt="Alternate Text" title="@g.Name" />
+
 
                     </div>
 
@@ -36,28 +36,32 @@
             </div>
         </div>
     </div>
-    <div class="row">
+    <div class="row" id="lll">
 
-    
-            @Html.Partial("_SearchPanel")
-    
-            
-            <div class="col-lg-9" id="list">
-                @Html.Action("OfferList")
-            </div>
+
+        @Html.Partial("_SearchPanel", Model)
+
+
+        <div class="col-lg-9" id="list">
+            @Html.Action("OfferList")
+        </div>
+
         
-            
     </div>
 </div>
 
 <div id="loader" style="display:none">
     LOADING...
 </div>
+<script src="@RouteJs.RouteJsHandler.HandlerUrl"></script>
 @section scripts
 {
+    
+        
     <script>
-
+        
         function GetOfferList() {
+            
             $.ajax({
                 url: "/Offer/OfferList",
                 contentType: "application/json",

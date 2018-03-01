@@ -69,11 +69,44 @@ namespace Market.Web.Controllers
                 minPrice = offers.Min(m => m.Price);
                 maxPrice = offers.Max(m => m.Price);
             }
+
+            switch (searchInfo.Sort)
+            {
+                case "bestSeller":
+                    {
+                        offers = from offer in offers
+                                      orderby offer.UserProfile.Rating descending
+                                      select offer;
+                        break;
+                    }
+                case "priceDesc":
+                    {
+                        offers = from offer in offers
+                                      orderby offer.Price descending
+                                      select offer;
+                        break;
+                    }
+                case "priceAsc":
+                    {
+                        offers = from offer in offers
+                                      orderby offer.Price ascending
+                                      select offer;
+                        break;
+                    }
+                case "newestOffer":
+                    {
+                        offers = from offer in offers
+                                      orderby offer.DateCreated descending
+                                      select offer;
+                        break;
+                    }
+                default:
+                    break;
+            }
             IList<SelectListItem> ranks = new List<SelectListItem>
             {
                 new SelectListItem() { Text = "Все ранги", Value = "none", Selected = true }
             };
-            
             IList<OfferViewModel> offerList = new List<OfferViewModel>();
             foreach (var offer in offers)
             {
@@ -83,10 +116,10 @@ namespace Market.Web.Controllers
             {
                 Filters = _filterService.GetFilters().Where(m => m.Game.Value == searchInfo.Game),
                 Game = _gameService.GetGameByValue(searchInfo.Game),
-                Offers = offerList
+                Offers = offerList,
+                PriceFrom = minPrice,
+                PriceTo = maxPrice
             };
-            
-
 
             return PartialView("_OfferList", offerList);
         }

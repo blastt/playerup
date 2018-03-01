@@ -1,5 +1,5 @@
 ﻿
-
+@model Market.Web.ViewModels.OfferListViewModel
 
 <div class="col-lg-3">
     <div class="bs-component">
@@ -34,7 +34,7 @@
                         <div class="price-slider">
                             <div class="filter-price">
                                 <div class="filter-price-from">
-                                    @Html.TextBox("PriceFrom", "", new { @class = "form-control form-control-sm", id = "price" })
+                                    @Html.TextBox("PriceFrom", Model.PriceFrom, new { @class = "form-control form-control-sm", id = "priceFrom" })
 
                                 </div>
                                 <div class="filter-price-separartor">
@@ -44,7 +44,7 @@
                                 </div>
 
                                 <div class="filter-price-to">
-                                    @Html.TextBox("PriceTo", "", new { @class = "form-control form-control-sm", id = "price2" })
+                                    @Html.TextBox("PriceTo", Model.PriceTo, new { @class = "form-control form-control-sm", id = "priceTo" })
                                 </div>
                             </div>
                         </div>
