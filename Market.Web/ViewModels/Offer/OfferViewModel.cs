@@ -15,7 +15,7 @@ namespace Market.Web.ViewModels
         public DateTime? DateCreated { get; set; } = DateTime.Now;
         public UserProfile User { get; set; }
         
-        public ICollection<Filter> Filters { get; set; }
-        public ICollection<FilterItem> FilterItems { get; set; }
+        public IList<Filter> Filters { get; set; }
+        public IList<FilterItem> FilterItems { get; set; }
     }
 }

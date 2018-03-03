@@ -8,6 +8,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
@@ -32,23 +33,27 @@ namespace Market.Web.Controllers
         }
 
         // GET: Offer
-        public ViewResult List()
+        public ViewResult List(string game)
         {
 
             IEnumerable<Game> games = _gameService.GetGames();
 
             OfferListViewModel model = new OfferListViewModel();
             model.Games = games;
+            model.SearchInfo = new SearchViewModel()
+            {
+                Game = game
+            };
             return View(model);
         }
 
         public PartialViewResult OfferList(SearchViewModel searchInfo)
         {
+            decimal minGamePrice = 0;
+            decimal maxGamePrice = 0;
             
-            decimal minPrice = 0;
-            decimal maxPrice = 0;
             searchInfo.SearchString = searchInfo.SearchString ?? "";
-            searchInfo.Game = searchInfo.Game ?? "csgo";
+            searchInfo.Game = searchInfo.Game ?? "all";
             //offer.Header.Replace(" ", "").ToLower().Contains(searchString.Replace(" ", "").ToLower()) || (searchInDescription ? (offer.Discription.Replace(" ", "").ToLower().Contains(searchString.Replace(" ", "").ToLower())) : searchInDescription)
             IEnumerable<Offer> offers;
             if (searchInfo.Game == "all")
@@ -60,16 +65,35 @@ namespace Market.Web.Controllers
                 offers = _offerService.GetOffers().Where(m => m.Game.Value == searchInfo.Game);
             }
             offers = offers.Where(m => m.Header.Contains(searchInfo.SearchString));
-            ViewData["SerchString"] = searchInfo.SearchString;
-            ViewData["Game"] = searchInfo.Game;
-
-            if (offers.Count() != 0 && offers != null)
+            
+            if(offers.Count() != 0)
             {
+                minGamePrice = offers.Min(m => m.Price);
 
-                minPrice = offers.Min(m => m.Price);
-                maxPrice = offers.Max(m => m.Price);
+                maxGamePrice = offers.Max(m => m.Price);
+
+                
+                    if (searchInfo.PriceFrom == 0)
+                    {
+                        searchInfo.PriceFrom = minGamePrice;
+
+
+                    }
+                    if (searchInfo.PriceTo == 0)
+                    {
+                        searchInfo.PriceTo = maxGamePrice;
+                    
+                    }
+                
+                
+                
+                
+                offers = from offer in offers
+                         where offer.Price >= searchInfo.PriceFrom &&
+                                offer.Price <= searchInfo.PriceTo
+                         select offer;
             }
-
+            
             switch (searchInfo.Sort)
             {
                 case "bestSeller":
@@ -112,16 +136,59 @@ namespace Market.Web.Controllers
             {
                 offerList.Add(Mapper.Map<Offer, OfferViewModel>(offer));
             }
+            //Dictionary<Model.Models.Filter, FilterItem> offerFilters = new Dictionary<Model.Models.Filter, FilterItem>();
+            //Dictionary<string, string> modelFilters = new Dictionary<string, string>();
+            //if(searchInfo.FilterValues != null && searchInfo.FilterItemValues != null)
+            //{
+            //    if (searchInfo.FilterValues.Count() == searchInfo.FilterItemValues.Count())
+            //    {
+            //        for (int i = 0; i < searchInfo.FilterValues.Count(); i++)
+            //        {
+            //            modelFilters.Add(searchInfo.FilterValues[i], searchInfo.FilterItemValues[i]);
+            //        }
+            //    }
+            //}
+
+            //foreach (var offer in offerList)
+            //{
+            //    if(offer.FilterItems.Count == offer.Filters.Count)
+            //    {
+            //        for (int i = 0; i < offer.Filters.Count; i++)
+            //        {
+            //            offerFilters.Add(offer.Filters[i], offer.FilterItems[i]);
+            //        }
+            //    }
+            //    var q = from f in offerFilters
+            //            join fs in modelFilters on f.Value.Value equals fs.Value into qqq
+            //            select new { filterValue = f.Value.Value, filterName = f.Value.Name, filterItemValue = f.Key.Value, filterItemName = f.Key.Text };
+            //    offerFilters.Clear();
+            //}
+
+
+
+
             var model = new OfferListViewModel()
             {
                 Filters = _filterService.GetFilters().Where(m => m.Game.Value == searchInfo.Game),
                 Game = _gameService.GetGameByValue(searchInfo.Game),
+                
                 Offers = offerList,
-                PriceFrom = minPrice,
-                PriceTo = maxPrice
+                SearchInfo = new SearchViewModel()
+                {
+                    SearchString = searchInfo.SearchString,
+                    IsOnline = searchInfo.IsOnline,           
+                    SearchInDiscription = searchInfo.SearchInDiscription,
+                    MinGamePrice = minGamePrice,
+                    MaxGamePrice = maxGamePrice,
+                    PriceFrom = searchInfo.PriceFrom,
+                    PriceTo = searchInfo.PriceTo,
+                    Game = searchInfo.Game,
+                    Page = 1,
+                    Sort = searchInfo.Sort
+                }
             };
 
-            return PartialView("_OfferList", offerList);
+            return PartialView("_OfferList", model);
         }
 
         //public ViewResult All()
@@ -388,18 +455,24 @@ namespace Market.Web.Controllers
             offer.Filters = new List<Model.Models.Filter>();
             offer.FilterItems = new List<FilterItem>();
             offer.UserProfile = _userProfileService.GetUserProfileById(User.Identity.GetUserId());
-            foreach (var filterValue in model.FilterValues)
+            if(model.FilterValues != null)
             {
-               var filter =  _filterService.GetFilters().Where(m => m.Value == filterValue).FirstOrDefault();
-                offer.Filters.Add(filter);
-                _filterService.SaveFilter();
+                foreach (var filterValue in model.FilterValues)
+                {
+                    var filter = _filterService.GetFilters().Where(m => m.Value == filterValue).FirstOrDefault();
+                    offer.Filters.Add(filter);
+                    _filterService.SaveFilter();
+                }
             }
 
-            foreach (var filterItemValue in model.FilterItemValues)
+            if (model.FilterItemValues != null)
             {
-                var filterItem = _filterItemService.GetFilterItems().Where(m => m.Value == filterItemValue).FirstOrDefault();
-                offer.FilterItems.Add(filterItem);
-                _filterItemService.SaveFilterItem();
+                foreach (var filterItemValue in model.FilterItemValues)
+                {
+                    var filterItem = _filterItemService.GetFilterItems().Where(m => m.Value == filterItemValue).FirstOrDefault();
+                    offer.FilterItems.Add(filterItem);
+                    _filterItemService.SaveFilterItem();
+                }
             }
             _offerService.CreateOffer(offer);
             _offerService.SaveOffer();

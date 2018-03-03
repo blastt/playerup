@@ -151,12 +151,12 @@ ul {
 .filter-body {
     padding-top: 5px;
     margin-bottom: 30px;
-    border-bottom: 1px solid #d8e9fa
+    border-bottom: 1px solid #e4e4e4
 }
 
 .filter-specific {
     margin-bottom: 30px;
-    border-bottom: 1px solid #d8e9fa
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1)
 }
 
 .filter-label {
@@ -617,3 +617,124 @@ div#users-contain {
     margin-right: 20px
 }
 
+
+
+/*----------------------------------------------*/
+
+.btn-search {
+    border-radius: 50px;
+    background-color: #62b2e2;
+    color: white;
+    padding: 6px 20px;
+    font-size: 18px;
+    font-weight: 300
+}
+
+.btn-reset {
+    border-radius: 50px;
+    background-color: #e98451;
+    padding: 6px 20px;
+    color: white;
+    font-size: 18px;
+    font-weight: 300
+}
+
+.loader {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    animation: background 3s infinite alternate;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    background-color: rgba(251, 251, 251, 0.63)
+}
+
+/*Loader for offerList*/
+
+
+.cssload-container{
+	
+}
+	
+.cssload-whirlpool,
+.cssload-whirlpool::before,
+.cssload-whirlpool::after {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	border: 2px solid rgb(204,204,204);
+	border-left-color: rgb(0,0,0);
+	border-radius: 2373px;
+		-o-border-radius: 2373px;
+		-ms-border-radius: 2373px;
+		-webkit-border-radius: 2373px;
+		-moz-border-radius: 2373px;
+}
+
+.cssload-whirlpool {
+	margin: -59px 0 0 -59px;
+	height: 119px;
+	width: 119px;
+	animation: cssload-rotate 1900ms linear infinite;
+		-o-animation: cssload-rotate 1900ms linear infinite;
+		-ms-animation: cssload-rotate 1900ms linear infinite;
+		-webkit-animation: cssload-rotate 1900ms linear infinite;
+		-moz-animation: cssload-rotate 1900ms linear infinite;
+}
+
+.cssload-whirlpool::before {
+	content: "";
+	margin: -55px 0 0 -55px;
+	height: 105px;
+	width: 105px;
+	animation: cssload-rotate 1900ms linear infinite;
+		-o-animation: cssload-rotate 1900ms linear infinite;
+		-ms-animation: cssload-rotate 1900ms linear infinite;
+		-webkit-animation: cssload-rotate 1900ms linear infinite;
+		-moz-animation: cssload-rotate 1900ms linear infinite;
+}
+
+.cssload-whirlpool::after {
+	content: "";
+	margin: -69px 0 0 -69px;
+	height: 133px;
+	width: 133px;
+	animation: cssload-rotate 3800ms linear infinite;
+		-o-animation: cssload-rotate 3800ms linear infinite;
+		-ms-animation: cssload-rotate 3800ms linear infinite;
+		-webkit-animation: cssload-rotate 3800ms linear infinite;
+		-moz-animation: cssload-rotate 3800ms linear infinite;
+}
+
+
+
+@keyframes cssload-rotate {
+	100% {
+		transform: rotate(360deg);
+	}
+}
+
+@-o-keyframes cssload-rotate {
+	100% {
+		-o-transform: rotate(360deg);
+	}
+}
+
+@-ms-keyframes cssload-rotate {
+	100% {
+		-ms-transform: rotate(360deg);
+	}
+}
+
+@-webkit-keyframes cssload-rotate {
+	100% {
+		-webkit-transform: rotate(360deg);
+	}
+}
+
+@-moz-keyframes cssload-rotate {
+	100% {
+		-moz-transform: rotate(360deg);
+	}
+}

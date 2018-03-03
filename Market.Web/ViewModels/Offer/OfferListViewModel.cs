@@ -10,9 +10,9 @@ namespace Market.Web.ViewModels
     public class OfferListViewModel
     {
         public Game Game { get; set; }
+        
         public IEnumerable<Game> Games { get; set; }
-        public decimal PriceFrom { get; set; }
-        public decimal PriceTo { get; set; }
+        public SearchViewModel SearchInfo { get; set; }
         public IEnumerable<Filter> Filters { get; set; }
         public ICollection<OfferViewModel> Offers { get; set; }
     }

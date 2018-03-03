@@ -29,7 +29,7 @@ namespace Market.Model.Models
         public virtual Order Order { get; set; }
         public virtual string UserProfileId { get; set; }
         public virtual UserProfile UserProfile { get; set; }
-        public virtual ICollection<Filter> Filters { get; set; } = new List<Filter>();
-        public virtual ICollection<FilterItem> FilterItems { get; set; } = new List<FilterItem>();
+        public virtual IList<Filter> Filters { get; set; } = new List<Filter>();
+        public virtual IList<FilterItem> FilterItems { get; set; } = new List<FilterItem>();
     }
 }

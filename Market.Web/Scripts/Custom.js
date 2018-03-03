@@ -1,13 +1,50 @@
-﻿
+﻿$(document).ready(function () {
+    SearchOffers();
+});
+
+function getVals() {
+    // Get slider values
+    var parent = this.parentNode;
+    var slides = parent.getElementsByTagName("input");
+    var slide1 = parseFloat(slides[0].value);
+    var slide2 = parseFloat(slides[1].value);
+    // Neither slider will clip the other, so make sure we determine which is larger
+    if (slide1 > slide2) { var tmp = slide2; slide2 = slide1; slide1 = tmp; }
+
+    var displayElement = parent.getElementsByClassName("rangeValues")[0];
+    $('#priceFrom').val(slide1);
+    $('#priceTo').val(slide2);
+    
+}
+
+function slider() {
+    // Initialize Sliders
+    var sliderSections = document.getElementsByClassName("range-slider");
+    for (var x = 0; x < sliderSections.length; x++) {
+        var sliders = sliderSections[x].getElementsByTagName("input");
+        for (var y = 0; y < sliders.length; y++) {
+            if (sliders[y].type === "range") {
+                sliders[y].oninput = getVals;
+                // Manually trigger event first time to display values
+                sliders[y].oninput();
+            }
+        }
+    }
+}
+
+
 $(".game-filter-item").each(function (index) {
     if (index == 0 && window.location.href.split('=')[1] == undefined) {
         $(this).addClass("active");
+        
+
     }
     else if (this.dataset.game == window.location.href.split('=')[1]) {
         $(this).addClass("active");
-        SelectFilterItem(this.dataset.game, false);
-    }
 
+
+    }
+   
     $(this).on("click", function () {
         // For the boolean value
         $(".game-filter-item").each(function (index) {
@@ -33,25 +70,34 @@ $(".game-filter-item").each(function (index) {
     });
 });
 
-function SelectGame(game) {
-    if (game != null) {
-        $('#game').val(game);
-    } 
-    SelectFilterItem(game, false);
-    $(this).addClass("active");
+//function SelectGame(game) {
+//    if (game != null) {
+//        $('#game').val(game);
+//    } 
+//    $(this).addClass("active");
 
-    SearchOffers();
-}
+//    SearchOffers();
+//}
 
 function SearchOffers() {
       
     var g = $('#game').val();
+    var filterItemValues = [];
+    $(".selsel").each(function () {
+        filterItemValues.push($(this).val());
+    });
+    var filterValues = [];
+    $(".selselsel").each(function () {
+        filterValues.push($(this).val());
+    });
     var message = {
         "page": 1,
         "sort": $('#sort').val(),
-        "online": "sort",
+        "isOnline": $('#isOnline').is(':checked'),
+        "searchInDiscription": $('#searchInDiscription').is(':checked'),
         "searchString": $('#searchString').val(),
-        "filterItems": "sort",
+        "filterItemValues": filterItemValues,
+        "filterValues": filterItemValues,
         "game": g,
         "priceFrom": $('#priceFrom').val(),
         "priceTo": $('#priceTo').val()
@@ -64,16 +110,21 @@ function SearchOffers() {
         dataType: "html",
         beforeSend: function () {
             $('#loader').show();
-            $('#lll').css('background-color','#333')
-        },
-        complete: function () {
-            $('#loader').hide();
-            $('#lll').removeAttr('style')
+
         },
         success: function (response) {
-            
+            var s = $('#sort').val();
+
             $('#list').html(response);
-        }
+            $('#loader').hide();
+            $('#sort').val(s)
+            slider();
+
+            //SelectFilterItem(g, false);
+        },
+        error: function () {
+            alert("fff");
+        }       
     });
 }
 
@@ -181,7 +232,7 @@ function CustomSelect() {
 }
 
 function CreateFilters(ranks) {
-    var label, hidden;
+    var label, hidden, hidden2;
     var select;
     var div;
     var mainDiv = $("#filter-item");
@@ -189,12 +240,14 @@ function CreateFilters(ranks) {
     for (var rank in ranks) {
         div = $("<div></div>");
         div.addClass("image-select");
-        hidden = $('<input type="hidden" name="FilterValues" value="' + ranks[rank].Value + '">');
+        
         label = $("<label for='Filter.Value'>" + ranks[rank].Name + "</label>")
-        select = $("<select name='FilterItemValues'></select>");
+        select = $("<select class='selsel' id='filterItemValues' name='FilterItemValues'></select>");
         var defaultOption = $('<option>Выберите ранг</option>').val('empty');
+        hidden2 = $('<input type="hidden" class="selselsel" id="filters" name="Filters" value="' + ranks[rank].Value + '">');
         select.append(defaultOption);
         for (var item in ranks[rank].FilterItems) {
+            hidden = $('<input type="hidden" id="filterItems" name="FilterValues" value="' + ranks[rank].FilterItems[item].Value + '">');
             var url = "../../Content/Images/" + ranks[rank].GameValue + "/Ranks/" + ranks[rank].FilterItems[item].Image;
             var option = $('<option data-url="' + url + '"></option>').val(ranks[rank].FilterItems[item].Value).text(ranks[rank].FilterItems[item].Name);
 
@@ -202,6 +255,7 @@ function CreateFilters(ranks) {
         }
         div.append(select);
         div.append(hidden);
+        div.append(hidden2);
         mainDiv.append(label).append(div);
 
     }

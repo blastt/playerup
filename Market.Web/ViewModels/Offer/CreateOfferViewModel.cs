@@ -20,5 +20,13 @@ namespace Market.Web.ViewModels
         public IEnumerable<SelectListItem> FilterItems { get; set; }
         public Dictionary<Model.Models.Filter, FilterItem> FilterPairs { get; set; }
         public decimal Price { get; set; }
+
+        public CreateOfferViewModel()
+        {
+            Games = new List<SelectListItem>();
+            Filters = new List<SelectListItem>();
+            FilterItems = new List<SelectListItem>();
+
+        }
     }
 }

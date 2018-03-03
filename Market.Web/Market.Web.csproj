@@ -298,12 +298,19 @@
     <Content Include="Content\Images\Lineage2\Icons\lineage2.png" />
     <Content Include="Content\Images\noavatar.png" />
     <Content Include="Content\Images\Pubg\Icons\pubg.png" />
+    <Content Include="Content\range-slider.css" />
     <Content Include="Content\Images\Warface\Icons\warface.png" />
     <Content Include="Content\Images\Warframe\Icons\warframe.png" />
     <Content Include="Content\Images\Wot\Icons\wot.png" />
     <Content Include="Content\Images\Wow\Icons\wow.png" />
     <Content Include="Content\jquery-ui.css" />
     <Content Include="Content\jquery-ui.min.css" />
+    <Content Include="Content\slider.css">
+      <DependentUpon>slider.scss</DependentUpon>
+    </Content>
+    <Content Include="Content\slider.min.css">
+      <DependentUpon>slider.css</DependentUpon>
+    </Content>
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
@@ -333,6 +340,11 @@
     <Content Include="Content\bootstrap-reboot.css.map" />
     <Content Include="Content\bootstrap-grid.min.css.map" />
     <Content Include="Content\bootstrap-grid.css.map" />
+    <Content Include="Content\slider.scss" />
+    <None Include="compilerconfig.json" />
+    <None Include="compilerconfig.json.defaults">
+      <DependentUpon>compilerconfig.json</DependentUpon>
+    </None>
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
@@ -433,13 +445,16 @@
     <Content Include="Views\Shared\_OfferList.cshtml" />
     <Content Include="Views\Offer\Details.cshtml" />
     <Content Include="Views\Shared\_SearchPanel.cshtml" />
+    <Content Include="Views\Shared\_OfferBlock.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\God\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
     <Content Include="Scripts\jquery-3.3.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.3.1.min.map" />
   </ItemGroup>
