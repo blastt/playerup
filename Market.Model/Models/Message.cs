@@ -15,11 +15,14 @@ namespace Market.Model.Models
         public string MessageBody { get; set; }
         public bool IsViewed { get; set; }
         public int ParentMessageId { get; set; }
-        //public string SenderId { get; set; }
-        //public string ReceiverId { get; set; }
+        
         public bool SenderDeleted { get; set; }
         public bool ReceiverDeleted { get; set; }
         public DateTime CreatedDate { get; set; }
-        public virtual IList<UserProfile> UserProfiles { get; set; } = new List<UserProfile>();
+
+        public string SenderId { get; set; }
+        public string ReceiverId { get; set; }
+        public virtual UserProfile Sender { get; set; }
+        public virtual UserProfile Receiver { get; set; }
     }
 }

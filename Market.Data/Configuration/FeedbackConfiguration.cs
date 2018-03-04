@@ -15,7 +15,8 @@ namespace Market.Data.Configuration
             Property(f => f.DateLeft).IsRequired();
             Property(f => f.Grade).IsRequired();
             Property(f => f.OfferHeader).IsRequired().HasMaxLength(100);
-            HasMany(f => f.UserProfiles).WithMany(u => u.Feedbacks);
+            HasRequired(m => m.Sender).WithMany(m => m.Feedbacks).HasForeignKey(m => m.SenderId);
+            HasRequired(m => m.Receiver).WithMany(m => m.Feedbacks).HasForeignKey(m => m.ReceiverId);
         }
     }
 }

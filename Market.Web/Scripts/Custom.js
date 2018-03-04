@@ -2,6 +2,25 @@
     SearchOffers();
 });
 
+
+
+//Ajax paging
+//$(".page-item").each(function (index) {
+//    alert("ffq");
+//    $(this).on("click", function () {
+//        // For the boolean value
+//        alert('loh');
+//    });
+//});
+
+function SelectPage(page) {
+    $('#page').val(page);
+    SearchOffers();
+}
+
+//------
+
+
 function getVals() {
     // Get slider values
     var parent = this.parentNode;
@@ -33,42 +52,7 @@ function slider() {
 }
 
 
-$(".game-filter-item").each(function (index) {
-    if (index == 0 && window.location.href.split('=')[1] == undefined) {
-        $(this).addClass("active");
-        
 
-    }
-    else if (this.dataset.game == window.location.href.split('=')[1]) {
-        $(this).addClass("active");
-
-
-    }
-   
-    $(this).on("click", function () {
-        // For the boolean value
-        $(".game-filter-item").each(function (index) {
-            $(this).removeClass("active");
-        });
-            
-            var url = Router.action('offer', 'list', { game: this.dataset.game});
-            window.history.pushState("2", "", url);
-
-            if (this.dataset.game == window.location.href.split('=')[1]) {
-                $(this).addClass("active");
-                return;
-            }  
-        
-            else if (window.location.href.split('=')[1] == "all") {
-                $(this).addClass("active");
-                return;
-            }
-        
-
-        // For the mammal value
-
-    });
-});
 
 //function SelectGame(game) {
 //    if (game != null) {
@@ -91,7 +75,7 @@ function SearchOffers() {
         filterValues.push($(this).val());
     });
     var message = {
-        "page": 1,
+        "page": $('#page').val(),
         "sort": $('#sort').val(),
         "isOnline": $('#isOnline').is(':checked'),
         "searchInDiscription": $('#searchInDiscription').is(':checked'),
@@ -114,10 +98,17 @@ function SearchOffers() {
         },
         success: function (response) {
             var s = $('#sort').val();
+            $(".game-filter-item").each(function (index) {
+                if (this.dataset.game === g) {
+                    $(this).addClass("active");
+                    return;
+                }
 
+            });
             $('#list').html(response);
             $('#loader').hide();
-            $('#sort').val(s)
+            $('#sort').val(s);
+            
             slider();
 
             //SelectFilterItem(g, false);
@@ -145,15 +136,15 @@ function ajaxFilters(g, isListView) {
             var divRank = $('<div></div>');
             div.empty();
 
-            if (Object.keys(data).length != 0) {
+            if (Object.keys(data).length !== 0) {
 
                 divRank.addClass('form-group');
 
 
-                if (g == 'dota2') {
+                if (g === 'dota2') {
                     AddDota2RankFields(divRank, data, isListView);
                 }
-                else if (g == 'csgo') {
+                else if (g === 'csgo') {
                     AddCsgoRankFields(divRank, data, isListView);
                 }
                 div.append(divRank);
@@ -189,7 +180,7 @@ function CustomSelect() {
                 s = this.parentNode.parentNode.getElementsByTagName("select")[0];
                 h = this.parentNode.previousSibling;
                 for (i = 0; i < s.length; i++) {
-                    if (s.options[i].innerHTML == this.innerHTML) {
+                    if (s.options[i].innerHTML === this.innerHTML) {
                         s.selectedIndex = i;
                         h.innerHTML = this.innerHTML;
                         break;
@@ -216,7 +207,7 @@ function CustomSelect() {
         x = document.getElementsByClassName("select-items");
         y = document.getElementsByClassName("select-selected");
         for (i = 0; i < y.length; i++) {
-            if (elmnt == y[i]) {
+            if (elmnt === y[i]) {
                 arrNo.push(i)
             } else {
                 y[i].classList.remove("select-arrow-active");
@@ -318,7 +309,7 @@ function myfunction() {
                 s = this.parentNode.parentNode.getElementsByTagName("select")[0];
                 h = this.parentNode.previousSibling;
                 for (i = 0; i < s.length; i++) {
-                    if (s.options[i].innerText == this.innerText) {
+                    if (s.options[i].innerText === this.innerText) {
                         s.selectedIndex = i;
                         h.innerHTML = this.innerHTML;
                         break;
@@ -348,7 +339,7 @@ function closeAllSelect(elmnt) {
     x = document.getElementsByClassName("select-items");
     y = document.getElementsByClassName("select-selected");
     for (i = 0; i < y.length; i++) {
-        if (elmnt == y[i]) {
+        if (elmnt === y[i]) {
             arrNo.push(i)
         } else {
             y[i].classList.remove("select-arrow-active");

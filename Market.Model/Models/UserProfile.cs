@@ -17,7 +17,6 @@ namespace Market.Model.Models
         public int Positive { get; set; }
         public int Negative { get; set; }
         public string Discription { get; set; }
-        public int MyProperty { get; set; }
         public bool IsOnline { get; set; }
 
         public string Name { get; set; }

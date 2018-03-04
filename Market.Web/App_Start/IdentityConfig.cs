@@ -13,6 +13,8 @@ using Microsoft.Owin.Security;
 using Market.Web.Models;
 using Marketplace.Data;
 using Market.Model.Models;
+using SendGrid;
+using SendGrid.Helpers.Mail;
 
 namespace Market.Web
 {
@@ -20,8 +22,21 @@ namespace Market.Web
     {
         public Task SendAsync(IdentityMessage message)
         {
-            // Plug in your email service here to send an email.
-            return Task.FromResult(0);
+            return ConfigSendGridasync(message);
+        }
+
+        private async Task ConfigSendGridasync(IdentityMessage message)
+        {
+            // Create a Web transport for sending email.
+            var apiKey = Environment.GetEnvironmentVariable("SENDGRID_KEY");
+            var client = new SendGridClient(apiKey);
+            var from = new EmailAddress("test@example.com", "Example User");
+            var subject = message.Subject;
+            var to = new EmailAddress(message.Destination);
+            var plainTextContent = message.Body;
+            var htmlContent = message.Body;
+            var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
+            var response = await client.SendEmailAsync(msg);
         }
     }
 

@@ -130,6 +130,9 @@
     <Reference Include="RouteJs.Mvc5, Version=2.2.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\RouteJs.Mvc5.2.2.0\lib\net45\RouteJs.Mvc5.dll</HintPath>
     </Reference>
+    <Reference Include="SendGrid, Version=9.8.0.0, Culture=neutral, PublicKeyToken=4f047e93159395ca, processorArchitecture=MSIL">
+      <HintPath>..\packages\Sendgrid.9.9.0\lib\net452\SendGrid.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Diagnostics.DiagnosticSource, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
@@ -224,6 +227,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\PagingHelpers.cs" />
     <Compile Include="Mappings\AutoMapperConfiguration.cs" />
     <Compile Include="Mappings\DomainToViewModelMappingProfile.cs" />
     <Compile Include="Mappings\ViewModelToDomainMappingProfile.cs" />
@@ -249,6 +253,7 @@
     <Compile Include="ViewModels\Offer\OfferViewModel.cs" />
     <Compile Include="ViewModels\Order\DetailsOrderViewModel.cs" />
     <Compile Include="ViewModels\Order\OrderViewModel.cs" />
+    <Compile Include="ViewModels\PageInfoViewModel.cs" />
     <Compile Include="ViewModels\SearchViewModel.cs" />
     <Compile Include="ViewModels\UserProfile\UserProfileViewModel.cs" />
   </ItemGroup>
@@ -305,12 +310,6 @@
     <Content Include="Content\Images\Wow\Icons\wow.png" />
     <Content Include="Content\jquery-ui.css" />
     <Content Include="Content\jquery-ui.min.css" />
-    <Content Include="Content\slider.css">
-      <DependentUpon>slider.scss</DependentUpon>
-    </Content>
-    <Content Include="Content\slider.min.css">
-      <DependentUpon>slider.css</DependentUpon>
-    </Content>
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
@@ -340,7 +339,6 @@
     <Content Include="Content\bootstrap-reboot.css.map" />
     <Content Include="Content\bootstrap-grid.min.css.map" />
     <Content Include="Content\bootstrap-grid.css.map" />
-    <Content Include="Content\slider.scss" />
     <None Include="compilerconfig.json" />
     <None Include="compilerconfig.json.defaults">
       <DependentUpon>compilerconfig.json</DependentUpon>
@@ -446,6 +444,19 @@
     <Content Include="Views\Offer\Details.cshtml" />
     <Content Include="Views\Shared\_SearchPanel.cshtml" />
     <Content Include="Views\Shared\_OfferBlock.cshtml" />
+    <Content Include="Views\Account\Settings.cshtml" />
+    <Content Include="Views\Account\UpdateEmail.cshtml" />
+    <Content Include="Views\Account\UpdateEmailSuccess.cshtml" />
+    <Content Include="Views\Account\UpdatePassword.cshtml" />
+    <Content Include="Views\Account\ChangeEmailRequest.cshtml" />
+    <Content Include="Views\Account\ChangePasswordConfirmation.cshtml" />
+    <Content Include="Views\Account\ControlPanel.cshtml" />
+    <Content Include="Views\Shared\_AccountFeedbacksMenu.cshtml" />
+    <Content Include="Views\Shared\_AccountMenu.cshtml" />
+    <Content Include="Views\Shared\_AccountMessagesMenu.cshtml" />
+    <Content Include="Views\Shared\_AccountOffersMenu.cshtml" />
+    <Content Include="Views\Shared\_AccountOrdersMenu.cshtml" />
+    <Content Include="Views\Offer\All.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

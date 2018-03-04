@@ -522,10 +522,7 @@ div#users-contain {
 
 .message-info {
     border-bottom: 1px solid #e9eaea;
-    padding-top: 15px;
-    padding-left: 20px;
-    padding-right: 20px;
-    padding-bottom: 20px
+    padding: 15px 20px 20px 20px;
 }
 
 .message-text {
@@ -643,7 +640,6 @@ div#users-contain {
     width: 100%;
     height: 100%;
     position: absolute;
-    animation: background 3s infinite alternate;
     top: 0;
     left: 0;
     z-index: 10;
@@ -737,4 +733,17 @@ div#users-contain {
 	100% {
 		-moz-transform: rotate(360deg);
 	}
+}
+
+.btn-currentpage {
+    color: #fff;
+    background-color: #62b2e2;
+    border-color: #62b2e2;
+    margin-right: 7px
+}
+
+.btn-default {
+    background-color: #e1e1e1;
+    border-color: #e1e1e1;
+    margin-right: 7px
 }

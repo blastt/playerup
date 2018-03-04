@@ -24,7 +24,11 @@ namespace Market.Model.Models
         public string OfferId { get; set; }        
 
         public string OfferHeader { get; set; }
-        public ICollection<UserProfile> UserProfiles { get; set; }
-        
+
+        public string SenderId { get; set; }
+        public string ReceiverId { get; set; }
+        public virtual UserProfile Sender { get; set; }
+        public virtual UserProfile Receiver { get; set; }
+
     }
 }

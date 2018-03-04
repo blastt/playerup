@@ -58,6 +58,130 @@ namespace Market.Web.Controllers
             }
         }
 
+
+        #region Custom Methods
+
+        [Authorize]
+        public ActionResult Settings()
+        {
+            return View();
+        }
+        public PartialViewResult AccountMenu()
+        {
+            return PartialView("_AccountMenu");
+        }
+        public ActionResult ControlPanel()
+        {
+            return View();
+        }
+
+        [Authorize]
+        public ActionResult UpdateEmail()
+        {
+            return View();
+        }
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> UpdateEmail(UpdateEmailViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                // get user object from the storage
+                var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+                var result = await UserManager.CheckPasswordAsync(user, model.Password);
+                if (result)
+                {
+                    // change username and email
+                    //user.Email = model.NewEmail;
+                    // Persiste the changes
+
+                    var emailExists = await UserManager.SetEmailAsync(user.Id, model.NewEmail);
+                    if (emailExists.Succeeded)
+                    {
+                        await UserManager.UpdateAsync(user);
+                        // generage email confirmation code
+                        string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                        var callbackUrl = Url.Action("ChangeEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+
+                        await UserManager.SendEmailAsync(user.Id, "Подтверждение почты", "Вы предоставили новый email-адрес для вашей" +
+                            " учётной записи Для смены адреса вам необходимо его активировать, щелкнув <a href=\"" + callbackUrl + "\">здесь</a>");
+
+                        return View("ChangeEmailRequest");
+                    }
+                }
+                return View("Error");
+            }
+            return View();
+
+            // send email to the user with the confirmation link
+        }
+
+        [Authorize]
+        public async Task<ActionResult> ChangeEmail(string userId, string code)
+        {
+
+            if (userId == null || code == null)
+            {
+                return View("Error");
+            }
+
+            var result = await UserManager.ConfirmEmailAsync(userId, code);
+            if (result.Succeeded)
+            {
+                //await UserManager.SetEmailAsync(userId, newEmail);
+                return View("UpdateEmailSuccess");
+            }
+            return View("Error");
+        }
+
+        [Authorize]
+        public ActionResult UpdatePassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> UpdatePassword(UpdatePasswordViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+                if (user == null)
+                {
+                    // Не показывать, что пользователь не существует или не подтвержден
+                    return View("UpdatePasswordConfirmation");
+                }
+
+                {
+                    var result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword, model.Password);
+                    if (result.Succeeded)
+                    {
+                        return RedirectToAction("ChangePasswordConfirmation", "Account");
+                    }
+                    // Дополнительные сведения о включении подтверждения учетной записи и сброса пароля см. на странице https://go.microsoft.com/fwlink/?LinkID=320771.
+                    // Отправка сообщения электронной почты с этой ссылкой
+
+                    return View();
+                }
+
+            }
+
+            // Появление этого сообщения означает наличие ошибки; повторное отображение формы
+            return View(model);
+        }
+
+        [Authorize]
+        public ActionResult ChangePasswordConfirmation()
+        {
+            return View();
+        }
+
+        #endregion
+
+
         //
         // GET: /Account/Login
         [AllowAnonymous]
@@ -165,9 +289,9 @@ namespace Market.Web.Controllers
 
                     // Дополнительные сведения о включении подтверждения учетной записи и сброса пароля см. на странице https://go.microsoft.com/fwlink/?LinkID=320771.
                     // Отправка сообщения электронной почты с этой ссылкой
-                    // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                    // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                    // await UserManager.SendEmailAsync(user.Id, "Подтверждение учетной записи", "Подтвердите вашу учетную запись, щелкнув <a href=\"" + callbackUrl + "\">здесь</a>");
+                    string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                    var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                    await UserManager.SendEmailAsync(user.Id, "Подтверждение учетной записи", "Подтвердите вашу учетную запись, щелкнув <a href=\"" + callbackUrl + "\">здесь</a>");
                     byte[] imageData = System.IO.File.ReadAllBytes(Server.MapPath("~/Content/Images/noavatar.png"));
 
                     UserProfile profile = new UserProfile
@@ -229,10 +353,10 @@ namespace Market.Web.Controllers
 
                 // Дополнительные сведения о включении подтверждения учетной записи и сброса пароля см. на странице https://go.microsoft.com/fwlink/?LinkID=320771.
                 // Отправка сообщения электронной почты с этой ссылкой
-                // string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
-                // var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);		
-                // await UserManager.SendEmailAsync(user.Id, "Сброс пароля", "Сбросьте ваш пароль, щелкнув <a href=\"" + callbackUrl + "\">здесь</a>");
-                // return RedirectToAction("ForgotPasswordConfirmation", "Account");
+                string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
+                var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                await UserManager.SendEmailAsync(user.Id, "Сброс пароля", "Сбросьте ваш пароль, щелкнув <a href=\"" + callbackUrl + "\">здесь</a>");
+                return RedirectToAction("ForgotPasswordConfirmation", "Account");
             }
 
             // Появление этого сообщения означает наличие ошибки; повторное отображение формы

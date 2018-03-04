@@ -13,6 +13,7 @@ namespace Market.Web.ViewModels
         
         public IEnumerable<Game> Games { get; set; }
         public SearchViewModel SearchInfo { get; set; }
+        public PageInfoViewModel PageInfo { get; set; }
         public IEnumerable<Filter> Filters { get; set; }
         public ICollection<OfferViewModel> Offers { get; set; }
     }

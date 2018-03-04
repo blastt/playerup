@@ -10,6 +10,7 @@ namespace Market.Web.ViewModels
     {
         public int Id { get; set; }
         public string Header { get; set; }
+        public string Discription { get; set; }
         public Game Game { get; set; }        
         public decimal Price { get; set; }
         public DateTime? DateCreated { get; set; } = DateTime.Now;

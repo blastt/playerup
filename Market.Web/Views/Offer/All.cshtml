@@ -1,4 +1,4 @@
-﻿@model Trader.WEB.Models.OfferListViewModel
+﻿@model Market.Web.ViewModels.OfferListViewModel
 @{
     ViewBag.Title = "All";
 
@@ -15,20 +15,20 @@
                 @{Html.RenderPartial("_AccountOffersMenu"); }
                 <table class="table table-hover">
                     <tr>
-                        <th>Предложение</th>
-                        <th>Сообщение</th>
-                        <th>Отправитель</th>
-                        <th>Дата</th>
+                        <th>Игра</th>
+                        <th>Заголовок</th>
+                        <th>Описание</th>
+                        <th>Цена</th>
                     </tr>
                     @foreach (var offer in Model.Offers)
-            {
-                <tr>
-                    <td>@offer.Game</td>
-                    <td>@offer.Header</td>
-                    <td>@offer.Discription</td>
-                    <td>@offer.Price</td>
-                </tr>
-    }
+                    {
+                    <tr>
+                        <td>@offer.Game.Name</td>
+                        <td>@offer.Header</td>
+                        <td>@offer.Discription</td>
+                        <td>@offer.Price</td>
+                    </tr>
+                    }
 
                 </table>
             </div>

@@ -76,8 +76,8 @@ namespace Market.Web.Mappings
                .ForMember(o => o.ReceiverDeleted, map => map.MapFrom(vm => vm.ReceiverDeleted))
                .ForMember(o => o.SenderDeleted, map => map.MapFrom(vm => vm.SenderDeleted))
                .ReverseMap()
-               .ForPath(o => o.SenderName, map => map.MapFrom(vm => vm.UserProfiles.FirstOrDefault().Name))              
-               .ForPath(o => o.ReceiverName, map => map.MapFrom(vm => vm.UserProfiles.LastOrDefault().Name))
+               .ForPath(o => o.ReceiverName, map => map.MapFrom(vm => vm.Receiver.Name))              
+               .ForPath(o => o.SenderName, map => map.MapFrom(vm => vm.Sender.Name))
                .ReverseMap()
                .ForMember(o => o.CreatedDate, map => map.MapFrom(vm => vm.CreatedDate))
                .ForMember(o => o.Subject, map => map.MapFrom(vm => vm.Subject));
@@ -90,8 +90,8 @@ namespace Market.Web.Mappings
                .ForMember(o => o.Subject, map => map.MapFrom(vm => vm.Subject))
                .ForMember(o => o.MessageBody, map => map.MapFrom(vm => vm.MessageBody))
                .ReverseMap()
-               .ForPath(o => o.SenderName, map => map.MapFrom(vm => vm.UserProfiles.FirstOrDefault().Name))
-               .ForPath(o => o.ReceiverName, map => map.MapFrom(vm => vm.UserProfiles.LastOrDefault().Name))
+               .ForPath(o => o.ReceiverName, map => map.MapFrom(vm => vm.Receiver.Name))
+               .ForPath(o => o.SenderName, map => map.MapFrom(vm => vm.Sender.Name))
                .ReverseMap()
                .ForMember(o => o.CreatedDate, map => map.MapFrom(vm => vm.CreatedDate));
 

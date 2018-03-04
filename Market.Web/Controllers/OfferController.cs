@@ -22,7 +22,7 @@ namespace Market.Web.Controllers
         private readonly IGameService _gameService;
         private readonly IFilterService _filterService;
         private readonly IFilterItemService _filterItemService;
-        public int pageSize = 7;
+        public int pageSize = 3;
         public OfferController(IOfferService offerService, IGameService gameService, IFilterService filterService, IFilterItemService filterItemService, IUserProfileService userProfileService)
         {
             _offerService = offerService;
@@ -43,6 +43,21 @@ namespace Market.Web.Controllers
             model.SearchInfo = new SearchViewModel()
             {
                 Game = game
+            };
+            return View(model);
+        }
+
+        public ViewResult All()
+        {
+            IEnumerable<Offer> offers = _offerService.GetOffers().Where(m => m.UserProfileId == User.Identity.GetUserId());
+            ICollection<OfferViewModel> offersViewModel = new List<OfferViewModel>();
+            foreach (var offer in offers)
+            {
+                offersViewModel.Add(Mapper.Map<Offer, OfferViewModel>(offer));
+            }
+            OfferListViewModel model = new OfferListViewModel
+            {
+                Offers = offersViewModel
             };
             return View(model);
         }
@@ -172,7 +187,7 @@ namespace Market.Web.Controllers
                 Filters = _filterService.GetFilters().Where(m => m.Game.Value == searchInfo.Game),
                 Game = _gameService.GetGameByValue(searchInfo.Game),
                 
-                Offers = offerList,
+                Offers = offerList.Skip((searchInfo.Page - 1) * pageSize).Take(pageSize).ToList(),
                 SearchInfo = new SearchViewModel()
                 {
                     SearchString = searchInfo.SearchString,
@@ -185,6 +200,12 @@ namespace Market.Web.Controllers
                     Game = searchInfo.Game,
                     Page = 1,
                     Sort = searchInfo.Sort
+                },
+                PageInfo = new PageInfoViewModel()
+                {
+                    PageNumber = searchInfo.Page,
+                    PageSize = pageSize,
+                    TotalItems = offerList.Count
                 }
             };
 
