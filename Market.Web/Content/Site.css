@@ -56,7 +56,6 @@ textarea {
     }
 /*style the items (options), including the selected item:*/
 .select-items div, .select-selected {
-
     padding: 8px 16px;
     border: 1px solid transparent;
     border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;
@@ -439,6 +438,21 @@ ul {
     border-radius: 6px;
 }
 
+.account-setting-container {
+    background-clip: border-box;
+    border: 1px solid #eff0f4;
+    background-color: #fff;
+    z-index: 1;
+    padding: 20px 35px;
+    border-radius: 6px;
+}
+
+.account-message-container {
+    background-clip: border-box;
+    border: 1px solid #eff0f4;
+    z-index: 1;
+    border-radius: 6px;
+}
 .page-info {
     padding-top: 20px;
     padding-bottom: 30px
@@ -649,90 +663,89 @@ div#users-contain {
 /*Loader for offerList*/
 
 
-.cssload-container{
-	
+.cssload-container {
 }
-	
+
 .cssload-whirlpool,
 .cssload-whirlpool::before,
 .cssload-whirlpool::after {
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	border: 2px solid rgb(204,204,204);
-	border-left-color: rgb(0,0,0);
-	border-radius: 2373px;
-		-o-border-radius: 2373px;
-		-ms-border-radius: 2373px;
-		-webkit-border-radius: 2373px;
-		-moz-border-radius: 2373px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    border: 2px solid rgb(204,204,204);
+    border-left-color: rgb(0,0,0);
+    border-radius: 2373px;
+    -o-border-radius: 2373px;
+    -ms-border-radius: 2373px;
+    -webkit-border-radius: 2373px;
+    -moz-border-radius: 2373px;
 }
 
 .cssload-whirlpool {
-	margin: -59px 0 0 -59px;
-	height: 119px;
-	width: 119px;
-	animation: cssload-rotate 1900ms linear infinite;
-		-o-animation: cssload-rotate 1900ms linear infinite;
-		-ms-animation: cssload-rotate 1900ms linear infinite;
-		-webkit-animation: cssload-rotate 1900ms linear infinite;
-		-moz-animation: cssload-rotate 1900ms linear infinite;
+    margin: -59px 0 0 -59px;
+    height: 119px;
+    width: 119px;
+    animation: cssload-rotate 1900ms linear infinite;
+    -o-animation: cssload-rotate 1900ms linear infinite;
+    -ms-animation: cssload-rotate 1900ms linear infinite;
+    -webkit-animation: cssload-rotate 1900ms linear infinite;
+    -moz-animation: cssload-rotate 1900ms linear infinite;
 }
 
-.cssload-whirlpool::before {
-	content: "";
-	margin: -55px 0 0 -55px;
-	height: 105px;
-	width: 105px;
-	animation: cssload-rotate 1900ms linear infinite;
-		-o-animation: cssload-rotate 1900ms linear infinite;
-		-ms-animation: cssload-rotate 1900ms linear infinite;
-		-webkit-animation: cssload-rotate 1900ms linear infinite;
-		-moz-animation: cssload-rotate 1900ms linear infinite;
-}
+    .cssload-whirlpool::before {
+        content: "";
+        margin: -55px 0 0 -55px;
+        height: 105px;
+        width: 105px;
+        animation: cssload-rotate 1900ms linear infinite;
+        -o-animation: cssload-rotate 1900ms linear infinite;
+        -ms-animation: cssload-rotate 1900ms linear infinite;
+        -webkit-animation: cssload-rotate 1900ms linear infinite;
+        -moz-animation: cssload-rotate 1900ms linear infinite;
+    }
 
-.cssload-whirlpool::after {
-	content: "";
-	margin: -69px 0 0 -69px;
-	height: 133px;
-	width: 133px;
-	animation: cssload-rotate 3800ms linear infinite;
-		-o-animation: cssload-rotate 3800ms linear infinite;
-		-ms-animation: cssload-rotate 3800ms linear infinite;
-		-webkit-animation: cssload-rotate 3800ms linear infinite;
-		-moz-animation: cssload-rotate 3800ms linear infinite;
-}
+    .cssload-whirlpool::after {
+        content: "";
+        margin: -69px 0 0 -69px;
+        height: 133px;
+        width: 133px;
+        animation: cssload-rotate 3800ms linear infinite;
+        -o-animation: cssload-rotate 3800ms linear infinite;
+        -ms-animation: cssload-rotate 3800ms linear infinite;
+        -webkit-animation: cssload-rotate 3800ms linear infinite;
+        -moz-animation: cssload-rotate 3800ms linear infinite;
+    }
 
 
 
 @keyframes cssload-rotate {
-	100% {
-		transform: rotate(360deg);
-	}
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 @-o-keyframes cssload-rotate {
-	100% {
-		-o-transform: rotate(360deg);
-	}
+    100% {
+        -o-transform: rotate(360deg);
+    }
 }
 
 @-ms-keyframes cssload-rotate {
-	100% {
-		-ms-transform: rotate(360deg);
-	}
+    100% {
+        -ms-transform: rotate(360deg);
+    }
 }
 
 @-webkit-keyframes cssload-rotate {
-	100% {
-		-webkit-transform: rotate(360deg);
-	}
+    100% {
+        -webkit-transform: rotate(360deg);
+    }
 }
 
 @-moz-keyframes cssload-rotate {
-	100% {
-		-moz-transform: rotate(360deg);
-	}
+    100% {
+        -moz-transform: rotate(360deg);
+    }
 }
 
 .btn-currentpage {
@@ -746,4 +759,15 @@ div#users-contain {
     background-color: #e1e1e1;
     border-color: #e1e1e1;
     margin-right: 7px
+}
+
+.btn-submit {
+    color: #fff;
+    background-color: #62b2e2;
+    border-color: #62b2e2;
+    margin-right: 7px
+}
+
+.table-white{
+    background-color: #fff
 }

@@ -1,10 +1,13 @@
 ﻿using Market.Model.Models;
 using Market.Service;
+using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Market.Web.ViewModels;
+using AutoMapper;
 
 namespace Market.Web.Controllers
 {
@@ -12,9 +15,12 @@ namespace Market.Web.Controllers
     {
         private readonly IUserProfileService _userProfileService;
         private readonly IMessageService _messageService;
-        public MessageController(IMessageService messageService)
+        private readonly IOfferService _offerService;
+        public MessageController(IMessageService messageService, IOfferService offerService, IUserProfileService userProfileService)
         {
             _messageService = messageService;
+            _offerService = offerService;
+            _userProfileService = userProfileService;
         }
 
         //public IList<Message> GetMessageStory(int messageId, IList<Message> messages)
@@ -46,31 +52,18 @@ namespace Market.Web.Controllers
                 if(messageId != null)
                 {
                     Message message = _messageService.GetMessage(messageId.Value);
-                    
-                }
-                
-                if (message != null && (message.ReceiverId == User.Identity.GetUserId() || message.SenderId == User.Identity.GetUserId()))
-                {
-                    _messageService.SetMessageViewed(messageId.Value);
-                    MessageViewModel model = new MessageViewModel()
+                    if (message != null && (message.ReceiverId == User.Identity.GetUserId() || message.SenderId == User.Identity.GetUserId()))
                     {
-                        Id = message.Id,
-                        CreatedDate = message.CreatedDate,
-                        IsViewed = message.IsViewed,
-                        MessageBody = message.MessageBody,
-                        SenderId = message.SenderId,
-                        Subject = message.Subject
+                        _messageService.SetMessageViewed(messageId.Value);
+                        _messageService.SaveMessage();
+                        MessageViewModel model = Mapper.Map<Message, MessageViewModel>(message);
 
-                    };
-                    var offer = _db.Offers.Get(message.Subject);
-                    if (offer != null)
-                    {
-                        ViewData["OfferHeader"] = offer.Header;
-                        ViewData["SenderName"] = _db.Users.Get(message.SenderId).UserName;
-                        ViewData["ReceiverName"] = _db.Users.Get(message.ReceiverId).UserName;
+                        
+
+                        return View(model);
                     }
-
-                    return View(model);
+                
+                
 
 
                 }
@@ -80,10 +73,15 @@ namespace Market.Web.Controllers
 
         public ActionResult DeleteStory(int? lastMessageId)
         {
-            DeleteGroup(lastMessageId);
-            _db.Messages.Delete(lastMessageId.ToString());
-            _db.Save();
-            return RedirectToAction("Inbox");
+            if(lastMessageId != null)
+            {
+                DeleteGroup(lastMessageId);
+
+                _messageService.DeleteMessage(lastMessageId.Value);
+                _messageService.SaveMessage();
+                return RedirectToAction("Inbox");
+            }
+            return HttpNotFound();
         }
 
         public ActionResult Story(string userId, int? id, int? page)
@@ -162,7 +160,7 @@ namespace Market.Web.Controllers
             ViewData["SenderName"] = senderName;
             ViewData["SearchString"] = searchString;
             ViewData["CurrentFilter"] = currentFilter;
-            var messages = _db.Messages.Find(m => m.ReceiverId == User.Identity.GetUserId() && !m.ReceiverDeleted);
+            var messages = _messageService.GetMessages().Where(m => m.ReceiverId == User.Identity.GetUserId() && !m.ReceiverDeleted);
 
             //var messages = _db.Messages.Find(m => m.ReceiverId == User.Identity.GetUserId());
 
@@ -172,7 +170,7 @@ namespace Market.Web.Controllers
             }
             if (!String.IsNullOrEmpty(senderName))
             {
-                var userProfile = _db.UserProfiles.Find(m => m.ApplicationUser.UserName == senderName).FirstOrDefault();
+                var userProfile = _userProfileService.GetUserProfiles().Where(m => m.ApplicationUser.UserName == senderName).FirstOrDefault();
                 if (userProfile != null)
                 {
                     messages = messages.Where(s => s.SenderId == userProfile.Id && s.ReceiverId == User.Identity.GetUserId());
@@ -225,17 +223,9 @@ namespace Market.Web.Controllers
             };
             foreach (var message in messages)
             {
-                model.Messages.Add(new MessageViewModel()
-                {
-                    Id = message.Id,
-                    CreatedDate = message.CreatedDate,
-                    IsViewed = message.IsViewed,
-                    MessageBody = message.MessageBody,
-                    ReceiverId = message.ReceiverId,
-                    SenderId = message.SenderId,
-                    SenderName = _db.Users.Get(message.SenderId).UserName,
-                    Subject = message.Subject
-                });
+                var messageViewModel = Mapper.Map<Message, MessageViewModel>(message);
+                messageViewModel.ReceiverName = _userProfileService.GetUserProfileById(message.ReceiverId).Name;
+                model.Messages.Add(messageViewModel);
             }
 
 
@@ -250,7 +240,7 @@ namespace Market.Web.Controllers
             //ViewBag.FilterParam = String.IsNullOrEmpty(filter) ? "all" : "";
             ViewData["ReceiverName"] = receiverName;
             ViewData["SearchString"] = searchString;
-            var messages = _db.Messages.Find(m => m.SenderId == User.Identity.GetUserId() && !m.SenderDeleted);
+            var messages = _messageService.GetMessages().Where(m => m.SenderId == User.Identity.GetUserId() && !m.SenderDeleted);
 
             //var messages = _db.Messages.Find(m => m.ReceiverId == User.Identity.GetUserId());
 
@@ -260,7 +250,7 @@ namespace Market.Web.Controllers
             }
             if (!String.IsNullOrEmpty(receiverName))
             {
-                var userProfile = _db.UserProfiles.Find(m => m.ApplicationUser.UserName == receiverName).FirstOrDefault();
+                var userProfile = _userProfileService.GetUserProfiles().Where(m => m.ApplicationUser.UserName == receiverName).FirstOrDefault();
                 if (userProfile != null)
                 {
                     messages = messages.Where(s => s.ReceiverId == userProfile.Id && s.SenderId == User.Identity.GetUserId());
@@ -294,17 +284,9 @@ namespace Market.Web.Controllers
             };
             foreach (var message in messages)
             {
-                model.Messages.Add(new MessageViewModel()
-                {
-                    Id = message.Id,
-                    CreatedDate = message.CreatedDate,
-                    IsViewed = message.IsViewed,
-                    MessageBody = message.MessageBody,
-                    ReceiverId = message.ReceiverId,
-                    SenderId = message.SenderId,
-                    ReceiverName = _db.Users.Get(message.ReceiverId).UserName,
-                    Subject = message.Subject
-                });
+                var messageViewModel = Mapper.Map<Message, MessageViewModel>(message);
+                messageViewModel.ReceiverName = _userProfileService.GetUserProfileById(message.ReceiverId).Name;
+                model.Messages.Add(messageViewModel);
             }
             return View(model);
         }
@@ -314,11 +296,11 @@ namespace Market.Web.Controllers
         {
             if (id != null)
             {
-                var user = _db.UserProfiles.Get(User.Identity.GetUserId());
+                var user = _userProfileService.GetUserProfileById(User.Identity.GetUserId());
                 if (user != null)
                 {
 
-                    var message = _db.Messages.Get(id.ToString());
+                    var message = _messageService.GetMessage(id.Value);
                     if (message.ReceiverId == User.Identity.GetUserId() || message.SenderId == User.Identity.GetUserId())
                     {
                         if (message.ReceiverId == User.Identity.GetUserId())
@@ -329,7 +311,7 @@ namespace Market.Web.Controllers
                         {
                             message.SenderDeleted = true;
                         }
-                        _db.Save();
+                        _messageService.SaveMessage();
                         return RedirectToAction("Inbox");
                     }
                     else
@@ -347,11 +329,11 @@ namespace Market.Web.Controllers
         {
             if (id != null)
             {
-                var user = _db.UserProfiles.Get(User.Identity.GetUserId());
+                var user = _userProfileService.GetUserProfileById(User.Identity.GetUserId());
                 if (user != null)
                 {
 
-                    var message = _db.Messages.Get(id.ToString());
+                    var message = _messageService.GetMessage(id.Value);
                     if (message.ReceiverId == User.Identity.GetUserId() || message.SenderId == User.Identity.GetUserId())
                     {
                         if (message.ReceiverId == User.Identity.GetUserId())
@@ -362,7 +344,7 @@ namespace Market.Web.Controllers
                         {
                             message.SenderDeleted = true;
                         }
-                        _db.Save();
+                        _messageService.SaveMessage();
                         return Json(new { Success = true });
                     }
 
@@ -378,15 +360,15 @@ namespace Market.Web.Controllers
         {
             if (id != null)
             {
-                var user = _db.UserProfiles.Get(User.Identity.GetUserId());
+                var user = _userProfileService.GetUserProfileById(User.Identity.GetUserId());
                 if (user != null)
                 {
 
-                    var message = _db.Messages.Get(id.ToString());
+                    var message = _messageService.GetMessage(id.Value);
                     if (message.ReceiverId == User.Identity.GetUserId() || message.SenderId == User.Identity.GetUserId())
                     {
                         message.IsViewed = true;
-                        _db.Save();
+                        _messageService.SaveMessage();
                         return Json(new { Success = true });
                     }
 
@@ -418,20 +400,17 @@ namespace Market.Web.Controllers
             if (ModelState.IsValid)
             {
                 // Поменять(Не проверять на наличие оффера)                
-                var user = _db.UserProfiles.GetAll().FirstOrDefault(m => m.Id == model.ReceiverId);
+                var user = _userProfileService.GetUserProfileById(model.ReceiverId);
 
                 if (user != null)
                 {
-                    var message = new Message
-                    {
-                        IsViewed = false,
-                        ReceiverId = model.ReceiverId,
-                        SenderId = User.Identity.GetUserId(),
-                        MessageBody = model.MessageBody,
-                        CreatedDate = DateTime.Now,
-                        Subject = model.Subject
-                    };
-                    _messageService.SendMessage(message);
+                    Message message = Mapper.Map<MessageViewModel, Message>(model);
+                    message.IsViewed = false;
+                    message.SenderId = User.Identity.GetUserId();
+                    message.CreatedDate = DateTime.Now;
+
+                    _messageService.CreateMessage(message);
+                    _messageService.SaveMessage();
                     return Redirect(Request.UrlReferrer.ToString());
                 }
                 return HttpNotFound("User does not exist!");

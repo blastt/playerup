@@ -25,8 +25,8 @@ namespace Market.Model.Models
 
         public string OfferHeader { get; set; }
 
-        public string SenderId { get; set; }
-        public string ReceiverId { get; set; }
+        public virtual string SenderId { get; set; }
+        public virtual string ReceiverId { get; set; }
         public virtual UserProfile Sender { get; set; }
         public virtual UserProfile Receiver { get; set; }
 

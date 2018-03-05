@@ -36,8 +36,9 @@ namespace Market.Web.Helpers
                 else
                 {
                     tag.AddCssClass("btn-default");
+                    tag.MergeAttribute("onclick", "SelectPage(" + i + ")");
                 }
-                tag.MergeAttribute("onclick", "SelectPage("+i+")");
+                
                 div.InnerHtml += tag;
                 
             }

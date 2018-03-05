@@ -1,4 +1,4 @@
-﻿@model Trader.WEB.Models.MessageListViewModel
+﻿@model Market.Web.ViewModels.MessageListViewModel
 @using Microsoft.AspNet.Identity
 @{
     ViewBag.Title = "Inbox";
@@ -21,7 +21,7 @@
                 <p class="lead">Здесь отображается информация по входящим и исходящим сообщениям</p>
             </div>
             @{Html.RenderAction("AccountMenu", "Account"); }
-            <div class="account-offer-container">
+            <div class="account-message-container">
                 @{Html.RenderPartial("_AccountMessagesMenu"); }
                 @using (Html.BeginForm("Inbox", "Message", null, FormMethod.Get, new { @class = "form-inline form-message-filter" }))
                 {
@@ -71,7 +71,7 @@
 
                 }
 
-                <table class="table table-hover" id="messages">
+                <table class="table table-white" id="messages">
                     <tr>
                         <th></th>
                         <th>@Html.ActionLink("Отправитель", "Inbox", "Message", new { sortOrder = ViewData["NameSortParm"], currentFilter = ViewData["SearchString"] }, null)</th>
@@ -121,6 +121,6 @@
 @section scripts
 {
     <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
-    <script type="text/javascript" src="~/Scripts/myScripts.js"></script>
+    <script type="text/javascript" src="~/Scripts/jquery-messages.js"></script>
 
 }

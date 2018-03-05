@@ -20,8 +20,8 @@ namespace Market.Model.Models
         public bool ReceiverDeleted { get; set; }
         public DateTime CreatedDate { get; set; }
 
-        public string SenderId { get; set; }
-        public string ReceiverId { get; set; }
+        public virtual string SenderId { get; set; }
+        public virtual string ReceiverId { get; set; }
         public virtual UserProfile Sender { get; set; }
         public virtual UserProfile Receiver { get; set; }
     }

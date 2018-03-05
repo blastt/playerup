@@ -98,7 +98,7 @@
                                     var url = "../../Content/Images/" + Model.Game.Value + "/Ranks/" + item.Image;
                                     <div class="col-md-6">
 
-                                        <img src = "@url" style="width:100px" alt="Alternate Text" />
+                                        <img src="@url" style="width:100px" alt="Alternate Text" />
                                     </div>
                                 }
                             </div>
@@ -128,10 +128,10 @@
                     <div style="text-align:center">
                         @Html.ActionLink("Купить", "Pay", "Checkout", null, new { });
                         @using (Html.BeginForm("Pay", "Checkout"))
-                                                                        {
-                        @Html.HiddenFor(m => m.Id)
-                        <input type="submit" name="buy" value="Купить" class=" btn btn-success" />
-                                                                        }
+                        {
+                            @Html.HiddenFor(m => m.Id)
+                            <input type="submit" name="buy" value="Купить" class=" btn btn-success" />
+                        }
 
                     </div>
                 </div>
@@ -169,11 +169,11 @@
 
     </div>
     @using (Html.BeginForm("Give", "Feedback", new { userProfileId = "3" }, FormMethod.Get, null))
-            {
-    @Html.HiddenFor(m => m.UserProfile.Id)
-    @Html.HiddenFor(m => m.Id)
-    <input class="btn btn-success" type="submit" value="Оставить отзыв" />
-            }
+    {
+        @Html.HiddenFor(m => m.UserProfile.Id)
+        @Html.HiddenFor(m => m.Id)
+        <input class="btn btn-success" type="submit" value="Оставить отзыв" />
+    }
 
     @*@if (ViewBag.CurrentProfileOffers != null && ((ICollection<Offer>)ViewData["Offers"]).Contains(Model.))
         {*@
@@ -191,45 +191,45 @@
                 </button>
             </div>
             @using (Html.BeginForm("New", "Message", FormMethod.Post, new { }))
-                                    {
-            @Html.Hidden("ReceiverId", Model.UserProfile.Id)
-            @Html.Hidden("Subject", Model.Id)
-            @Html.AntiForgeryToken()
-            <div class="modal-body">
+            {
+                @Html.Hidden("ReceiverId", Model.UserProfile.Id)
+                @Html.Hidden("Subject", Model.Id)
+                @Html.AntiForgeryToken()
+                <div class="modal-body">
 
-                <div class="form-group">
-                    <img class="img-circle avatar-small" src="@Url.Action("Photo", "Profile" , new { UserId = Model.UserProfile.Id })" style="float:left; margin-right: 20px" alt="Alternate Text" />
-                    <div>
+                    <div class="form-group">
+                        <img class="img-circle avatar-small" src="@Url.Action("Photo", "Profile" , new { UserId = Model.UserProfile.Id })" style="float:left; margin-right: 20px" alt="Alternate Text" />
+                        <div>
 
-                        @Html.ActionLink(Model.UserProfile.ApplicationUser.UserName, "Info", new { })
+                            @Html.ActionLink(Model.UserProfile.ApplicationUser.UserName, "Info", new { })
 
-                        <p>
-                            @if (Model.UserProfile.IsOnline)
-                                                                                        {
-                            <span class="badge badge-pill badge-light">Online</span>
-                                                                                        }
-                                                                                        else
-                                                                                        {
-                            <span class="badge badge-pill badge-dark">Offline</span>
-                                                                                        }
-                        </p>
+                            <p>
+                                @if (Model.UserProfile.IsOnline)
+                                {
+                                    <span class="badge badge-pill badge-light">Online</span>
+                                }
+                                else
+                                {
+                                    <span class="badge badge-pill badge-dark">Offline</span>
+                                }
+                            </p>
 
 
+                        </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    @Html.TextBox("OfferHeader", Model.Header + " " + "(" + Model.Id + ")", new { @class = "form-control", @readonly = "readonly" })
-                </div>
-                <div class="form-group">
-                    <textarea name="MessageBody" class="form-control" rows="5"></textarea>
-                </div>
+                    <div class="form-group">
+                        @Html.TextBox("OfferHeader", Model.Header + " " + "(" + Model.Id + ")", new { @class = "form-control", @readonly = "readonly" })
+                    </div>
+                    <div class="form-group">
+                        <textarea name="MessageBody" class="form-control" rows="5"></textarea>
+                    </div>
 
 
-            </div>
-            <div class="modal-footer">
-                <button type="submit" class="btn btn-info">Отправить</button>
-            </div>
-                                    }
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-info">Отправить</button>
+                </div>
+            }
         </div>
     </div>
 </div>

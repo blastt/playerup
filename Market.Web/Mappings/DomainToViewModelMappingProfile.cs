@@ -94,34 +94,37 @@ namespace Market.Web.Mappings
 
             //#endregion
 
-            //#region Message
+            #region Message
 
-            //CreateMap<MessageViewModel, Message>()
-            //   .ForMember(o => o.IsViewed, map => map.MapFrom(vm => vm.IsViewed))
-            //   .ForMember(o => o.MessageBody, map => map.MapFrom(vm => vm.MessageBody))
-            //   .ForMember(o => o.ReceiverDeleted, map => map.MapFrom(vm => vm.ReceiverDeleted))
-            //   .ForMember(o => o.SenderDeleted, map => map.MapFrom(vm => vm.SenderDeleted))
-            //   .ReverseMap()
-            //   .ForPath(o => o.SenderName, map => map.MapFrom(vm => vm.UserProfiles.FirstOrDefault().Name))
-            //   .ForPath(o => o.ReceiverName, map => map.MapFrom(vm => vm.UserProfiles.LastOrDefault().Name))
-            //   .ReverseMap()
-            //   .ForMember(o => o.CreatedDate, map => map.MapFrom(vm => vm.CreatedDate))
-            //   .ForMember(o => o.Subject, map => map.MapFrom(vm => vm.Subject));
+            CreateMap<MessageViewModel, Message>()
+                .ForMember(o => o.Id, map => map.MapFrom(vm => vm.Id))
+                .ForMember(o => o.IsViewed, map => map.MapFrom(vm => vm.IsViewed))
+                .ForMember(o => o.MessageBody, map => map.MapFrom(vm => vm.MessageBody))
+                .ForMember(o => o.ReceiverDeleted, map => map.MapFrom(vm => vm.ReceiverDeleted))
+                .ForMember(o => o.SenderDeleted, map => map.MapFrom(vm => vm.SenderDeleted))
+                .ForMember(o => o.SenderId, map => map.MapFrom(vm => vm.SenderId))
+                .ForMember(o => o.ReceiverId, map => map.MapFrom(vm => vm.ReceiverId))
+                .ReverseMap()
+                .ForPath(o => o.SenderName, map => map.MapFrom(vm => vm.Sender.Name))
+                .ForPath(o => o.ReceiverName, map => map.MapFrom(vm => vm.Receiver.Name))
+                .ReverseMap()
+                .ForMember(o => o.CreatedDate, map => map.MapFrom(vm => vm.CreatedDate))
+                .ForMember(o => o.Subject, map => map.MapFrom(vm => vm.Subject));
 
-            //CreateMap<NewMessageViewModel, Message>()
-            //    .ForMember(o => o.Subject, map => map.MapFrom(vm => vm.Subject))
-            //    .ForMember(o => o.MessageBody, map => map.MapFrom(vm => vm.MessageBody));
+            CreateMap<NewMessageViewModel, Message>()
+                .ForMember(o => o.Subject, map => map.MapFrom(vm => vm.Subject))
+                .ForMember(o => o.MessageBody, map => map.MapFrom(vm => vm.MessageBody));
 
-            //CreateMap<DetailsMessageViewModel, Message>()
-            //   .ForMember(o => o.Subject, map => map.MapFrom(vm => vm.Subject))
-            //   .ForMember(o => o.MessageBody, map => map.MapFrom(vm => vm.MessageBody))
-            //   .ReverseMap()
-            //   .ForPath(o => o.SenderName, map => map.MapFrom(vm => vm.UserProfiles.FirstOrDefault().Name))
-            //   .ForPath(o => o.ReceiverName, map => map.MapFrom(vm => vm.UserProfiles.LastOrDefault().Name))
-            //   .ReverseMap()
-            //   .ForMember(o => o.CreatedDate, map => map.MapFrom(vm => vm.CreatedDate));
+            CreateMap<DetailsMessageViewModel, Message>()
+               .ForMember(o => o.Subject, map => map.MapFrom(vm => vm.Subject))
+               .ForMember(o => o.MessageBody, map => map.MapFrom(vm => vm.MessageBody))
+               .ReverseMap()
+               .ForPath(o => o.SenderName, map => map.MapFrom(vm => vm.Sender.Name))
+               .ForPath(o => o.ReceiverName, map => map.MapFrom(vm => vm.Receiver.Name))
+               .ReverseMap()
+               .ForMember(o => o.CreatedDate, map => map.MapFrom(vm => vm.CreatedDate));
 
-            //#endregion
+            #endregion
 
             //#region Feedback
 

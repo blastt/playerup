@@ -71,10 +71,13 @@ namespace Market.Web.Mappings
             #region Message
 
             CreateMap<MessageViewModel, Message>()
+               .ForMember(o => o.Id, map => map.MapFrom(vm => vm.Id))
                .ForMember(o => o.IsViewed, map => map.MapFrom(vm => vm.IsViewed))
                .ForMember(o => o.MessageBody, map => map.MapFrom(vm => vm.MessageBody))
                .ForMember(o => o.ReceiverDeleted, map => map.MapFrom(vm => vm.ReceiverDeleted))
                .ForMember(o => o.SenderDeleted, map => map.MapFrom(vm => vm.SenderDeleted))
+               .ForMember(o => o.ReceiverId, map => map.MapFrom(vm => vm.ReceiverId))
+               .ForMember(o => o.SenderId, map => map.MapFrom(vm => vm.SenderId))
                .ReverseMap()
                .ForPath(o => o.ReceiverName, map => map.MapFrom(vm => vm.Receiver.Name))              
                .ForPath(o => o.SenderName, map => map.MapFrom(vm => vm.Sender.Name))

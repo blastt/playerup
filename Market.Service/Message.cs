@@ -13,7 +13,9 @@ namespace Market.Service
     {
         IEnumerable<Message> GetMessages();
         Message GetMessage(int id);
+        void SetMessageViewed(int id);
         void CreateMessage(Message message);
+        void DeleteMessage(int id);
         void SaveMessage();
     }
 
@@ -46,12 +48,41 @@ namespace Market.Service
 
         public void CreateMessage(Message message)
         {
+            var prevMessages = messagesRepository.GetMany(p => (p.ReceiverId == message.ReceiverId && p.SenderId == message.SenderId) ||
+            (p.ReceiverId == message.SenderId && p.SenderId == message.ReceiverId));
+
+            // if true
+            if (prevMessages.Count() != 0)
+            {
+                message.ParentMessageId = prevMessages.LastOrDefault().Id;
+            }
+            
             messagesRepository.Add(message);
+            
+            
         }
 
         public void SaveMessage()
         {
             unitOfWork.Commit();
+        }
+
+        public void SetMessageViewed(int id)
+        {
+            var message = messagesRepository.GetById(id);
+            if (message != null)
+            {
+                message.IsViewed = true;
+            }
+        }
+
+        public void DeleteMessage(int id)
+        {
+            var message = messagesRepository.GetById(id);
+            if (message != null)
+            {
+                messagesRepository.Delete(message);
+            }
         }
 
         #endregion

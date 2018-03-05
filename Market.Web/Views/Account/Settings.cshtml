@@ -10,10 +10,16 @@
                 <p class="lead">Здесь вы можете изменить настройки учетной записи</p>
             </div>
             @{Html.RenderAction("AccountMenu", "Account"); }
-            <div class="account-offer-container">
-                @Html.Partial("UpdatePassword")
+            <div class="account-setting-container">
+                <div class="row">
+                    <div class="col-md-6">
+                        @Html.Partial("UpdatePassword")
 
-                @Html.Partial("UpdateEmail")
+                        @Html.Partial("UpdateEmail")
+                    </div>
+                </div>
+               
+                
             </div>
         </div>
     </div>
