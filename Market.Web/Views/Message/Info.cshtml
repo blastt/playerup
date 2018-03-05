@@ -11,8 +11,8 @@
                 <p class="lead">Здесь отображается информация по входящим и исходящим сообщениям</p>
             </div>
             @{Html.RenderAction("AccountMenu", "Account"); }
-            <div class="account-offer-container">
-                @{Html.RenderPartial("_AccountMessagesMenu"); }
+            <div class="account-info-container">
+          
                 <div style="padding: 20px">
                     <a href="@Request.UrlReferrer"><span style="font-weight: 700">&#10218;</span> <span>Назад</span> </a>
                 </div>
@@ -22,8 +22,8 @@
                         <div class="message-info" style="border-top: 1px solid #e9eaea">
                             <img class="img-circle avatar-big" src="@Url.Action("Photo", "Profile", new { UserId = Model.SenderId })" alt="Alternate Text" />
                             <h2>@Model.OfferHeader</h2>
-                            <h6>От кого: @ViewData["SenderName"]</h6>
-                            <h6>Кому: @ViewData["ReceiverName"]</h6>
+                            <h6>От кого: @Model.SenderName</h6>
+                            <h6>Кому: @Model.ReceiverName</h6>
                             <span>@Model.CreatedDate</span>
                         </div>
                     </div>
@@ -49,7 +49,7 @@
                                 </fieldset>
 
 
-                                <button type="submit" class="btn btn-info">Ответить</button>
+                                <button type="submit" class="btn btn-submit">Ответить</button>
 
                             }
                         </div>

@@ -47,27 +47,27 @@ namespace Market.Web.Controllers
 
         public ActionResult Info(int? messageId)
         {
-            if (messageId != null)
+            if(messageId != null)
             {
-                if(messageId != null)
+                Message message = _messageService.GetMessage(messageId.Value);
+                if (message != null && (message.ReceiverId == User.Identity.GetUserId() || message.SenderId == User.Identity.GetUserId()))
                 {
-                    Message message = _messageService.GetMessage(messageId.Value);
-                    if (message != null && (message.ReceiverId == User.Identity.GetUserId() || message.SenderId == User.Identity.GetUserId()))
-                    {
-                        _messageService.SetMessageViewed(messageId.Value);
-                        _messageService.SaveMessage();
-                        MessageViewModel model = Mapper.Map<Message, MessageViewModel>(message);
-
+                    Offer offer = _offerService.GetOffer(int.Parse(message.Subject)); //Костыль
+                    _messageService.SetMessageViewed(messageId.Value);
+                    _messageService.SaveMessage();
+                    MessageViewModel model = Mapper.Map<Message, MessageViewModel>(message);
+                    if(offer != null)
+                        model.OfferHeader = offer.Header;
                         
 
-                        return View(model);
-                    }
-                
-                
-
-
+                    return View(model);
                 }
+                
+                
+
+
             }
+            
             return HttpNotFound("Info error!");
         }
 

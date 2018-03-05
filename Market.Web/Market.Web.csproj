@@ -305,6 +305,7 @@
     <Content Include="Content\Images\Lineage2\Icons\lineage2.png" />
     <Content Include="Content\Images\noavatar.png" />
     <Content Include="Content\Images\Pubg\Icons\pubg.png" />
+    <Content Include="Content\Images\trash.png" />
     <Content Include="Content\range-slider.css" />
     <Content Include="Content\Images\Warface\Icons\warface.png" />
     <Content Include="Content\Images\Warframe\Icons\warframe.png" />
