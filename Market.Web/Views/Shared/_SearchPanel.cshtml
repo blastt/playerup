@@ -16,16 +16,17 @@
                     </div>
                     <div class="form-group">
                         <div class="custom-control custom-checkbox mr-sm-2">
-                            @{ string checkedOnline = Model.IsOnline ? "checked" : ""; }
-
-                            <input type="checkbox" @checkedOnline class="custom-control-input" id="isOnline" onchange="SearchOffers();">
-                            <label class="custom-control-label" for="isOnline">Искать в описании</label>
-                        </div>
-                        <div class="custom-control custom-checkbox mr-sm-2">
                             @{ string checkedSerchInDiscription = Model.SearchInDiscription ? "checked" : ""; }
 
                             <input type="checkbox" @checkedSerchInDiscription class="custom-control-input" id="searchInDiscription" onchange="SearchOffers();">
-                            <label class="custom-control-label" for="searchInDiscription">Только онлайн</label>
+                            
+                            <label class="custom-control-label" for="searchInDiscription">Искать в описании</label>
+                        </div>
+                        <div class="custom-control custom-checkbox mr-sm-2">
+                            @{ string checkedOnline = Model.IsOnline ? "checked" : ""; }
+
+                            <input type="checkbox" @checkedOnline class="custom-control-input" id="isOnline" onchange="SearchOffers();">
+                            <label class="custom-control-label" for="isOnline">Только онлайн</label>
                         </div>
 
                     </div>

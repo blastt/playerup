@@ -7,11 +7,18 @@
         using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "nav navbar-nav navbar-right" }))
         {
             @Html.AntiForgeryToken()
+            
             <li class="nav-item">
-                @Html.ActionLink("Продать аккаунт", "Create", new { controller = "Offer" }, new { @class = "btn btn-sell" })
+                <a href="#">
+                    <img class="notice" src="~/Content/Images/notice.png" />
+                </a>
+                
             </li>
             <li class="nav-item">
-                <img class="img-messages" src="~/Content/Images/messages.png" style="width:32px" />
+                <a href="#">
+                    <img class="message" src="~/Content/Images/message.png" />
+                </a>
+                
             </li>
             <li class="nav-item">
                 <img class="img-circle avatar-small" src="@Url.Action("Photo", "Profile" , new { UserId = User.Identity.GetUserId() })" alt="Alternate Text" />

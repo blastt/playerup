@@ -1,8 +1,16 @@
 ﻿body {
-    padding-top: 100px;
+    padding-top: 150px;
     padding-bottom: 20px;
 }
 
+.nav-item{
+    margin-left: 10px;
+    margin-right: 10px
+}
+
+.navbar-nav{
+    margin-left: 40px
+}
 /* Set padding to keep content from hitting the edges */
 .body-content {
     padding-left: 15px;
@@ -119,8 +127,8 @@ ul {
 }
 
 .navbar {
-    padding: 10px;
-    box-shadow: 0 0 6px 0 #a5a5a5;
+    padding: 20px;
+    box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.21);
     position: absolute
     /*border-bottom: 1px solid #bababa*/
 }
@@ -269,12 +277,12 @@ ul {
     box-shadow: inset 0px -5px 0px 0px #62b2e2;
 }
 
-.offer-full {
+.offer-full-block {
     padding: 15px;
     background-color: #fff;
     background-clip: border-box;
     box-shadow: 0 0 3px 0 rgba(159,173,196,.4);
-    border-radius: 5px;
+    border-radius: 15px;
 }
 
 .seller-details {
@@ -285,8 +293,10 @@ ul {
 }
 
 .offer-details {
-    width: 450px;
+
     float: left;
+    min-height: 270px;
+
     border-left: 1px solid #eee
 }
 
@@ -296,6 +306,7 @@ ul {
 
 .ul-details {
     text-align: left;
+    margin-bottom: 30px
 }
 
 .li-details {
@@ -312,11 +323,12 @@ ul {
 }
 
 .offer-description {
-    margin-top: 40px
+    margin-top: 30px
 }
 
 .offer-details-rank {
-    padding: 0px 40px;
+    padding-left:70px;
+    padding-right:40px;
     text-align: center;
 }
 
@@ -332,15 +344,19 @@ ul {
 
 .feed-item-header {
     width: 100%;
+    color: #a9a9a9;
 }
 
 .feed-item-comment {
     width: 100%;
     margin-top: 5px
 }
+.feed-item-info {
+    padding-top: 5px
+}
 
 .feed-item-icon {
-    width: 9%;
+    margin-right: 10px;
     float: left
 }
 
@@ -352,21 +368,21 @@ ul {
 
 .feed-item-date {
     width: auto;
-    height: 25px;
     margin-right: 10px;
-    line-height: 25px;
     font-size: small;
     float: left
 }
 
 .feed-item-leftby {
     width: auto;
-    height: 25px;
-    line-height: 25px;
+
     font-size: small;
     float: left
 }
 
+.feed-count-label {
+    font-weight: 700
+}
 .account-list {
     height: 44px;
     display: -webkit-box;
@@ -779,4 +795,52 @@ div#users-contain {
 
 .table-white{
     background-color: #fff
+}
+
+.nav-item .message{
+    padding-top: 8px
+}
+
+.nav-item .notice {
+    padding-top: 8px
+}
+
+.current{
+    background-color: aquamarine
+}
+
+.offer-description-block {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 3px 0 rgba(159,173,196,.4);
+    border-radius: 15px;
+}
+
+.block-label{
+    padding-top: 20px;
+    padding-left: 30px;
+    color: #a9a9a9
+}
+
+.block-body {
+    padding-top: 20px;
+    padding-left: 20px;
+    
+}
+
+.label-details {
+    min-width: 300px;
+    margin-bottom: 0px;
+    color: #a9a9a9
+}
+
+.main-block{
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    padding-bottom: 50px;
+    margin-bottom: 30px
+}
+
+.positive-feedback{
+    background-image:url(Images/smile-pos.png);
+    width: 16px
 }

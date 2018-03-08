@@ -1,8 +1,8 @@
 ﻿@using System.Globalization
 @using Microsoft.AspNet.Identity
-@using Trader.WEB.Models
-@using Trader.DAL.Entities
-@model IEnumerable<Feedback>
+@using Market.Model.Models
+@using Market.Web.Helpers
+@model Market.Web.ViewModels.FeedbackListViewModel
 
 @*<table class="table table-striped">
         @foreach (var feedback in Model)
@@ -26,13 +26,15 @@
             </tr>
         }
     </table>*@
+<div class="col-lg-12">
+    <h5>Отзывы <span class="feed-count-label">@Model.PageInfo.TotalItems</span></h5>
+</div>
 
-
-@foreach (var feedback in Model)
+@foreach (var feedback in Model.Feedbacks)
 {
 
 
-    <div class="col-lg-5">
+    <div class="col-lg-7">
         <div class="feed-item">
             <div class="row">
                 <div class="col-sm-12">
@@ -47,14 +49,14 @@
                     <div class="feed-item-info">
                         @if (feedback.Grade == Emotions.Good)
                         {
-                            <i class="positive-feedback"></i>
+                            <img src="~/Content/Images/smile-pos.png"  class="feed-item-icon "/>
                         }
                         else
                         {
-                            <i class="negative-feedback"></i>
+                            <img src="~/Content/Images/smile-neg.png" class="feed-item-icon " />
                         }
 
-                        <div class="feed-item-date">@Html.Date(feedback.Date)</div>
+                        <div class="feed-item-date">@Html.Date(feedback.DateLeft.Value)</div>
                         <div class="feed-item-leftby">Оставлен пользователем: @Html.ActionLink(feedback.SenderName, "Info", "Profile", new { prof = feedback.SenderName }, null)</div>
                     </div>
                 </div>
@@ -63,13 +65,13 @@
 
         </div>
     </div>
-    <div class="col-lg-7">
-
-    </div>
+    
 
 
 }
-
+    <div class="col-lg-12">
+        @Html.PagedListPager(Model.PageInfo, page => Url.Action("FeedbackList", new { page }))
+    </div>
 
 
 

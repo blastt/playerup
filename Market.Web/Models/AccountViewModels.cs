@@ -49,13 +49,10 @@ namespace Market.Web.Models
 
     public class LoginViewModel
     {
-        [Required]
-        [Display(Name = "Адрес электронной почты")]
-        [EmailAddress]
-        public string Email { get; set; }
 
-        [Display(Name = "Имя пользователя")]
-        public string UserName { get; set; }
+        [Required]
+        [Display(Name = "Имя пользователя или почта")]
+        public string UserNameOrEmail { get; set; }
 
         [Required]
         [DataType(DataType.Password)]

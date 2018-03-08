@@ -205,7 +205,15 @@ namespace Market.Web.Controllers
 
             // Сбои при входе не приводят к блокированию учетной записи
             // Чтобы ошибки при вводе пароля инициировали блокирование учетной записи, замените на shouldLockout: true
-            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+            var userName = model.UserNameOrEmail;
+            
+            var user = _userProfileService.GetUserProfiles().FirstOrDefault(m => model.UserNameOrEmail == m.ApplicationUser.Email);
+            if (user != null)
+            {
+                userName = user.Name;
+            }
+            
+            var result = await SignInManager.PasswordSignInAsync(userName, model.Password, model.RememberMe, shouldLockout: false);
             switch (result)
             {
                 case SignInStatus.Success:

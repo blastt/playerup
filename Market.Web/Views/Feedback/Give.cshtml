@@ -1,4 +1,4 @@
-﻿@model Trader.DAL.Entities.FeedbackViewModel
+﻿@model Market.Web.ViewModels.GiveFeedbackViewModel
 
 @{
     ViewBag.Title = "Create";
@@ -9,7 +9,7 @@
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    @Html.HiddenFor(m => m.UserProfileId)
+    @Html.HiddenFor(m => m.ReceiverId)
 
     <div class="form-horizontal">
         <h4>Feedback</h4>

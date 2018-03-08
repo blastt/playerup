@@ -50,14 +50,11 @@ namespace Market.Web.Controllers
         public ViewResult All()
         {
             IEnumerable<Offer> offers = _offerService.GetOffers().Where(m => m.UserProfileId == User.Identity.GetUserId());
-            ICollection<OfferViewModel> offersViewModel = new List<OfferViewModel>();
-            foreach (var offer in offers)
-            {
-                offersViewModel.Add(Mapper.Map<Offer, OfferViewModel>(offer));
-            }
+            IEnumerable<OfferViewModel> offerViewModels;
+            offerViewModels = Mapper.Map<IEnumerable<Offer>, IEnumerable<OfferViewModel>>(offers);
             OfferListViewModel model = new OfferListViewModel
             {
-                Offers = offersViewModel
+                Offers = offerViewModels
             };
             return View(model);
         }
@@ -79,35 +76,49 @@ namespace Market.Web.Controllers
             {
                 offers = _offerService.GetOffers().Where(m => m.Game.Value == searchInfo.Game);
             }
-            offers = offers.Where(m => m.Header.Contains(searchInfo.SearchString));
-            
-            if(offers.Count() != 0)
+            if (offers.Count() != 0)
             {
                 minGamePrice = offers.Min(m => m.Price);
 
                 maxGamePrice = offers.Max(m => m.Price);
 
-                
-                    if (searchInfo.PriceFrom == 0)
-                    {
-                        searchInfo.PriceFrom = minGamePrice;
+
+                if (searchInfo.PriceFrom == 0)
+                {
+                    searchInfo.PriceFrom = minGamePrice;
 
 
-                    }
-                    if (searchInfo.PriceTo == 0)
-                    {
-                        searchInfo.PriceTo = maxGamePrice;
-                    
-                    }
-                
-                
-                
-                
+                }
+                if (searchInfo.PriceTo == 0)
+                {
+                    searchInfo.PriceTo = maxGamePrice;
+
+                }
+
+
+
+
                 offers = from offer in offers
                          where offer.Price >= searchInfo.PriceFrom &&
                                 offer.Price <= searchInfo.PriceTo
                          select offer;
             }
+
+            if (searchInfo.SearchInDiscription)
+            {
+                offers = offers.Where(o => o.Header.Replace(" ", "").ToLower().Contains(searchInfo.SearchString.Replace(" ", "").ToLower()) || o.Discription.Replace(" ", "").ToLower().Contains(searchInfo.SearchString.Replace(" ", "").ToLower()));
+            }
+            else
+            {
+                offers = offers.Where(o => o.Header.Replace(" ", "").ToLower().Contains(searchInfo.SearchString.Replace(" ", "").ToLower()));
+            }
+            if (searchInfo.IsOnline)
+            {
+                offers = offers.Where(o => o.UserProfile.IsOnline);
+            }
+            
+            
+           
             
             switch (searchInfo.Sort)
             {
@@ -147,10 +158,11 @@ namespace Market.Web.Controllers
                 new SelectListItem() { Text = "Все ранги", Value = "none", Selected = true }
             };
             IList<OfferViewModel> offerList = new List<OfferViewModel>();
-            foreach (var offer in offers)
-            {
-                offerList.Add(Mapper.Map<Offer, OfferViewModel>(offer));
-            }
+            var offerViewModels = Mapper.Map<IEnumerable<Offer>, IEnumerable<OfferViewModel>>(offers);
+            //foreach (var offer in offers)
+            //{
+            //    offerList.Add(Mapper.Map<Offer, OfferViewModel>(offer));
+            //}
             //Dictionary<Model.Models.Filter, FilterItem> offerFilters = new Dictionary<Model.Models.Filter, FilterItem>();
             //Dictionary<string, string> modelFilters = new Dictionary<string, string>();
             //if(searchInfo.FilterValues != null && searchInfo.FilterItemValues != null)
@@ -187,7 +199,7 @@ namespace Market.Web.Controllers
                 Filters = _filterService.GetFilters().Where(m => m.Game.Value == searchInfo.Game),
                 Game = _gameService.GetGameByValue(searchInfo.Game),
                 
-                Offers = offerList.Skip((searchInfo.Page - 1) * pageSize).Take(pageSize).ToList(),
+                Offers = offerViewModels.Skip((searchInfo.Page - 1) * pageSize).Take(pageSize).ToList(),
                 SearchInfo = new SearchViewModel()
                 {
                     SearchString = searchInfo.SearchString,
@@ -205,7 +217,7 @@ namespace Market.Web.Controllers
                 {
                     PageNumber = searchInfo.Page,
                     PageSize = pageSize,
-                    TotalItems = offerList.Count
+                    TotalItems = offerViewModels.Count()
                 }
             };
 

@@ -360,9 +360,9 @@ template {
 
 h1, h2, h3, h4, h5, h6,
 .h1, .h2, .h3, .h4, .h5, .h6 {
-  margin-bottom: 0.5rem;
+  margin-bottom: 10px;
   font-family: inherit;
-  font-weight: 500;
+  font-weight: 400;
   line-height: 1.2;
   color: inherit;
 }
@@ -3851,6 +3851,7 @@ tbody.collapse.show {
 .nav-link {
   display: block;
   padding: 0.5rem 1rem;
+  font-weight: 500
 }
 
 .nav-link:hover, .nav-link:focus {
@@ -3867,6 +3868,8 @@ tbody.collapse.show {
 
 .nav-tabs .nav-item {
   margin-bottom: -1px;
+  margin-left: 10px;
+  margin-right: 10px
 }
 
 .nav-tabs .nav-link {
@@ -5407,6 +5410,7 @@ button.close {
   display: none;
   overflow: hidden;
   outline: 0;
+  background-color: rgba(0, 0, 0, 0.50)
 }
 
 .modal-open .modal {
@@ -5547,7 +5551,7 @@ button.close {
 @media (min-width: 576px) {
   .modal-dialog {
     max-width: 500px;
-    margin: 1.75rem auto;
+    margin: 120px auto;
   }
   .modal-dialog-centered {
     min-height: calc(100% - (1.75rem * 2));
@@ -6134,7 +6138,7 @@ button.bg-danger:focus {
 }
 
 .bg-light {
-  background-color: #f8f9fa !important;
+  background-color: #fff !important;
 }
 
 a.bg-light:hover, a.bg-light:focus,
