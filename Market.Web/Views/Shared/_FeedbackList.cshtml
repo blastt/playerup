@@ -70,7 +70,7 @@
 
 }
     <div class="col-lg-12">
-        @Html.PagedListPager(Model.PageInfo, page => Url.Action("FeedbackList", new { page }))
+        @Html.PagedListPager(Model.PageInfo, "SelectPage")
     </div>
 
 

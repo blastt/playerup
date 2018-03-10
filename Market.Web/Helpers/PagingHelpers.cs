@@ -11,8 +11,7 @@ namespace Market.Web.Helpers
     public static class PagingHelpers
     {
         public static MvcHtmlString PagedListPager(this HtmlHelper html,
-                                              PageInfoViewModel pageInfo,
-                                              Func<int, string> pageUrl)
+                                              PageInfoViewModel pageInfo, string jsFunctionName)
         {
             StringBuilder result = new StringBuilder();
             TagBuilder div = new TagBuilder("div");
@@ -36,7 +35,7 @@ namespace Market.Web.Helpers
                 else
                 {
                     tag.AddCssClass("btn-default");
-                    tag.MergeAttribute("onclick", "SelectPage(" + i + ")");
+                    tag.MergeAttribute("onclick", jsFunctionName + "(" + i + ")");
                 }
                 
                 div.InnerHtml += tag;

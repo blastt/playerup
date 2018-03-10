@@ -481,7 +481,10 @@ namespace Market.Web.Controllers
         [HttpPost]
         public ActionResult Create(CreateOfferViewModel model, string test)
         {
-
+            if (!ModelState.IsValid)
+            {
+                return HttpNotFound("fafa");
+            }
             Game game = _gameService.GetGameByValue(model.Game);
             Offer offer = Mapper.Map<CreateOfferViewModel, Offer>(model);
             offer.Game = game;
@@ -791,7 +794,11 @@ namespace Market.Web.Controllers
         //    return Json(_db.Offers.GetAll().Min(m => m.Price), JsonRequestBehavior.AllowGet);
         //}
 
-
+        public JsonResult IsSteamLoginExists(string steamLogin)
+        {
+            //check if any of the UserName matches the UserName specified in the Parameter using the ANY extension method.  
+            return Json(!_offerService.GetOffers().Any(x => x.SteamLogin == steamLogin), JsonRequestBehavior.AllowGet);
+        }
         [HttpPost]
         public JsonResult GetFiltersJson(string game)
         {

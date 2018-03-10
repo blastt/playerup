@@ -17,6 +17,7 @@ namespace Market.Web.Controllers
         private readonly IFeedbackService _feedbackService;
         private readonly IOfferService _offerService;
         private readonly IUserProfileService _userProfileService;
+        private const int pageSize = 3;
         public FeedbackController(IOfferService offerService, IFeedbackService feedbackService, IUserProfileService userProfileService)
         {
             _offerService = offerService;
@@ -31,15 +32,15 @@ namespace Market.Web.Controllers
 
 
 
-        public PartialViewResult FeedbackList(string receiverId, int page = 1)
+        public PartialViewResult FeedbackList(string receiverId, int page = 1, string filter = "all")
         {
             FeedbackListViewModel model = new FeedbackListViewModel();
             IEnumerable<Feedback> feedbacks = _feedbackService.GetFeedbacks().Where(m => m.ReceiverId == receiverId);
             IList<FeedbackViewModel> feedbackViewModels = Mapper.Map<List<Feedback>, List<FeedbackViewModel>>(feedbacks.ToList());
-            model.Feedbacks = feedbackViewModels;
+            model.Feedbacks = feedbackViewModels.Skip((page - 1) * pageSize).Take(pageSize).ToList();
             model.PageInfo = new PageInfoViewModel()
             {
-                PageSize = 2,
+                PageSize = pageSize,
                 PageNumber = page,
                 TotalItems = feedbacks.Count()
             };

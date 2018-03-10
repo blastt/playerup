@@ -320,8 +320,6 @@
     <Content Include="Content\Images\Warframe\Icons\warframe.png" />
     <Content Include="Content\Images\Wot\Icons\wot.png" />
     <Content Include="Content\Images\Wow\Icons\wow.png" />
-    <Content Include="Content\jquery-ui.css" />
-    <Content Include="Content\jquery-ui.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />

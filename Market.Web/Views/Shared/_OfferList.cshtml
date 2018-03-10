@@ -9,7 +9,7 @@
         @Html.Partial("_OfferBlock", Model.Offers)
     <div class="col-lg-3"></div>
     <div class="col-lg-9">
-        @Html.PagedListPager(Model.PageInfo, page => Url.Action("OfferList",new { page }))
+        @Html.PagedListPager(Model.PageInfo, "SelectPage")
         
     </div>
 </div>

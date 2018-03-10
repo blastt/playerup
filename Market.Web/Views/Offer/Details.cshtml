@@ -28,13 +28,13 @@
                             </li>
                             <li>
                                 @if (Model.UserProfile.IsOnline)
-                            {
-                                <span class="badge badge-pill badge-light">Online</span>
-                        }
-                        else
-                        {
-                            <span class="badge badge-pill badge-dark">Offline</span>
-                    }
+                                {
+                                    <span class="badge badge-pill badge-light">Online</span>
+                                }
+                                else
+                                {
+                                    <span class="badge badge-pill badge-dark">Offline</span>
+                                }
                             </li>
                         </ul>
 
@@ -88,19 +88,19 @@
 
                             <div class="row offer-details-rank">
                                 @foreach (var filter in Model.Filters)
-                            {
-                                <div class="col-md-6">
-                                    <span>@filter.Text</span>
-                                </div>
-                        }
+                                {
+                                    <div class="col-md-6">
+                                        <span>@filter.Text</span>
+                                    </div>
+                                }
                                 @foreach (var item in Model.FilterItems)
-                            {
-                                var url = "../../Content/Images/" + Model.Game.Value + "/Ranks/" + item.Image;
-                                <div class="col-md-6">
+                                {
+                                    var url = "../../Content/Images/" + Model.Game.Value + "/Ranks/" + item.Image;
+                                    <div class="col-md-6">
 
-                                    <img src="@url" style="width:100px" alt="Alternate Text" />
-                                </div>
-                        }
+                                        <img src="@url" style="width:100px" alt="Alternate Text" />
+                                    </div>
+                                }
                             </div>
 
                         </div>
@@ -128,10 +128,10 @@
                     <div style="text-align:center">
                         @Html.ActionLink("Купить", "Pay", "Checkout", null, new { });
                         @using (Html.BeginForm("Pay", "Checkout"))
-                    {
-                        @Html.HiddenFor(m => m.Id)
-                        <input type="submit" name="buy" value="Купить" class=" btn btn-success" />
-                }
+                        {
+                            @Html.HiddenFor(m => m.Id)
+                            <input type="submit" name="buy" value="Купить" class=" btn btn-success" />
+                        }
 
                     </div>
                 </div>
@@ -159,10 +159,10 @@
         </div>
     </div>
 
-    <div class="row">
+    <div class="row" id="feedback-list">
 
-            @*@Html.Partial("_FeedbackList",Model.UserProfile.Feedbacks)*@
-            @Html.Action("FeedbackList", "Feedback", new { page = 1, receiverId = Model.UserProfile.Id })
+        @*@Html.Partial("_FeedbackList",Model.UserProfile.Feedbacks)*@
+        @Html.Action("FeedbackList", "Feedback", new { page = 1, receiverId = Model.UserProfile.Id, filter = "all" })
 
     </div>
     @using (Html.BeginForm("Give", "Feedback", new { }, FormMethod.Get, null))
@@ -177,7 +177,7 @@
     @Html.ActionLink("Редактировать", "Edit", "Offer", new { id = Model.Id }, null)
     @*}*@
 </div>
-  
+
 
 
 <div id="modal-dialog" class="modal">
@@ -191,7 +191,7 @@
             </div>
             @using (Html.BeginForm("New", "Message", FormMethod.Post, new { }))
             {
-                @Html.Hidden("ReceiverId", Model.UserProfile.Id)
+                <input type="hidden" name="ReceiverId" value="@Model.UserProfile.Id" />
                 @Html.Hidden("Subject", Model.Id)
                 @Html.AntiForgeryToken()
                 <div class="modal-body">
@@ -228,16 +228,53 @@
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-info">Отправить</button>
                 </div>
+
             }
+
         </div>
     </div>
 </div>
-
+<input type="hidden" id="page" value="1" />
+<input type="hidden" id="filter" value="all" />
+<input type="hidden" id="receiver-id" value="@Model.UserProfile.Id" />
 
 
 @section scripts
 {
-    <script type="text/javascript" src="~/Scripts/jquery-ui.min.js"></script>
-
     <script type="text/javascript" src="~/Scripts/jquery-modal.js"></script>
+    <script>
+        function SelectPage(page) {
+
+            $('#page').val(page);
+            SearchFeedbacks();
+        }
+        function SearchFeedbacks() {
+            var message = {
+                "page": $('#page').val(),
+                "filter": $('#filter').val(),
+                "receiverId": $('#receiver-id').val()
+            };
+            $.ajax({
+                url: '/Feedback/FeedbackList',
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify(message),
+                dataType: "html",
+                beforeSend: function () {
+                    $('#loader').show();
+
+                },
+                success: function (response) {
+
+                    $('#feedback-list').html(response);
+                    $('#loader').hide();
+
+                    //SelectFilterItem(g, false);
+                },
+                error: function () {
+                    alert("fff");
+                }
+            });
+        }
+    </script>
 }

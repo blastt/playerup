@@ -3,6 +3,35 @@
     padding-bottom: 20px;
 }
 
+/* styles for validation helpers */
+.field-validation-error {
+    color: #b94a48;
+}
+
+.field-validation-valid {
+    display: none;
+}
+
+.input-validation-error {
+    border: 1px solid #b94a48;
+}
+
+.valid {
+    border: 1px solid #53b02c;
+}
+
+input[type="checkbox"].input-validation-error {
+    border: 0 none;
+}
+
+.validation-summary-errors {
+    color: #b94a48;
+}
+
+.validation-summary-valid {
+    display: none;
+}
+
 .nav-item{
     margin-left: 10px;
     margin-right: 10px
@@ -50,7 +79,7 @@ textarea {
     .select-selected:after {
         position: absolute;
         content: "";
-        top: 14px;
+        top: 22px;
         right: 10px;
         width: 0;
         height: 0;
@@ -65,8 +94,9 @@ textarea {
 /*style the items (options), including the selected item:*/
 .select-items div, .select-selected {
     padding: 8px 16px;
-    border: 1px solid transparent;
-    border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;
+    
+        height: 50px;
+    line-height: 2;
     cursor: pointer;
     user-select: none;
 }
@@ -74,8 +104,7 @@ textarea {
 .select-items {
     position: absolute;
     background-color: #ffffff;
-    border: 1px solid transparent;
-    border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;
+    border: 1px solid rgba(0, 0, 0, 0.1);
     top: 100%;
     left: 0;
     right: 0;
@@ -327,8 +356,8 @@ ul {
 }
 
 .offer-details-rank {
-    padding-left:70px;
-    padding-right:40px;
+    padding-left:40px;
+
     text-align: center;
 }
 
