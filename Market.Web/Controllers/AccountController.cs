@@ -294,7 +294,7 @@ namespace Market.Web.Controllers
                     return HttpNotFound("User exists!");
                 }
                 var user = new ApplicationUser { UserName = model.UserName, Email = model.Email };
-                user.LockoutEnabled
+          
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
