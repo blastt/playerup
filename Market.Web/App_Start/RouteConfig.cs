@@ -52,13 +52,13 @@ namespace Market.Web
             routes.MapRoute(
                 name: null,
                 url: "game={game}",
-                defaults: new { controller = "Offer", action = "OfferList", game = "csgo" }
+                defaults: new { controller = "Offer", action = "Buy", game = "csgo" }
             );
 
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}",
-                defaults: new { controller = "Offer", action = "List" }
+                defaults: new { controller = "Offer", action = "Buy" }
             );
         
 

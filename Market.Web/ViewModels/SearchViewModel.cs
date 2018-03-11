@@ -7,14 +7,14 @@ namespace Market.Web.ViewModels
 {
     public class SearchViewModel
     {
-        public int Page { get; set; }
-        public string Sort { get; set; }
+        public int Page { get; set; } = 1;
+        public string Sort { get; set; } = "bestSeller";
         public bool IsOnline { get; set; }
         public bool SearchInDiscription { get; set; }
-        public string SearchString { get; set; }
+        public string SearchString { get; set; } = "";
         public string[] FilterValues { get; set; }
         public string[] FilterItemValues { get; set; }
-        public string Game { get; set; }
+        public string Game { get; set; } = "all";
         public decimal MinGamePrice { get; set; }
         public decimal MaxGamePrice { get; set; }
         public decimal PriceFrom { get; set; }

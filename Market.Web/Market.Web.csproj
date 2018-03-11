@@ -481,6 +481,7 @@
     <Content Include="Views\Feedback\Positive.cshtml" />
     <Content Include="Views\Feedback\Show.cshtml" />
     <Content Include="Views\Shared\_FeedbackList.cshtml" />
+    <Content Include="Views\Offer\Buy.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

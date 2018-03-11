@@ -33,18 +33,10 @@ namespace Market.Web.Controllers
         }
 
         // GET: Offer
-        public ViewResult List(string game)
+        public ViewResult Buy(string game)
         {
-
-            IEnumerable<Game> games = _gameService.GetGames();
-
-            OfferListViewModel model = new OfferListViewModel();
-            model.Games = games;
-            model.SearchInfo = new SearchViewModel()
-            {
-                Game = game
-            };
-            return View(model);
+            
+            return View((object)game);
         }
 
         public ViewResult All()
@@ -59,7 +51,7 @@ namespace Market.Web.Controllers
             return View(model);
         }
 
-        public PartialViewResult OfferList(SearchViewModel searchInfo)
+        public PartialViewResult List(SearchViewModel searchInfo)
         {
             decimal minGamePrice = 0;
             decimal maxGamePrice = 0;
@@ -198,7 +190,7 @@ namespace Market.Web.Controllers
             {
                 Filters = _filterService.GetFilters().Where(m => m.Game.Value == searchInfo.Game),
                 Game = _gameService.GetGameByValue(searchInfo.Game),
-                
+                Games = _gameService.GetGames(),
                 Offers = offerViewModels.Skip((searchInfo.Page - 1) * pageSize).Take(pageSize).ToList(),
                 SearchInfo = new SearchViewModel()
                 {
@@ -221,7 +213,7 @@ namespace Market.Web.Controllers
                 }
             };
 
-            return PartialView("_OfferList", model);
+            return PartialView("List", model);
         }
 
         //public ViewResult All()

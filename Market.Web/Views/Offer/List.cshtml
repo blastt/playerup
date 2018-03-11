@@ -2,26 +2,20 @@
 @using Market.Web.ViewModels
 @model OfferListViewModel
 
-@{
-    ViewBag.Title = "List";
 
-}
-
-<div class="container">
+<div class="content">
     <div class="row">
         <div class="col-lg-12">
 
             <div class="game-filter" id="game-filter">
-                <div class="game-filter-item" data-game="all">
-                    <a class="all-games" href="@Url.Action("List", new {game = "all" })">Все</a>
-                </div>
+                
 
                 @foreach (var g in Model.Games)
                 {
                     var url = "../../Content/Images/" + g.Value + "/Icons/" + g.Image;
-                    <div class="game-filter-item" data-game="@g.Value" data-url="@Url.Action("List","Offer", new { game = g.Value })">
-                        <a href="@Url.Action("List", new {game = g.Value })"><img src="@url" style="width:40px" alt="Alternate Text" title="@g.Name" /></a>
-                        
+                    <div class="game-filter-item" data-game="@g.Value" data-url="@Url.Action("List", "Offer", new { game = g.Value })">
+                        <div onclick="ChangeGame('@g.Value')"><img src="@url" style="width:40px" alt="Alternate Text" title="@g.Name" /></div>
+
 
 
                     </div>
@@ -30,6 +24,11 @@
 
             </div>
         </div>
+        <div class="col-lg-12">
+            @{var game = Model.Game == null ? "Все" : Model.Game.Name;}
+            <span class="game-title">Игра &#8594 <span style="font-weight:700">@game</span> </span>
+            @Html.ActionLink("Продать аккаунт", "Create", null, new { @class= "btn btn-link-sell" })
+        </div>
     </div>
     <div class="row" id="lll">
 
@@ -37,95 +36,25 @@
 
 
 
-        <div class="col-lg-12">
-            <div class="loader" id="loader">
-                <div class="cssload-container">
-                    <div class="cssload-whirlpool"></div>
-                </div>
-            </div>
-            <div id="list">
-                @Html.Action("OfferList")
-            </div>
 
+
+        <div class="col-lg-12">
+            <div class="offer-list">
+
+            </div>
+            @Html.Partial("_OfferList", Model)
         </div>
+
+
         <input type="hidden" name="page" id="page" value="1" />
+        
 
     </div>
 </div>
+    
 
 
-<script src="@RouteJs.RouteJsHandler.HandlerUrl"></script>
-@section scripts
-{
-    <script>
 
-        function SelectPage(page) {
-            $('#page').val(page);
-            SearchOffers();
-        }
-        function SearchOffers() {
-
-            var g = $('#game').val();
-            var filterItemValues = [];
-            $(".selsel").each(function () {
-                filterItemValues.push($(this).val());
-            });
-            var filterValues = [];
-            $(".selselsel").each(function () {
-                filterValues.push($(this).val());
-            });
-            var message = {
-                "page": $('#page').val(),
-                "sort": $('#sort').val(),
-                "isOnline": $('#isOnline').is(':checked'),
-                "searchInDiscription": $('#searchInDiscription').is(':checked'),
-                "searchString": $('#searchString').val(),
-                "filterItemValues": filterItemValues,
-                "filterValues": filterItemValues,
-                "game": g,
-                "priceFrom": $('#priceFrom').val(),
-                "priceTo": $('#priceTo').val()
-            };
-            $.ajax({
-                url: '/Offer/OfferList',
-                type: "POST",
-                contentType: "application/json",
-                data: JSON.stringify({ searchInfo: message }),
-                dataType: "html",
-                beforeSend: function () {
-                    $('#loader').show();
-
-                },
-                success: function (response) {
-                    var s = $('#sort').val();
-                    $(".game-filter-item").each(function (index) {
-                        if (this.dataset.game === g) {
-                            $(this).addClass("active");
-                            return;
-                        }
-
-                    });
-                    $('#list').html(response);
-                    $('#loader').hide();
-                    $('#sort').val(s);
-
-                    slider();
-
-                    //SelectFilterItem(g, false);
-                },
-                error: function () {
-                    alert("fff");
-                }
-            });
-        }
-
-    </script>
-
-    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
-
-    <script type="text/javascript" src="~/Scripts/Custom.js"></script>
-   
-}
 
 
 
