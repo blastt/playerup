@@ -11,6 +11,6 @@ namespace Market.Web.ViewModels
         public SearchViewModel SearchInfo { get; set; }
         public PageInfoViewModel PageInfo { get; set; }
 
-        public IList<FeedbackViewModel> Feedbacks { get; set; }
+        public IEnumerable<FeedbackViewModel> Feedbacks { get; set; }
     }
 }

@@ -1,0 +1,65 @@
+﻿@model Market.Web.ViewModels.OfferListViewModel
+@using Market.Web.Helpers
+
+<div class="info-teble-content">
+    <div class="offer-filter">
+        <div class="row mb-3">
+
+            <div class="col-sm-4">
+                @Html.TextBox("SearchString", "", new { @class = "form-control", id = "searchString", placeholder = "Поиск..." })
+            </div>
+            <div class="col-sm-4">
+                @Html.TextBox("SearchString", "", new { @class = "form-control", id = "searchString", placeholder = "Поиск..." })
+            </div>
+            <div class="col-sm-4">
+                @Html.TextBox("SearchString", "", new { @class = "form-control", id = "searchString", placeholder = "Поиск..." })
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-sm-12">
+                Найдено: @Model.PageInfo.TotalItems
+            </div>
+        </div>
+
+
+    </div>
+
+    <div class="table-offers">
+        <div class="offer-line">
+            <div class="offer-game">
+                Игра
+            </div>
+            <div class="offer-header">
+                Заголовок
+            </div>
+            <div class="offer-price">
+                Цена
+            </div>
+            <div class="offer-link">
+
+            </div>
+        </div>
+        @foreach (var offer in Model.Offers)
+        {
+            <div class="offer-line">
+                <div class="offer-game">
+                    @offer.Game.Name
+                </div>
+                <div class="offer-header">
+                    @offer.Header
+                </div>
+                <div class="offer-price">
+                    @offer.Price
+                </div>
+                <div class="offer-link">
+                    @Html.ActionLink("Детали", "", null, new { @class = "btn btn-info" })
+                </div>
+            </div>
+
+        }
+    </div>
+</div>
+@Html.PagedListPager(Model.PageInfo, "SelectPageOffersInfo")
+
+
+

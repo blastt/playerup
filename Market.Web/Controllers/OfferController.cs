@@ -216,6 +216,30 @@ namespace Market.Web.Controllers
             return PartialView("List", model);
         }
 
+        public PartialViewResult OfferListInfo(SearchOffersInfoViewModel searchInfo)
+        {
+            searchInfo.SearchString = searchInfo.SearchString ?? "";
+            var offers = _offerService.GetOffers().Where(m => m.UserProfileId == searchInfo.UserId);
+            offers = offers.Where(o => o.Header.Replace(" ", "").ToLower().Contains(searchInfo.SearchString.Replace(" ", "").ToLower()) || o.Discription.Replace(" ", "").ToLower().Contains(searchInfo.SearchString.Replace(" ", "").ToLower()));
+            var modelOffers = Mapper.Map<IEnumerable<Offer>, IEnumerable<OfferViewModel>>(offers);
+            OfferListViewModel model = new OfferListViewModel
+            {
+                Offers = modelOffers,
+                PageInfo = new PageInfoViewModel
+                {
+                    PageSize = 4,
+                    PageNumber = searchInfo.Page,
+                    TotalItems = modelOffers.Count()
+                },
+                SearchInfo = new SearchViewModel
+                {
+                    SearchString = searchInfo.SearchString,
+                    Page = searchInfo.Page
+                }
+            };
+            return PartialView("_OfferListInfo", model);
+        }
+
         //public ViewResult All()
         //{
         //    IEnumerable<Offer> offers = _db.Offers.Find(m => m.UserProfileId == User.Identity.GetUserId());

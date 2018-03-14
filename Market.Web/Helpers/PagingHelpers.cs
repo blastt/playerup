@@ -15,6 +15,7 @@ namespace Market.Web.Helpers
         {
             StringBuilder result = new StringBuilder();
             TagBuilder div = new TagBuilder("div");
+            
             div.MergeAttribute("id", "contentPager");
             div.AddCssClass("page-container");
             for (int i = 1; i <= pageInfo.TotalPages; i++)

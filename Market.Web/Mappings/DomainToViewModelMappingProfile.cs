@@ -142,6 +142,20 @@ namespace Market.Web.Mappings
             //   .ForMember(o => o.OfferId, map => map.MapFrom(vm => vm.OfferId));
 
             //#endregion
+
+            #region UserProfile
+
+            CreateMap<UserProfile, InfoUserProfileViewModel > ()
+                .ForMember(o => o.Id, map => map.MapFrom(vm => vm.Id))
+                .ForMember(o => o.Avatar, map => map.MapFrom(vm => vm.Avatar))
+                .ForMember(o => o.PositiveFeedbacks, map => map.MapFrom(vm => vm.Positive))
+                .ForMember(o => o.NegativeFeedbacks, map => map.MapFrom(vm => vm.Negative))
+                .ForMember(o => o.IsOnline, map => map.MapFrom(vm => vm.IsOnline))
+                .ForMember(o => o.Rating, map => map.MapFrom(vm => vm.Rating))
+                .ForMember(o => o.Name, map => map.MapFrom(vm => vm.Name))
+                .ForMember(o => o.RegistrationDate, map => map.MapFrom(vm => vm.RegistrationDate));
+
+            #endregion
         }
     }
 }

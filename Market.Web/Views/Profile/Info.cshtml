@@ -1,109 +1,284 @@
 ﻿@using System.Globalization
 @using Microsoft.AspNet.Identity
-@model Trader.DAL.Entities.ClientProfile
+
+@model Market.Web.ViewModels.InfoUserProfileViewModel
 
 @{
     ViewBag.Title = "Profile";
 }
-<div style="background-color:#fbfbfb">
 
-    <div class="container">
 
-        <div class="col-md-3">
-            <div class="well" style="text-align:center">
-                <img class="img-thumbnail" src="@Url.Action("Photo", "Profile" , new { UserId=Model.Id })" alt="Alternate Text" style="width:220px; height:220px" />
-                @if (Model.NickName == User.Identity.Name)
-                {
-                    @Html.ActionLink("Обновить фотографию", "Upload", "Profile", null, new { @class = "btn btn-default", style = "width:220px;" })
-                }
-                <div>
-                    <h2 class="text-center">@Model.NickName</h2>
-                    @Html.HiddenFor(m => m.Id)
-                    @Html.LabelFor(m => m.Positive)
-                    <span style="color:limegreen">@Model.Positive</span>
-                    <br />
-                    @Html.LabelFor(m => m.Negative)
-                    @Model.Negative
-                    <br />
-                    @Html.LabelFor(m => m.Rating)
-                    @Model.Rating
-                </div>
-            </div>
+<div class="container">
+    <div class="row">
 
-        </div>
-        <div class="col-md-9">
 
-            <div class="col-lg-12  well">
-                @if (Model.ApplicationUser.UserName != User.Identity.Name)
-                {
-                    @Model.Discription
-                }
-                else
-                {
-                    using (Html.BeginForm())
-                    {
-                        <div id="discription">
-                            @Html.DisplayFor(m => m.Discription)
-                            @Html.HiddenFor(m => m.Discription, new { name = "discription" })
-                            <input type="submit" name="edit" value="Редактировать" />
+        <div class="col-md-4">
+            <div class="info-user-block" style="text-align:center">
+                <img class="img-circle" src="@Url.Action("Photo", "Profile" , new { UserId=Model.Id })" alt="Alternate Text" style="width:150px; height:150px" />
+                @if (Model.Name == User.Identity.Name)
+    {
+            @Html.ActionLink("Обновить фотографию", "Upload", "Profile", null, new { @class = "btn btn-default", style = "width:220px;" })
+}
+
+                <div class=" info-name">
+                    <div class="row">
+                        <div class="col-sm-7 info-name-nick">@Model.Name</div>
+                        <div class="col-sm-5 info-name-contact">
+                            <input id="contact" type="button" value="Связаться" class="btn-contact" />
+                            @Html.HiddenFor(m => m.Id)
                         </div>
-                    }
+                    </div>
+                </div>
+                <div class="info-rate-date">
+                    <div class="row">
+                        <div class="col-sm-5 info-rate">Рейтинг: @Model.Rating</div>
+                        <div class="col-sm-7 info-date">
+                            Зарегистрирован @Model.RegistrationDate.ToShortDateString()
+                        </div>
+                    </div>
+                </div>
 
-                }
+                <div class="info-feedbacks">
+                    <ul class="ul-info-rate">
+                        <li class="row li-info-rate">
+                            <div class="col-sm-8 text-left">
+                                <i class="info-rate-line icon-positive icon-info-rate"></i>
+                                <span class="text-gray info-rate-label">Успешные сделки</span>
+                            </div>
+
+                            <div class="col-sm-4 text-right">
+                                131
+                            </div>
+                        </li>
+                        <li class="row li-info-rate">
+                            <div class="col-sm-8 text-left">
+                                <i class="info-rate-line icon-positive icon-info-rate icon-info-rate"></i>
+                                <span class="text-gray info-rate-label">Успешные сделки</span>
+                            </div>
+
+                            <div class="col-sm-4 text-right">
+                                100
+                            </div>
+                        </li>
+                        <li class="row li-info-rate">
+                            <div class="col-sm-8 text-left">
+                                <i class="info-rate-line icon-smile-pos-dark icon-info-rate"></i>
+                                <span class="text-gray info-rate-label">Позитивные отзывы</span>
+                            </div>
+
+                            <div class="col-sm-4 text-right">
+                                42
+                            </div>
+                        </li>
+                        <li class="row li-info-rate">
+                            <div class="col-sm-8 text-left">
+                                <i class="info-rate-line icon-smile-neg-dark icon-info-rate"></i>
+                                <span class="text-gray info-rate-label">Негативные отзывы</span>
+                            </div>
+
+                            <div class="col-sm-4 text-right">
+                                62
+                            </div>
+                        </li>
+                    </ul>
+                    
+                </div>
+
+
+
+
+                <label>Позитивные отзывы</label>
+
+                <span style="color:limegreen">@Model.PositiveFeedbacks</span>
+                <br />
+                @Html.LabelFor(m => m.NegativeFeedbacks)
+                @Model.NegativeFeedbacks
+                <br />
+                @Html.LabelFor(m => m.Rating)
+                @Model.Rating
             </div>
+
         </div>
-    </div>
+        <div class="col-md-8">
+            <div class="row">
 
-    <div class="container">
-        <ul class="nav nav-tabs">
-            <li>
-                <a href="#offers" data-toggle="tab" aria-expanded="true">Предложения <span style="color:darkorange">@Model.Offers.Count</span></a>
-            </li>
-            <li class="active">
-                <a href="#feedbacks" data-toggle="tab" aria-expanded="true">Отзывы <span style="color:darkorange">@Model.Feedbacks.Count</span></a>
-            </li>
-        </ul>
+                <div class="col-lg-12">
+                    <ul class="info-list">
+                        <li class="info-menu-item offers-div active">Предложения</li>
+                        <li class="info-menu-item feedbacks-div">Отзывы</li>
+                    </ul>
+                </div>
+                <div class="col-lg-12">
+                    <div id="list-info">
 
 
 
-        <div class="tab-content" id="myTabContent">
-            <div class="tab-pane fade" id="offers">
-                <div>
-                    <table class="table table-striped">
-                        @foreach (var offer in Model.Offers)
-                        {
-                            using (Ajax.BeginForm("Delete", "Offer", new { id = offer.Id }, null, null))
-                            {
-                                <tr>
-                                    @Html.Hidden("Id", offer.Id)
-                                    <td>@offer.Header</td>
-                                    <td>@offer.StartDate.ToShortDateString()</td>
-                                    <td>@offer.Price.ToString("C", CultureInfo.CreateSpecificCulture("ru-RUS"))</td>
-                                    <td>@Html.ActionLink("Детали", "Details", "Offer", new { id = offer.Id }, null)</td>
-                                    @if (Model.ApplicationUser.UserName == User.Identity.Name)
-                                    {
-                                        <td>@Html.ActionLink("Редактировать", "Edit", "Offer", new { id = offer.Id }, null)</td>
-                                        <td><input class="btn btn-group-sm" type="submit" value="Удалить" /></td>
-                                    }
-                                </tr>
-                            }
-                        }
-                    </table>
+                    </div>
 
                 </div>
+
             </div>
-            <div class="tab-pane fade active in" id="feedbacks">
-                @Html.Partial("~/Views/Shared/_FeedbackList.cshtml", Model.Feedbacks)
-                @if (Model.ApplicationUser.UserName != User.Identity.Name && User.Identity.IsAuthenticated)
-                {
-                    @Html.ActionLink("Оставить отзыв", "Comment", "Profile", new { name = Model.ApplicationUser.UserName }, null)
-                }
+            <div class="info-right-block">
+
             </div>
         </div>
     </div>
-
 </div>
-    @section scripts
+
+
+<div id="modal-dialog" class="modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 class="modal-title">Написать сообщение</h6>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span id="close" aria-hidden="true">×</span>
+                </button>
+            </div>
+            @using (Html.BeginForm("New", "Message", FormMethod.Post, new { }))
+            {
+                <input type="hidden" name="ReceiverId" value="@Model.CurrentUserId" />
+                @Html.Hidden("Subject", Model.Id)
+                @Html.AntiForgeryToken()
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        <img class="img-circle avatar-small" src="@Url.Action("Photo", "Profile" , new { UserId = Model.CurrentUserId })" style="float:left; margin-right: 20px" alt="Alternate Text" />
+                        <div>
+
+                            @Html.ActionLink(Model.Name, "Info", new { })
+
+                            <p>
+                                @if (Model.IsOnline)
+                                {
+                                    <span class="badge badge-pill badge-light">Online</span>
+                                }
+                                else
+                                {
+                                    <span class="badge badge-pill badge-dark">Offline</span>
+                                }
+                            </p>
+
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.TextBox("OfferHeader", "", new { @class = "form-control", @readonly = "readonly" })
+                    </div>
+                    <div class="form-group">
+                        <textarea name="MessageBody" class="form-control" rows="5"></textarea>
+                    </div>
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-info">Отправить</button>
+                </div>
+
+            }
+
+        </div>
+    </div>
+</div>
+<input type="hidden" id="page" value="1" />
+<input type="hidden" id="receiver-id" value="@Model.CurrentUserId" />
+<input type="hidden" id="user-id" value="@Model.Id" />
+@section scripts
 {
-        <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
-    }
+    <script>
+        $(document).ready(function () {
+            SearchOffersInfo();
+        });
+        function SelectPageOffersInfo(page) {
+            $('#page').val(page);
+            SearchOffersInfo();
+        }
+        function SelectPageFeedbacksInfo(page) {
+            $('#page').val(page);
+            SearchFeedbacksInfo();
+        }
+        $(".info-menu-item").each(function (index) {
+
+            $(this).on("click", function () {
+                $(".info-menu-item").each(function (index) {
+                    $(this).removeClass('active');
+
+                });
+                $(this).addClass('active');
+
+            });
+        });
+
+        $(".offers-div").on("click", function () {
+            SearchOffersInfo();
+        });
+
+        $(".feedbacks-div").on("click", function () {
+            SearchFeedbacksInfo();
+        });
+
+        function SearchOffersInfo() {
+
+            var g = $('#game').val();
+            var message = {
+                "userId": $('#user-id').val(),
+                "page": $('#page').val(),
+                "searchString": $('#searchString').val()
+            };
+            $.ajax({
+                url: '/Offer/OfferListInfo',
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify({ searchInfo: message }),
+                dataType: "html",
+
+                success: function (response) {
+
+
+                    $('#list-info').html(response);
+
+
+                    //SelectFilterItem(g, false);
+                },
+                error: function () {
+                    alert("fff");
+                }
+            });
+
+
+        }
+
+        function SearchFeedbacksInfo() {
+
+            var g = $('#game').val();
+            var message = {
+                "userId": $('#user-id').val(),
+                "page": $('#page').val(),
+                "searchString": $('#searchString').val()
+
+            };
+            $.ajax({
+                url: '/Feedback/FeedbackListInfo',
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify({ searchInfo: message }),
+                dataType: "html",
+
+                success: function (response) {
+
+
+                    $('#list-info').html(response);
+
+
+                    //SelectFilterItem(g, false);
+                },
+                error: function () {
+                    alert("fff");
+                }
+            });
+
+
+        }
+    </script>
+    <script type="text/javascript" src="~/Scripts/jquery-modal.js"></script>
+}

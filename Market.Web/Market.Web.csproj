@@ -260,7 +260,11 @@
     <Compile Include="ViewModels\Order\DetailsOrderViewModel.cs" />
     <Compile Include="ViewModels\Order\OrderViewModel.cs" />
     <Compile Include="ViewModels\PageInfoViewModel.cs" />
+    <Compile Include="ViewModels\SearchFeedbacksInfoViewModel.cs" />
+    <Compile Include="ViewModels\SearchOffersInfoViewModel.cs" />
     <Compile Include="ViewModels\SearchViewModel.cs" />
+    <Compile Include="ViewModels\SearchViewModel2.cs" />
+    <Compile Include="ViewModels\UserProfile\InfoUserProfileViewModel.cs" />
     <Compile Include="ViewModels\UserProfile\UserProfileViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -312,8 +316,11 @@
     <Content Include="Content\Images\noavatar.png" />
     <Content Include="Content\Images\notice.png" />
     <Content Include="Content\Images\Pubg\Icons\pubg.png" />
+    <Content Include="Content\Images\smile-neg-dark.png" />
     <Content Include="Content\Images\smile-neg.png" />
+    <Content Include="Content\Images\smile-pos-dark.png" />
     <Content Include="Content\Images\smile-pos.png" />
+    <Content Include="Content\Images\success.png" />
     <Content Include="Content\Images\trash.png" />
     <Content Include="Content\range-slider.css" />
     <Content Include="Content\Images\Warface\Icons\warface.png" />
@@ -482,6 +489,8 @@
     <Content Include="Views\Feedback\Show.cshtml" />
     <Content Include="Views\Shared\_FeedbackList.cshtml" />
     <Content Include="Views\Offer\Buy.cshtml" />
+    <Content Include="Views\Shared\_OfferListInfo.cshtml" />
+    <Content Include="Views\Shared\_FeedbackListInfo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

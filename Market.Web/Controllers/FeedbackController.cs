@@ -114,6 +114,26 @@ namespace Market.Web.Controllers
             return View(model);
         }
 
+        public PartialViewResult FeedbackListInfo(SearchFeedbacksInfoViewModel searchInfo)
+        {
+            var feedbacks = _feedbackService.GetFeedbacks().Where(m => m.ReceiverId == searchInfo.UserId);
+            var modelFeedbacks = Mapper.Map<IEnumerable<Feedback>, IEnumerable<FeedbackViewModel>>(feedbacks);
+            FeedbackListViewModel model = new FeedbackListViewModel
+            {
+                Feedbacks = modelFeedbacks,
+                PageInfo = new PageInfoViewModel
+                {
+                    PageSize = 4,
+                    PageNumber = searchInfo.Page,
+                    TotalItems = modelFeedbacks.Count()
+                },
+                SearchInfo = new SearchViewModel
+                {
+                    Page = searchInfo.Page
+                }
+            };
+            return PartialView("_FeedbackListInfo", model);
+        }
         // GET: Feedback/Edit/5
         //public ActionResult Edit(int? id)
         //{

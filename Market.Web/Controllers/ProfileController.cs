@@ -1,5 +1,7 @@
-﻿using Market.Model.Models;
+﻿using AutoMapper;
+using Market.Model.Models;
 using Market.Service;
+using Market.Web.ViewModels;
 using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
@@ -79,13 +81,43 @@ namespace Trader.WEB.Controllers
         public ActionResult Info(string id)
         {
             var profile = _userProfileService.GetUserProfileById(id);
-
             if (profile == null)
             {
                 return HttpNotFound();
             }
-            return View(profile);
+            var model = Mapper.Map<UserProfile, InfoUserProfileViewModel>(profile);
+            //double posProcent = (100 * model.PositiveFeedbacks) / (model.PositiveFeedbacks * model.NegativeFeedbacks);
+            //double negProcent = (100 * model.NegativeFeedbacks) / (model.NegativeFeedbacks * model.PositiveFeedbacks);
+            //model.PositiveFeedbackProcent = posProcent;
+            //model.NegativeFeedbackProcent = negProcent;    
+            model.CurrentUserId = User.Identity.GetUserId();
+            model.OffersViewModel.Offers = Mapper.Map<IEnumerable<Offer>, IEnumerable<OfferViewModel>>(profile.Offers);
+            model.FeedbacksViewModel.Feedbacks = Mapper.Map<IEnumerable<Feedback>, IEnumerable<FeedbackViewModel>>(profile.Feedbacks);
+            //var games = _gameService.GetGames();
+            //IList<SelectListItem> gameList = new List<SelectListItem>();
+            //foreach (var offer in model.OffersViewModel.Offers)
+            //{
+
+            //    if (!gameList.Contains(new SelectListItem() { Text = offer.Game.Name, Value = offer.Game.Value }))
+            //        gameList.Add(new SelectListItem() { Text = offer.Game.Name, Value = offer.Game.Value });
+
+            //}
+            //model.OffersViewModel.Games = 
+            model.FeedbacksViewModel.PageInfo = new PageInfoViewModel
+            {
+                PageSize = 4,
+                TotalItems = model.FeedbacksViewModel.Feedbacks.Count()
+            };
+
+            model.OffersViewModel.PageInfo = new PageInfoViewModel
+            {
+                PageSize = 4,
+                TotalItems = model.OffersViewModel.Offers.Count()
+            };
+
+            return View(model);
         }
+
 
         //[HttpPost]
         //public new ActionResult Profile(ClientProfile profile)
@@ -191,5 +223,7 @@ namespace Trader.WEB.Controllers
 
             return RedirectToAction("List", "Offer");
         }
+
+
     }
 }

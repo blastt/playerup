@@ -81,6 +81,10 @@
     <Compile Include="Migrations\201803041505496_messageAndFeedbaks.Designer.cs">
       <DependentUpon>201803041505496_messageAndFeedbaks.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201803111843427_RegistrData.cs" />
+    <Compile Include="Migrations\201803111843427_RegistrData.Designer.cs">
+      <DependentUpon>201803111843427_RegistrData.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\FeedbackRepository.cs" />
@@ -111,6 +115,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201803041505496_messageAndFeedbaks.resx">
       <DependentUpon>201803041505496_messageAndFeedbaks.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803111843427_RegistrData.resx">
+      <DependentUpon>201803111843427_RegistrData.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

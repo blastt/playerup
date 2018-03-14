@@ -1,0 +1,57 @@
+﻿@using Market.Model.Models
+@using Market.Web.Helpers
+@model Market.Web.ViewModels.FeedbackListViewModel
+
+<div class="info-teble-content">
+    <div class="feedback-filter">
+
+
+
+    </div>
+
+    <div class="table-feedbacks">
+        <div class="feedback-line">
+            <div class="feedback-grade">
+
+            </div>
+            <div class="feedback-comment">
+
+            </div>
+            <div class="feedback-sender">
+                Кто оставил
+            </div>
+            <div class="feedback-date">
+                Дата
+            </div>
+        </div>
+        @foreach (var feedback in Model.Feedbacks)
+        {
+            <div class="feedback-line">
+                <div class="feedback-grade">
+                    @if (feedback.Grade == Emotions.Good)
+                    {
+                        <img src="~/Content/Images/smile-pos.png" class="feed-item-icon" />
+                    }
+                    else
+                    {
+                        <img src="~/Content/Images/smile-neg.png" class="feed-item-icon" />
+                    }
+                </div>
+                <div class="feedback-comment">
+                    <p>@feedback.Comment</p>
+                    <p class="text-gray">@feedback.OfferHeader</p>
+                </div>
+                <div class="feedback-sender">
+                    @feedback.SenderName
+                </div>
+                <div class="feedback-date">
+                    @feedback.DateLeft.Value.ToShortDateString()
+                </div>
+            </div>
+
+        }
+    </div>
+</div>
+
+
+@Html.PagedListPager(Model.PageInfo, "SelectPageFeedbacksInfo")
