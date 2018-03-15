@@ -69,21 +69,13 @@
     <Compile Include="Infrastructure\RepositoryBase.cs" />
     <Compile Include="Infrastructure\UnitOfWork.cs" />
     <Compile Include="MarketEntities.cs" />
-    <Compile Include="Migrations\201802151502381_New5.cs" />
-    <Compile Include="Migrations\201802151502381_New5.Designer.cs">
-      <DependentUpon>201802151502381_New5.cs</DependentUpon>
+    <Compile Include="Migrations\201803151902507_New.cs" />
+    <Compile Include="Migrations\201803151902507_New.Designer.cs">
+      <DependentUpon>201803151902507_New.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201802171624406_Images.cs" />
-    <Compile Include="Migrations\201802171624406_Images.Designer.cs">
-      <DependentUpon>201802171624406_Images.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201803041505496_messageAndFeedbaks.cs" />
-    <Compile Include="Migrations\201803041505496_messageAndFeedbaks.Designer.cs">
-      <DependentUpon>201803041505496_messageAndFeedbaks.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201803111843427_RegistrData.cs" />
-    <Compile Include="Migrations\201803111843427_RegistrData.Designer.cs">
-      <DependentUpon>201803111843427_RegistrData.cs</DependentUpon>
+    <Compile Include="Migrations\201803151906448_New1.cs" />
+    <Compile Include="Migrations\201803151906448_New1.Designer.cs">
+      <DependentUpon>201803151906448_New1.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -107,17 +99,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201802151502381_New5.resx">
-      <DependentUpon>201802151502381_New5.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201803151902507_New.resx">
+      <DependentUpon>201803151902507_New.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201802171624406_Images.resx">
-      <DependentUpon>201802171624406_Images.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201803041505496_messageAndFeedbaks.resx">
-      <DependentUpon>201803041505496_messageAndFeedbaks.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201803111843427_RegistrData.resx">
-      <DependentUpon>201803111843427_RegistrData.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201803151906448_New1.resx">
+      <DependentUpon>201803151906448_New1.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

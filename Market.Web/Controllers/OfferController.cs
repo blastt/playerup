@@ -225,7 +225,7 @@ namespace Market.Web.Controllers
             searchInfo.SearchString = searchInfo.SearchString ?? "";
             
             var offers = _offerService.GetOffers().Where(m => m.UserProfileId == searchInfo.UserId);
-
+            
             var modelOffers = Mapper.Map<IEnumerable<Offer>, IEnumerable<OfferViewModel>>(offers);
             IList<GameViewModel> gameList = new List<GameViewModel>();
             foreach (var offer in modelOffers)
