@@ -123,6 +123,11 @@ namespace Market.Web.Mappings
                 .ForMember(o => o.Name, map => map.MapFrom(vm => vm.Name))
                .ForMember(o => o.Value, map => map.MapFrom(vm => vm.Value));
 
+            CreateMap<GameViewModel, Game>()
+               .ForMember(o => o.Name, map => map.MapFrom(vm => vm.Name))
+              .ForMember(o => o.Value, map => map.MapFrom(vm => vm.Value))
+              .ForMember(o => o.Image, map => map.MapFrom(vm => vm.Image));
+
             #endregion
 
             #region Game            

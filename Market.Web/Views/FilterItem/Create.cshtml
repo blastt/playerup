@@ -38,7 +38,7 @@
                 var label = $("<label for='Filter.Value'>Фильтр</label>")
                 var select = $("<select name='Filter.Value'></select>").addClass("form-control");
                 for (var key in ranks) {
-                    var option = $("<option></option>").val(ranks[key].Value).text(ranks[key].Text);
+                    var option = $("<option></option>").val(ranks[key].Value).text(ranks[key].Name);
                     select.append(option);
                 }
                 $("#filter-item").empty().append(label).append(select);

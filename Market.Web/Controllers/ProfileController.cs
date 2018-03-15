@@ -86,23 +86,35 @@ namespace Trader.WEB.Controllers
                 return HttpNotFound();
             }
             var model = Mapper.Map<UserProfile, InfoUserProfileViewModel>(profile);
-            //double posProcent = (100 * model.PositiveFeedbacks) / (model.PositiveFeedbacks * model.NegativeFeedbacks);
-            //double negProcent = (100 * model.NegativeFeedbacks) / (model.NegativeFeedbacks * model.PositiveFeedbacks);
-            //model.PositiveFeedbackProcent = posProcent;
-            //model.NegativeFeedbackProcent = negProcent;    
+            double posProcent = 0;
+            double negProcent = 0;
+            int feedbackCount = model.NegativeFeedbacks + model.PositiveFeedbacks;
+            if (model.PositiveFeedbacks != 0 || model.NegativeFeedbacks != 0)
+            {
+                if (model.PositiveFeedbacks == 0)
+                {
+                    model.NegativeFeedbacks = 100;
+                }
+                else
+                {
+                    negProcent = Math.Round((double)(100 * model.NegativeFeedbacks) / (feedbackCount), 2);
+                }
+                if (model.PositiveFeedbacks == 0)
+                {
+                    model.NegativeFeedbacks = 100;
+                }
+                else
+                {
+                    posProcent = Math.Round((double)(100 * model.PositiveFeedbacks) / (feedbackCount), 2);
+                }
+            }
+            model.PositiveFeedbackProcent = posProcent;
+            model.NegativeFeedbackProcent = negProcent;
             model.CurrentUserId = User.Identity.GetUserId();
             model.OffersViewModel.Offers = Mapper.Map<IEnumerable<Offer>, IEnumerable<OfferViewModel>>(profile.Offers);
             model.FeedbacksViewModel.Feedbacks = Mapper.Map<IEnumerable<Feedback>, IEnumerable<FeedbackViewModel>>(profile.Feedbacks);
-            //var games = _gameService.GetGames();
-            //IList<SelectListItem> gameList = new List<SelectListItem>();
-            //foreach (var offer in model.OffersViewModel.Offers)
-            //{
-
-            //    if (!gameList.Contains(new SelectListItem() { Text = offer.Game.Name, Value = offer.Game.Value }))
-            //        gameList.Add(new SelectListItem() { Text = offer.Game.Name, Value = offer.Game.Value });
-
-            //}
-            //model.OffersViewModel.Games = 
+            var games = _gameService.GetGames();
+            
             model.FeedbacksViewModel.PageInfo = new PageInfoViewModel
             {
                 PageSize = 4,

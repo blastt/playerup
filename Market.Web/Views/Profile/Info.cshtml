@@ -9,119 +9,140 @@
 
 
 <div class="container">
-    <div class="row">
+    <div class="user-info-content">
+        <div class="row">
 
 
-        <div class="col-md-4">
-            <div class="info-user-block" style="text-align:center">
-                <img class="img-circle" src="@Url.Action("Photo", "Profile" , new { UserId=Model.Id })" alt="Alternate Text" style="width:150px; height:150px" />
-                @if (Model.Name == User.Identity.Name)
-    {
-            @Html.ActionLink("Обновить фотографию", "Upload", "Profile", null, new { @class = "btn btn-default", style = "width:220px;" })
-}
+            <div class="col-md-4">
+                <div class="info-user-block" style="text-align:center">
+                    <img class="img-circle" src="@Url.Action("Photo", "Profile", new { UserId = Model.Id })" alt="Alternate Text" style="width:150px; height:150px" />
+                    @if (Model.Name == User.Identity.Name)
+                    {
+                        @Html.ActionLink("Обновить фотографию", "Upload", "Profile", null, new { @class = "btn btn-default", style = "width:220px;" })
+                    }
 
-                <div class=" info-name">
-                    <div class="row">
-                        <div class="col-sm-7 info-name-nick">@Model.Name</div>
-                        <div class="col-sm-5 info-name-contact">
-                            <input id="contact" type="button" value="Связаться" class="btn-contact" />
-                            @Html.HiddenFor(m => m.Id)
+                    <div class=" info-name">
+                        <div class="row">
+                            <div class="col-sm-7 info-name-nick">@Model.Name</div>
+                            <div class="col-sm-5 info-name-contact">
+                                <input id="contact" type="button" value="Связаться" class="btn-contact" />
+                                @Html.HiddenFor(m => m.Id)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="info-rate-date">
+                        <div class="row">
+                            <div class="col-sm-5 info-rate">Рейтинг: <span class="text-700">@Model.Rating</span></div>
+                            <div class="col-sm-7 info-date">
+                                Зарегистрирован @Model.RegistrationDate.ToShortDateString()
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="info-feedbacks">
+                        <ul class="ul-info-rate">
+                            <li class="row li-info-rate">
+                                <div class="col-sm-8 text-left">
+                                    <i class="info-rate-line icon-success icon-info-rate"></i>
+                                    <span class="text-gray info-rate-label">Успешные сделки</span>
+                                </div>
+
+                                <div class="col-sm-4 text-right text-700">
+                                    131
+                                </div>
+                            </li>
+                            <li class="row li-info-rate">
+                                <div class="col-sm-8 text-left">
+                                    <i class="info-rate-line icon-total-reviews icon-info-rate"></i>
+                                    <span class="text-gray info-rate-label">Всего отзывов</span>
+                                </div>
+
+                                <div class="col-sm-4 text-right text-700">
+                                    @{ var p = Model.NegativeFeedbacks + Model.PositiveFeedbacks; }
+                                    @p
+                                </div>
+                            </li>
+                            <li class="row li-info-rate">
+                                <div class="col-sm-8 text-left">
+                                    <i class="info-rate-line icon-smile-pos-dark icon-info-rate"></i>
+                                    <span class="text-gray info-rate-label">Позитивные отзывы</span>
+                                </div>
+
+                                <div class="col-sm-4 text-right text-700">
+                                    @Model.PositiveFeedbackProcent%
+                                </div>
+                            </li>
+                            <li class="row li-info-rate">
+                                <div class="col-sm-8 text-left">
+                                    <i class="info-rate-line icon-smile-neg-dark icon-info-rate"></i>
+                                    <span class="text-gray info-rate-label">Негативные отзывы</span>
+                                </div>
+
+                                <div class="col-sm-4 text-right text text-700">
+                                    @Model.NegativeFeedbackProcent%
+                                </div>
+                            </li>
+                        </ul>
+
+                    </div>
+                    <div class="user-info-feedbackscore">
+                        <div class="row">
+                            <div class="col-sm-12"><p class="text-left user-info-title">Отзывы пользователя</p></div>
+                            <div class="col-sm-6 text-left">
+
+
+
+
+                                <i class="info-rate-line icon-smile-pos-green icon-info-rate"></i>
+
+
+                                <span class="feedbacks-counter text-700">@Model.PositiveFeedbacks</span>
+
+
+
+                            </div>
+                            <div class="col-sm-6 text-right">
+
+
+
+
+                                <i class="info-rate-line icon-smile-neg-gray icon-info-rate"></i>
+
+
+                                <span class="feedbacks-counter text-700">@Model.NegativeFeedbacks</span>
+
+
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="info-rate-date">
-                    <div class="row">
-                        <div class="col-sm-5 info-rate">Рейтинг: @Model.Rating</div>
-                        <div class="col-sm-7 info-date">
-                            Зарегистрирован @Model.RegistrationDate.ToShortDateString()
+
+            </div>
+            <div class="col-md-8">
+                <div class="row">
+
+                    <div class="col-lg-12">
+                        <ul class="info-list">
+                            <li class="info-menu-item offers-div active">Предложения</li>
+                            <li class="info-menu-item feedbacks-div">Отзывы</li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-12">
+                        <div id="list-info">
+
+
+
                         </div>
-                    </div>
-                </div>
-
-                <div class="info-feedbacks">
-                    <ul class="ul-info-rate">
-                        <li class="row li-info-rate">
-                            <div class="col-sm-8 text-left">
-                                <i class="info-rate-line icon-positive icon-info-rate"></i>
-                                <span class="text-gray info-rate-label">Успешные сделки</span>
-                            </div>
-
-                            <div class="col-sm-4 text-right">
-                                131
-                            </div>
-                        </li>
-                        <li class="row li-info-rate">
-                            <div class="col-sm-8 text-left">
-                                <i class="info-rate-line icon-positive icon-info-rate icon-info-rate"></i>
-                                <span class="text-gray info-rate-label">Успешные сделки</span>
-                            </div>
-
-                            <div class="col-sm-4 text-right">
-                                100
-                            </div>
-                        </li>
-                        <li class="row li-info-rate">
-                            <div class="col-sm-8 text-left">
-                                <i class="info-rate-line icon-smile-pos-dark icon-info-rate"></i>
-                                <span class="text-gray info-rate-label">Позитивные отзывы</span>
-                            </div>
-
-                            <div class="col-sm-4 text-right">
-                                42
-                            </div>
-                        </li>
-                        <li class="row li-info-rate">
-                            <div class="col-sm-8 text-left">
-                                <i class="info-rate-line icon-smile-neg-dark icon-info-rate"></i>
-                                <span class="text-gray info-rate-label">Негативные отзывы</span>
-                            </div>
-
-                            <div class="col-sm-4 text-right">
-                                62
-                            </div>
-                        </li>
-                    </ul>
-                    
-                </div>
-
-
-
-
-                <label>Позитивные отзывы</label>
-
-                <span style="color:limegreen">@Model.PositiveFeedbacks</span>
-                <br />
-                @Html.LabelFor(m => m.NegativeFeedbacks)
-                @Model.NegativeFeedbacks
-                <br />
-                @Html.LabelFor(m => m.Rating)
-                @Model.Rating
-            </div>
-
-        </div>
-        <div class="col-md-8">
-            <div class="row">
-
-                <div class="col-lg-12">
-                    <ul class="info-list">
-                        <li class="info-menu-item offers-div active">Предложения</li>
-                        <li class="info-menu-item feedbacks-div">Отзывы</li>
-                    </ul>
-                </div>
-                <div class="col-lg-12">
-                    <div id="list-info">
-
-
 
                     </div>
 
                 </div>
+                <div class="info-right-block">
 
-            </div>
-            <div class="info-right-block">
-
+                </div>
             </div>
         </div>
+
     </div>
 </div>
 
@@ -219,8 +240,9 @@
 
         function SearchOffersInfo() {
 
-            var g = $('#game').val();
+            var g = $('#sort-game');
             var message = {
+                "game": g.val(),
                 "userId": $('#user-id').val(),
                 "page": $('#page').val(),
                 "searchString": $('#searchString').val()
@@ -234,9 +256,13 @@
 
                 success: function (response) {
 
-
+                    var sort = $('#sort-game').val();
                     $('#list-info').html(response);
-
+                    if (typeof sort != 'undefined') {
+                        
+                        $('#sort-game').val(sort);
+                    }
+                    
 
                     //SelectFilterItem(g, false);
                 },
@@ -266,7 +292,7 @@
 
                 success: function (response) {
 
-
+                
                     $('#list-info').html(response);
 
 

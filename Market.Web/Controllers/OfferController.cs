@@ -151,6 +151,9 @@ namespace Market.Web.Controllers
             };
             IList<OfferViewModel> offerList = new List<OfferViewModel>();
             var offerViewModels = Mapper.Map<IEnumerable<Offer>, IEnumerable<OfferViewModel>>(offers);
+
+            var games = _gameService.GetGames();
+            var gameViewModels = Mapper.Map<IEnumerable<Game>, IEnumerable<GameViewModel>>(games);
             //foreach (var offer in offers)
             //{
             //    offerList.Add(Mapper.Map<Offer, OfferViewModel>(offer));
@@ -190,7 +193,8 @@ namespace Market.Web.Controllers
             {
                 Filters = _filterService.GetFilters().Where(m => m.Game.Value == searchInfo.Game),
                 Game = _gameService.GetGameByValue(searchInfo.Game),
-                Games = _gameService.GetGames(),
+                
+                Games = gameViewModels,
                 Offers = offerViewModels.Skip((searchInfo.Page - 1) * pageSize).Take(pageSize).ToList(),
                 SearchInfo = new SearchViewModel()
                 {
@@ -219,11 +223,30 @@ namespace Market.Web.Controllers
         public PartialViewResult OfferListInfo(SearchOffersInfoViewModel searchInfo)
         {
             searchInfo.SearchString = searchInfo.SearchString ?? "";
+            
             var offers = _offerService.GetOffers().Where(m => m.UserProfileId == searchInfo.UserId);
-            offers = offers.Where(o => o.Header.Replace(" ", "").ToLower().Contains(searchInfo.SearchString.Replace(" ", "").ToLower()) || o.Discription.Replace(" ", "").ToLower().Contains(searchInfo.SearchString.Replace(" ", "").ToLower()));
+
             var modelOffers = Mapper.Map<IEnumerable<Offer>, IEnumerable<OfferViewModel>>(offers);
+            IList<GameViewModel> gameList = new List<GameViewModel>();
+            foreach (var offer in modelOffers)
+            {
+                GameViewModel game = new GameViewModel() { Name = offer.Game.Name, Value = offer.Game.Value };
+                if (!gameList.Contains(game))
+                {
+                    gameList.Add(game);
+                }
+
+            }
+            var games = gameList;
+            modelOffers = modelOffers.Where(o => o.Header.Replace(" ", "").ToLower().Contains(searchInfo.SearchString.Replace(" ", "").ToLower()) || o.Discription.Replace(" ", "").ToLower().Contains(searchInfo.SearchString.Replace(" ", "").ToLower()));
+            if (searchInfo.Game != null && searchInfo.Game != "all")
+            {
+                modelOffers = modelOffers.Where(m => m.Game.Value == searchInfo.Game);
+            }
+            
             OfferListViewModel model = new OfferListViewModel
             {
+                Games = games,
                 Offers = modelOffers,
                 PageInfo = new PageInfoViewModel
                 {
@@ -237,6 +260,7 @@ namespace Market.Web.Controllers
                     Page = searchInfo.Page
                 }
             };
+            
             return PartialView("_OfferListInfo", model);
         }
 
@@ -511,7 +535,7 @@ namespace Market.Web.Controllers
             {
                 foreach (var filterValue in model.FilterValues)
                 {
-                    var filter = _filterService.GetFilters().Where(m => m.Value == filterValue).FirstOrDefault();
+                    var filter = _filterService.GetFilters().Where(m => m.Value == filterValue && m.Game.Value == game.Value).FirstOrDefault();
                     offer.Filters.Add(filter);
                     _filterService.SaveFilter();
                 }

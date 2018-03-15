@@ -1,5 +1,5 @@
 ﻿body {
-    padding-top: 100px
+    padding-top: 80px
 }
 .test{
     position:absolute;
@@ -148,7 +148,7 @@ ul {
 .img-circle {
     margin-right: 10px;
     border: 0px;
-    border-radius: 50px;
+    border-radius: 100px;
 }
 
 .avatar-small {
@@ -406,15 +406,13 @@ ul {
 .feed-item-date {
     width: auto;
     margin-right: 10px;
-    font-size: small;
-    float: left
+    font-size: small
 }
 
 .feed-item-leftby {
     width: auto;
 
-    font-size: small;
-    float: left
+    font-size: small
 }
 
 .feed-count-label {
@@ -1074,6 +1072,7 @@ div#users-contain {
         position: relative;
     }
 .info-name{
+    margin-top: 20px;
     margin-bottom: 20px;
     padding-bottom: 20px;
     border-bottom: 1px solid rgba(0, 0, 0, 0.1)
@@ -1096,6 +1095,10 @@ div#users-contain {
 
 }
 
+.user-info-feedbackscore{
+
+}
+
 .info-rate-date {
     margin-bottom: 20px;
     padding-bottom: 20px;
@@ -1112,8 +1115,12 @@ div#users-contain {
     font-weight: 300
 }
 
-.icon-positive {
+.icon-success {
     background: url(Images/success.png) top left no-repeat;
+}
+
+.icon-total-reviews {
+    background: url(Images/total-reviews.png) top left no-repeat;
 }
 
 .icon-smile-pos-dark {
@@ -1124,14 +1131,24 @@ div#users-contain {
     background: url(Images/smile-neg-dark.png) top left no-repeat;
 }
 
-.info-feedbacks i {
+.icon-smile-pos-green {
+    background: url(Images/smile-pos-green.png) top left no-repeat;
+}
+
+.icon-smile-neg-gray {
+    background: url(Images/smile-neg-gray.png) top left no-repeat;
+}
+
+i {
     display: inline-block;
-    height: 16px;
+    vertical-align: middle;
+    height: 100%;
     width: 16px
 }
 
-.info-rate-label{
+.info-rate-label {
     font-size: 14px;
+    line-height: 100%;
 }
 
 .ul-info-rate{
@@ -1147,11 +1164,33 @@ div#users-contain {
 }
 
 .info-feedbacks {
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1)
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
 }
 
 .page-container{
     margin-top: 20px;
     margin-bottom: 20px
+}
+
+.user-info-title{
+    margin-bottom: 20px;
+    font-size: 18px
+}
+
+.feedbacks-counter {
+    font-size: 20px;
+    line-height: 100%;
+}
+
+.user-info-content{
+    margin-top: 60px
+}
+.buy-content {
+    margin-top: 120px
+}
+
+.text-700 {
+    font-weight: 700
 }
 /*\e60b === \e605*/

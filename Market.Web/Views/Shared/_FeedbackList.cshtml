@@ -49,15 +49,15 @@
                     <div class="feed-item-info">
                         @if (feedback.Grade == Emotions.Good)
                         {
-                            <img src="~/Content/Images/smile-pos.png"  class="feed-item-icon "/>
+                        <i class="info-rate-line icon-smile-pos-green icon-info-rate" style="height:16px"></i>
                         }
                         else
                         {
-                            <img src="~/Content/Images/smile-neg.png" class="feed-item-icon " />
+                        <i class="info-rate-line icon-smile-neg-gray icon-info-rate" style="height:16px"></i>
                         }
 
-                        <div class="feed-item-date">@Html.Date(feedback.DateLeft.Value)</div>
-                        <div class="feed-item-leftby">Оставлен пользователем: @Html.ActionLink(feedback.SenderName, "Info", "Profile", new { prof = feedback.SenderName }, null)</div>
+                        <span class="feed-item-date">@Html.Date(feedback.DateLeft.Value)</span>
+                        <span class="feed-item-leftby">Оставлен пользователем: @Html.ActionLink(feedback.SenderName, "Info", "Profile", new { prof = feedback.SenderName }, null)</span>
                     </div>
                 </div>
 

@@ -6,13 +6,21 @@
         <div class="row mb-3">
 
             <div class="col-sm-4">
-                @Html.TextBox("SearchString", "", new { @class = "form-control", id = "searchString", placeholder = "Поиск..." })
+                @Html.TextBox("SearchString", Model.SearchInfo.SearchString, new { @class = "form-control", id = "searchString", placeholder = "Поиск..." })
             </div>
             <div class="col-sm-4">
-                @Html.TextBox("SearchString", "", new { @class = "form-control", id = "searchString", placeholder = "Поиск..." })
+                <select class="form-control" id="sort-game">
+                    <option value="all" selected="selected">Все</option>
+                    @foreach (var game in Model.Games)
+                    {
+                        <option value="@game.Value">@game.Name</option>
+                    }
+
+                </select>
+
             </div>
             <div class="col-sm-4">
-                @Html.TextBox("SearchString", "", new { @class = "form-control", id = "searchString", placeholder = "Поиск..." })
+                <input type="button" name="name" value="Поиск" class="btn btn-info" onclick="SearchOffersInfo()" />
             </div>
         </div>
         <div class="row mb-3">
@@ -52,7 +60,7 @@
                     @offer.Price
                 </div>
                 <div class="offer-link">
-                    @Html.ActionLink("Детали", "", null, new { @class = "btn btn-info" })
+                    @Html.ActionLink("Детали", "Details","Offer", new { id = offer.Id }, new { @class = "btn btn-info" })
                 </div>
             </div>
 

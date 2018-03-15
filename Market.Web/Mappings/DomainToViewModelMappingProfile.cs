@@ -19,6 +19,7 @@ namespace Market.Web.Mappings
         {
             CreateMap<Offer, OfferViewModel>();
             CreateMap<Order, OrderViewModel>();
+            CreateMap<Game, GameViewModel>();
             CreateMap<Message, MessageViewModel>();
             CreateMap<Feedback, FeedbackViewModel>();
             CreateMap<UserProfile, UserProfileViewModel>();
