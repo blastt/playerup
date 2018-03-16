@@ -54,17 +54,35 @@
     
     @RenderBody()
     <footer class="card-footer">
-        <ul class="">
-            <li>Home</li>
-            <li>Home</li>
-            <li>Home</li>
-            <li>Home</li>
-            <li>Home</li>
-            <li>Home</li>
-        </ul>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4">
+                    <dl>
+                        <dt>Сайт</dt>
+                        <dd>@Html.ActionLink("О Нас", "s")</dd>
+                        <dd>@Html.ActionLink("Как купить", "s")</dd>
+                        <dd>@Html.ActionLink("Как продать", "s")</dd>
+                        <dd>@Html.ActionLink("Лицензионное соглашение", "s")</dd>
+                        <dd>@Html.ActionLink("Карта сайта", "s")</dd>
+                    </dl>
+                </div>
+                <div class="col-lg-4">
+                    <h3 class="text-700 mb-4">О сервисе</h3>
+                    <p style="font-size:14px; line-height: 28px">
+                        Виртуальная площадка для продажи и покупки аккаунтов и цифровой информации безопасным и быстрым способом.
+                    </p>
+                </div>
+                <div class="col-lg-4">
+                    <h3 class="text-700 mb-4">Платежные системы</h3>
+                    <img src="~/Content/Images/payment-methods.png" width="350" alt="Alternate Text" />
+                </div>
+            </div>
+            
+        </div>
+        
     </footer>
 
-
+    
 
 
     @Scripts.Render("~/bundles/jquery")

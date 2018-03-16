@@ -84,6 +84,13 @@ namespace Market.Web.Controllers.Admin
             {
                 Games = _gameService.GetGames()
             };
+            foreach (var game in model.Games)
+            {
+                foreach (var filter in game.Filters)
+                {
+                    filter.FilterItems = filter.FilterItems.OrderBy(f => f.Rank).ToList();
+                }
+            }
             return View(model);
         }
 
@@ -114,22 +121,16 @@ namespace Market.Web.Controllers.Admin
             //[{\"Text\":\"2x2\",\"Value\":\"2x2\",\"FilterItems\":[]},{\"Text\":\"5x5\",\"Value\":\"5x5\",\"FilterItems\":[]}]
             // Сделать проверку на налл
             Game g = _gameService.GetGameByValue(game);
-            
+
             IList<FilterViewModel> filters = new List<FilterViewModel>();
             if (g != null)
             {
                 foreach (var filter in g.Filters)
                 {
+                    filter.FilterItems = filter.FilterItems.OrderBy(f => f.Rank).ToList();
                     filters.Add(Mapper.Map<Model.Models.Filter, FilterViewModel>(filter));
                 }
 
-                var ranks = g.Filters.Select(m => new
-                {
-                    Text = m.Text,
-                    Value = m.Value,
-                    FilterItems = m.FilterItems,
-                    GameValue = m.Game.Value
-                });
             }
             
             var s = new JavaScriptSerializer();

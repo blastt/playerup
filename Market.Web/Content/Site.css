@@ -891,6 +891,7 @@ div#users-contain {
 .main-block{
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     padding-bottom: 50px;
+    margin-top: 60px;
     margin-bottom: 30px
 }
 
@@ -1193,4 +1194,57 @@ i {
 .text-700 {
     font-weight: 700
 }
-/*\e60b === \e605*/
+
+.btn-buy {
+    border-radius: 10px;
+    background-color: #62b2e2;
+    color: white;
+    
+    width: 60%
+}
+
+.btn-buy:hover {
+    border-radius: 10px;
+    background-color: rgba(98, 178, 226, 0.80);
+    color: white;
+    width: 60%
+}
+
+.btn-details {
+    border-radius: 10px;
+    background-color: #bfbfbf;
+    color: white;
+    width: 60%
+}
+
+    .btn-details:hover {
+        border-radius: 10px;
+        background-color: rgba(169, 169, 169, 0.60);
+        color: white;
+        width: 60%
+    }
+
+.footer-left {
+
+    width: 40%;
+}
+
+.footer-center {
+    width: 40%;
+}
+
+.footer-right{
+    width: 20%
+}
+
+dl dt {
+    font-weight: 700;
+
+    padding-bottom: 16px;
+    font-size: 26px
+}
+dl dd a{
+    font-size: 14px;
+    color: #333
+}
+    /*\e60b === \e605*/

@@ -77,6 +77,14 @@
     <Compile Include="Migrations\201803151906448_New1.Designer.cs">
       <DependentUpon>201803151906448_New1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201803151935365_New2.cs" />
+    <Compile Include="Migrations\201803151935365_New2.Designer.cs">
+      <DependentUpon>201803151935365_New2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803151937406_Rank.cs" />
+    <Compile Include="Migrations\201803151937406_Rank.Designer.cs">
+      <DependentUpon>201803151937406_Rank.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\FeedbackRepository.cs" />
@@ -104,6 +112,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201803151906448_New1.resx">
       <DependentUpon>201803151906448_New1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803151935365_New2.resx">
+      <DependentUpon>201803151935365_New2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803151937406_Rank.resx">
+      <DependentUpon>201803151937406_Rank.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

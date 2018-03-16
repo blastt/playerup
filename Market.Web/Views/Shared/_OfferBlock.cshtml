@@ -96,13 +96,13 @@
                                     </div>
                                     <div class="col-sm-4 text-right">
                                         <div class="mb-2">
-                                            <span id="offer_price" style="font-weight: 400; font-size: 24px">@offer.Price.ToString("0.#####") USD</span>
+                                            <span id="offer_price" style="font-weight: 400; font-size: 24px">@offer.Price.ToString("0.#####") руб</span>
                                         </div>
                                         <div class="mb-2">
-                                            @Html.ActionLink("Подробнее", "Details", new { id = offer.Id }, new { @class = "btn btn-secondary" })
+                                            @Html.ActionLink("Подробнее", "Details", new { id = offer.Id }, new { @class = "btn btn-details" })
                                         </div>
                                         <div>
-                                            @Html.ActionLink("Купить", "Details", new { id = offer.Id }, new { @class = "btn btn-info" })
+                                            @Html.ActionLink("Купить", "Details", new { id = offer.Id }, new { @class = "btn btn-buy" })
                                         </div>
                                     </div>
                                 </div>
