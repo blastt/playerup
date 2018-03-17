@@ -60,12 +60,13 @@
                     @offer.Price
                 </div>
                 <div class="offer-link">
-                    @Html.ActionLink("Детали", "Details","Offer", new { id = offer.Id }, new { @class = "btn btn-info" })
+                    @Html.ActionLink("Детали", "Details", "Offer", new { id = offer.Id }, new { @class = "btn btn-info" })
                 </div>
             </div>
 
         }
     </div>
+    <input type="hidden" id="page" value="1" />
 </div>
 @Html.PagedListPager(Model.PageInfo, "SelectPageOffersInfo")
 

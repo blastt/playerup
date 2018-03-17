@@ -5,14 +5,12 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="utf-8" />
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&amp;subset=cyrillic" rel="stylesheet">
-    <link rel="stylesheet" href="~/Content/jquery-ui.min.css">
     <link rel="stylesheet" href="~/Content/range-slider.css">
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title – приложение ASP.NET</title>
     @Styles.Render("~/Content/css")
-    
-    <link rel="stylesheet" type="text/css" href="~/Content/custom.css">
+
     @Scripts.Render("~/bundles/modernizr")
 
 </head>
@@ -113,7 +111,7 @@
 
         });
     </script>
-    <script>
+    @*<script>
         window.addEventListener('offline', function (e) { console.log('offline'); });
 
         window.addEventListener('online', function (e) { console.log('online'); });
@@ -127,6 +125,6 @@
 
         }
 
-    </script>
+    </script>*@
 </body>
 </html>

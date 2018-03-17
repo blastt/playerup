@@ -15,6 +15,10 @@ using Marketplace.Data;
 using Market.Model.Models;
 using SendGrid;
 using SendGrid.Helpers.Mail;
+using Twilio.Clients;
+using Twilio;
+using Twilio.Rest.Api.V2010.Account;
+using Twilio.Types;
 
 namespace Market.Web
 {
@@ -42,10 +46,18 @@ namespace Market.Web
 
     public class SmsService : IIdentityMessageService
     {
-        public Task SendAsync(IdentityMessage message)
+        public async Task SendAsync(IdentityMessage message)
         {
-            // Plug in your SMS service here to send a text message.
-            return Task.FromResult(0);
+            var accountSid = "ACb0ac84bf73d0ed0f84ee7939d98c28e5";
+            // Your Auth Token from twilio.com/console
+            var authToken = "24dc4ae21e8bc3bfa70edb3ec783345d";
+
+            TwilioClient.Init(accountSid, authToken);
+
+            var msg = await MessageResource.CreateAsync(
+                to: new PhoneNumber(message.Destination),
+                from: new PhoneNumber("+15172101708"),
+                body: message.Body);
         }
     }
 

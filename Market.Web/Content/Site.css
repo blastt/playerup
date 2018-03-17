@@ -330,10 +330,9 @@ ul {
 }
 
 .offer-details {
-
+    max-width: 450px;
     float: left;
     min-height: 270px;
-
     border-left: 1px solid #eee
 }
 

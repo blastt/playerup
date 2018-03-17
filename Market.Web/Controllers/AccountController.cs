@@ -11,6 +11,7 @@ using Microsoft.Owin.Security;
 using Market.Web.Models;
 using Market.Model.Models;
 using Market.Service;
+using static Market.Web.Controllers.ManageController;
 
 namespace Market.Web.Controllers
 {
@@ -75,11 +76,32 @@ namespace Market.Web.Controllers
             return View();
         }
 
+
         [Authorize]
-        public ActionResult UpdateEmail()
+        public async Task<ActionResult> VerifyEmail()
         {
-            return View();
+            if (User != null)
+            {
+                // get user object from the storage
+                var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+
+                    // change username and email
+
+                    // Persiste the changes
+                // generage email confirmation code
+                string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+
+                await UserManager.SendEmailAsync(user.Id, "Подтверждение почты", "Для почтверждения почты" +
+                    " учётной записи Для смены адреса вам необходимо его активировать, щелкнув <a href=\"" + callbackUrl + "\">здесь</a>");
+
+                return View("ChangeEmailRequest");
+            }
+            return View("Error");
+
+            // send email to the user with the confirmation link
         }
+
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
@@ -116,6 +138,13 @@ namespace Market.Web.Controllers
 
             // send email to the user with the confirmation link
         }
+
+        [Authorize]
+        public ActionResult UpdateEmail()
+        {
+            return View();
+        }
+        
 
         [Authorize]
         public async Task<ActionResult> ChangeEmail(string userId, string code)
@@ -311,7 +340,8 @@ namespace Market.Web.Controllers
                     {
                         Id = user.Id,
                         Avatar = imageData,
-                        Name = user.UserName
+                        Name = user.UserName,
+                        RegistrationDate = DateTime.Now
                     };
                     _userProfileService.CreateUserProfile(profile);                    
                     user.UserProfile = profile;
@@ -338,6 +368,59 @@ namespace Market.Web.Controllers
             }
             var result = await UserManager.ConfirmEmailAsync(userId, code);
             return View(result.Succeeded ? "ConfirmEmail" : "Error");
+        }
+
+        public ActionResult AddPhoneNumber()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> AddPhoneNumber(AddPhoneNumberViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            var code = await UserManager.GenerateChangePhoneNumberTokenAsync(User.Identity.GetUserId(), model.Number);
+            if (UserManager.SmsService != null)
+            {
+                var message = new IdentityMessage
+                {
+                    Destination = model.Number,
+                    Body = "Your security code is: " + code
+                };
+                await UserManager.SmsService.SendAsync(message);
+            }
+            return RedirectToAction("VerifyPhoneNumber", new { PhoneNumber = model.Number });
+        }
+
+        public async Task<ActionResult> VerifyPhoneNumber(string phoneNumber)
+        {
+            var code = await UserManager.GenerateChangePhoneNumberTokenAsync(User.Identity.GetUserId(), phoneNumber);
+            return phoneNumber == null ? View("Error") : View(new VerifyPhoneNumberViewModel { PhoneNumber = phoneNumber });
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> VerifyPhoneNumber(VerifyPhoneNumberViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            var result = await UserManager.ChangePhoneNumberAsync(User.Identity.GetUserId(), model.PhoneNumber, model.Code);
+            if (result.Succeeded)
+            {
+                var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+                if (user != null)
+                {
+                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                }
+                return RedirectToAction("Index", new { Message = ManageMessageId.AddPhoneSuccess });
+            }
+            ModelState.AddModelError("", "Failed to verify phone");
+            return View(model);
         }
 
         //

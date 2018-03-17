@@ -22,7 +22,7 @@ namespace Market.Web.Controllers
         private readonly IGameService _gameService;
         private readonly IFilterService _filterService;
         private readonly IFilterItemService _filterItemService;
-        public int pageSize = 3;
+        public int pageSize = 5;
         public OfferController(IOfferService offerService, IGameService gameService, IFilterService filterService, IFilterItemService filterItemService, IUserProfileService userProfileService)
         {
             _offerService = offerService;
@@ -223,7 +223,6 @@ namespace Market.Web.Controllers
         public PartialViewResult OfferListInfo(SearchOffersInfoViewModel searchInfo)
         {
             searchInfo.SearchString = searchInfo.SearchString ?? "";
-            
             var offers = _offerService.GetOffers().Where(m => m.UserProfileId == searchInfo.UserId);
             
             var modelOffers = Mapper.Map<IEnumerable<Offer>, IEnumerable<OfferViewModel>>(offers);
@@ -247,10 +246,10 @@ namespace Market.Web.Controllers
             OfferListViewModel model = new OfferListViewModel
             {
                 Games = games,
-                Offers = modelOffers,
+                Offers = modelOffers.Skip((searchInfo.Page - 1) * pageSize).Take(pageSize).ToList(),
                 PageInfo = new PageInfoViewModel
                 {
-                    PageSize = 4,
+                    PageSize = pageSize,
                     PageNumber = searchInfo.Page,
                     TotalItems = modelOffers.Count()
                 },
@@ -524,6 +523,23 @@ namespace Market.Web.Controllers
             if (!ModelState.IsValid)
             {
                 return HttpNotFound("fafa");
+            }
+            var userProfile = _userProfileService.GetUserProfileById(User.Identity.GetUserId());
+            if (userProfile != null)
+            {
+                var appUser = userProfile.ApplicationUser;
+                if(appUser != null)
+                {
+                    if(!(appUser.PhoneNumberConfirmed && appUser.EmailConfirmed))
+                    {
+                        return HttpNotFound("you are not confirmed email or phone number");
+                    }
+                }
+
+            }
+            else
+            {
+                return HttpNotFound("You are not logged in");
             }
             Game game = _gameService.GetGameByValue(model.Game);
             Offer offer = Mapper.Map<CreateOfferViewModel, Offer>(model);
