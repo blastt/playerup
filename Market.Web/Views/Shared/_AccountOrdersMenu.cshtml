@@ -4,7 +4,6 @@
 }
 
 <ul class="account-inner-list" id="account-inner-list">
-    <li class="account-inner-menu-item">@Html.ActionLink("Все", "All", "Order", null, new { @class = "account-inner-menu-link" })</li>
-    <li class="account-inner-menu-item">@Html.ActionLink("Активные", "Active", "Order", null, new { @class = "account-inner-menu-link" })</li>
-    <li class="account-inner-menu-item">@Html.ActionLink("Неактивные", "Closed", "Order", null, new { @class = "account-inner-menu-link" })</li>
+    <li class="account-inner-menu-item">@Html.ActionLink("Заказ (покупка)", "OrderBuy", "Order", null, new { @class = "account-inner-menu-link" })</li>
+    <li class="account-inner-menu-item">@Html.ActionLink("Заказ (продажа)", "OrderSell", "Order", null, new { @class = "account-inner-menu-link" })</li>
 </ul>

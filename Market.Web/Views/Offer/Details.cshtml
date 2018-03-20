@@ -126,7 +126,7 @@
                         <h3>@Html.DisplayFor(m => m.Price)</h3>
                     </div>
                     <div style="text-align:center">
-                        @Html.ActionLink("Купить", "Pay", "Checkout", null, new { });
+                        @Html.ActionLink("Купить", "Pay", "Checkout", new { offerId = Model.Id, sellerId = Model.UserProfile.Id },null );
                         @using (Html.BeginForm("Pay", "Checkout"))
                         {
                             @Html.HiddenFor(m => m.Id)

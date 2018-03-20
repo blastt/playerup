@@ -23,6 +23,19 @@ namespace Market.Web.Mappings
             CreateMap<Message, MessageViewModel>();
             CreateMap<Feedback, FeedbackViewModel>();
             CreateMap<UserProfile, UserProfileViewModel>();
+            CreateMap<AccountInfo, AccountInfoViewModel>();
+            #region AccountInfo
+
+            CreateMap<AccountInfo, AccountInfoViewModel>()
+                .ForMember(o => o.Id, map => map.MapFrom(vm => vm.Id))
+              .ForMember(o => o.AdditionalInformation, map => map.MapFrom(vm => vm.AdditionalInformation))
+              .ForMember(o => o.BuyerId, map => map.MapFrom(vm => vm.BuyerId))
+              .ForMember(o => o.SteamPassword, map => map.MapFrom(vm => vm.Password))
+              .ForMember(o => o.ModeratorId, map => map.MapFrom(vm => vm.ModeratorId))
+              .ForMember(o => o.SteamLogin, map => map.MapFrom(vm => vm.Login))
+              .ForMember(o => o.SteamEmail, map => map.MapFrom(vm => vm.Email));
+
+            #endregion
 
             #region Offer
 
@@ -62,6 +75,33 @@ namespace Market.Web.Mappings
                .ForMember(o => o.Price, map => map.MapFrom(vm => vm.Price))
                .ForPath(o => o.Feedbacks, map => map.MapFrom(vm => vm.UserProfile.Feedbacks));
 
+            #endregion
+
+            #region Order
+
+            CreateMap<Order, OrderViewModel>()
+                .ForPath(o => o.Id, map => map.MapFrom(vm => vm.Id))
+                .ForPath(o => o.BuyerName, map => map.MapFrom(vm => vm.Buyer.Name))
+                .ForMember(o => o.DateCreated, map => map.MapFrom(vm => vm.DateCreated))
+                .ForPath(o => o.OfferHeader, map => map.MapFrom(vm => vm.Offer.Header))
+                .ForPath(o => o.OfferId, map => map.MapFrom(vm => vm.Offer.Id))
+                .ForPath(o => o.OfferPrice, map => map.MapFrom(vm => vm.Offer.Price))
+                .ForPath(o => o.SellerName, map => map.MapFrom(vm => vm.Seller.Name));
+
+
+            CreateMap<Order, DetailsOrderViewModel>()
+                .ForMember(o => o.BuyerFeedbacked, map => map.MapFrom(vm => vm.BuyerFeedbacked))
+                .ForMember(o => o.SellerFeedbacked, map => map.MapFrom(vm => vm.SellerFeedbacked))
+                .ForPath(o => o.Id, map => map.MapFrom(vm => vm.Id))
+                .ForMember(o => o.BuyerId, map => map.MapFrom(vm => vm.BuyerId))
+                .ForMember(o => o.SellerId, map => map.MapFrom(vm => vm.SellerId))
+                .ForPath(o => o.BuyerName, map => map.MapFrom(vm => vm.Buyer.Name))
+                .ForMember(o => o.DateCreated, map => map.MapFrom(vm => vm.DateCreated))
+                .ForPath(o => o.OfferHeader, map => map.MapFrom(vm => vm.Offer.Header))
+                .ForPath(o => o.OfferId, map => map.MapFrom(vm => vm.Offer.Id))
+                .ForPath(o => o.OfferPrice, map => map.MapFrom(vm => vm.Offer.Price))
+                .ForPath(o => o.ModeratorName, map => map.MapFrom(vm => vm.Moderator.Name))
+                .ForPath(o => o.SellerName, map => map.MapFrom(vm => vm.Seller.Name));
             #endregion
 
             #region FilterItem

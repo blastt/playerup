@@ -232,12 +232,15 @@
     <Compile Include="Controllers\Admin\FilterController.cs" />
     <Compile Include="Controllers\Admin\FilterItemController.cs" />
     <Compile Include="Controllers\Admin\GameController.cs" />
+    <Compile Include="Controllers\CheckoutController.cs" />
     <Compile Include="Controllers\FeedbackController.cs" />
     <Compile Include="Controllers\GodController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\MessageController.cs" />
+    <Compile Include="Controllers\Moderator\ModeratorController.cs" />
     <Compile Include="Controllers\OfferController.cs" />
+    <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -251,6 +254,8 @@
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="ViewModels\Checkout\CheckoutViewModel.cs" />
+    <Compile Include="ViewModels\Checkout\ProvideDataViewModel.cs" />
     <Compile Include="ViewModels\Feedback\FeedbackListViewModel.cs" />
     <Compile Include="ViewModels\Feedback\FeedbackViewModel.cs" />
     <Compile Include="ViewModels\Feedback\GiveFeedbackViewModel.cs" />
@@ -272,6 +277,7 @@
     <Compile Include="ViewModels\Offer\OfferListViewModel.cs" />
     <Compile Include="ViewModels\Offer\OfferViewModel.cs" />
     <Compile Include="ViewModels\Order\DetailsOrderViewModel.cs" />
+    <Compile Include="ViewModels\Order\OrderListViewModel.cs" />
     <Compile Include="ViewModels\Order\OrderViewModel.cs" />
     <Compile Include="ViewModels\PageInfoViewModel.cs" />
     <Compile Include="ViewModels\SearchFeedbacksInfoViewModel.cs" />
@@ -473,9 +479,9 @@
     <Content Include="Views\Message\Sent.cshtml" />
     <Content Include="Views\Message\Story.cshtml" />
     <Content Include="Views\Nav\Menu.cshtml" />
-    <Content Include="Views\Order\Active.cshtml" />
+    <Content Include="Views\Order\OrderBuy.cshtml" />
     <Content Include="Views\Order\All.cshtml" />
-    <Content Include="Views\Order\Closed.cshtml" />
+    <Content Include="Views\Order\OrderSell.cshtml" />
     <Content Include="Views\Profile\Feedbacks.cshtml" />
     <Content Include="Views\Profile\Info.cshtml" />
     <Content Include="Views\Profile\Offers.cshtml" />
@@ -507,7 +513,7 @@
     <Content Include="Views\Feedback\Delete.cshtml" />
     <Content Include="Views\Feedback\Details.cshtml" />
     <Content Include="Views\Feedback\Edit.cshtml" />
-    <Content Include="Views\Feedback\Give.cshtml" />
+    <Content Include="Views\Feedback\GiveToBuyer.cshtml" />
     <Content Include="Views\Feedback\Index.cshtml" />
     <Content Include="Views\Feedback\Negative.cshtml" />
     <Content Include="Views\Feedback\Positive.cshtml" />
@@ -516,10 +522,20 @@
     <Content Include="Views\Offer\Buy.cshtml" />
     <Content Include="Views\Shared\_OfferListInfo.cshtml" />
     <Content Include="Views\Shared\_FeedbackListInfo.cshtml" />
+    <Content Include="Views\Moderator\Panel.cshtml" />
+    <Content Include="Views\Order\SellDetails.cshtml" />
+    <Content Include="Views\Checkout\ProvideData.cshtml" />
+    <Content Include="Views\Moderator\MyOrderList.cshtml" />
+    <Content Include="Views\Moderator\OrderList.cshtml" />
+    <Content Include="Views\Moderator\ProvideDataToBuyer.cshtml" />
+    <Content Include="Views\Order\BuyDetails.cshtml" />
+    <Content Include="Views\Feedback\GiveToSeller.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\God\" />
+    <Folder Include="Views\NewFolder1\" />
+    <Folder Include="Views\NewFolder2\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config">

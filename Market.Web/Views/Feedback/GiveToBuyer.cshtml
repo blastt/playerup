@@ -6,13 +6,13 @@
 
 <h2>Create</h2>
 
-@using (Html.BeginForm())
+@using (Html.BeginForm("GiveToBuyer", "Feedback"))
 {
     @Html.AntiForgeryToken()
     @Html.HiddenFor(m => m.ReceiverId)
-
+    @Html.HiddenFor(m => m.OrderId)
     <div class="form-horizontal">
-        <h4>Feedback</h4>
+        <h4>Отзыв для покупателя</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">

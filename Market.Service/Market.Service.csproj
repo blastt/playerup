@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountInfo.cs" />
     <Compile Include="Feedbacks.cs" />
     <Compile Include="Filter.cs" />
     <Compile Include="FilterItem.cs" />

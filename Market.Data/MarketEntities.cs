@@ -49,6 +49,7 @@ namespace Marketplace.Data
             modelBuilder.Configurations.Add(new GameConfiguration());
             modelBuilder.Configurations.Add(new FilterConfiguration());
             modelBuilder.Configurations.Add(new FilterItemConfiguration());
+            modelBuilder.Configurations.Add(new AccountInfoConfiguration());
             base.OnModelCreating(modelBuilder);
         }
         public virtual DbSet<UserProfile> UserProfiles { get; set; }
@@ -59,5 +60,6 @@ namespace Marketplace.Data
         public virtual DbSet<Game> Games { get; set; }
         public virtual DbSet<Filter> Filters { get; set; }
         public virtual DbSet<FilterItem> FilterItems { get; set; }
+        public virtual DbSet<AccountInfo> AccountInfos { get; set; }
     }
 }

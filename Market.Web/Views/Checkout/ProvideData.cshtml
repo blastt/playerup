@@ -1,0 +1,58 @@
+﻿@model Market.Web.ViewModels.AccountInfoViewModel
+
+@{
+    ViewBag.Title = "ProvideData";
+}
+
+
+<div class="container">
+    @using (Html.BeginForm("ProvideData", "Checkout"))
+    {
+        @Html.HiddenFor(m => m.ModeratorId)
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Логин Steam</label>
+            </div>
+            <div class="col-lg-4">
+                @Html.TextBoxFor(m => m.SteamLogin, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Пароль Steam</label>
+            </div>
+            <div class="col-lg-4">
+                @Html.TextBoxFor(m => m.SteamPassword, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Подтверждение пароля Steam</label>
+            </div>
+            <div class="col-lg-4">
+                @Html.TextBoxFor(m => m.ConfirmSteamPassword, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Email Steam</label>
+            </div>
+            <div class="col-lg-4">
+                @Html.TextBoxFor(m => m.SteamEmail, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Дополнительная информация Steam</label>
+            </div>
+            <div class="col-lg-4">
+                @Html.TextBoxFor(m => m.AdditionalInformation, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4">
+                <input type="submit" value="Отправить" />
+            </div>
+        </div>
+    }
+</div>

@@ -1,0 +1,47 @@
+﻿@model Market.Web.ViewModels.OrderListViewModel
+@{
+    ViewBag.Title = "OrderList";
+}
+
+<h2>OrderList</h2>
+
+<div class="container">
+    <table>
+        <tr>
+            <th>Предложение</th>
+            <th>Имя продавца</th>
+            <th>Имя покупателя</th>
+            <th>Цена</th>
+            <th>Статус</th>
+            <th>Дата создания</th>
+            <th></th>
+        </tr>
+        @foreach (var order in Model.Orders)
+        {
+        <tr>
+            <td>
+                @order.OfferHeader
+            </td>
+            <td>
+                @order.SellerName
+            </td>
+            <td>
+                @order.BuyerName
+            </td>
+            <td>
+                @order.OfferPrice
+            </td>
+            <td>
+                @order.OrderStatus
+            </td>
+            <td>
+                @order.DateCreated
+            </td>
+            <td>
+                @Html.ActionLink("Взять заказ", "ProcessOrder", "Moderator", new { orderId = order.Id }, null)
+            </td>
+        </tr>
+        }
+
+    </table>
+</div>

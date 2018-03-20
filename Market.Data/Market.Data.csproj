@@ -53,6 +53,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuration\AccountInfoConfiguration.cs" />
     <Compile Include="Configuration\FeedbackConfiguration.cs" />
     <Compile Include="Configuration\FilterConfiguration.cs" />
     <Compile Include="Configuration\FilterItemConfiguration.cs" />
@@ -85,8 +86,25 @@
     <Compile Include="Migrations\201803151937406_Rank.Designer.cs">
       <DependentUpon>201803151937406_Rank.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201803171414027_Order.cs" />
+    <Compile Include="Migrations\201803171414027_Order.Designer.cs">
+      <DependentUpon>201803171414027_Order.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803181141182_Buyer feedbacked.cs" />
+    <Compile Include="Migrations\201803181141182_Buyer feedbacked.Designer.cs">
+      <DependentUpon>201803181141182_Buyer feedbacked.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803181313418_Moder.cs" />
+    <Compile Include="Migrations\201803181313418_Moder.Designer.cs">
+      <DependentUpon>201803181313418_Moder.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803181815318_AccInfos.cs" />
+    <Compile Include="Migrations\201803181815318_AccInfos.Designer.cs">
+      <DependentUpon>201803181815318_AccInfos.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\AccountInfoRepository.cs" />
     <Compile Include="Repositories\FeedbackRepository.cs" />
     <Compile Include="Repositories\FilterItemRepository.cs" />
     <Compile Include="Repositories\FilterRepository.cs" />
@@ -118,6 +136,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201803151937406_Rank.resx">
       <DependentUpon>201803151937406_Rank.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803171414027_Order.resx">
+      <DependentUpon>201803171414027_Order.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803181141182_Buyer feedbacked.resx">
+      <DependentUpon>201803181141182_Buyer feedbacked.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803181313418_Moder.resx">
+      <DependentUpon>201803181313418_Moder.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803181815318_AccInfos.resx">
+      <DependentUpon>201803181815318_AccInfos.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -58,13 +58,23 @@ namespace Market.Web.Mappings
             #region Order
 
             CreateMap<OrderViewModel, Order>()
-                .ForMember(o => o.IsFeedbacked, map => map.MapFrom(vm => vm.IsFeedbacked))
-               .ForMember(o => o.OrderStatus, map => map.MapFrom(vm => vm.OrderStatus))
-               .ForPath(o => o.UserProfile.Name, map => map.MapFrom(vm => vm.OrderUserName))
-               .ForPath(o => o.Offer.Id, map => map.MapFrom(vm => vm.OfferId))
-               .ForPath(o => o.Offer.Header, map => map.MapFrom(vm => vm.OfferName))
-               .ForPath(o => o.Offer.UserProfile.Name, map => map.MapFrom(vm => vm.OfferUserName))
-               .ForMember(o => o.DateCreated, map => map.MapFrom(vm => vm.DateCreated));
+              .ForPath(o => o.Buyer.Name, map => map.MapFrom(vm => vm.BuyerName))
+              .ForMember(o => o.DateCreated, map => map.MapFrom(vm => vm.DateCreated))
+              .ForPath(o => o.Offer.Header, map => map.MapFrom(vm => vm.OfferHeader))
+              .ForPath(o => o.Offer.Id, map => map.MapFrom(vm => vm.OfferId))
+              .ForPath(o => o.Offer.Price, map => map.MapFrom(vm => vm.OfferPrice))
+              .ForPath(o => o.Seller.Name, map => map.MapFrom(vm => vm.SellerName));
+
+            #endregion
+
+            #region AccountInfo
+
+            CreateMap<AccountInfoViewModel, AccountInfo>()
+                .ForMember(o => o.Id, map => map.MapFrom(vm => vm.Id))
+              .ForMember(o => o.Login, map => map.MapFrom(vm => vm.SteamLogin))
+              .ForMember(o => o.Password, map => map.MapFrom(vm => vm.SteamPassword))
+              .ForMember(o => o.Email, map => map.MapFrom(vm => vm.SteamEmail))
+              .ForMember(o => o.AdditionalInformation, map => map.MapFrom(vm => vm.AdditionalInformation));
 
             #endregion
 

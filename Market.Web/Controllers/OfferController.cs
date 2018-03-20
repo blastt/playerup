@@ -68,6 +68,7 @@ namespace Market.Web.Controllers
             {
                 offers = _offerService.GetOffers().Where(m => m.Game.Value == searchInfo.Game);
             }
+            offers = offers.Where(o => o.Order == null);
             if (offers.Count() != 0)
             {
                 minGamePrice = offers.Min(m => m.Price);

@@ -16,13 +16,15 @@ namespace Market.Web.Controllers
 
         private readonly IFeedbackService _feedbackService;
         private readonly IOfferService _offerService;
+        private readonly IOrderService _orderService;
         private readonly IUserProfileService _userProfileService;
         private const int pageSize = 3;
-        public FeedbackController(IOfferService offerService, IFeedbackService feedbackService, IUserProfileService userProfileService)
+        public FeedbackController(IOfferService offerService, IFeedbackService feedbackService, IUserProfileService userProfileService, IOrderService orderService)
         {
             _offerService = offerService;
             _feedbackService = feedbackService;
             _userProfileService = userProfileService;
+            _orderService = orderService;
         }
         public ActionResult All()
         {
@@ -51,19 +53,21 @@ namespace Market.Web.Controllers
 
 
         // GET: Feedback/Create
-        public ActionResult Give(string senderId, int? id)
+        public ActionResult GiveToBuyer(string receiverId, int? orderId)
         {
-            if (senderId == null || id == null)
+            if (receiverId != null && orderId != null)
             {
-                return HttpNotFound("pass error");
+                GiveFeedbackViewModel model = new GiveFeedbackViewModel()
+                {
+                    ReceiverId = receiverId,
+                    OrderId = orderId.Value
+                };
+                return View(model);                
             }
-            GiveFeedbackViewModel model = new GiveFeedbackViewModel()
-            {
-                ReceiverId = senderId
-            };
 
-            //ViewBag.UserProfileId = new SelectList(db.UserProfiles, "Id", "Discription");
-            return View(model);
+            return HttpNotFound("Ошибка");           
+
+            //ViewBag.UserProfileId = new SelectList(db.UserProfiles, "Id", "Discription");            
         }
 
         // POST: Feedback/Create
@@ -71,47 +75,84 @@ namespace Market.Web.Controllers
         // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Give(GiveFeedbackViewModel model, int id = 1)
+        public ActionResult GiveToBuyer(GiveFeedbackViewModel model)
         {
-
-            if (ModelState.IsValid && Enum.IsDefined(typeof(Emotions), model.Grade))
+            if (model.ReceiverId != null && ModelState.IsValid && Enum.IsDefined(typeof(Emotions), model.Grade))
             {
-                var receiverUserProfile = _userProfileService.GetUserProfileById(model.ReceiverId);
-
-
-                if (receiverUserProfile != null)
+                var order = _orderService.GetOrders().Where(o => o.Id == model.OrderId && o.Buyer.Id == model.ReceiverId && o.Seller.Id == User.Identity.GetUserId() && !o.BuyerFeedbacked &&
+            (o.OrderStatus == Status.PayingToSeller || o.OrderStatus == Status.ClosedSeccessfuly)).FirstOrDefault();
+                if (order != null)
                 {
-                    var offer = receiverUserProfile.Offers.FirstOrDefault(m => m.Id == id);
-                    if (offer != null)
+                    order.BuyerFeedbacked = true;
+                    var feedback = new Feedback
                     {
-                        //if (offer.Order != null)
-                        //{
-                        //    if (offer.Order.IsFeedbacked == false && offer.Order.OrderStatus == Status.Successfully)
-                        //    {
-                        var currentUserProfile = _userProfileService.GetUserProfileById(User.Identity.GetUserId());
-                        var feedback = new Feedback
-                        {
-                            Comment = model.Comment,
-                            DateLeft = DateTime.Now,
-                            Grade = model.Grade,
-                            Sender = currentUserProfile,
-                            Receiver = receiverUserProfile,
-                            OfferHeader = offer.Header,
-                            OfferId = offer.Id.ToString()
-                        };
-                        //offer.Order.IsFeedbacked = true;
-                        _feedbackService.CreateFeedback(feedback);
-                        _feedbackService.SaveFeedback();
-                        return RedirectToAction("Index");
-                        //    }
-                        //}
-                    }
+                        Comment = model.Comment,
+                        DateLeft = DateTime.Now,
+                        Grade = model.Grade,
+                        SenderId = User.Identity.GetUserId(),
+                        ReceiverId = model.ReceiverId,
+                        OfferHeader = order.Offer.Header,
+                        OfferId = order.Offer.Id.ToString()
+                    };
+                    order.Buyer.Feedbacks.Add(feedback);
+                    _feedbackService.SaveFeedback();
+                    return View(model);
                 }
-                return HttpNotFound("User does not exist");
-
             }
-            //ViewBag.UserProfileId = new SelectList(_db.UserProfiles, "Id", "Discription", feedback.UserProfileId);
-            return View(model);
+
+            return HttpNotFound("Ошибка");
+        }
+
+        // GET: Feedback/Create
+        public ActionResult GiveToSeller(string receiverId, int? orderId)
+        {
+            if (receiverId != null && orderId != null)
+            {
+                GiveFeedbackViewModel model = new GiveFeedbackViewModel()
+                {
+                    ReceiverId = receiverId,
+                    OrderId = orderId.Value
+                };
+                return View(model);
+            }
+
+            return HttpNotFound("Ошибка");
+
+            //ViewBag.UserProfileId = new SelectList(db.UserProfiles, "Id", "Discription");            
+        }
+
+        // POST: Feedback/Create
+        // Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
+        // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult GiveToSeller(GiveFeedbackViewModel model)
+        {
+            if (model.ReceiverId != null && ModelState.IsValid && Enum.IsDefined(typeof(Emotions), model.Grade))
+            {
+                
+                var order = _orderService.GetOrders().Where(o => o.Id == model.OrderId && o.Seller.Id == model.ReceiverId && o.BuyerId == User.Identity.GetUserId() && !o.SellerFeedbacked &&
+            (o.OrderStatus == Status.PayingToSeller || o.OrderStatus == Status.ClosedSeccessfuly)).FirstOrDefault();
+                if (order != null)
+                {
+                    order.SellerFeedbacked = true;
+                    var feedback = new Feedback
+                    {
+                        Comment = model.Comment,
+                        DateLeft = DateTime.Now,
+                        Grade = model.Grade,
+                        SenderId = User.Identity.GetUserId(),
+                        ReceiverId = model.ReceiverId,
+                        OfferHeader = order.Offer.Header,
+                        OfferId = order.Offer.Id.ToString()
+                    };
+                    order.Seller.Feedbacks.Add(feedback);
+                    _feedbackService.SaveFeedback();
+                    return View(model);
+                }
+            }
+
+            return HttpNotFound("Ошибка");
         }
 
         public PartialViewResult FeedbackListInfo(SearchFeedbacksInfoViewModel searchInfo)

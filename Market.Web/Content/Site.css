@@ -1247,3 +1247,19 @@ dl dd a{
     color: #333
 }
     /*\e60b === \e605*/
+
+.order-details-container {
+    background-clip: border-box;
+    border: 1px solid #eff0f4;
+    background-color: #fff;
+    z-index: 1;
+    border-radius: 6px;
+}
+
+
+.order-details-head {
+    padding: 20px
+}
+.order-details-body{
+    padding: 20px
+}

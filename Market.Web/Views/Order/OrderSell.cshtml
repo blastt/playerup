@@ -1,4 +1,4 @@
-﻿@model Trader.WEB.Models.OrderListViewModel
+﻿@model Market.Web.ViewModels.OrderListViewModel
 @{
     ViewBag.Title = "All";
 
@@ -17,26 +17,23 @@
             @{Html.RenderAction("AccountMenu", "Account"); }
             <div class="account-offer-container">
                 @{Html.RenderPartial("_AccountOrdersMenu"); }
-                <div class="">
-
-                </div>
                 <table class="table table-hover">
                     <tr>
-                        <th>Игра</th>
                         <th>Предложение</th>
-                        <th>Логин Steam</th>
-                        <th>Пользователь</th>
+                        <th>Покупатель</th>
+                        <th>Цена</th>
                         <th>Статус заказа</th>
+                        <th></th>
                     </tr>
                     @foreach (var order in Model.Orders)
                     {
-                        <tr>
-                            <td>@order.Offer.Game</td>
-                            <td>@order.Offer.Header</td>
-                            <td>@order.Offer.SteamLogin</td>
-                            <td>@order.Offer.UserProfile.ApplicationUser.UserName</td>
-                            <td>@order.OrderStatus</td>
-                        </tr>
+                    <tr>
+                        <td>@order.OfferHeader</td>
+                        <td>@order.BuyerName</td>
+                        <td>@order.OfferPrice</td>
+                        <td>@order.OrderStatus</td>
+                        <td>@Html.ActionLink("Детали", "SellDetails", "Order", new { orderId = order.Id }, null)</td>
+                    </tr>
                     }
 
                 </table>
@@ -45,4 +42,3 @@
 
     </div>
 </div>
-

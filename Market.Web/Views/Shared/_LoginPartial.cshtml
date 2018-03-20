@@ -9,7 +9,7 @@
             @Html.AntiForgeryToken()
             
             <li class="nav-item">
-                <a href="#">
+                <a href="@Url.Action("OrderBuy", "Order")">
                     <img class="notice" src="~/Content/Images/notice.png" />
                 </a>
                 
@@ -30,7 +30,7 @@
                 </a>
                 <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 45px, 0px); top: 0px; left: 0px; will-change: transform;">
                     @Html.ActionLink("Предложения", "All", "Offer", null, new { @class = "dropdown-item" })
-                    @Html.ActionLink("Заказы", "All", "Order", null, new { @class = "dropdown-item" })
+                    @Html.ActionLink("Заказы", "OrderBuy", "Order", null, new { @class = "dropdown-item" })
                     @Html.ActionLink("Сообщения", "Inbox", "Message", null, new { @class = "dropdown-item" })
                     @Html.ActionLink("Настройки", "Settings", "Account", null, new { @class = "dropdown-item" })
                     @Html.ActionLink("Отзывы", "All", "Feedback", null, new { @class = "dropdown-item" })
