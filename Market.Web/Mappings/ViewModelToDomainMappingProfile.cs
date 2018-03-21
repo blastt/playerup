@@ -58,12 +58,14 @@ namespace Market.Web.Mappings
             #region Order
 
             CreateMap<OrderViewModel, Order>()
-              .ForPath(o => o.Buyer.Name, map => map.MapFrom(vm => vm.BuyerName))
-              .ForMember(o => o.DateCreated, map => map.MapFrom(vm => vm.DateCreated))
-              .ForPath(o => o.Offer.Header, map => map.MapFrom(vm => vm.OfferHeader))
-              .ForPath(o => o.Offer.Id, map => map.MapFrom(vm => vm.OfferId))
-              .ForPath(o => o.Offer.Price, map => map.MapFrom(vm => vm.OfferPrice))
-              .ForPath(o => o.Seller.Name, map => map.MapFrom(vm => vm.SellerName));
+                .ForMember(o => o.BuyerChecked, map => map.MapFrom(vm => vm.BuyerChecked))
+                .ForMember(o => o.SellerChecked, map => map.MapFrom(vm => vm.SellerChecked))
+                .ForPath(o => o.Buyer.Name, map => map.MapFrom(vm => vm.BuyerName))
+                .ForMember(o => o.DateCreated, map => map.MapFrom(vm => vm.DateCreated))
+                .ForPath(o => o.Offer.Header, map => map.MapFrom(vm => vm.OfferHeader))
+                .ForPath(o => o.Offer.Id, map => map.MapFrom(vm => vm.OfferId))
+                .ForPath(o => o.Offer.Price, map => map.MapFrom(vm => vm.OfferPrice))
+                .ForPath(o => o.Seller.Name, map => map.MapFrom(vm => vm.SellerName));
 
             #endregion
 

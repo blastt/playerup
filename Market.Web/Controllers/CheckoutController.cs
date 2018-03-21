@@ -37,6 +37,8 @@ namespace Trader.WEB.Controllers
 
                 offer.Order = new Order
                 {
+                    BuyerChecked = false,
+                    SellerChecked = false,
                     OrderStatus = Status.OrderCreated,
                     BuyerId = User.Identity.GetUserId(),
                     SellerId = model.SellerId,
@@ -80,7 +82,7 @@ namespace Trader.WEB.Controllers
                 var moderator = _userProfileService.GetUserProfileById(model.ModeratorId);
 
                 bool moderIsInrole = false;
-                if(moderator != null)
+                if (moderator != null)
                 {
                     foreach (var role in moderator.ApplicationUser.Roles)
                     {
@@ -89,12 +91,14 @@ namespace Trader.WEB.Controllers
                             moderIsInrole = true;
                         }
                     }
-                }                
-                if(moderIsInrole)
+                }
+                if (moderIsInrole)
                 {
                     var order = _orderService.GetOrders().Where(o => o.Offer.SteamLogin == model.SteamLogin && o.ModeratorId == moderator.Id).FirstOrDefault();
                     if (order != null && order.AccountInfo == null && order.OrderStatus == Status.SellerProviding)
                     {
+                        order.BuyerChecked = false;
+                        order.SellerChecked = false;
                         order.OrderStatus = Status.AdminChecking;
                         accountInfo.ModeratorId = moderator.Id;
                         order.AccountInfo = accountInfo;
@@ -107,14 +111,16 @@ namespace Trader.WEB.Controllers
             return HttpNotFound("fefwefww");
         }
 
-        
+
         public ActionResult ConfirmOrder(int? orderId)
         {
-            if(orderId != null)
+            if (orderId != null)
             {
                 var order = _orderService.GetOrder(orderId.Value);
-                if(order != null && order.BuyerId == User.Identity.GetUserId() && order.OrderStatus == Status.BuyerConfirming)
+                if (order != null && order.BuyerId == User.Identity.GetUserId() && order.OrderStatus == Status.BuyerConfirming)
                 {
+                    order.BuyerChecked = false;
+                    order.SellerChecked = false;
                     order.OrderStatus = Status.PayingToSeller;
                     _orderService.SaveOrder();
                     return View();

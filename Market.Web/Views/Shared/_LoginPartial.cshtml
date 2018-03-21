@@ -7,15 +7,18 @@
         using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "nav navbar-nav navbar-right" }))
         {
             @Html.AntiForgeryToken()
-            
-            <li class="nav-item">
+
+            <li class="nav-item" id="orders">
                 <a href="@Url.Action("OrderBuy", "Order")">
                     <img class="notice" src="~/Content/Images/notice.png" />
+
                 </a>
                 
             </li>
-            <li class="nav-item">
-                <a href="#">
+            //messagess - count
+
+            <li class="nav-item" id="messagess">
+                <a href="@Url.Action("Inbox", "Message")">
                     <img class="message" src="~/Content/Images/message.png" />
                 </a>
                 

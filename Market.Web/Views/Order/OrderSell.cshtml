@@ -27,13 +27,18 @@
                     </tr>
                     @foreach (var order in Model.Orders)
                     {
-                    <tr>
-                        <td>@order.OfferHeader</td>
-                        <td>@order.BuyerName</td>
-                        <td>@order.OfferPrice</td>
-                        <td>@order.OrderStatus</td>
-                        <td>@Html.ActionLink("Детали", "SellDetails", "Order", new { orderId = order.Id }, null)</td>
-                    </tr>
+                        var cls = "";
+                        if (!order.SellerChecked)
+                        {
+                            cls = "warning-row";
+                        }
+                        <tr class="@cls">
+                            <td>@order.OfferHeader</td>
+                            <td>@order.BuyerName</td>
+                            <td>@order.OfferPrice</td>
+                            <td>@order.OrderStatus</td>
+                            <td>@Html.ActionLink("Детали", "SellDetails", "Order", new { orderId = order.Id }, null)</td>
+                        </tr>
                     }
 
                 </table>

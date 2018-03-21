@@ -80,6 +80,8 @@ namespace Market.Web.Mappings
             #region Order
 
             CreateMap<Order, OrderViewModel>()
+                .ForMember(o => o.BuyerChecked, map => map.MapFrom(vm => vm.BuyerChecked))
+                .ForMember(o => o.SellerChecked, map => map.MapFrom(vm => vm.SellerChecked))
                 .ForPath(o => o.Id, map => map.MapFrom(vm => vm.Id))
                 .ForPath(o => o.BuyerName, map => map.MapFrom(vm => vm.Buyer.Name))
                 .ForMember(o => o.DateCreated, map => map.MapFrom(vm => vm.DateCreated))

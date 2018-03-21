@@ -30,7 +30,10 @@ namespace Market.Model.Models
         public Status OrderStatus { get; set; }
 
         public bool BuyerFeedbacked { get; set; }
-        public bool SellerFeedbacked { get; set; }       
+        public bool SellerFeedbacked { get; set; }
+
+        public bool BuyerChecked { get; set; }
+        public bool SellerChecked { get; set; }
 
         public virtual Offer Offer { get; set; }
 

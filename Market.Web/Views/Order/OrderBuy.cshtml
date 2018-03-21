@@ -27,7 +27,12 @@
                     </tr>
                     @foreach (var order in Model.Orders)
                     {
-                        <tr>
+                        var cls = "";
+                        if (!order.BuyerChecked)
+                        {
+                            cls = "warning-row";
+                        }
+                        <tr class="@cls">
                             <td>@order.OfferHeader</td>
                             <td>@order.SellerName</td>
                             <td>@order.OfferPrice</td>

@@ -12,6 +12,9 @@ namespace Market.Web.ViewModels
         public Status OrderStatus { get; set; }
         //public bool IsFeedbacked { get; set; }
 
+        public bool BuyerChecked { get; set; }
+        public bool SellerChecked { get; set; }
+
         public string OfferHeader { get; set; }
         public decimal OfferPrice { get; set; }
         public string OfferId { get; set; }

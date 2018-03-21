@@ -102,6 +102,10 @@
     <Compile Include="Migrations\201803181815318_AccInfos.Designer.cs">
       <DependentUpon>201803181815318_AccInfos.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201803201815293_orderViewed.cs" />
+    <Compile Include="Migrations\201803201815293_orderViewed.Designer.cs">
+      <DependentUpon>201803201815293_orderViewed.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\AccountInfoRepository.cs" />
@@ -148,6 +152,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201803181815318_AccInfos.resx">
       <DependentUpon>201803181815318_AccInfos.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803201815293_orderViewed.resx">
+      <DependentUpon>201803201815293_orderViewed.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

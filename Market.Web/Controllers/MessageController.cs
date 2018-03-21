@@ -419,6 +419,19 @@ namespace Market.Web.Controllers
             return View(model);
         }
 
+        public JsonResult GetMessagessCount()
+        {
+            string currentUserId = User.Identity.GetUserId();
+            int messagessCount = 0;
+            var messagessReceiver = _messageService.GetMessages().Where(m => m.ReceiverId == currentUserId && !m.IsViewed);
+            if (messagessReceiver != null)
+            {
+                messagessCount = messagessReceiver.Count();
+            }
+
+            return Json(messagessCount);
+        }
+
         // GET: Message/Edit/5
         //public ActionResult Edit(int? id)
         //{

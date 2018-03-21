@@ -519,8 +519,10 @@ namespace Market.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult Create(CreateOfferViewModel model, string test)
+        public ActionResult Create(CreateOfferViewModel model)
         {
+            
+
             if (!ModelState.IsValid)
             {
                 return HttpNotFound("fafa");

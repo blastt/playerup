@@ -60,6 +60,8 @@ namespace Market.Web.Controllers.Moderator
                 var order = _orderService.GetOrder(orderId.Value);
                 if(order != null && order.OrderStatus == Model.Models.Status.OrderCreated)
                 {
+                    order.BuyerChecked = false;
+                    order.SellerChecked = false;
                     order.OrderStatus = Model.Models.Status.SellerProviding;
                     order.ModeratorId = User.Identity.GetUserId();
                     _orderService.SaveOrder();
@@ -110,7 +112,8 @@ namespace Market.Web.Controllers.Moderator
                         var buyerOrder = buyer.Orders.Where(m => m.BuyerId == model.BuyerId && m.ModeratorId == User.Identity.GetUserId() && m.Offer.SteamLogin == model.SteamLogin).FirstOrDefault();
                         if (buyer != null && buyerOrder != null && buyerOrder.OrderStatus == Status.AdminChecking)
                         {
-
+                            buyerOrder.BuyerChecked = false;
+                            buyerOrder.SellerChecked = false;
                             buyerOrder.OrderStatus = Status.BuyerConfirming;
                             accInfo.BuyerId = buyer.Id;
                             _accountInfoService.UpdateAccountInfo(accInfo);

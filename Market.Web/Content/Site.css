@@ -97,7 +97,7 @@ textarea {
     /*point the arrow upwards when the select box is open (active):*/
     .select-selected.select-arrow-active:after {
         border-color: transparent transparent #212529 transparent;
-        top: 7px;
+        top: 15px;
     }
 /*style the items (options), including the selected item:*/
 .select-items div, .select-selected {
@@ -1263,3 +1263,38 @@ dl dd a{
 .order-details-body{
     padding: 20px
 }
+
+.warning-row{
+    background-color: #ffcc9a
+}
+
+.orders-count {
+    border-radius: 0px;
+    margin-left: 15px;
+    border: 2px solid #fff;
+    position: absolute;
+    font-size: 12px;
+    line-height: 16px;
+    width: 19px;
+    height: 19px;
+    color: white;
+    text-align: center;
+    border-radius: 50px;
+    background-color: #ff4e4e;
+}
+
+.messagess-count {
+    border-radius: 0px;
+    margin-left: 15px;
+    border: 2px solid #fff;
+    position: absolute;
+    font-size: 12px;
+    line-height: 16px;
+    width: 18px;
+    height: 18px;
+    color: white;
+    text-align: center;
+    border-radius: 50px;
+    background-color: #ff4e4e;
+}
+

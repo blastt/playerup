@@ -73,6 +73,8 @@ namespace Market.Web.Controllers
             if(orderId != null)
             {
                 var order = _orderService.GetOrder(orderId.Value);
+                order.BuyerChecked = true;
+                _orderService.SaveOrder();
                 DetailsOrderViewModel model = Mapper.Map<Order, DetailsOrderViewModel>(order);
                 model.ModeratorId = order.ModeratorId;
                 return View(model);
@@ -87,6 +89,8 @@ namespace Market.Web.Controllers
             if (orderId != null)
             {
                 var order = _orderService.GetOrder(orderId.Value);
+                order.SellerChecked = true;
+                _orderService.SaveOrder();
                 DetailsOrderViewModel model = Mapper.Map<Order, DetailsOrderViewModel>(order);
                 model.ModeratorId = order.ModeratorId;
                 return View(model);
@@ -94,6 +98,20 @@ namespace Market.Web.Controllers
 
             return HttpNotFound("Lol");
 
+        }
+
+        public JsonResult GetOrdersCount()
+        {
+            string currentUserId = User.Identity.GetUserId();
+            int ordersCount = 0;
+            var ordersBuyer = _orderService.GetOrders().Where(o => o.BuyerId == currentUserId && !o.BuyerChecked);
+            var ordersSeller = _orderService.GetOrders().Where(o => o.SellerId == currentUserId && !o.SellerChecked);
+            if (ordersBuyer != null && ordersSeller != null)
+            {
+                ordersCount = ordersBuyer.Count() + ordersSeller.Count();
+            }
+
+            return Json(ordersCount);
         }
     }
 }
