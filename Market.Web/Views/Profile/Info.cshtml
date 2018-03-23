@@ -164,7 +164,7 @@
                 <div class="modal-body">
 
                     <div class="form-group">
-                        <img class="img-circle avatar-small" src="@Url.Action("Photo", "Profile" , new { UserId = Model.CurrentUserId })" style="float:left; margin-right: 20px" alt="Alternate Text" />
+                        <img class="img-circle avatar-small" src="@Url.Action("Photo", "Profile" , new { UserId = Model.Id })" style="float:left; margin-right: 20px" alt="Alternate Text" />
                         <div>
 
                             @Html.ActionLink(Model.Name, "Info", new { })

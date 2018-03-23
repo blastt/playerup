@@ -37,7 +37,7 @@
                         <div class="price-slider">
                             <div class="filter-price">
                                 <div class="filter-price-from">
-                                    @Html.TextBox("PriceFrom", Convert.ToInt32(Math.Round(Model.PriceFrom)), new { @class = "form-control form-control-sm", id = "priceFrom" })
+                                    @Html.TextBox("PriceFrom", Math.Round(Model.PriceFrom, 0), new { @class = "form-control form-control-sm", id = "priceFrom" })
 
                                 </div>
                                 <div class="filter-price-separartor">
@@ -47,13 +47,13 @@
                                 </div>
 
                                 <div class="filter-price-to">
-                                    @Html.TextBox("PriceTo", Convert.ToInt32(Math.Round(Model.PriceTo)), new { @class = "form-control form-control-sm", id = "priceTo" })
+                                    @Html.TextBox("PriceTo", Math.Round(Model.PriceTo, 0), new { @class = "form-control form-control-sm", id = "priceTo" })
                                 </div>
                             </div>
                             <section class="range-slider">
                                 <span class="rangeValues"></span>
-                                <input value="@Convert.ToInt32(Math.Round(Model.PriceFrom))" min="@Convert.ToInt32(Math.Round(Model.MinGamePrice))" max="@Convert.ToInt32(Math.Round(Model.MaxGamePrice))" step="2" type="range">
-                                <input value="@Convert.ToInt32(Math.Round(Model.PriceTo))" min="@Convert.ToInt32(Math.Round(Model.MinGamePrice))" max="@Convert.ToInt32(Math.Round(Model.MaxGamePrice))" step="2" type="range">
+                                <input value="@Math.Round(Model.PriceFrom, 0)" min="@Math.Round(Model.MinGamePrice, 0)" max="@Math.Round(Model.MaxGamePrice, 0)" step="1" type="range">
+                                <input value="@Math.Round(Model.PriceTo, 0)" min="@Math.Round(Model.MinGamePrice, 0)" max="@Math.Round(Model.MaxGamePrice, 0)" step="1" type="range">
                             </section>
                         </div>
                         <div id="slider_price"></div>

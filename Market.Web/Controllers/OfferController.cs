@@ -92,8 +92,8 @@ namespace Market.Web.Controllers
 
 
                 offers = from offer in offers
-                         where offer.Price >= searchInfo.PriceFrom &&
-                                offer.Price <= searchInfo.PriceTo
+                         where offer.Price >= searchInfo.PriceFrom - 1 &&
+                                offer.Price <= searchInfo.PriceTo + 1
                          select offer;
             }
 
@@ -188,7 +188,22 @@ namespace Market.Web.Controllers
             //}
 
 
+            var filterDict = new Dictionary<Model.Models.Filter, FilterItem>();
+            
+            foreach (var offer in offerViewModels)
+            {
+                if (offer.Filters.Count() == offer.FilterItems.Count())
+                {
+                    for (int i = 0; i < offer.Filters.Count; i++)
+                    {
 
+                        filterDict.Add(offer.Filters[i], offer.FilterItems[i]);
+                    }
+                    offer.FilterFilterItem = filterDict;
+                    filterDict = new Dictionary<Model.Models.Filter, FilterItem>();
+                }               
+            }
+            
 
             var model = new OfferListViewModel()
             {
@@ -521,8 +536,8 @@ namespace Market.Web.Controllers
         [HttpPost]
         public ActionResult Create(CreateOfferViewModel model)
         {
-            
 
+            
             if (!ModelState.IsValid)
             {
                 return HttpNotFound("fafa");
@@ -544,31 +559,89 @@ namespace Market.Web.Controllers
             {
                 return HttpNotFound("You are not logged in");
             }
-            Game game = _gameService.GetGameByValue(model.Game);
+            
             Offer offer = Mapper.Map<CreateOfferViewModel, Offer>(model);
-            offer.Game = game;
-            offer.Filters = new List<Model.Models.Filter>();
-            offer.FilterItems = new List<FilterItem>();
-            offer.UserProfile = _userProfileService.GetUserProfileById(User.Identity.GetUserId());
-            if(model.FilterValues != null)
+            
+            Game game = _gameService.GetGameByValue(model.Game);
+            var gameFilters = _filterService.GetFilters().Where(f => f.Game == game).ToList();
+            var modelFilters = model.FilterValues;
+            var gameFilterItems = _filterItemService.GetFilterItems().Where(f => f.Filter.Game == game).ToList();
+            var modelFilterItems = model.FilterItemValues;
+            if (game != null && modelFilters.Count() == gameFilters.Count())
             {
-                foreach (var filterValue in model.FilterValues)
+                for (int i = 0; i < gameFilters.Count; i++)
                 {
-                    var filter = _filterService.GetFilters().Where(m => m.Value == filterValue && m.Game.Value == game.Value).FirstOrDefault();
-                    offer.Filters.Add(filter);
-                    _filterService.SaveFilter();
+                    if (gameFilters[i].Value != modelFilters[i])
+                    {
+                        return HttpNotFound("фильтры указаны некорректно");
+                    }
+                    
+                    bool isContainsFilterItems = false;
+                    foreach (var fItem in gameFilters[i].FilterItems)
+                    {
+                        if (fItem.Value == modelFilterItems[i])
+                        {
+                            offer.FilterItems.Add(fItem);
+                            offer.Filters.Add(gameFilters[i]);
+                            isContainsFilterItems = true;
+                        }
+                    }
+                    if (!isContainsFilterItems)
+                    {
+                        return HttpNotFound("фильтры указаны некорректно");
+                    }
+                    isContainsFilterItems = false;
+                    //var gameFilterItems = _filterItemService.GetFilterItems().Where(f => f.Filter == gameFilters[i]).ToList();
+                    //var modelFilterItems = model.FilterItemValues;
+                    //if(gameFilterItems.Count() == modelFilterItems.Count())
+                    //{
+                    //for (int j = 0; j < gameFilterItems.Count; j++)
+                    //{
+                    //    if (gameFilterItems.C != modelFilterItems[j])
+                    //    {
+                    //        return HttpNotFound("фильтры указаны некорректно");
+                    //    }
+                    //}
+                    //}
+
                 }
+                
+
+
+            }
+            //    foreach (var filter in gameFilters)
+            //    {
+            //        foreach (var modelFilterItemValue in model.FilterItemValues)
+            //        {
+            //            foreach (var dbFilterItem in filter.FilterItems)
+            //            {
+            //                if (modelFilterItemValue == dbFilterItem.Value)
+            //                {
+            //                    offer.FilterItems.Add(dbFilterItem);
+            //                    isContainsFilterItems = true;
+            //                    break;
+            //                }
+
+            //            }
+            //            if (!isContainsFilterItems)
+            //            {
+            //                return HttpNotFound("фильтры указаны некорректно");
+            //            }
+            //            isContainsFilterItems = false;
+            //        }
+            //        offer.Filters.Add(filter);
+            //    }
+            //    offer.Game = game;
+            //}
+            else
+            {
+                return HttpNotFound("фильтры указаны некорректно");
             }
 
-            if (model.FilterItemValues != null)
-            {
-                foreach (var filterItemValue in model.FilterItemValues)
-                {
-                    var filterItem = _filterItemService.GetFilterItems().Where(m => m.Value == filterItemValue).FirstOrDefault();
-                    offer.FilterItems.Add(filterItem);
-                    _filterItemService.SaveFilterItem();
-                }
-            }
+
+            offer.Game = game;
+            _filterService.SaveFilter();
+            offer.UserProfile = _userProfileService.GetUserProfileById(User.Identity.GetUserId());
             _offerService.CreateOffer(offer);
             _offerService.SaveOffer();
             //var q2 = from item in offer.FilterItems

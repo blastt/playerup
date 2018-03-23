@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
@@ -15,8 +16,11 @@ namespace Market.Web.ViewModels
         public string[] FilterValues { get; set; }
         public string[] FilterItemValues { get; set; }
         public string Game { get; set; } = "all";
+
         public decimal MinGamePrice { get; set; }
+
         public decimal MaxGamePrice { get; set; }
+
         public decimal PriceFrom { get; set; }
         public decimal PriceTo { get; set; }
         

@@ -295,9 +295,9 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Images\arrow.png" />
+    <Content Include="Content\Images\Csgo\Icons\csgo.png" />
+    <Content Include="Content\Images\Dota2\Icons\dota2.png" />
     <Content Include="Content\Images\payment-methods.png" />
-    <Content Include="Content\Images\Csgo\Icons\large.png" />
-    <Content Include="Content\Images\Csgo\Icons\small.png" />
     <Content Include="Content\Images\Csgo\Ranks\dmg.png" />
     <Content Include="Content\Images\Csgo\Ranks\ge.png" />
     <Content Include="Content\Images\Csgo\Ranks\gn1.png" />
@@ -317,7 +317,6 @@
     <Content Include="Content\Images\Csgo\Ranks\sem.png" />
     <Content Include="Content\Images\Csgo\Ranks\smfc.png" />
     <Content Include="Content\Images\Csgo\Ranks\unranked.png" />
-    <Content Include="Content\Images\Dota2\Icons\small.png" />
     <Content Include="Content\Images\Dota2\Ranks\ancient.png" />
     <Content Include="Content\Images\Dota2\Ranks\archon.png" />
     <Content Include="Content\Images\Dota2\Ranks\crusader.png" />
@@ -353,6 +352,12 @@
     <Content Include="Content\Images\success.png" />
     <Content Include="Content\Images\total-reviews.png" />
     <Content Include="Content\Images\trash.png" />
+    <Content Include="Content\Images\Wot\Ranks\asia.png" />
+    <Content Include="Content\Images\Wot\Ranks\china.png" />
+    <Content Include="Content\Images\Wot\Ranks\europe.png" />
+    <Content Include="Content\Images\Wot\Ranks\korea.png" />
+    <Content Include="Content\Images\Wot\Ranks\russia.png" />
+    <Content Include="Content\Images\Wot\Ranks\usa.png" />
     <Content Include="Content\range-slider.css" />
     <Content Include="Content\Images\Warface\Icons\warface.png" />
     <Content Include="Content\Images\Warframe\Icons\warframe.png" />
@@ -530,6 +535,7 @@
     <Content Include="Views\Moderator\ProvideDataToBuyer.cshtml" />
     <Content Include="Views\Order\BuyDetails.cshtml" />
     <Content Include="Views\Feedback\GiveToSeller.cshtml" />
+    <Content Include="Views\Shared\_NoResults.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

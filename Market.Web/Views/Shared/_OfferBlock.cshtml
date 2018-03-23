@@ -78,25 +78,24 @@
                                     </div>
                                     <div class="col-sm-4 text-center">
                                         <div class="row">
-                                            @foreach (var filter in offer.Filters)
-                                            {
-                                                <div class="col-md-6 text-700 mb-3">
-                                                    <span>@filter.Text</span>
-                                                </div>
-                                            }
-                                            @foreach (var item in offer.FilterItems)
-                                            {
-                                                var url = "../../Content/Images/" + offer.Game.Value + "/Ranks/" + item.Image;
-                                                <div class="col-md-6">
 
-                                                    <img src="@url" style="width:100px" alt="Alternate Text" />
+                                            @foreach (var filter in offer.FilterFilterItem)
+                                            {
+                                                var url = "../../Content/Images/" + offer.Game.Value + "/Ranks/" + filter.Value.Image;
+                                            <div class="col-md-6" style="margin:0 auto;">
+                                                <div class="mb-3">
+                                                    <span class="text-700">@filter.Key.Text</span>
                                                 </div>
+                                                
+                                                <img src="@url" title="@filter.Value.Name" style="width:100px" alt="Alternate Text" />
+                                            </div>
                                             }
+                                            
                                         </div>
                                     </div>
                                     <div class="col-sm-4 text-right">
                                         <div class="mb-2">
-                                            <span id="offer_price" style="font-weight: 400; font-size: 24px">@offer.Price.ToString("0.#####") руб</span>
+                                            <span id="offer_price" style="font-weight: 400; font-size: 24px">@string.Format("{0:n0}", offer.Price) руб</span>
                                         </div>
                                         <div class="mb-2">
                                             @Html.ActionLink("Подробнее", "Details", new { id = offer.Id }, new { @class = "btn btn-details" })
