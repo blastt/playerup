@@ -18,12 +18,37 @@ namespace Market.Web.Helpers
             
             div.MergeAttribute("id", "contentPager");
             div.AddCssClass("page-container");
-            for (int i = 1; i <= pageInfo.TotalPages; i++)
+            int p = 1;
+            if (pageInfo.PageNumber >= 5)
+            {
+                TagBuilder tag = new TagBuilder("button");
+                tag.MergeAttribute("value", "1");
+                tag.MergeAttribute("type", "button");
+                tag.AddCssClass("btn");
+                tag.AddCssClass("btn-default");
+                tag.MergeAttribute("onclick", jsFunctionName + "(" + 1 + ")");
+                tag.InnerHtml = "1";
+                div.InnerHtml += tag;
+                TagBuilder span = new TagBuilder("span");
+                span.AddCssClass(" mr-2");
+                span.InnerHtml = ("...");
+                div.InnerHtml += span;
+                p = pageInfo.PageNumber - 3;
+            }
+            int to = pageInfo.TotalPages;
+            bool lastBtn = false;
+            if ((pageInfo.TotalPages - pageInfo.PageNumber) >= 4)
+            {
+                lastBtn = true;
+                to = pageInfo.PageNumber + 3;
+            }
+            for (int i = p; i <= to; i++)
             {
                 
                 
-                TagBuilder tag = new TagBuilder("btn");
+                TagBuilder tag = new TagBuilder("button");
                 tag.MergeAttribute("value", i.ToString());
+                tag.MergeAttribute("type", "button");
                 tag.AddCssClass("btn");
                 tag.InnerHtml = i.ToString();
                 if (i == pageInfo.PageNumber)
@@ -40,6 +65,23 @@ namespace Market.Web.Helpers
                 }
                 
                 div.InnerHtml += tag;
+                
+            }
+            if (lastBtn)
+            {
+                TagBuilder tag = new TagBuilder("button");
+                tag.MergeAttribute("value", pageInfo.TotalPages.ToString());
+                tag.MergeAttribute("type", "button");
+                tag.AddCssClass("btn");
+                tag.AddCssClass("btn-default");
+                tag.MergeAttribute("onclick", jsFunctionName + "(" + pageInfo.TotalPages + ")");
+                tag.InnerHtml = pageInfo.TotalPages.ToString();
+                TagBuilder span = new TagBuilder("span");
+                span.AddCssClass(" mr-2");
+                span.InnerHtml = ("...");
+                div.InnerHtml += span;
+                div.InnerHtml += tag;
+                
                 
             }
             result.Append(div.ToString());

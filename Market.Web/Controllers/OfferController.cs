@@ -22,7 +22,7 @@ namespace Market.Web.Controllers
         private readonly IGameService _gameService;
         private readonly IFilterService _filterService;
         private readonly IFilterItemService _filterItemService;
-        public int pageSize = 5;
+        public int pageSize = 1;
         public OfferController(IOfferService offerService, IGameService gameService, IFilterService filterService, IFilterItemService filterItemService, IUserProfileService userProfileService)
         {
             _offerService = offerService;

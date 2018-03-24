@@ -33,6 +33,19 @@
         });
 
         function SelectPage(page) {
+            //var pageContainer = $('#contentPager');
+            //if (page > 5) {
+                
+            //    var p = $('<button></button>').addClass('btn-default btn').attr('onclick', 'SelectPage(1)').attr('type', 'button');
+            //    p.text(1);
+            //    pageContainer.prependTo(p);
+            //}
+            //var lastPage = $('button').last().val();
+            //if (page < lastPage - 5) {
+            //    var p = $('<button></button>').addClass('btn-default btn').attr('onclick', 'SelectPage(' + lastPage + ')').attr('type', 'button');
+            //    p.text(lastPage);
+            //    pageContainer.appendTo(p);
+            //}
             $('#page').val(page);
             SearchOffers();
         }
