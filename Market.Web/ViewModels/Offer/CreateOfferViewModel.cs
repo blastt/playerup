@@ -29,12 +29,13 @@ namespace Market.Web.ViewModels
         [Display(Name = "Игра")]
         public string Game { get; set; }
 
-        [Required]
+        
         public string[] FilterValues { get; set; }
 
-        [Required]
+        
         public string[] FilterItemValues { get; set; }
 
+        [Display(Name = "Игра")]
         public IEnumerable<SelectListItem> Games { get; set; }
         public IEnumerable<SelectListItem> Filters { get; set; }
         public IEnumerable<SelectListItem> FilterItems { get; set; }

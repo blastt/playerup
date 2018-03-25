@@ -22,7 +22,7 @@ namespace Market.Web.Controllers
         private readonly IGameService _gameService;
         private readonly IFilterService _filterService;
         private readonly IFilterItemService _filterItemService;
-        public int pageSize = 1;
+        public int pageSize = 4;
         public OfferController(IOfferService offerService, IGameService gameService, IFilterService filterService, IFilterItemService filterItemService, IUserProfileService userProfileService)
         {
             _offerService = offerService;
@@ -540,7 +540,7 @@ namespace Market.Web.Controllers
             
             if (!ModelState.IsValid)
             {
-                return HttpNotFound("fafa");
+                return View(model);
             }
             var userProfile = _userProfileService.GetUserProfileById(User.Identity.GetUserId());
             if (userProfile != null)
@@ -591,48 +591,12 @@ namespace Market.Web.Controllers
                         return HttpNotFound("фильтры указаны некорректно");
                     }
                     isContainsFilterItems = false;
-                    //var gameFilterItems = _filterItemService.GetFilterItems().Where(f => f.Filter == gameFilters[i]).ToList();
-                    //var modelFilterItems = model.FilterItemValues;
-                    //if(gameFilterItems.Count() == modelFilterItems.Count())
-                    //{
-                    //for (int j = 0; j < gameFilterItems.Count; j++)
-                    //{
-                    //    if (gameFilterItems.C != modelFilterItems[j])
-                    //    {
-                    //        return HttpNotFound("фильтры указаны некорректно");
-                    //    }
-                    //}
-                    //}
 
                 }
                 
 
 
             }
-            //    foreach (var filter in gameFilters)
-            //    {
-            //        foreach (var modelFilterItemValue in model.FilterItemValues)
-            //        {
-            //            foreach (var dbFilterItem in filter.FilterItems)
-            //            {
-            //                if (modelFilterItemValue == dbFilterItem.Value)
-            //                {
-            //                    offer.FilterItems.Add(dbFilterItem);
-            //                    isContainsFilterItems = true;
-            //                    break;
-            //                }
-
-            //            }
-            //            if (!isContainsFilterItems)
-            //            {
-            //                return HttpNotFound("фильтры указаны некорректно");
-            //            }
-            //            isContainsFilterItems = false;
-            //        }
-            //        offer.Filters.Add(filter);
-            //    }
-            //    offer.Game = game;
-            //}
             else
             {
                 return HttpNotFound("фильтры указаны некорректно");
@@ -644,75 +608,6 @@ namespace Market.Web.Controllers
             offer.UserProfile = _userProfileService.GetUserProfileById(User.Identity.GetUserId());
             _offerService.CreateOffer(offer);
             _offerService.SaveOffer();
-            //var q2 = from item in offer.FilterItems
-            //         join filter in offer.Filters on item. equals filter.Id
-            //         select new { itemValue = item.Value, filterValue = filter.Value };
-
-
-
-
-
-
-            //if(game.Filters.Count() == model.FilterValues.Count() && game != null)
-            //{
-            //    foreach (var filter in game.Filters)
-            //    {
-            //        var contains = model.FilterValues.Contains(filter.Value);
-            //        if (!contains)
-            //        {
-            //            return HttpNotFound("Filter is not found!");
-            //        }
-            //        else
-            //        {
-            //            var f = game.Filters.FirstOrDefault(m => m.Value == filter.Value);
-
-            //            offer.Filters.Add(f,f.FilterItems.Where(m => m.Value == ));
-
-            //        }
-            //    }
-            //    foreach (var item in model.FilterItemValues)
-            //    {
-            //        var fitems = _filterItemService.GetFilterItems().Where(m => m.Value == item).FirstOrDefault(); ;
-
-            //        offer.FilterItems = fitems.ToList();
-            //    }
-
-            //}
-
-
-
-            //bool isGameExists = model.Games.Any(m => m.Value == model.Game);
-
-            //if (!ModelState.IsValid || !isGameExists || !(bool)(IsSteamLoginExists(model.SteamLogin).Data))
-            //{
-            //    return View(model);
-            //}
-            //Offer offer = Mapper.Map<CreateOfferViewModel, Offer>(model);
-            //UserProfile currentUserProfile = _db.UserProfiles.Get(User.Identity.GetUserId<string>());
-            //if (currentUserProfile != null)
-            //{
-            //    var offer = new Offer
-            //    {
-            //        Game = model.Game,
-            //        UserProfile = currentUserProfile,
-            //        UserProfileId = currentUserProfile.Id,
-            //        Header = model.Header,
-            //        Discription = model.Discription,
-            //        EndDate = DateTime.Now.AddDays(30),
-            //        Price = model.Price,
-            //        Filter = model.Filter,
-            //        SteamLogin = model.SteamLogin,
-            //        StartDate = DateTime.Now
-            //    };
-            //    foreach (var filter in Filters)
-            //    {
-            //        offer.Filter += $"{filter},";
-            //    }
-            //    offer.Filter = offer.Filter.TrimEnd(',');
-            //    currentUserProfile.Offers.Add(offer);
-            //    _db.Offers.Create(offer);
-            //    _db.Save();
-            //}
 
             return RedirectToAction("Buy");
         }

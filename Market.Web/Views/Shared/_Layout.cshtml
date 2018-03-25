@@ -10,8 +10,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title – приложение ASP.NET</title>
     @Styles.Render("~/Content/css")
+   
 
     @Scripts.Render("~/bundles/modernizr")
+    
 
 </head>
 <body>
@@ -19,7 +21,7 @@
     <div class="navbar navbar-expand-lg fixed-top navbar-light bg-light">
         <div class="container">
             <a href="#" class="navbar-brand">
-                <img style="width: 110px" src="~/Content/Images/logo.png" alt="Alternate Text" />
+                <img src="~/Content/Images/logo1.png" alt="Alternate Text" />
             </a>
 
             <div class="collapse navbar-collapse left-bar" id="navbarResponsive">
@@ -34,7 +36,7 @@
                         @Html.ActionLink("Поддержка", "Support", "Some", null, new { @class = "nav-link" })
                     </li>
                     <li class="nav-item">
-                        @Html.ActionLink("FAQ", "Faq", "Some", null, new { @class = "nav-link" })
+                        @Html.ActionLink("FAQ", "Faq", "Help", null, new { @class = "nav-link" })
                     </li>
                 </ul>
 
@@ -49,7 +51,7 @@
         </div>
 
     </div>
-    
+
     @RenderBody()
     <footer class="card-footer">
         <div class="container">
@@ -75,91 +77,35 @@
                     <img src="~/Content/Images/payment-methods.png" width="350" alt="Alternate Text" />
                 </div>
             </div>
-            
+
         </div>
-        
+
     </footer>
 
-    
+
 
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/jqueryval")
     @Scripts.Render("~/bundles/bootstrap")
+    
+    <script src="~/Scripts/Main.js"></script>
     @RenderSection("scripts", required: false)
-    <script>
 
-        $(document).ready(function () {
-            $.ajax({
-                url: '/Order/GetOrdersCount',
-                type: "POST",
-                contentType: "application/json",
-                data: JSON.stringify(),
-                dataType: "json",
-                success: function (response) {
-                    if (response != 0) {
-                        var li = $('#orders');
-                        var div = $('<div></div>'); 
-                        div.text(response);
-                        div.addClass('orders-count');
-                        li.prepend(div);
-                    }
-                }
-            });
-
-            $.ajax({
-                url: '/Message/GetMessagessCount',
-                type: "POST",
-                contentType: "application/json",
-                data: JSON.stringify(),
-                dataType: "json",
-                success: function (response) {
-                    if (response != 0) {
-                        var li = $('#messagess');
-                        var div = $('<div></div>');
-                        div.text(response);
-                        div.addClass('messagess-count');
-                        li.prepend(div);
-                    }
-                }
-            });
-        })
-        $(document).ready(function () {
-            //$(".nav-item a").each(function () {
-
-            //    if (this.href == window.location.href) {
-            //        $(this.parentNode).addClass("current");
-            //    }
-            //});
-            $("#account-list a").each(function () {
-                
-                if (this.href.split('/', 4)[3] == window.location.href.split('/', 4)[3]) {
-                    $(this.parentNode).addClass("active");
-                }
-            });
-            $("#account-inner-list a").each(function () {
-                if (this.href == window.location.href) {
-
-                    $(this).addClass("active");
-                }
-            });
-
-        });
-    </script>
     @*<script>
-        window.addEventListener('offline', function (e) { console.log('offline'); });
+            window.addEventListener('offline', function (e) { console.log('offline'); });
 
-        window.addEventListener('online', function (e) { console.log('online'); });
-        window.onunload = function () {
-            $.get("/Offer/SetOffLineStatus", null, function () { });
-        }
-        if (navigator.onLine) {
+            window.addEventListener('online', function (e) { console.log('online'); });
+            window.onunload = function () {
+                $.get("/Offer/SetOffLineStatus", null, function () { });
+            }
+            if (navigator.onLine) {
 
 
-            $.get("/Offer/SetOnLineStatus", null, function () { });
+                $.get("/Offer/SetOnLineStatus", null, function () { });
 
-        }
+            }
 
-    </script>*@
+        </script>*@
 </body>
 </html>

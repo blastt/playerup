@@ -235,6 +235,7 @@
     <Compile Include="Controllers\CheckoutController.cs" />
     <Compile Include="Controllers\FeedbackController.cs" />
     <Compile Include="Controllers\GodController.cs" />
+    <Compile Include="Controllers\HelpController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\MessageController.cs" />
@@ -288,6 +289,7 @@
     <Compile Include="ViewModels\UserProfile\UserProfileViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\Accordion.css" />
     <Content Include="Content\bootstrap-grid.css" />
     <Content Include="Content\bootstrap-grid.min.css" />
     <Content Include="Content\bootstrap-reboot.css" />
@@ -297,6 +299,9 @@
     <Content Include="Content\Images\arrow.png" />
     <Content Include="Content\Images\Csgo\Icons\csgo.png" />
     <Content Include="Content\Images\Dota2\Icons\dota2.png" />
+    <Content Include="Content\Images\Hearthstone\Ranks\asia.png" />
+    <Content Include="Content\Images\Hearthstone\Ranks\europe.png" />
+    <Content Include="Content\Images\logo1.png" />
     <Content Include="Content\Images\payment-methods.png" />
     <Content Include="Content\Images\Csgo\Ranks\dmg.png" />
     <Content Include="Content\Images\Csgo\Ranks\ge.png" />
@@ -369,10 +374,13 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Scripts\Accordion.js" />
+    <Content Include="Scripts\AccountMenu.js" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\CreateOffer.js" />
     <Content Include="Scripts\Custom.js" />
     <Content Include="Scripts\esm\popper-utils.js" />
     <Content Include="Scripts\esm\popper-utils.min.js" />
@@ -410,6 +418,7 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\Main.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\popper-utils.js" />
     <Content Include="Scripts\popper-utils.min.js" />
@@ -423,6 +432,7 @@
     <Content Include="Scripts\umd\popper-utils.min.js" />
     <Content Include="Scripts\umd\popper.js" />
     <Content Include="Scripts\umd\popper.min.js" />
+    <Content Include="Scripts\UserInfo.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -536,6 +546,12 @@
     <Content Include="Views\Order\BuyDetails.cshtml" />
     <Content Include="Views\Feedback\GiveToSeller.cshtml" />
     <Content Include="Views\Shared\_NoResults.cshtml" />
+    <Content Include="Views\Help\Faq.cshtml" />
+    <Content Include="Views\Shared\_FaqRegistration.cshtml" />
+    <Content Include="Views\Shared\_FaqBuy.cshtml" />
+    <Content Include="Views\Shared\_FaqSell.cshtml" />
+    <Content Include="Views\Shared\_FaqOrder.cshtml" />
+    <Content Include="Views\Shared\_FaqAccount.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

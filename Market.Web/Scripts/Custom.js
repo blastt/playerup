@@ -14,7 +14,153 @@
 
 
 //------
+$(document).ready(function () {
+    ResetOffers();
+});
 
+function SelectPage(page) {
+
+    $('#page').val(page);
+    SearchOffers();
+}
+function ChangeGame(game) {
+    $('#game').val(game);
+
+    ResetOffers();
+}
+
+function SearchOffers() {
+
+    var g = $('#game').val();
+    var filterItemValues = [];
+    $(".selsel").each(function () {
+        filterItemValues.push($(this).val());
+    });
+    var filterValues = [];
+    $(".selselsel").each(function () {
+        filterValues.push($(this).val());
+    });
+    var message = {
+        "page": $('#page').val(),
+        "sort": $('#sort').val(),
+        "isOnline": $('#isOnline').is(':checked'),
+        "searchInDiscription": $('#searchInDiscription').is(':checked'),
+        "searchString": $('#searchString').val(),
+        "filterItemValues": filterItemValues,
+        "filterValues": filterItemValues,
+        "game": g,
+        "priceFrom": $('#priceFrom').val(),
+        "priceTo": $('#priceTo').val()
+    };
+    $.ajax({
+        url: '/Offer/List',
+        type: "POST",
+        contentType: "application/json",
+        data: JSON.stringify({ searchInfo: message }),
+        dataType: "html",
+        beforeSend: function () {
+            $('#loader').show();
+            $('#loader').animate({ opacity: '0.7' }, 400);
+
+
+
+        },
+        success: function (response) {
+            var s = $('#sort').val();
+
+            $('#list').html(response);
+            $(".game-filter-item").each(function (index) {
+                if (this.dataset.game === g) {
+                    $(this).addClass("active");
+                    return;
+                }
+
+            });
+            var urlPath = Router.action('Offer', 'Buy', { game: g });
+            window.history.pushState({ "html": response.html, "pageTitle": response.pageTitle }, "", urlPath);
+            $('#loader').animate({ opacity: '0.0' }, 400, "", function () {
+                $('#loader').hide();
+            });
+
+
+
+
+
+            if (typeof s !== "undefined") {
+                $('#sort').val(s);
+            }
+
+
+            slider();
+
+            //SelectFilterItem(g, false);
+        },
+        error: function () {
+            alert("fff");
+        }
+    });
+}
+
+function ResetOffers() {
+
+    var g = $('#game').val();
+    var filterItemValues = [];
+    $(".selsel").each(function () {
+        filterItemValues.push($(this).val());
+    });
+    var filterValues = [];
+    $(".selselsel").each(function () {
+        filterValues.push($(this).val());
+    });
+    var message = {
+        "page": 1,
+        "sort": "bestSeller",
+        "isOnline": false,
+        "searchInDiscription": false,
+        "searchString": "",
+        "filterItemValues": "all",
+        "filterValues": "all",
+        "game": g
+    };
+    $.ajax({
+        url: '/Offer/List',
+        type: "POST",
+        contentType: "application/json",
+        data: JSON.stringify({ searchInfo: message }),
+        dataType: "html",
+        beforeSend: function () {
+            $('#loader').show();
+            $('#loader').animate({ opacity: '0.7' }, 400);
+
+        },
+        success: function (response) {
+
+            $('#list').html(response);
+            $(".game-filter-item").each(function (index) {
+
+                if (this.dataset.game === g) {
+
+                    $(this).addClass("active");
+                    return;
+                }
+
+            });
+            var currentPath = window.location.href.split('/');
+            var urlPath = Router.action('Offer', 'Buy', { game: g });
+            window.history.pushState({ "html": response.html, "pageTitle": response.pageTitle }, "", urlPath);
+            $('#loader').animate({ opacity: '0.0' }, 400, "", function () {
+                $('#loader').hide();
+            });
+
+            slider();
+
+            //SelectFilterItem(g, false);
+        },
+        error: function () {
+            alert("fff");
+        }
+    });
+}
 
 function getVals() {
     // Get slider values

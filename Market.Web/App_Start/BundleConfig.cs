@@ -27,6 +27,12 @@ namespace Market.Web
                       "~/Content/bootstrap.css",
                       "~/Content/site.css"));
 
+            bundles.Add(new StyleBundle("~/Content/accordion").Include(
+                      "~/Content/Accordion.css"));
+
+            bundles.Add(new StyleBundle("~/bundles/accordion").Include(
+                      "~/Scripts/Accordion.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/jquery-ui").Include(
                       "~/Scripts/jquery-ui.js"));
 
