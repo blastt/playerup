@@ -209,20 +209,29 @@ ul {
 }
 
 .filter-price-from {
-    width: 100px;
-    float: left;
+    position: relative;
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 45%;
+    flex: 0 0 45%;
+    max-width: 45%;
     font-weight: 700
 }
 
 .filter-price-to {
-    width: 100px;
-    float: left;
+    position: relative;
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 45%;
+    flex: 0 0 45%;
+    max-width: 45%;
     font-weight: 700
 }
 
 .filter-price-separartor {
-    width: 17px;
-    float: left;
+    position: relative;
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 10%;
+    flex: 0 0 10%;
+    max-width: 10%;
     text-align: center;
     line-height: 30px
 }
@@ -642,7 +651,7 @@ div#users-contain {
 }
 
 .set-viewed-icon {
-    background-color: #62b2e2;
+    background-color: red;
     height: 10px;
     width: 10px;
     border-radius: 50%;
@@ -656,9 +665,6 @@ div#users-contain {
     border-radius: 50%;
 }
 
-.set-viewed-icon:hover {
-    background-color: rgba(98, 178, 226, 0.42);
-}
 
 .set-viewed-link {
 }
@@ -669,6 +675,7 @@ div#users-contain {
 }
 
 .set-viewed-td {
+    padding-left: 10px;
     max-width: 10px;
     padding-right: 0px;
 }
@@ -1267,8 +1274,8 @@ dl dd a{
     padding: 20px
 }
 
-.warning-row{
-    background-color: #ffcc9a
+.warning-row {
+    background-color: #fffabe
 }
 
 .orders-count {
@@ -1378,4 +1385,9 @@ dl dd a{
 .details-user-feedback {
     margin-top: 10px;
     margin-bottom: 10px;
+}
+
+.price-container {
+    margin-right: 0px;
+    margin-left: 0px;
 }

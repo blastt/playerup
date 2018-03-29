@@ -17,6 +17,8 @@
             @{Html.RenderAction("AccountMenu", "Account"); }
             <div class="account-offer-container">
                 @{Html.RenderPartial("_AccountOrdersMenu"); }
+
+                
                 <table class="table table-hover">
                     <tr>
                         <th>Предложение</th>
@@ -27,12 +29,20 @@
                     </tr>
                     @foreach (var order in Model.Orders)
                     {
-                        var cls = "";
+                        var clsBold = "";
                         if (!order.SellerChecked)
                         {
-                            cls = "warning-row";
+                            clsBold = "font-weight-bold warning-row";
                         }
-                        <tr class="@cls">
+
+                        <tr id="message-row-@order.Id" class="@clsBold">
+                            <td class="clickable  set-viewed-td" data-id="@order.Id">
+                                @if (!order.SellerChecked)
+                                {
+                                    <div class="set-viewed-icon"></div>
+
+                                }
+                            </td>
                             <td>@order.OfferHeader</td>
                             <td>@order.BuyerName</td>
                             <td>@order.OfferPrice</td>

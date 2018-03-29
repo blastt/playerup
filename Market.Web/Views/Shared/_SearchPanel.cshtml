@@ -34,8 +34,8 @@
                         <label class="filter-label">
                             <span>ЦЕНА</span>
                         </label>
-                        <div class="price-slider">
-                            <div class="filter-price">
+                    
+                            <div class="price-container row">
                                 <div class="filter-price-from">
                                     @Html.TextBox("PriceFrom", Math.Round(Model.PriceFrom, 0), new { @class = "form-control form-control-sm", id = "priceFrom" })
 
@@ -55,7 +55,7 @@
                                 <input value="@Math.Round(Model.PriceFrom, 0)" min="@Math.Round(Model.MinGamePrice, 0)" max="@Math.Round(Model.MaxGamePrice, 0)" step="1" type="range">
                                 <input value="@Math.Round(Model.PriceTo, 0)" min="@Math.Round(Model.MinGamePrice, 0)" max="@Math.Round(Model.MaxGamePrice, 0)" step="1" type="range">
                             </section>
-                        </div>
+                       
                         <div id="slider_price"></div>
                     </div>
                 </div>

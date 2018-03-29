@@ -61,6 +61,7 @@
     <Compile Include="Configuration\MessageConfiguration.cs" />
     <Compile Include="Configuration\OfferConfiguration.cs" />
     <Compile Include="Configuration\OrderConfiguration.cs" />
+    <Compile Include="Configuration\OrderStatusConfiguration.cs" />
     <Compile Include="Configuration\UserProfileConfiguration.cs" />
     <Compile Include="Infrastructure\DBFactory.cs" />
     <Compile Include="Infrastructure\Disposable.cs" />

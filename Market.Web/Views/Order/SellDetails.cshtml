@@ -22,7 +22,7 @@
                             <label>Предложение (Оффер)</label>
                         </div>
                         <div class="order-details-col col-md-8">
-                            <span>@Model.OfferHeader</span>
+                            <span>@Html.ActionLink(Model.OfferHeader, "Details", "Offer", new { id = Model.OfferId }, null)</span>
                         </div>
                     </div>
                     <div class="order-details-row row">
@@ -30,7 +30,7 @@
                             <label>Покупатель</label>
                         </div>
                         <div class="order-details-col col-md-8">
-                            <span>@Model.BuyerName</span>
+                            <span>@Html.ActionLink(Model.BuyerName, "Info", "Profile", new { id = Model.BuyerId }, null)</span>
                         </div>
                     </div>
                     <div class="order-details-row row">

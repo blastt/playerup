@@ -36,6 +36,7 @@ namespace Market.Model.Models
         public bool SellerChecked { get; set; }
 
         public virtual Offer Offer { get; set; }
+        public IEnumerable<OrderStatus> OrderStatuses { get; set; }
 
         public virtual string ModeratorId { get; set; }
         public virtual UserProfile Moderator { get; set; }

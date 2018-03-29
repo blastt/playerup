@@ -19,6 +19,7 @@
                 @{Html.RenderPartial("_AccountOrdersMenu"); }
                 <table class="table table-hover">
                     <tr>
+                        <th></th>
                         <th>Предложение</th>
                         <th>Продавец</th>
                         <th>Цена</th>
@@ -27,12 +28,20 @@
                     </tr>
                     @foreach (var order in Model.Orders)
                     {
-                        var cls = "";
+                        var clsBold = "";
                         if (!order.BuyerChecked)
                         {
-                            cls = "warning-row";
+                            clsBold = "font-weight-bold warning-row";
                         }
-                        <tr class="@cls">
+
+                        <tr id="message-row-@order.Id" class="@clsBold">
+                            <td class="clickable  set-viewed-td" data-id="@order.Id">
+                                @if (!order.BuyerChecked)
+                                {
+                                    <div class="set-viewed-icon"></div>
+
+                                }
+                            </td>
                             <td>@order.OfferHeader</td>
                             <td>@order.SellerName</td>
                             <td>@order.OfferPrice</td>
@@ -47,3 +56,4 @@
 
     </div>
 </div>
+

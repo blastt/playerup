@@ -85,14 +85,14 @@
                         var clsBold = "";
                         if (!messageGroup.IsViewed)
                         {
-                            clsBold = "font-weight-bold";
+                            clsBold = "font-weight-bold warning-row";
                         }
 
                         <tr id="message-row-@messageGroup.Id" class="@clsBold">
-                            <td class="set-viewed-td">
+                            <td class="clickable  set-viewed-td" data-id="@messageGroup.Id">
                                 @if (!messageGroup.IsViewed)
                                 {
-                                    <a class="set-viewed-link"><div data-id="@messageGroup.Id" class="set-viewed-icon"></div></a>
+                                    <div  class="set-viewed-icon"></div>
 
                                 }
                             </td>
