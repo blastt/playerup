@@ -32,7 +32,16 @@
   --breakpoint-lg: 992px;
   --breakpoint-xl: 1200px;
   --font-family-sans-serif: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-  --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  --font-family-monospace: SFMono-Reg
+      
+      
+      
+      
+      
+      
+      
+      
+      ar, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
 *,
@@ -86,7 +95,7 @@ h1, h2, h3, h4, h5, h6 {
 
 p {
   margin-top: 0;
-  margin-bottom: 0rem;
+  margin-bottom: 1rem;
 }
 
 abbr[title],
@@ -107,8 +116,9 @@ address {
 ol,
 ul,
 dl {
-  margin-top: 0;
-  margin-bottom: 1rem;
+    margin-top: 0;
+    padding-left: 0px;
+    margin-bottom: 1rem;
 }
 
 ol ol,
@@ -116,6 +126,8 @@ ul ul,
 ol ul,
 ul ol {
   margin-bottom: 0;
+  
+  
 }
 
 dt {

@@ -9,67 +9,48 @@
 <div class="container">
     <div class="main-block">
         <div class="row">
-            <div class="col-md-8">
-                <div class="offer-full-block" style="height: 300px">
-                    <div class="seller-details">
-                        <img class="img-circle" src="@Url.Action("Photo", "Profile", new { UserId = Model.UserProfile.Id })" alt="Alternate Text" style="width:80px; height:80px" />
+            <div class="col-md-3">
+                <div class="details-user-block">
+                    <img class="img-circle" src="@Url.Action("Photo", "Profile", new { UserId = Model.UserProfile.Id })" alt="Alternate Text" style="width:80px; height:80px" />
 
-
-                        <ul class="ul-seller-info">
-                            <li>
-                                @Html.ActionLink(Model.UserProfile.ApplicationUser.UserName, "Info", "Profile", new { prof = Model.UserProfile.ApplicationUser.UserName }, null)
-                            </li>
-                            <li>
-                                Рейтинг <span style="font-weight:700">@Model.UserProfile.Rating</span>
-                            </li>
-                            <li>
-                                <input id="contact" type="button" value="Связаться" class="btn btn-info" />
-
-                            </li>
-                            <li>
-                                @if (Model.UserProfile.IsOnline)
-                                {
-                                    <span class="badge badge-pill badge-light">Online</span>
-                                }
-                                else
-                                {
-                                    <span class="badge badge-pill badge-dark">Offline</span>
-                                }
-                            </li>
-                        </ul>
-
-
-                        <table style="margin:auto; width: 100px">
-                            <tr>
-                                <td align="center">
-                                    <div class="feedback-score-pos">
-                                        <i class="info-rate-line icon-smile-pos-green icon-info-rate"></i>
-                                    </div>
-                                </td>
-
-                                <td align="center">
-                                    <div class="feedback-score-neg">
-                                        <i class="info-rate-line icon-smile-pos-green icon-info-rate"></i>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    @Model.UserProfile.Positive
-                                </td>
-                                <td>
-                                    @Model.UserProfile.Negative
-                                </td>
-                            </tr>
-                        </table>
+                    <div class="details-user-name-contact">
+                        <div class="row">
+                            <div class="col-lg-6 details-user-block-name">
+                                @Model.UserProfile.Name
+                            </div>
+                            <div class="col-lg-6 details-user-block-contact">
+                                <input id="contact" type="button" value="Связаться" class="btn-contact" />
+                                @Html.HiddenFor(m => m.UserProfile.Id)
+                            </div>
+                        </div>
                     </div>
 
-
-
-
-
-                    <div class="offer-details">
-                        <ul class="ul-details">
+                    <div class="details-user-rate-date">
+                        <div class="row">
+                            <div class="col-sm-5 details-user-block-rate">Рейтинг: <span class="text-700">@Model.UserProfile.Rating</span></div>
+                            <div class="col-sm-7 details-user-block-date">
+                                Зарегистрирован @Model.UserProfile.RegistrationDate.ToShortDateString()
+                            </div>
+                        </div>
+                    </div>
+                    <div class="details-user-feedback">
+                        <div class="row">
+                            <div class="col-sm-6 text-left">
+                                <i class="info-rate-line icon-smile-pos-green icon-info-rate"></i>
+                                <span class="feedbacks-counter text-700">@Model.UserProfile.Positive</span>
+                            </div>
+                            <div class="col-sm-6 text-right">
+                                <i class="info-rate-line icon-smile-neg-gray icon-info-rate"></i>
+                                <span class="feedbacks-counter text-700">@Model.UserProfile.Negative</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+            <div class="col-md-5">                
+                    <div class="details-offer-block">
+                        <ul>
                             <li class="li-details">
                                 <label class="label-details">Игра</label>
                                 @Html.DisplayFor(m => m.Game.Name)
@@ -102,23 +83,9 @@
                                     </div>
                                 }
                             </div>
-
                         </div>
-
-
-
                     </div>
-
-
-
                 </div>
-
-
-
-            </div>
-
-
-
 
             <div class="col-md-4">
                 <div class="offer-description-block" style="height: 300px">
@@ -126,7 +93,7 @@
                         <h3>@Html.DisplayFor(m => m.Price)</h3>
                     </div>
                     <div style="text-align:center">
-                        @Html.ActionLink("Купить", "Pay", "Checkout", new { offerId = Model.Id, sellerId = Model.UserProfile.Id },null );
+                        @Html.ActionLink("Купить", "Pay", "Checkout", new { offerId = Model.Id, sellerId = Model.UserProfile.Id }, null);
                         @using (Html.BeginForm("Pay", "Checkout"))
                         {
                             @Html.HiddenFor(m => m.Id)
@@ -165,17 +132,7 @@
         @Html.Action("FeedbackList", "Feedback", new { page = 1, receiverId = Model.UserProfile.Id, filter = "all" })
 
     </div>
-    @using (Html.BeginForm("Give", "Feedback", new { }, FormMethod.Get, null))
-    {
-        <input type="hidden" name="senderId" value="@Model.UserProfile.Id" />
-        <input type="hidden" name="id" value="@Model.Id" />
-        <input class="btn btn-success" type="submit" value="Оставить отзыв" />
-    }
-
-    @*@if (ViewBag.CurrentProfileOffers != null && ((ICollection<Offer>)ViewData["Offers"]).Contains(Model.))
-        {*@
-    @Html.ActionLink("Редактировать", "Edit", "Offer", new { id = Model.Id }, null)
-    @*}*@
+    
 </div>
 
 

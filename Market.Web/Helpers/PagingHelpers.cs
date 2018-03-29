@@ -21,9 +21,9 @@ namespace Market.Web.Helpers
             int p = 1;
             if (pageInfo.PageNumber >= 5)
             {
-                TagBuilder tag = new TagBuilder("button");
+                TagBuilder tag = new TagBuilder("a");
                 tag.MergeAttribute("value", "1");
-                tag.MergeAttribute("type", "button");
+                tag.MergeAttribute("href", "#game-title");
                 tag.AddCssClass("btn");
                 tag.AddCssClass("btn-default");
                 tag.MergeAttribute("onclick", jsFunctionName + "(" + 1 + ")");
@@ -46,9 +46,9 @@ namespace Market.Web.Helpers
             {
                 
                 
-                TagBuilder tag = new TagBuilder("button");
+                TagBuilder tag = new TagBuilder("a");
                 tag.MergeAttribute("value", i.ToString());
-                tag.MergeAttribute("type", "button");
+                tag.MergeAttribute("href", "#game-title");
                 tag.AddCssClass("btn");
                 tag.InnerHtml = i.ToString();
                 if (i == pageInfo.PageNumber)
@@ -69,9 +69,9 @@ namespace Market.Web.Helpers
             }
             if (lastBtn)
             {
-                TagBuilder tag = new TagBuilder("button");
+                TagBuilder tag = new TagBuilder("a");
                 tag.MergeAttribute("value", pageInfo.TotalPages.ToString());
-                tag.MergeAttribute("type", "button");
+                tag.MergeAttribute("href", "#game-title");
                 tag.AddCssClass("btn");
                 tag.AddCssClass("btn-default");
                 tag.MergeAttribute("onclick", jsFunctionName + "(" + pageInfo.TotalPages + ")");
