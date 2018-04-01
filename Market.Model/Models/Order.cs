@@ -10,12 +10,11 @@ namespace Market.Model.Models
 {
     public enum Status
     {
-        [Description("Foo")]
+        
         OrderCreated,
         SellerProviding,
         AdminChecking,
-        BuyerConfirming,
-        [Description("Foo")]
+        BuyerConfirming,        
         PayingToSeller,
         ClosedSeccessfuly,
         ColsedFelure,
@@ -27,8 +26,6 @@ namespace Market.Model.Models
     public class Order
     {
         public int Id { get; set; }
-        public Status OrderStatus { get; set; }
-
         public bool BuyerFeedbacked { get; set; }
         public bool SellerFeedbacked { get; set; }
 
@@ -36,7 +33,8 @@ namespace Market.Model.Models
         public bool SellerChecked { get; set; }
 
         public virtual Offer Offer { get; set; }
-        public IEnumerable<OrderStatus> OrderStatuses { get; set; }
+
+        public virtual ICollection<OrderStatus> OrderStatuses { get; set; } = new List<OrderStatus>();
 
         public virtual string ModeratorId { get; set; }
         public virtual UserProfile Moderator { get; set; }
@@ -48,6 +46,6 @@ namespace Market.Model.Models
 
         public virtual AccountInfo AccountInfo { get; set; }
 
-        public DateTime? DateCreated { get; set; } = DateTime.Now;
+        public DateTime DateCreated { get; set; } = DateTime.Now;
     }
 }

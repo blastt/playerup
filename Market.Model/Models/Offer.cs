@@ -24,7 +24,7 @@ namespace Market.Model.Models
         public int Views { get; set; }
 
         [Display(Name = "Дата создания")]
-        public DateTime? DateCreated { get; set; } = DateTime.Now;
+        public DateTime DateCreated { get; set; } = DateTime.Now;
         public DateTime? DateDeleted { get; set; }
 
 

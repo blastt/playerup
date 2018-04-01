@@ -10,8 +10,11 @@ namespace Market.Model.Models
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public string FinisedName { get; set; }
         public string Value { get; set; }
+        public DateTime? DateFinished { get; set; }
 
-        public IEnumerable<Order> Orders { get; set; }
+        public virtual Order Order { get; set; }
+        public virtual int OrderId { get; set; }
     }
 }

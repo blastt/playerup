@@ -9,7 +9,7 @@ namespace Market.Web.ViewModels
     public class DetailsOrderViewModel
     {
         public int Id { get; set; }
-        public Status OrderStatus { get; set; }
+        public virtual ICollection<OrderStatus> OrderStatuses { get; set; } = new List<OrderStatus>();
         //public bool IsFeedbacked { get; set; }
 
         public string OfferHeader { get; set; }
@@ -27,6 +27,8 @@ namespace Market.Web.ViewModels
 
         public string SellerId { get; set; }
         public string SellerName { get; set; }
+
+        public AccountInfo AccountInfo { get; set; }
 
         public DateTime DateCreated { get; set; }
     }

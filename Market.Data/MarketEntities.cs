@@ -61,5 +61,6 @@ namespace Marketplace.Data
         public virtual DbSet<Filter> Filters { get; set; }
         public virtual DbSet<FilterItem> FilterItems { get; set; }
         public virtual DbSet<AccountInfo> AccountInfos { get; set; }
+        public virtual DbSet<OrderStatus> OrderStatuses { get; set; }
     }
 }

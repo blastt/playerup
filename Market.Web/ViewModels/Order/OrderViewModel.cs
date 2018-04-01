@@ -9,7 +9,7 @@ namespace Market.Web.ViewModels
     public class OrderViewModel
     {
         public int Id { get; set; }
-        public Status OrderStatus { get; set; }
+        public ICollection<OrderStatus> OrderStatuses { get; set; } = new List<OrderStatus>();
         //public bool IsFeedbacked { get; set; }
 
         public bool BuyerChecked { get; set; }

@@ -95,6 +95,7 @@ namespace Market.Web.Mappings
                 .ForMember(o => o.BuyerFeedbacked, map => map.MapFrom(vm => vm.BuyerFeedbacked))
                 .ForMember(o => o.SellerFeedbacked, map => map.MapFrom(vm => vm.SellerFeedbacked))
                 .ForPath(o => o.Id, map => map.MapFrom(vm => vm.Id))
+                .ForMember(o => o.AccountInfo, map => map.MapFrom(vm => vm.AccountInfo))
                 .ForMember(o => o.BuyerId, map => map.MapFrom(vm => vm.BuyerId))
                 .ForMember(o => o.SellerId, map => map.MapFrom(vm => vm.SellerId))
                 .ForPath(o => o.BuyerName, map => map.MapFrom(vm => vm.Buyer.Name))

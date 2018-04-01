@@ -107,6 +107,22 @@
     <Compile Include="Migrations\201803201815293_orderViewed.Designer.cs">
       <DependentUpon>201803201815293_orderViewed.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201803292159472_OrderStatus.cs" />
+    <Compile Include="Migrations\201803292159472_OrderStatus.Designer.cs">
+      <DependentUpon>201803292159472_OrderStatus.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803292211317_OrderStatusNew.cs" />
+    <Compile Include="Migrations\201803292211317_OrderStatusNew.Designer.cs">
+      <DependentUpon>201803292211317_OrderStatusNew.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803301705329_OrderStatus1.cs" />
+    <Compile Include="Migrations\201803301705329_OrderStatus1.Designer.cs">
+      <DependentUpon>201803301705329_OrderStatus1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803311536327_datefinished.cs" />
+    <Compile Include="Migrations\201803311536327_datefinished.Designer.cs">
+      <DependentUpon>201803311536327_datefinished.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\AccountInfoRepository.cs" />
@@ -117,6 +133,7 @@
     <Compile Include="Repositories\MessageRepository.cs" />
     <Compile Include="Repositories\OfferRepository.cs" />
     <Compile Include="Repositories\OrderRepository.cs" />
+    <Compile Include="Repositories\OrderStatusRepository.cs" />
     <Compile Include="Repositories\UserProfileRepository.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -156,6 +173,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201803201815293_orderViewed.resx">
       <DependentUpon>201803201815293_orderViewed.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803292159472_OrderStatus.resx">
+      <DependentUpon>201803292159472_OrderStatus.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803292211317_OrderStatusNew.resx">
+      <DependentUpon>201803292211317_OrderStatusNew.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803301705329_OrderStatus1.resx">
+      <DependentUpon>201803301705329_OrderStatus1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803311536327_datefinished.resx">
+      <DependentUpon>201803311536327_datefinished.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

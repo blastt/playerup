@@ -1202,6 +1202,10 @@ i {
     font-weight: 700
 }
 
+.text-300 {
+    font-weight: 300
+}
+
 .btn-buy {
     border-radius: 10px;
     background-color: #62b2e2;
@@ -1267,11 +1271,9 @@ dl dd a{
 }
 
 
-.order-details-head {
-    padding: 20px
-}
 .order-details-body{
-    padding: 20px
+    padding: 20px;
+    padding-top:0px;
 }
 
 .warning-row {
@@ -1390,4 +1392,93 @@ dl dd a{
 .price-container {
     margin-right: 0px;
     margin-left: 0px;
+}
+
+.order-details-node {
+    min-height: 120px;
+    font-size: 14px;
+    position: relative;
+    float: left;
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 16%;
+    flex: 0 0 16%;
+    width: 16%;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #a9a9a9
+}
+
+.order-details-head {
+    padding: 20px;
+}
+
+
+.order-details-log-head {
+    padding: 20px;
+
+}
+
+.order-details-log-body {
+    min-height: 150px;
+    padding: 20px;
+    padding-top: 0px;
+}
+
+.node-name {
+    padding-left: 25px;
+    margin-bottom: 10px;
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 100%;
+    flex: 0 0 100%;
+    max-width: 100%;
+    font-weight: 700
+}
+
+.node-date {
+    padding-left: 25px;
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 100%;
+    flex: 0 0 100%;
+    max-width: 100%;
+}
+
+.node-circle {
+    margin-left: 0px;
+    
+   bottom: -9px;
+
+    position: absolute;
+    vertical-align:bottom;
+    font-size: 12px;
+    line-height: 16px;
+    width: 18px;
+    height: 18px;
+    color: white;
+    text-align: center;
+    border-radius: 50px;
+    background-color: #62b2e2;
+}
+
+.order-details-title {
+    margin-bottom: 10px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1)
+}
+
+.btn-leavefeedback {
+    border: 1px solid #46b764;
+    border-radius: 0px;
+    color: #46b764;
+    padding: 3px 6px;
+    background-color: transparent
+}
+
+.btn-provide {
+    border: 1px solid #62b2e2;
+    border-radius: 0px;
+    color: #62b2e2;
+    padding: 3px 6px;
+    background-color: transparent
+}
+
+.form-offer-filter {
+    padding: 20px;
 }

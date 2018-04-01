@@ -17,10 +17,11 @@ namespace Market.Web.Controllers.Moderator
         private readonly IOrderService _orderService;
         private readonly IAccountInfoService _accountInfoService;
         private readonly IUserProfileService _userProfileService;
-
-        public ModeratorController(IOrderService orderService, IAccountInfoService accountInfoService, IUserProfileService userProfileService)
+        private readonly IOrderStatusService _orderStatusService;
+        public ModeratorController(IOrderService orderService, IAccountInfoService accountInfoService, IUserProfileService userProfileService, IOrderStatusService orderStatusService)
         {
             _orderService = orderService;
+            _orderStatusService = orderStatusService;
             _accountInfoService = accountInfoService;
             _userProfileService = userProfileService;
         }
@@ -32,7 +33,18 @@ namespace Market.Web.Controllers.Moderator
 
         public ActionResult OrderList()
         {
-            var orders = _orderService.GetOrders().Where(o => o.OrderStatus == Status.OrderCreated);
+           
+            var orders = new List<Order>();//.Where(o => o.OrderStatus == Status.OrderCreated);
+
+            foreach (var order in _orderService.GetOrders())
+            {
+                var currentOrderStatus = order.OrderStatuses.OrderBy(o => o.DateFinished).LastOrDefault();
+
+                if (currentOrderStatus.Value == "adminWating")
+                {
+                    orders.Add(order);
+                }
+            }
             var ordersViewModel = Mapper.Map<IEnumerable<Order>, IEnumerable<OrderViewModel>>(orders);
             OrderListViewModel model = new OrderListViewModel
             {
@@ -58,15 +70,30 @@ namespace Market.Web.Controllers.Moderator
             if(orderId != null)
             {
                 var order = _orderService.GetOrder(orderId.Value);
-                if(order != null && order.OrderStatus == Model.Models.Status.OrderCreated)
+                var currentOrderStatus = order.OrderStatuses.OrderBy(o => o.DateFinished).LastOrDefault();
+                if (currentOrderStatus != null)
                 {
-                    order.BuyerChecked = false;
-                    order.SellerChecked = false;
-                    order.OrderStatus = Model.Models.Status.SellerProviding;
-                    order.ModeratorId = User.Identity.GetUserId();
-                    _orderService.SaveOrder();
-                    return RedirectToAction("MyOrderList");
+                    if (order != null && currentOrderStatus.Value == "adminWating")
+                    {
+                        OrderStatus orderStatus = new OrderStatus
+                        {
+                            Value = "sellerProviding",
+                            Name = "Продавец предоставляет информацию гаранту",
+                            FinisedName = "Гарант найден",
+                            DateFinished = DateTime.Now
+                        };
+                        
+                        order.BuyerChecked = false;
+                        order.SellerChecked = false;
+                        order.OrderStatuses.Add(orderStatus);
+                        order.ModeratorId = User.Identity.GetUserId();
+                        _orderService.SaveOrder();
+                        return RedirectToAction("MyOrderList");
+                        
+                        
+                    }
                 }
+                
                
             }
             
@@ -109,18 +136,40 @@ namespace Market.Web.Controllers.Moderator
                     var buyer = _userProfileService.GetUserProfileById(model.BuyerId);
                     if(buyer != null)
                     {
+
                         var buyerOrder = buyer.Orders.Where(m => m.BuyerId == model.BuyerId && m.ModeratorId == User.Identity.GetUserId() && m.Offer.SteamLogin == model.SteamLogin).FirstOrDefault();
-                        if (buyer != null && buyerOrder != null && buyerOrder.OrderStatus == Status.AdminChecking)
+                        if(buyerOrder != null)
                         {
-                            buyerOrder.BuyerChecked = false;
-                            buyerOrder.SellerChecked = false;
-                            buyerOrder.OrderStatus = Status.BuyerConfirming;
-                            accInfo.BuyerId = buyer.Id;
-                            _accountInfoService.UpdateAccountInfo(accInfo);
-                            buyerOrder.AccountInfo = accInfo;
-                            _orderService.SaveOrder();
-                            return RedirectToAction("ProvideDataToBuyer", new { orderId = buyerOrder.Id });
+                            var currentOrderStatus = buyerOrder.OrderStatuses.OrderBy(o => o.DateFinished).LastOrDefault();
+                            if (currentOrderStatus != null)
+                            {
+                                if (buyer != null && buyerOrder != null && currentOrderStatus.Value == "adminChecking")
+                                {
+                                    OrderStatus orderStatus = new OrderStatus
+                                    {
+                                        Value = "buyerConfirming",
+                                        Name = "Покупатель подтверждает получение",
+                                        FinisedName = "Гарант проверил данные",
+                                        DateFinished = DateTime.Now
+                                    };
+
+                                    if (orderStatus != null)
+                                    {
+                                        buyerOrder.BuyerChecked = false;
+                                        buyerOrder.SellerChecked = false;
+                                        buyerOrder.OrderStatuses.Add(orderStatus);
+                                        accInfo.BuyerId = buyer.Id;
+                                        _accountInfoService.UpdateAccountInfo(accInfo);
+                                        buyerOrder.AccountInfo = accInfo;
+                                        _orderService.SaveOrder();
+                                        return RedirectToAction("ProvideDataToBuyer", new { orderId = buyerOrder.Id });
+                                    }
+                                    
+                                }
+                            }
+                            
                         }
+                        
                     }
                     
                 }

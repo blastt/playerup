@@ -32,13 +32,13 @@
                     @order.OfferPrice
                 </td>
                 <td>
-                    @order.OrderStatus
+                    @order.OrderStatuses.LastOrDefault().Name
                 </td>
                 <td>
                     @order.DateCreated
                 </td>
                 <td>
-                    @if (order.OrderStatus == Market.Model.Models.Status.AdminChecking)
+                    @if (order.OrderStatuses.LastOrDefault().Value == "adminChecking")
                     {
                         @Html.ActionLink("Проверить данные", "ProvideDataToBuyer", "Moderator", new { orderId = order.Id }, null)
                     }

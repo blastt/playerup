@@ -14,10 +14,7 @@ namespace Market.Data.Configuration
         public OrderStatusConfiguration()
         {
             ToTable("OrderStatus");
-            Property(f => f.).IsRequired().HasMaxLength(50);
-            Property(f => f.DateLeft).IsRequired();
-            Property(f => f.Grade).IsRequired();
-            Property(f => f.OfferHeader).IsRequired().HasMaxLength(100);
+            HasRequired(o => o.Order).WithMany(o => o.OrderStatuses).HasForeignKey(o => o.OrderId);
 
         }
     }

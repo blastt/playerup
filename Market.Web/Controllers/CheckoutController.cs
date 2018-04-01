@@ -16,11 +16,13 @@ namespace Trader.WEB.Controllers
     public class CheckoutController : Controller
     {
         private readonly IUserProfileService _userProfileService;
+        private readonly IOrderStatusService _orderStatusService;
         private readonly IOrderService _orderService;
         private readonly IOfferService _offerService;
         private readonly IAccountInfoService _accountInfoService;
-        public CheckoutController(IUserProfileService userProfileService, IOrderService orderService, IOfferService offerService, IAccountInfoService accountInfoService)
+        public CheckoutController(IUserProfileService userProfileService, IOrderService orderService, IOfferService offerService, IAccountInfoService accountInfoService, IOrderStatusService orderStatusService)
         {
+            _orderStatusService = orderStatusService;
             _userProfileService = userProfileService;
             _orderService = orderService;
             _offerService = offerService;
@@ -35,15 +37,24 @@ namespace Trader.WEB.Controllers
             if (offer != null && offer.Order == null)
             {
 
+                OrderStatus orderStatus = new OrderStatus
+                {
+                    Value = "adminWating",
+                    FinisedName = "Заказ создан",
+                    Name = "Поиск гаранта",
+                    DateFinished = DateTime.Now
+            };
+                
                 offer.Order = new Order
                 {
                     BuyerChecked = false,
                     SellerChecked = false,
-                    OrderStatus = Status.OrderCreated,
                     BuyerId = User.Identity.GetUserId(),
                     SellerId = model.SellerId,
                     DateCreated = DateTime.Now
                 };
+                
+                offer.Order.OrderStatuses.Add(orderStatus);
                 _offerService.SaveOffer();
 
                 var userProfiles = _userProfileService.GetUserProfiles()
@@ -57,6 +68,7 @@ namespace Trader.WEB.Controllers
                     });
                 }
                 return RedirectToAction("BuyDetails", "Order");
+                             
             }
             return View();
 
@@ -94,17 +106,41 @@ namespace Trader.WEB.Controllers
                 }
                 if (moderIsInrole)
                 {
+                    
                     var order = _orderService.GetOrders().Where(o => o.Offer.SteamLogin == model.SteamLogin && o.ModeratorId == moderator.Id).FirstOrDefault();
-                    if (order != null && order.AccountInfo == null && order.OrderStatus == Status.SellerProviding)
+                    if(order != null)
                     {
-                        order.BuyerChecked = false;
-                        order.SellerChecked = false;
-                        order.OrderStatus = Status.AdminChecking;
-                        accountInfo.ModeratorId = moderator.Id;
-                        order.AccountInfo = accountInfo;
-                        _orderService.SaveOrder();
-                        return RedirectToAction("ProvideData", new { moderatorId = moderator.Id });
+                        var currentOrderStatus = order.OrderStatuses.OrderBy(o => o.DateFinished).LastOrDefault();
+                        if(currentOrderStatus != null)
+                        {
+                            if (order.AccountInfo == null && currentOrderStatus.Value == "sellerProviding")
+                            {
+                   
+                                OrderStatus orderStatus = new OrderStatus
+                                {
+                                    Value = "adminChecking",
+                                    Name = "Гарант проверяет данные",
+                                    FinisedName = "Продавец предоставил данные гаранту",
+                                    DateFinished = DateTime.Now
+                            };
+
+
+
+                                if (orderStatus != null)
+                                {
+                                    order.BuyerChecked = false;
+                                    order.SellerChecked = false;
+                                    order.OrderStatuses.Add(orderStatus);
+                                    accountInfo.ModeratorId = moderator.Id;
+                                    order.AccountInfo = accountInfo;
+                                    _orderService.SaveOrder();
+                                    return RedirectToAction("ProvideData", new { moderatorId = moderator.Id });
+                                }
+                                
+                            }
+                        }
                     }
+                    
                 }
             }
 
@@ -117,14 +153,35 @@ namespace Trader.WEB.Controllers
             if (orderId != null)
             {
                 var order = _orderService.GetOrder(orderId.Value);
-                if (order != null && order.BuyerId == User.Identity.GetUserId() && order.OrderStatus == Status.BuyerConfirming)
+                if(order != null)
                 {
-                    order.BuyerChecked = false;
-                    order.SellerChecked = false;
-                    order.OrderStatus = Status.PayingToSeller;
-                    _orderService.SaveOrder();
-                    return View();
+                    var currentOrderStatus = order.OrderStatuses.OrderBy(o => o.DateFinished).LastOrDefault();
+                    if (currentOrderStatus != null)
+                    {
+                        if (order.BuyerId == User.Identity.GetUserId() && currentOrderStatus.Value == "buyerConfirming")
+                        {
+            
+                            OrderStatus orderStatus = new OrderStatus
+                            {
+                                Value = "payingToSeller",
+                                Name = "Отправка средств продавцу",
+                                FinisedName = "Покупатель подтвердил получение",
+                                DateFinished = DateTime.Now
+                        };
+
+                            if(orderStatus != null)
+                            {
+                                order.BuyerChecked = false;
+                                order.SellerChecked = false;
+                                order.OrderStatuses.Add(orderStatus);
+                                _orderService.SaveOrder();
+                                return View();
+                            }
+                            
+                        }
+                    }
                 }
+                
             }
             return HttpNotFound("qqqq");
         }

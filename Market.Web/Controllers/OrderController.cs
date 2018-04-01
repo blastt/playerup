@@ -73,11 +73,16 @@ namespace Market.Web.Controllers
             if(orderId != null)
             {
                 var order = _orderService.GetOrder(orderId.Value);
-                order.BuyerChecked = true;
-                _orderService.SaveOrder();
-                DetailsOrderViewModel model = Mapper.Map<Order, DetailsOrderViewModel>(order);
-                model.ModeratorId = order.ModeratorId;
-                return View(model);
+                if (order.BuyerId == User.Identity.GetUserId())
+                {
+                    order.BuyerChecked = true;
+                    _orderService.SaveOrder();
+                    DetailsOrderViewModel model = Mapper.Map<Order, DetailsOrderViewModel>(order);
+                    model.OrderStatuses = order.OrderStatuses.OrderBy(o => o.DateFinished).ToList();
+                    model.ModeratorId = order.ModeratorId;
+                    return View(model);
+                }
+                
             }
             
             return HttpNotFound("Lol");
@@ -89,11 +94,16 @@ namespace Market.Web.Controllers
             if (orderId != null)
             {
                 var order = _orderService.GetOrder(orderId.Value);
-                order.SellerChecked = true;
-                _orderService.SaveOrder();
-                DetailsOrderViewModel model = Mapper.Map<Order, DetailsOrderViewModel>(order);
-                model.ModeratorId = order.ModeratorId;
-                return View(model);
+                if (order.SellerId == User.Identity.GetUserId())
+                {
+                    order.SellerChecked = true;
+                    _orderService.SaveOrder();
+                    DetailsOrderViewModel model = Mapper.Map<Order, DetailsOrderViewModel>(order);
+                    model.OrderStatuses = order.OrderStatuses.OrderBy(o => o.DateFinished).ToList();
+                    model.ModeratorId = order.ModeratorId;
+                    return View(model);
+                }
+                
             }
 
             return HttpNotFound("Lol");

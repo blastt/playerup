@@ -13,7 +13,12 @@
             @{Html.RenderAction("AccountMenu", "Account"); }
             <div class="account-offer-container">
                 @{Html.RenderPartial("_AccountOffersMenu"); }
-                <table class="table table-hover">
+                <div class="form-inline form-offer-filter">
+                    <h2>
+                        <span class="text-gray text-300">Все предложения:</span>
+                    </h2>
+                </div>
+                <table class="table table-white">
                     <tr>
                         <th>Игра</th>
                         <th>Заголовок</th>

@@ -46,7 +46,7 @@
                             <td>@order.OfferHeader</td>
                             <td>@order.BuyerName</td>
                             <td>@order.OfferPrice</td>
-                            <td>@order.OrderStatus</td>
+                            <td>@order.OrderStatuses.LastOrDefault().Name</td>
                             <td>@Html.ActionLink("Детали", "SellDetails", "Order", new { orderId = order.Id }, null)</td>
                         </tr>
                     }
