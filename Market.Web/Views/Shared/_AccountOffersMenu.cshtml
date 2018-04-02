@@ -1,10 +1,13 @@
-﻿@{
+﻿@model Market.Web.ViewModels.OfferListViewModel
+
+@{
     ViewBag.Title = "AccountMenu";
     Layout = null;
 }
 
 <ul class="account-inner-list" id="account-inner-list">
-    <li class="account-inner-menu-item">@Html.ActionLink("Все", "All", "Offer",null ,new { @class= "account-inner-menu-link" })</li>
-    <li class="account-inner-menu-item">@Html.ActionLink("Активные", "Active", "Offer", null, new { @class = "account-inner-menu-link" })</li>
-    <li class="account-inner-menu-item">@Html.ActionLink("Неактивные", "Close", "Offer", null, new { @class = "account-inner-menu-link" })</li>
+
+    <li class="account-inner-menu-item">@Html.ActionLink("Активные (" + Model.ActiveOffersCount + ")", "Active", "Offer", null, new { @class = "account-inner-menu-link" })</li>
+    <li class="account-inner-menu-item">@Html.ActionLink("Неактивные (" + Model.InactiveOffersCount + ")", "InActive", "Offer", null, new { @class = "account-inner-menu-link" })</li>
+    <li class="account-inner-menu-item">@Html.ActionLink("Закрытые (" + Model.CloseOffersCount+ ")", "Closed", "Offer", null, new { @class = "account-inner-menu-link" })</li>
 </ul>

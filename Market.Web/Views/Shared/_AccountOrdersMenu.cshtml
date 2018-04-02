@@ -1,9 +1,11 @@
-﻿@{
+﻿@model Market.Web.ViewModels.OrderListViewModel
+
+@{
     ViewBag.Title = "AccountMenu";
     Layout = null;
 }
 
 <ul class="account-inner-list" id="account-inner-list">
-    <li class="account-inner-menu-item">@Html.ActionLink("Заказ (покупка)", "OrderBuy", "Order", null, new { @class = "account-inner-menu-link" })</li>
-    <li class="account-inner-menu-item">@Html.ActionLink("Заказ (продажа)", "OrderSell", "Order", null, new { @class = "account-inner-menu-link" })</li>
+    <li class="account-inner-menu-item">@Html.ActionLink("Заказ (покупка) (" + Model.BuyCount + ")", "OrderBuy", "Order", null, new { @class = "account-inner-menu-link" })</li>
+    <li class="account-inner-menu-item">@Html.ActionLink("Заказ (продажа) (" + Model.SellCount + ")", "OrderSell", "Order", null, new { @class = "account-inner-menu-link" })</li>
 </ul>

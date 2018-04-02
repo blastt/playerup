@@ -1,5 +1,5 @@
 ﻿body {
-    padding-top: 80px
+    padding-top: 130px
 }
 .test{
     position:absolute;
@@ -1481,4 +1481,15 @@ dl dd a{
 
 .form-offer-filter {
     padding: 20px;
+}
+
+.success-block{
+    font-weight: 700;
+    font-size: 22px;
+    margin-bottom: 50px
+}
+
+.line-height-40{
+    line-height: 40px;
+    margin-bottom: 0px
 }

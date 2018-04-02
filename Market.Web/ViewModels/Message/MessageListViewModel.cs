@@ -9,5 +9,6 @@ namespace Market.Web.ViewModels
     {
 
         public ICollection<MessageViewModel> Messages { get; set; } = new List<MessageViewModel>();
+
     }
 }

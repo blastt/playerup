@@ -23,6 +23,7 @@ namespace Market.Web.ViewModels
         public IList<Filter> Filters { get; set; }
         public IList<FilterItem> FilterItems { get; set; }
 
+
         public Dictionary<Model.Models.Filter, FilterItem> FilterFilterItem { get; set; }
     }
 }

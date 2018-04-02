@@ -3,5 +3,13 @@
     ViewBag.Title = "UpdateEmail";
 }
 
-<h2>Ваш email-адрес изменён!</h2>
+
+<div class="container text-center">
+    <div class="alert alert-dismissible alert-success  success-block">
+        <p class="line-height-40">
+            <span>Благодарим за подтверждение электронной почты. @Html.ActionLink("Щелкните здесь для входа", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</span>
+
+        </p>
+    </div>
+</div>
 

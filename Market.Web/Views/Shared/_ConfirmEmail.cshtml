@@ -1,0 +1,33 @@
+﻿@model Market.Web.Models.ConfirmEmailViewModel
+
+<h2>Подтверждение почты</h2>
+
+@using (Html.BeginForm("UpdateEmail", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    <hr />
+    @Html.ValidationSummary("", new { @class = "text-danger" })
+    <div class="form-group">
+        @if (Model.IsConfirmed)
+        {
+            <div class="alert alert-dismissible alert-success">
+                <p>Ваш адресс электронной почты <span class="text-700">@Model.Email</span> подтвержден</p>
+            </div>
+
+        }
+        else
+        {
+
+            <div class="alert alert-dismissible alert-warning">
+                <p>Ваш адресс электронной почты <span class="text-700">@Model.Email</span> не подтвержден @Html.ActionLink("Подтвердить почту", "VerifyEmail", "Account")</p>
+            </div>
+            
+        }
+
+    </div>
+
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

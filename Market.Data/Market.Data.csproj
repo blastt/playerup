@@ -123,6 +123,10 @@
     <Compile Include="Migrations\201803311536327_datefinished.Designer.cs">
       <DependentUpon>201803311536327_datefinished.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201804010922513_OfferState.cs" />
+    <Compile Include="Migrations\201804010922513_OfferState.Designer.cs">
+      <DependentUpon>201804010922513_OfferState.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\AccountInfoRepository.cs" />
@@ -185,6 +189,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201803311536327_datefinished.resx">
       <DependentUpon>201803311536327_datefinished.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804010922513_OfferState.resx">
+      <DependentUpon>201804010922513_OfferState.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -39,14 +39,53 @@ namespace Market.Web.Controllers
             return View((object)game);
         }
 
-        public ViewResult All()
+        public ViewResult Active()
         {
-            IEnumerable<Offer> offers = _offerService.GetOffers().Where(m => m.UserProfileId == User.Identity.GetUserId());
+            IEnumerable<Offer> offersActive = _offerService.GetOffers().Where(m => m.UserProfileId == User.Identity.GetUserId() && m.State == OfferState.active);
+            IEnumerable<Offer> offersInactive = _offerService.GetOffers().Where(m => m.UserProfileId == User.Identity.GetUserId() && m.State == OfferState.inactive);
+            IEnumerable<Offer> offersClosed = _offerService.GetOffers().Where(m => m.UserProfileId == User.Identity.GetUserId() && m.State == OfferState.closed);
             IEnumerable<OfferViewModel> offerViewModels;
-            offerViewModels = Mapper.Map<IEnumerable<Offer>, IEnumerable<OfferViewModel>>(offers);
+            offerViewModels = Mapper.Map<IEnumerable<Offer>, IEnumerable<OfferViewModel>>(offersActive);
             OfferListViewModel model = new OfferListViewModel
             {
-                Offers = offerViewModels
+                Offers = offerViewModels,
+                ActiveOffersCount = offersActive.Count(),
+                InactiveOffersCount = offersInactive.Count(),
+                CloseOffersCount = offersClosed.Count()
+            };
+            return View(model);
+        }
+
+        public ViewResult Inactive()
+        {
+            IEnumerable<Offer> offersActive = _offerService.GetOffers().Where(m => m.UserProfileId == User.Identity.GetUserId() && m.State == OfferState.active);
+            IEnumerable<Offer> offersInactive = _offerService.GetOffers().Where(m => m.UserProfileId == User.Identity.GetUserId() && m.State == OfferState.inactive);
+            IEnumerable<Offer> offersClosed = _offerService.GetOffers().Where(m => m.UserProfileId == User.Identity.GetUserId() && m.State == OfferState.closed);
+            IEnumerable<OfferViewModel> offerViewModels;
+            offerViewModels = Mapper.Map<IEnumerable<Offer>, IEnumerable<OfferViewModel>>(offersInactive);
+            OfferListViewModel model = new OfferListViewModel
+            {
+                Offers = offerViewModels,
+                ActiveOffersCount = offersActive.Count(),
+                InactiveOffersCount = offersInactive.Count(),
+                CloseOffersCount = offersClosed.Count()
+            };
+            return View(model);
+        }
+
+        public ViewResult Closed()
+        {
+            IEnumerable<Offer> offersActive = _offerService.GetOffers().Where(m => m.UserProfileId == User.Identity.GetUserId() && m.State == OfferState.active);
+            IEnumerable<Offer> offersInactive = _offerService.GetOffers().Where(m => m.UserProfileId == User.Identity.GetUserId() && m.State == OfferState.inactive);
+            IEnumerable<Offer> offersClosed = _offerService.GetOffers().Where(m => m.UserProfileId == User.Identity.GetUserId() && m.State == OfferState.closed);
+            IEnumerable<OfferViewModel> offerViewModels;
+            offerViewModels = Mapper.Map<IEnumerable<Offer>, IEnumerable<OfferViewModel>>(offersClosed);
+            OfferListViewModel model = new OfferListViewModel
+            {
+                Offers = offerViewModels,
+                ActiveOffersCount = offersActive.Count(),
+                InactiveOffersCount = offersInactive.Count(),
+                CloseOffersCount = offersClosed.Count()
             };
             return View(model);
         }
@@ -68,7 +107,7 @@ namespace Market.Web.Controllers
             {
                 offers = _offerService.GetOffers().Where(m => m.Game.Value == searchInfo.Game);
             }
-            offers = offers.Where(o => o.Order == null);
+            offers = offers.Where(o => o.Order == null && o.State == OfferState.active);
             if (offers.Count() != 0)
             {
                 minGamePrice = offers.Min(m => m.Price);

@@ -28,15 +28,18 @@ namespace Market.Web.Controllers
 
         public ActionResult OrderBuy()
         {
-            var orders = _orderService.GetOrders().Where(m => m.BuyerId == User.Identity.GetUserId());
+            var ordersBuy = _orderService.GetOrders().Where(m => m.BuyerId == User.Identity.GetUserId());
+            var ordersSell = _orderService.GetOrders().Where(m => m.SellerId == User.Identity.GetUserId());
 
-            if(orders != null)
+            if (ordersBuy != null)
             {
-                var orderViewModels = Mapper.Map<IEnumerable<Order>, IEnumerable<OrderViewModel>>(orders);
+                var orderViewModels = Mapper.Map<IEnumerable<Order>, IEnumerable<OrderViewModel>>(ordersBuy);
 
                 var model = new OrderListViewModel
                 {
-                    Orders = orderViewModels
+                    Orders = orderViewModels,
+                    BuyCount = ordersBuy.Count(),
+                    SellCount = ordersSell.Count()
 
                 };
 
@@ -49,15 +52,18 @@ namespace Market.Web.Controllers
 
         public ActionResult OrderSell()
         {
-            var orders = _orderService.GetOrders().Where(m => m.SellerId == User.Identity.GetUserId());
+            var ordersBuy = _orderService.GetOrders().Where(m => m.BuyerId == User.Identity.GetUserId());
+            var ordersSell = _orderService.GetOrders().Where(m => m.SellerId == User.Identity.GetUserId());
 
-            if (orders != null)
+            if (ordersBuy != null)
             {
-                var orderViewModels = Mapper.Map<IEnumerable<Order>, IEnumerable<OrderViewModel>>(orders);
+                var orderViewModels = Mapper.Map<IEnumerable<Order>, IEnumerable<OrderViewModel>>(ordersSell);
 
                 var model = new OrderListViewModel
                 {
-                    Orders = orderViewModels
+                    Orders = orderViewModels,
+                    BuyCount = ordersBuy.Count(),
+                    SellCount = ordersSell.Count()
 
                 };
 

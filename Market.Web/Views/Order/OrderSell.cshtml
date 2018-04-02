@@ -16,7 +16,7 @@
 
             @{Html.RenderAction("AccountMenu", "Account"); }
             <div class="account-offer-container">
-                @{Html.RenderPartial("_AccountOrdersMenu"); }
+                @{Html.RenderPartial("_AccountOrdersMenu", Model); }
 
                 
                 <table class="table table-hover">

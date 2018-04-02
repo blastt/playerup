@@ -82,8 +82,10 @@ namespace Market.Web.Controllers
         {
             if (User != null)
             {
-                // get user object from the storage
                 var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+                
+                // get user object from the storage
+                
 
                     // change username and email
 
@@ -95,7 +97,7 @@ namespace Market.Web.Controllers
                 await UserManager.SendEmailAsync(user.Id, "Подтверждение почты", "Для почтверждения почты" +
                     " учётной записи Для смены адреса вам необходимо его активировать, щелкнув <a href=\"" + callbackUrl + "\">здесь</a>");
 
-                return View("ChangeEmailRequest");
+                return View("VerifyEmailRequest");
             }
             return View("Error");
 
@@ -115,22 +117,36 @@ namespace Market.Web.Controllers
                 if (result)
                 {
                     // change username and email
-                    //user.Email = model.NewEmail;
+                    
                     // Persiste the changes
 
-                    var emailExists = await UserManager.SetEmailAsync(user.Id, model.NewEmail);
-                    if (emailExists.Succeeded)
+                    bool emailExists = false;
+                    foreach (var u in UserManager.Users)
                     {
-                        await UserManager.UpdateAsync(user);
+                        if (u.Email == model.NewEmail && u.EmailConfirmed)
+                        {
+                            emailExists = true;
+
+                            break;
+                        }
+                    }
+                    if (emailExists)
+                    {
+                        return HttpNotFound("Такая почта уже существует");
+                    }
+                    user.Email = model.NewEmail;
+                    user.EmailConfirmed = false;
+                    await UserManager.UpdateAsync(user);
                         // generage email confirmation code
+
                         string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                         var callbackUrl = Url.Action("ChangeEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
 
                         await UserManager.SendEmailAsync(user.Id, "Подтверждение почты", "Вы предоставили новый email-адрес для вашей" +
                             " учётной записи Для смены адреса вам необходимо его активировать, щелкнув <a href=\"" + callbackUrl + "\">здесь</a>");
 
-                        return View("ChangeEmailRequest");
-                    }
+                        return View("UpdateEmailRequest");
+                    
                 }
                 return View("Error");
             }
@@ -323,7 +339,7 @@ namespace Market.Web.Controllers
                     return HttpNotFound("User exists!");
                 }
                 var user = new ApplicationUser { UserName = model.UserName, Email = model.Email };
-          
+                
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
@@ -357,6 +373,32 @@ namespace Market.Web.Controllers
             return View(model);
         }
 
+        public PartialViewResult ConfirmEmailPartial()
+        {
+            var currentUserId = User.Identity.GetUserId();
+            var isConfirmed = UserManager.IsEmailConfirmed(currentUserId);
+            var email = UserManager.GetEmail(currentUserId);
+            ConfirmEmailViewModel model = new ConfirmEmailViewModel()
+            {
+                IsConfirmed = isConfirmed,
+                Email = email
+            };
+            return PartialView("_ConfirmEmail",model);
+        }
+
+        public PartialViewResult ConfirmPhoneNumberPartial()
+        {
+            var currentUserId = User.Identity.GetUserId();
+            var isConfirmed = UserManager.IsPhoneNumberConfirmed(currentUserId);
+            var phoneNumber = UserManager.GetPhoneNumber(currentUserId);
+            ConfirmPhoneNumberViewModel model = new ConfirmPhoneNumberViewModel()
+            {
+                IsConfirmed = isConfirmed,
+                 PhoneNumber = phoneNumber
+            };
+            return PartialView("_ConfirmPhoneNumber", model);
+        }
+
         //
         // GET: /Account/ConfirmEmail
         [AllowAnonymous]
@@ -379,11 +421,25 @@ namespace Market.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> AddPhoneNumber(AddPhoneNumberViewModel model)
         {
+            var currentUserId = User.Identity.GetUserId();
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
-            var code = await UserManager.GenerateChangePhoneNumberTokenAsync(User.Identity.GetUserId(), model.Number);
+            bool numberExists = false;
+            foreach (var user in UserManager.Users)
+            {
+                if (user.PhoneNumber == model.Number)
+                {
+                    numberExists = true;
+                    break;
+                }
+            }
+            if (numberExists)
+            {
+                return HttpNotFound("Такой номер уже существует");
+            }
+            var code = await UserManager.GenerateChangePhoneNumberTokenAsync(currentUserId, model.Number);
             if (UserManager.SmsService != null)
             {
                 var message = new IdentityMessage
@@ -409,6 +465,8 @@ namespace Market.Web.Controllers
             {
                 return View(model);
             }
+            
+            
             var result = await UserManager.ChangePhoneNumberAsync(User.Identity.GetUserId(), model.PhoneNumber, model.Code);
             if (result.Succeeded)
             {
@@ -417,7 +475,7 @@ namespace Market.Web.Controllers
                 {
                     await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                 }
-                return RedirectToAction("Index", new { Message = ManageMessageId.AddPhoneSuccess });
+                return RedirectToAction("Settings", new { Message = ManageMessageId.AddPhoneSuccess });
             }
             ModelState.AddModelError("", "Failed to verify phone");
             return View(model);

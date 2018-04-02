@@ -3,9 +3,12 @@
     ViewBag.Title = "Подтверждение почты";
 }
 
-<h2>@ViewBag.Title.</h2>
-<div>
-    <p>
-        Благодарим за подтверждение электронной почты. @Html.ActionLink("Щелкните здесь для входа", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })
-    </p>
+
+<div class="container text-center">
+    <div class="alert alert-dismissible alert-success  success-block">
+        <p class="line-height-40">
+            <span>Благодарим за подтверждение электронной почты. @Html.ActionLink("Щелкните здесь для входа", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</span>
+
+        </p>
+    </div>
 </div>

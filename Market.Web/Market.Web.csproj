@@ -463,12 +463,12 @@
     <Content Include="Views\Account\ResetPasswordConfirmation.cshtml" />
     <Content Include="Views\Account\SendCode.cshtml" />
     <Content Include="Views\Account\VerifyCode.cshtml" />
-    <Content Include="Views\Manage\AddPhoneNumber.cshtml" />
-    <Content Include="Views\Manage\ChangePassword.cshtml" />
+    <Content Include="Views\Account\AddPhoneNumber.cshtml" />
+    <Content Include="Views\Account\ChangePassword.cshtml" />
     <Content Include="Views\Manage\Index.cshtml" />
     <Content Include="Views\Manage\ManageLogins.cshtml" />
-    <Content Include="Views\Manage\SetPassword.cshtml" />
-    <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
+    <Content Include="Views\Account\SetPassword.cshtml" />
+    <Content Include="Views\Account\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Scripts\umd\popper.min.js.map" />
@@ -515,7 +515,7 @@
     <Content Include="Views\Account\UpdateEmail.cshtml" />
     <Content Include="Views\Account\UpdateEmailSuccess.cshtml" />
     <Content Include="Views\Account\UpdatePassword.cshtml" />
-    <Content Include="Views\Account\ChangeEmailRequest.cshtml" />
+    <Content Include="Views\Account\VerifyEmailRequest.cshtml" />
     <Content Include="Views\Account\ChangePasswordConfirmation.cshtml" />
     <Content Include="Views\Account\ControlPanel.cshtml" />
     <Content Include="Views\Shared\_AccountFeedbacksMenu.cshtml" />
@@ -553,6 +553,12 @@
     <Content Include="Views\Shared\_FaqOrder.cshtml" />
     <Content Include="Views\Shared\_FaqAccount.cshtml" />
     <Content Include="Views\Shared\_FaqAboutUs.cshtml" />
+    <Content Include="Views\Offer\Active.cshtml" />
+    <Content Include="Views\Offer\Inactive.cshtml" />
+    <Content Include="Views\Offer\Closed.cshtml" />
+    <Content Include="Views\Shared\_ConfirmEmail.cshtml" />
+    <Content Include="Views\Shared\_ConfirmPhoneNumber.cshtml" />
+    <Content Include="Views\Account\UpdateEmailRequest.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -22,7 +22,7 @@
             </div>
             @{Html.RenderAction("AccountMenu", "Account"); }
             <div class="account-message-container">
-                @{Html.RenderPartial("_AccountMessagesMenu"); }
+                @{Html.RenderPartial("_AccountMessagesMenu", Model); }
                 @using (Html.BeginForm("Inbox", "Message", null, FormMethod.Get, new { @class = "form-inline form-message-filter" }))
                 {
 

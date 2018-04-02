@@ -34,9 +34,9 @@ namespace Trader.WEB.Controllers
         {
             //UserProfile buyer = _db.UserProfiles.Get(User.Identity.GetUserId());
             Offer offer = _offerService.GetOffer(model.OfferId);
-            if (offer != null && offer.Order == null)
+            if (offer != null && offer.Order == null && offer.State == OfferState.active)
             {
-
+                offer.State = OfferState.closed;
                 OrderStatus orderStatus = new OrderStatus
                 {
                     Value = "adminWating",
@@ -45,17 +45,17 @@ namespace Trader.WEB.Controllers
                     DateFinished = DateTime.Now
             };
                 
-                offer.Order = new Order
-                {
-                    BuyerChecked = false,
-                    SellerChecked = false,
-                    BuyerId = User.Identity.GetUserId(),
-                    SellerId = model.SellerId,
-                    DateCreated = DateTime.Now
-                };
+            offer.Order = new Order
+            {
+                BuyerChecked = false,
+                SellerChecked = false,
+                BuyerId = User.Identity.GetUserId(),
+                SellerId = model.SellerId,
+                DateCreated = DateTime.Now
+            };
                 
-                offer.Order.OrderStatuses.Add(orderStatus);
-                _offerService.SaveOffer();
+            offer.Order.OrderStatuses.Add(orderStatus);
+            _offerService.SaveOffer();
 
                 var userProfiles = _userProfileService.GetUserProfiles()
                     .Where(u => u.ApplicationUser.Roles.Contains(new IdentityUserRole() { RoleId = "2", UserId = u.Id }));

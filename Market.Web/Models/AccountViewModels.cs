@@ -116,6 +116,20 @@ namespace Market.Web.Models
         public string Email { get; set; }
     }
 
+    public class ConfirmPhoneNumberViewModel
+    {
+        public bool IsConfirmed { get; set; }
+
+        public string PhoneNumber { get; set; }
+    }
+
+    public class ConfirmEmailViewModel
+    {
+        public bool IsConfirmed { get; set; }
+
+        public string Email { get; set; }
+    }
+
     public class UpdateEmailViewModel
     {
         [Required]

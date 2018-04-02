@@ -8,7 +8,12 @@ using System.Threading.Tasks;
 
 namespace Market.Model.Models
 {
-
+    public enum OfferState
+    {
+        active,
+        inactive,
+        closed
+    }
 
     public class Offer
     {
@@ -17,6 +22,8 @@ namespace Market.Model.Models
 
         public string Discription { get; set; }
         public string SteamLogin { get; set; }
+
+        public OfferState State { get; set; }
 
         public decimal Price { get; set; }
 

@@ -13,11 +13,15 @@
             <div class="account-setting-container">
                 <div class="row">
                     <div class="col-md-6">
-                        @Html.Partial("UpdatePassword")
+
+
+                        @Html.Action("ConfirmEmailPartial")
+
+                        @Html.Action("ConfirmPhoneNumberPartial")
 
                         @Html.Partial("UpdateEmail")
+                        @Html.Partial("UpdatePassword")
 
-                        @Html.ActionLink("Подтвердить почту","VerifyEmail", "Account")
                     </div>
                 </div>
                
