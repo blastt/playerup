@@ -642,6 +642,24 @@ namespace Market.Web.Controllers
             }
 
 
+
+            offer.MiddlemanPrice = 0;
+            
+            if (model.Price < 3000)
+            {
+                offer.MiddlemanPrice = 300;
+
+            }
+            else if (model.Price < 15000)
+            {
+                offer.MiddlemanPrice = model.Price * Convert.ToDecimal(0.1);
+            }
+            else
+            {
+                offer.MiddlemanPrice = 1500;
+            }
+            
+
             offer.Game = game;
             _filterService.SaveFilter();
             offer.UserProfile = _userProfileService.GetUserProfileById(User.Identity.GetUserId());
@@ -863,7 +881,23 @@ namespace Market.Web.Controllers
         public JsonResult IsSteamLoginExists(string steamLogin)
         {
             //check if any of the UserName matches the UserName specified in the Parameter using the ANY extension method.  
-            return Json(!_offerService.GetOffers().Any(x => x.SteamLogin == steamLogin), JsonRequestBehavior.AllowGet);
+            bool exists = false;
+            Offer offer = _offerService.GetOffers().FirstOrDefault(x => x.SteamLogin == steamLogin);
+            if (offer != null)
+            {
+                if(offer.Order != null)
+                {
+                    OrderStatus orderStatus = offer.Order.OrderStatuses.OrderBy(m => m.DateFinished).LastOrDefault();
+                    if (orderStatus != null && orderStatus.Value == "")
+                    {
+                        exists = false;
+                        return Json(!exists, JsonRequestBehavior.AllowGet);
+                    }
+                }
+                exists = true;
+                return Json(!exists, JsonRequestBehavior.AllowGet);
+            }
+            return Json(!exists, JsonRequestBehavior.AllowGet);
         }
         [HttpPost]
         public JsonResult GetFiltersJson(string game)

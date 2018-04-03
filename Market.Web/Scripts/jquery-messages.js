@@ -7,6 +7,8 @@ $(".clickable").each(function () {
     });
 });
 
+
+
 $("#messages #linkdelete").each(function () {
 
     $(this).on('click', function (e) {

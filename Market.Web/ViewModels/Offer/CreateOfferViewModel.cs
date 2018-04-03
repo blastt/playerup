@@ -26,6 +26,8 @@ namespace Market.Web.ViewModels
         [Remote("IsSteamLoginExists", "Offer", ErrorMessage = "Этот логин уже использовался")]
         public string SteamLogin { get; set; }
 
+
+        public bool SellerPaysMiddleman { get; set; }
         [Display(Name = "Игра")]
         public string Game { get; set; }
 

@@ -18,6 +18,7 @@ namespace Market.Model.Models
         public int Negative { get; set; }
         public string Discription { get; set; }
         public bool IsOnline { get; set; }
+        //public double Balance { get; set; }
         public DateTime RegistrationDate { get; set; }
 
         public string Name { get; set; }

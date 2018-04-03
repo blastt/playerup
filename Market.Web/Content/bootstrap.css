@@ -5478,6 +5478,42 @@ button.close {
   outline: 0;
 }
 
+
+
+.modal-send {
+    position: fixed;
+    top: 200px;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1050;
+    display: none;
+    overflow: hidden;
+    outline: 0;
+    background-color: rgba(0, 0, 0, 0.00)
+}
+.modal-content-send {
+    position: relative;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    width: 100%;
+    pointer-events: auto;
+    background-color: rgba(0, 0, 0, 0.65);
+    background-clip: padding-box;
+    border-radius: 0.3rem;
+    outline: 0;
+}
+
+
+
+
+
+
 .modal-backdrop {
   position: fixed;
   top: 0;

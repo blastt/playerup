@@ -97,9 +97,8 @@
                 <div class="form-group">
                     <div class="custom-control custom-checkbox mr-sm-2">
 
-
-                        <input type="checkbox" checked="checked" class="custom-control-input" id="sellerPay">
-
+                        @Html.CheckBox("SellerPaysMiddleman",true, new { @class= "custom-control-input", @id="sellerPay", @checked = "checked" } )
+                        
                         <label class="custom-control-label" for="sellerPay">Оплатить безопасную сделку вместо покупателя</label>
                     </div>
                 </div>

@@ -17,6 +17,8 @@ namespace Market.Web.ViewModels
 
         [DisplayFormat(DataFormatString = "{0:n0}")]
         public decimal Price { get; set; }
+        public bool SellerPaysMiddleman { get; set; }
+        public decimal MiddlemanPrice { get; set; }
         public DateTime? DateCreated { get; set; } = DateTime.Now;
         public UserProfile User { get; set; }
         

@@ -394,8 +394,7 @@ namespace Market.Web.Controllers
         // Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
         // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult New(MessageViewModel model)
+        public JsonResult New(MessageViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -411,12 +410,13 @@ namespace Market.Web.Controllers
 
                     _messageService.CreateMessage(message);
                     _messageService.SaveMessage();
-                    return Redirect(Request.UrlReferrer.ToString());
+
+                    return Json(new {  });
                 }
-                return HttpNotFound("User does not exist!");
+                return Json("Error");
             }
 
-            return View(model);
+            return Json("Error");
         }
 
         public JsonResult GetMessagessCount()

@@ -41,6 +41,7 @@ namespace Market.Web.Mappings
 
             CreateMap<Offer, OfferViewModel>()
                .ForMember(o => o.Header, map => map.MapFrom(vm => vm.Header))
+               .ForMember(o => o.SellerPaysMiddleman, map => map.MapFrom(vm => vm.SellerPaysMiddleman))
                .ForMember(o => o.Filters, map => map.MapFrom(vm => vm.Filters))
                .ForMember(o => o.FilterItems, map => map.MapFrom(vm => vm.FilterItems))
                .ForMember(o => o.DateCreated, map => map.MapFrom(vm => vm.DateCreated))

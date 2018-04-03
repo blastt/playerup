@@ -29,6 +29,7 @@ namespace Market.Web.Mappings
 
             CreateMap<CreateOfferViewModel, Offer>()
                 .ForMember(o => o.Header, map => map.MapFrom(vm => vm.Header))
+                .ForMember(o => o.SellerPaysMiddleman, map => map.MapFrom(vm => vm.SellerPaysMiddleman))
                 .ForMember(o => o.Discription, map => map.MapFrom(vm => vm.Discription))
                 .ForMember(o => o.SteamLogin, map => map.MapFrom(vm => vm.SteamLogin))
                 .ForMember(o => o.Price, map => map.MapFrom(vm => vm.Price))

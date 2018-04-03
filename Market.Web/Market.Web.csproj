@@ -412,6 +412,7 @@
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery-messages.js" />
     <Content Include="Scripts\jquery-modal.js" />
+    <Content Include="Scripts\jquery-modal-send.js" />
     <Content Include="Scripts\jquery-ui.js" />
     <Content Include="Scripts\jquery-ui.min.js" />
     <Content Include="Scripts\jquery.validate.js" />

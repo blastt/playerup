@@ -18,23 +18,23 @@
             <div class="col-md-2">
                 @{
                     var currencyList = new List<SelectListItem>() {
-                                                                                        new SelectListItem()
-                                                                                        {
-                                                                                            Text = "USD",
-                                                                                            Value = "USD",
-                                                                                            Selected = true
-                                                                                        },
-                                                                                        new SelectListItem()
-                                                                                        {
-                                                                                            Text = "RUR",
-                                                                                            Value = "RUR"
-                                                                                        },
-                                                                                        new SelectListItem()
-                                                                                        {
-                                                                                            Text = "EUR",
-                                                                                            Value = "EUR"
-                                                                                        }
-                                                                                    };
+                                                                                                        new SelectListItem()
+                                                                                                        {
+                                                                                                            Text = "USD",
+                                                                                                            Value = "USD",
+                                                                                                            Selected = true
+                                                                                                        },
+                                                                                                        new SelectListItem()
+                                                                                                        {
+                                                                                                            Text = "RUR",
+                                                                                                            Value = "RUR"
+                                                                                                        },
+                                                                                                        new SelectListItem()
+                                                                                                        {
+                                                                                                            Text = "EUR",
+                                                                                                            Value = "EUR"
+                                                                                                        }
+                                                                                                    };
                 }
 
                 @Html.DropDownList("currency", currencyList, new { @class = "form-control", onchange = "submitAjaxForm(1);" })
@@ -100,10 +100,24 @@
 
                                     </div>
                                 </div>
-                                <div class="col-sm-4 text-right">
+                                <div class="col-sm-1">
+
+                                </div>
+                                <div class="col-sm-3 text-right">
                                     <div class="mb-2">
                                         <span id="offer_price" style="font-weight: 400; font-size: 24px">@string.Format("{0:n0}", offer.Price) руб</span>
                                     </div>
+                                    <div class="mb-2">
+                                        @if (offer.SellerPaysMiddleman)
+                                        {
+                                            <span style="color:green">Гарант за счет продавца @string.Format("{0:n0}", offer.MiddlemanPrice) руб</span>
+                                        }
+                                        else
+                                        {
+                                            <span style="color:red">Гарант за ваш счет @string.Format("{0:n0}", offer.MiddlemanPrice) руб</span>
+                                        }
+                                    </div>
+
                                     <div class="mb-2">
                                         @Html.ActionLink("Подробнее", "Details", new { id = offer.Id }, new { @class = "btn btn-details" })
                                     </div>

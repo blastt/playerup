@@ -156,48 +156,56 @@
                     <span id="close" aria-hidden="true">×</span>
                 </button>
             </div>
-            @using (Html.BeginForm("New", "Message", FormMethod.Post, new { }))
-            {
-                <input type="hidden" name="ReceiverId" value="@Model.CurrentUserId" />
-                @Html.Hidden("Subject", Model.Id)
-                @Html.AntiForgeryToken()
-                <div class="modal-body">
 
-                    <div class="form-group">
-                        <img class="img-circle avatar-small" src="@Url.Action("Photo", "Profile" , new { UserId = Model.Id })" style="float:left; margin-right: 20px" alt="Alternate Text" />
-                        <div>
+            <input type="hidden" id="receiverId" name="ReceiverId" value="@Model.CurrentUserId" />
 
-                            @Html.ActionLink(Model.Name, "Info", new { })
+            <div class="modal-body">
 
-                            <p>
-                                @if (Model.IsOnline)
-                                {
-                                    <span class="badge badge-pill badge-light">Online</span>
-                                }
-                                else
-                                {
-                                    <span class="badge badge-pill badge-dark">Offline</span>
-                                }
-                            </p>
+                <div class="form-group">
+                    <img class="img-circle avatar-small" src="@Url.Action("Photo", "Profile" , new { UserId = Model.Id })" style="float:left; margin-right: 20px" alt="Alternate Text" />
+                    <div>
+
+                        @Html.ActionLink(Model.Name, "Info", new { })
+
+                        <p>
+                            @if (Model.IsOnline)
+                            {
+                                <span class="badge badge-pill badge-light">Online</span>
+                            }
+                            else
+                            {
+                                <span class="badge badge-pill badge-dark">Offline</span>
+                            }
+                        </p>
 
 
-                        </div>
                     </div>
-                    <div class="form-group">
-                        @Html.TextBox("OfferHeader", "", new { @class = "form-control", @readonly = "readonly" })
-                    </div>
-                    <div class="form-group">
-                        <textarea name="MessageBody" class="form-control" rows="5"></textarea>
-                    </div>
-
-
                 </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-info">Отправить</button>
+                <div class="form-group">
+                    @Html.TextBox("OfferHeader", "", new { @class = "form-control", id = "subject" })
+                </div>
+                <div class="form-group">
+                    <textarea id="messageBody" class="form-control" rows="5"></textarea>
                 </div>
 
-            }
 
+            </div>
+            <div class="modal-footer">
+                <button id="sendMessage" type="button" onclick="SendMessage()" class="btn btn-info">Отправить</button>
+            </div>
+
+
+
+        </div>
+    </div>
+</div>
+
+<div  id="m-dialog" class="modal-send">
+    <div class="modal-dialog" role="document">
+        <div id="m-content-send" class="modal-content-send">
+            <div id="m-body" class="modal-body">
+                <span class="text-white text" style="font-size: 18px">Ваше сообщение отправлено</span>
+            </div>
         </div>
     </div>
 </div>
@@ -206,8 +214,9 @@
 <input type="hidden" id="user-id" value="@Model.Id" />
 @section scripts
 {
-    <script src="~/Scripts/UserInfo.js">
-        
+    <script type="text/javascript" src="~/Scripts/UserInfo.js">
+
     </script>
     <script type="text/javascript" src="~/Scripts/jquery-modal.js"></script>
+    <script type="text/javascript" src="~/Scripts/jquery-modal-send.js"></script>
 }

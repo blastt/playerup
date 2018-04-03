@@ -30,6 +30,10 @@ namespace Market.Model.Models
         [Display(Name = "Просмотров")]
         public int Views { get; set; }
 
+        public bool SellerPaysMiddleman { get; set; }
+
+        public decimal MiddlemanPrice { get; set; }
+
         [Display(Name = "Дата создания")]
         public DateTime DateCreated { get; set; } = DateTime.Now;
         public DateTime? DateDeleted { get; set; }
