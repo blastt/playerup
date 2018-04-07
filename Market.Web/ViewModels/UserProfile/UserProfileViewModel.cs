@@ -7,5 +7,7 @@ namespace Market.Web.ViewModels
 {
     public class UserProfileViewModel
     {
+        public string Id { get; set; }
+        public string Name { get; set; }
     }
 }

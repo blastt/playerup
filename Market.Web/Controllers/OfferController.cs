@@ -587,16 +587,16 @@ namespace Market.Web.Controllers
                 var appUser = userProfile.ApplicationUser;
                 if(appUser != null)
                 {
-                    if(!(appUser.PhoneNumberConfirmed && appUser.EmailConfirmed))
-                    {
-                        return HttpNotFound("you are not confirmed email or phone number");
-                    }
+                    //if(!(appUser.PhoneNumberConfirmed && appUser.EmailConfirmed))
+                    //{
+                    //    return HttpNotFound("you are not confirmed email or phone number");
+                    //}
                 }
 
             }
             else
             {
-                return HttpNotFound("You are not logged in");
+                return View("_CreateOfferConfirmationError");
             }
             
             Offer offer = Mapper.Map<CreateOfferViewModel, Offer>(model);
@@ -612,7 +612,7 @@ namespace Market.Web.Controllers
                 {
                     if (gameFilters[i].Value != modelFilters[i])
                     {
-                        return HttpNotFound("фильтры указаны некорректно");
+                        return View("CreateOfferFiltersError");
                     }
                     
                     bool isContainsFilterItems = false;
@@ -627,7 +627,7 @@ namespace Market.Web.Controllers
                     }
                     if (!isContainsFilterItems)
                     {
-                        return HttpNotFound("фильтры указаны некорректно");
+                        return View("_CreateOfferFilterError");
                     }
                     isContainsFilterItems = false;
 
@@ -638,7 +638,7 @@ namespace Market.Web.Controllers
             }
             else
             {
-                return HttpNotFound("фильтры указаны некорректно");
+                return View("_CreateOfferFilterError");
             }
 
 

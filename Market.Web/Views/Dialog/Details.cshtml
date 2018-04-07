@@ -1,0 +1,217 @@
+﻿@model Market.Web.ViewModels.DialogViewModel
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<div class="container">
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="page-info">
+                <h2>Сообщения</h2>
+                <p class="lead">Здесь отображается информация по входящим и исходящим сообщениям</p>
+            </div>
+            @{Html.RenderAction("AccountMenu", "Account"); }
+
+            <div class="account-info-container">
+                @{Html.RenderPartial("_AccountMessagesMenu", Model); }
+                <div class="back">
+                    <a href="@Request.UrlReferrer"><span style="font-weight: 700">&#10218;</span> <span>Назад</span> </a>
+                </div>
+                <div class="message-container">
+                    <div class="row">
+                        <div class="col-lg-12" id="messages-col" style="height: 400px; overflow-y: scroll">
+                            @foreach (var message in Model.Messages)
+                            {
+                                @*<div class="message-block">
+                                        <div class="message-image">
+                                            <img class="img-circle avatar-small" src="@Url.Action("Photo", "Profile", new { UserId = message.SenderId })" alt="Alternate Text" />
+                                        </div>
+                                        <div class="message-name">
+                                            @message.SenderName
+                                        </div>
+                                        <div class="message-content">
+                                            @message.MessageBody
+                                        </div>
+                                    </div>*@
+
+
+                                <div class="message-block">
+                                    <div class="row">
+                                        <div class="col-lg-1">
+                                            <img id="message-block-img" class="img-circle avatar-small" src="@Url.Action("Photo", "Profile", new { UserId = message.SenderId })" alt="Alternate Text" />
+
+                                        </div>
+                                        <div class="col-lg-11">
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <span id="sender-name" style="font-size: 14px; font-weight: 700; line-height: 20px" class="mr-2">
+                                                        @message.SenderName
+                                                    </span>
+                                                    <span id="created-date" style="font-size: 14px; font-weight: 400; line-height: 20px; color: rgba(0, 0, 0, 0.30)">
+                                                        @message.CreatedDate
+                                                    </span>
+
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <span id="message-body" style="font-size: 16px">
+                                                        @message.MessageBody
+                                                    </span>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            }
+                        </div>
+
+                    </div>
+
+
+                </div>
+                <div class="message-inputs">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <input type="hidden" id="dialogId" value="@Model.Id" />
+                            <input type="hidden" id="receiverId" value="@Model.otherUserId" />
+                            <input placeholder="Написать сообщение..." type="text" id="messageBody" class="form-control" onfocus="SetMessageViewed()" />
+                        </div>
+                        <div class="col-lg-2">
+
+                            <input type="button" id="send" value="Отправить" class="btn btn-info" />
+                        </div>
+                    </div>
+                </div>
+                @*<div class="row">
+                        <div class="col-md-12">
+                            @Html.PageLinks(Model.PagingInfo, x => Url.Action("Inbox", new { page = x, sortOrder = ViewBag.CurrentSort, searchString = ViewBag.SearchString }))
+                        </div>
+                    </div>*@
+            </div>
+        </div>
+
+    </div>
+
+
+</div>
+
+
+
+
+<div class="message-block" id="message-block-element" style="display:none">
+    <div class="row">
+        <div class="col-lg-1">
+            <img id="message-block-img" class="img-circle avatar-small" src="source" alt="Alternate Text" />
+
+        </div>
+        <div class="col-lg-11">
+            <div class="row">
+                <div class="col-lg-12">
+                    <span id="sender-name" style="font-size: 14px; font-weight: 700; line-height: 20px" class="mr-2">
+                        name
+                    </span>
+                    <span id="created-date" style="font-size: 14px; font-weight: 400; line-height: 20px; color: rgba(0, 0, 0, 0.30)">
+                        date
+                    </span>
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <span id="message-body" style="font-size: 16px">
+                        message
+                    </span>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+
+
+
+@section scripts
+{
+    <!--Ссылка на автоматически сгенерированный скрипт хаба SignalR -->
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var messageInput = $('#messageBody');
+            messageInput.click(function () {
+                SetMessagesViewed();
+            });
+            messageInput.keypress(function (e) {
+                if (e.which == 13) {
+
+                    CreateNewMessage()
+                    SetMessagesViewed();
+                }
+            });
+        });
+
+        function SetMessagesViewed() {
+            $.ajax({
+                url: '/Message/SetMessagesViewed',
+                type: "POST",
+                data: { dialogId: $('#dialogId').val() },
+                dataType: "json",
+                success: function (response) {
+
+                }
+            });
+
+        }
+
+        window.onload = function () {
+            messageScrollToButton();
+            inboxScrollToButton();
+        }
+        function messageScrollToButton() {
+            var objDiv = $('#messages-col');
+            objDiv.scrollTop(objDiv[0].scrollHeight);
+        }
+
+        function inboxScrollToButton() {
+            $(window).scrollTop(320);
+        }
+    </script>
+    <script type="text/javascript">
+        var btn = document.getElementById("send");
+
+        btn.onclick = function () {
+            CreateNewMessage();
+        }
+
+        function CreateNewMessage() {
+            var message = {
+                "MessageBody": $('#messageBody').val(),
+                "ReceiverId": $('#receiverId').val()
+            };
+            $.ajax({
+                url: "/Message/New",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify({ model: message }),
+                dataType: "Json",
+
+                success: function (result) {
+
+                },
+                error: function () {
+                    alert("خطا!");
+                }
+            });
+            modal.style.display = "none";
+        }
+    </script>
+}

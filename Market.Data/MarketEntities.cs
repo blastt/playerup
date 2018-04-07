@@ -50,6 +50,8 @@ namespace Marketplace.Data
             modelBuilder.Configurations.Add(new FilterConfiguration());
             modelBuilder.Configurations.Add(new FilterItemConfiguration());
             modelBuilder.Configurations.Add(new AccountInfoConfiguration());
+            modelBuilder.Configurations.Add(new OrderStatusConfiguration());
+            modelBuilder.Configurations.Add(new DialogConfiguration());
             base.OnModelCreating(modelBuilder);
         }
         public virtual DbSet<UserProfile> UserProfiles { get; set; }
@@ -62,5 +64,6 @@ namespace Marketplace.Data
         public virtual DbSet<FilterItem> FilterItems { get; set; }
         public virtual DbSet<AccountInfo> AccountInfos { get; set; }
         public virtual DbSet<OrderStatus> OrderStatuses { get; set; }
+        public virtual DbSet<Dialog> Dialogs { get; set; }
     }
 }

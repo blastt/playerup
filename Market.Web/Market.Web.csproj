@@ -87,6 +87,12 @@
     <Reference Include="Microsoft.ApplicationInsights, Version=2.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.ApplicationInsights.2.5.0\lib\net46\Microsoft.ApplicationInsights.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.AspNet.SignalR.Core, Version=2.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.SignalR.Core.2.2.3\lib\net45\Microsoft.AspNet.SignalR.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.SignalR.SystemWeb, Version=2.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.SignalR.SystemWeb.2.2.3\lib\net45\Microsoft.AspNet.SignalR.SystemWeb.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.AspNet.TelemetryCorrelation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.TelemetryCorrelation.1.0.0\lib\net45\Microsoft.AspNet.TelemetryCorrelation.dll</HintPath>
     </Reference>
@@ -233,6 +239,7 @@
     <Compile Include="Controllers\Admin\FilterItemController.cs" />
     <Compile Include="Controllers\Admin\GameController.cs" />
     <Compile Include="Controllers\CheckoutController.cs" />
+    <Compile Include="Controllers\DialogController.cs" />
     <Compile Include="Controllers\FeedbackController.cs" />
     <Compile Include="Controllers\GodController.cs" />
     <Compile Include="Controllers\HelpController.cs" />
@@ -248,6 +255,8 @@
     </Compile>
     <Compile Include="Helpers\DateHelpers.cs" />
     <Compile Include="Helpers\PagingHelpers.cs" />
+    <Compile Include="Hubs\MessageHub.cs" />
+    <Compile Include="Hubs\ProxyMessage.cs" />
     <Compile Include="Mappings\AutoMapperConfiguration.cs" />
     <Compile Include="Mappings\DomainToViewModelMappingProfile.cs" />
     <Compile Include="Mappings\ViewModelToDomainMappingProfile.cs" />
@@ -257,6 +266,8 @@
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\Checkout\CheckoutViewModel.cs" />
     <Compile Include="ViewModels\Checkout\ProvideDataViewModel.cs" />
+    <Compile Include="ViewModels\Dialog\DialogListViewModel.cs" />
+    <Compile Include="ViewModels\Dialog\DialogViewModel.cs" />
     <Compile Include="ViewModels\Feedback\FeedbackListViewModel.cs" />
     <Compile Include="ViewModels\Feedback\FeedbackViewModel.cs" />
     <Compile Include="ViewModels\Feedback\GiveFeedbackViewModel.cs" />
@@ -415,6 +426,8 @@
     <Content Include="Scripts\jquery-modal-send.js" />
     <Content Include="Scripts\jquery-ui.js" />
     <Content Include="Scripts\jquery-ui.min.js" />
+    <Content Include="Scripts\jquery.signalR-2.2.3.js" />
+    <Content Include="Scripts\jquery.signalR-2.2.3.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
@@ -449,9 +462,6 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
     <Content Include="Views\Account\ConfirmEmail.cshtml" />
     <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
@@ -481,7 +491,6 @@
     <Content Include="Scripts\popper.js.map" />
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
-    <Content Include="Views\Home\Details.cshtml" />
     <Content Include="Views\Offer\Create.cshtml" />
     <Content Include="Views\Offer\_SearchContainer.cshtml" />
     <Content Include="Views\Message\Create.cshtml" />
@@ -492,7 +501,7 @@
     <Content Include="Views\Message\Index.cshtml" />
     <Content Include="Views\Message\Info.cshtml" />
     <Content Include="Views\Message\New.cshtml" />
-    <Content Include="Views\Message\Sent.cshtml" />
+    <Content Include="Views\Message\Unread.cshtml" />
     <Content Include="Views\Message\Story.cshtml" />
     <Content Include="Views\Nav\Menu.cshtml" />
     <Content Include="Views\Order\OrderBuy.cshtml" />
@@ -560,12 +569,19 @@
     <Content Include="Views\Shared\_ConfirmEmail.cshtml" />
     <Content Include="Views\Shared\_ConfirmPhoneNumber.cshtml" />
     <Content Include="Views\Account\UpdateEmailRequest.cshtml" />
+    <Content Include="Views\Dialog\Details.cshtml" />
+    <Content Include="Views\Account\UpdatePhoneNumber.cshtml" />
+    <Content Include="Views\Account\UpdatePhoneNumberSuccess.cshtml" />
+    <Content Include="Views\Account\ChangePasswordSuccess.cshtml" />
+    <Content Include="Views\Account\ChangePasswordError.cshtml" />
+    <Content Include="Views\Account\ChangeEmailError.cshtml" />
+    <Content Include="Views\Account\UpdatePhoneNumberError.cshtml" />
+    <Content Include="Views\Offer\_CreateOfferConfirmationError.cshtml" />
+    <Content Include="Views\Offer\_CreateOfferFilterError.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\God\" />
-    <Folder Include="Views\NewFolder1\" />
-    <Folder Include="Views\NewFolder2\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config">

@@ -37,6 +37,20 @@ namespace Market.Web.Mappings
 
             #endregion
 
+            #region Dialog
+
+            CreateMap<Dialog, DialogViewModel>()
+               .ForMember(o => o.Id, map => map.MapFrom(vm => vm.Id))
+               .ForMember(o => o.Messages, map => map.MapFrom(vm => vm.Messages))
+               .ForMember(o => o.Users, map => map.MapFrom(vm => vm.Users))
+
+                .ForMember(o => o.CountOfNewMessages, map => map.MapFrom(vm => vm.Messages.Where(m => !m.IsViewed)));
+
+
+
+            #endregion
+
+
             #region Offer
 
             CreateMap<Offer, OfferViewModel>()
@@ -199,6 +213,11 @@ namespace Market.Web.Mappings
                 .ForMember(o => o.Rating, map => map.MapFrom(vm => vm.Rating))
                 .ForMember(o => o.Name, map => map.MapFrom(vm => vm.Name))
                 .ForMember(o => o.RegistrationDate, map => map.MapFrom(vm => vm.RegistrationDate));
+
+            CreateMap<UserProfile, UserProfileViewModel>()
+                .ForMember(o => o.Id, map => map.MapFrom(vm => vm.Id))
+                .ForMember(o => o.Name, map => map.MapFrom(vm => vm.Name));
+
 
             #endregion
         }

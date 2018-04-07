@@ -54,6 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\AccountInfo.cs" />
+    <Compile Include="Models\Dialog.cs" />
     <Compile Include="Models\Feedback.cs" />
     <Compile Include="Models\Filter.cs" />
     <Compile Include="Models\Game.cs" />

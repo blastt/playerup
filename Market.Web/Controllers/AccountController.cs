@@ -99,11 +99,20 @@ namespace Market.Web.Controllers
 
                 return View("VerifyEmailRequest");
             }
-            return View("Error");
+            return View("ChangeEmailError");
 
             // send email to the user with the confirmation link
         }
-
+        [AllowAnonymous]
+        public async Task<ActionResult> ConfirmEmail(string userId, string code)
+        {
+            if (userId == null || code == null)
+            {
+                return View("ChangeEmailError");
+            }
+            var result = await UserManager.ConfirmEmailAsync(userId, code);
+            return View(result.Succeeded ? "ConfirmEmail" : "ChangeEmailError");
+        }
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
@@ -132,7 +141,7 @@ namespace Market.Web.Controllers
                     }
                     if (emailExists)
                     {
-                        return HttpNotFound("Такая почта уже существует");
+                        return View("ChangeEmailError");
                     }
                     user.Email = model.NewEmail;
                     user.EmailConfirmed = false;
@@ -140,7 +149,7 @@ namespace Market.Web.Controllers
                         // generage email confirmation code
 
                         string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                        var callbackUrl = Url.Action("ChangeEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                        var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
 
                         await UserManager.SendEmailAsync(user.Id, "Подтверждение почты", "Вы предоставили новый email-адрес для вашей" +
                             " учётной записи Для смены адреса вам необходимо его активировать, щелкнув <a href=\"" + callbackUrl + "\">здесь</a>");
@@ -148,9 +157,9 @@ namespace Market.Web.Controllers
                         return View("UpdateEmailRequest");
                     
                 }
-                return View("Error");
+                return View("ChangeEmailError");
             }
-            return View();
+            return View("ChangeEmailError");
 
             // send email to the user with the confirmation link
         }
@@ -168,7 +177,7 @@ namespace Market.Web.Controllers
 
             if (userId == null || code == null)
             {
-                return View("Error");
+                return View("ChangeEmailError");
             }
 
             var result = await UserManager.ConfirmEmailAsync(userId, code);
@@ -177,7 +186,7 @@ namespace Market.Web.Controllers
                 //await UserManager.SetEmailAsync(userId, newEmail);
                 return View("UpdateEmailSuccess");
             }
-            return View("Error");
+            return View("ChangeEmailError");
         }
 
         [Authorize]
@@ -197,7 +206,7 @@ namespace Market.Web.Controllers
                 if (user == null)
                 {
                     // Не показывать, что пользователь не существует или не подтвержден
-                    return View("UpdatePasswordConfirmation");
+                    return View("ChangePasswordError");
                 }
 
                 {
@@ -209,19 +218,19 @@ namespace Market.Web.Controllers
                     // Дополнительные сведения о включении подтверждения учетной записи и сброса пароля см. на странице https://go.microsoft.com/fwlink/?LinkID=320771.
                     // Отправка сообщения электронной почты с этой ссылкой
 
-                    return View();
+                    return View("ChangePasswordError");
                 }
 
             }
 
             // Появление этого сообщения означает наличие ошибки; повторное отображение формы
-            return View(model);
+            return View("ChangePasswordError");
         }
 
         [Authorize]
         public ActionResult ChangePasswordConfirmation()
         {
-            return View();
+            return View("ChangePasswordSuccess");
         }
 
         #endregion
@@ -401,16 +410,7 @@ namespace Market.Web.Controllers
 
         //
         // GET: /Account/ConfirmEmail
-        [AllowAnonymous]
-        public async Task<ActionResult> ConfirmEmail(string userId, string code)
-        {
-            if (userId == null || code == null)
-            {
-                return View("Error");
-            }
-            var result = await UserManager.ConfirmEmailAsync(userId, code);
-            return View(result.Succeeded ? "ConfirmEmail" : "Error");
-        }
+        
 
         public ActionResult AddPhoneNumber()
         {
@@ -455,7 +455,7 @@ namespace Market.Web.Controllers
         public async Task<ActionResult> VerifyPhoneNumber(string phoneNumber)
         {
             var code = await UserManager.GenerateChangePhoneNumberTokenAsync(User.Identity.GetUserId(), phoneNumber);
-            return phoneNumber == null ? View("Error") : View(new VerifyPhoneNumberViewModel { PhoneNumber = phoneNumber });
+            return phoneNumber == null ? View("UpdatePhoneNumberError") : View(new VerifyPhoneNumberViewModel { PhoneNumber = phoneNumber, Code = code });
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -475,12 +475,55 @@ namespace Market.Web.Controllers
                 {
                     await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                 }
-                return RedirectToAction("Settings", new { Message = ManageMessageId.AddPhoneSuccess });
+
+                return View("UpdatePhoneNumberSuccess");
+                //return RedirectToAction("Settings", new { Message = ManageMessageId.AddPhoneSuccess });
             }
             ModelState.AddModelError("", "Failed to verify phone");
-            return View(model);
+            return View("UpdatePhoneNumberError");
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> UpdatePhoneNumber(UpdatePhoneNumberViewModel model)
+        {
+            var currentUserId = User.Identity.GetUserId();
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            bool numberExists = false;
+            
+            foreach (var user in UserManager.Users)
+            {
+                if (user.Id == currentUserId)
+                {
+                    continue;
+                }
+                if (user.PhoneNumber == model.PhoneNumber)
+                {
+                    numberExists = true;
+                    break;
+                }
+            }
+            if (numberExists)
+            {
+                return View("UpdatePhoneNumberError");
+            }
+            var code = await UserManager.GenerateChangePhoneNumberTokenAsync(currentUserId, model.PhoneNumber);
+            if (UserManager.SmsService != null)
+            {
+                var message = new IdentityMessage
+                {
+                    Destination = model.PhoneNumber,
+                    Body = "Your security code is: " + code
+                };
+                await UserManager.SmsService.SendAsync(message);
+            }
+            return RedirectToAction("VerifyPhoneNumber", new { PhoneNumber = model.PhoneNumber });
+        }
+
+     
         //
         // GET: /Account/ForgotPassword
         [AllowAnonymous]
@@ -514,7 +557,7 @@ namespace Market.Web.Controllers
             }
 
             // Появление этого сообщения означает наличие ошибки; повторное отображение формы
-            return View(model);
+            return View("ChangePasswordError");
         }
 
         //
@@ -530,7 +573,7 @@ namespace Market.Web.Controllers
         [AllowAnonymous]
         public ActionResult ResetPassword(string code)
         {
-            return code == null ? View("Error") : View();
+            return code == null ? View("ChangePasswordError") : View();
         }
 
         //
@@ -556,7 +599,7 @@ namespace Market.Web.Controllers
                 return RedirectToAction("ResetPasswordConfirmation", "Account");
             }
             AddErrors(result);
-            return View();
+            return View("ChangePasswordError");
         }
 
         //

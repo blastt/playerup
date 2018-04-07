@@ -160,4 +160,12 @@ namespace Market.Web.Models
         [Compare("Password", ErrorMessage = "Пароль и его подтверждение не совпадают.")]
         public string ConfirmPassword { get; set; }
     }
+
+    public class UpdatePhoneNumberViewModel
+    {
+        [Required]
+        [DataType(DataType.PhoneNumber)]
+        [Display(Name = "Новый номер")]
+        public string PhoneNumber { get; set; }
+    }
 }

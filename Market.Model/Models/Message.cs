@@ -24,5 +24,9 @@ namespace Market.Model.Models
         public virtual string ReceiverId { get; set; }
         public virtual UserProfile Sender { get; set; }
         public virtual UserProfile Receiver { get; set; }
+
+        public virtual int DialogId { get; set; }
+        public virtual Dialog Dialog { get; set; }
+        
     }
 }

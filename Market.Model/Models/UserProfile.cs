@@ -28,5 +28,6 @@ namespace Market.Model.Models
         public virtual ICollection<Offer> Offers { get; set; } = new List<Offer>();
         public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
         public virtual ICollection<Feedback> Feedbacks { get; set; } = new List<Feedback>();
+        public virtual ICollection<Dialog> Dialogs { get; set; } = new List<Dialog>();
     }
 }

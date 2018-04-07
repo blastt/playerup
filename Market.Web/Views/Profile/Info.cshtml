@@ -157,7 +157,7 @@
                 </button>
             </div>
 
-            <input type="hidden" id="receiverId" name="ReceiverId" value="@Model.CurrentUserId" />
+            <input type="hidden" id="receiverId" name="ReceiverId" value="@Model.Id" />
 
             <div class="modal-body">
 
@@ -210,8 +210,8 @@
     </div>
 </div>
 
-<input type="hidden" id="receiver-id" value="@Model.CurrentUserId" />
-<input type="hidden" id="user-id" value="@Model.Id" />
+<input type="hidden" id="receiver-id" value="@Model.Id" />
+<input type="hidden" id="user-id" value="@Model.CurrentUserId" />
 @section scripts
 {
     <script type="text/javascript" src="~/Scripts/UserInfo.js">

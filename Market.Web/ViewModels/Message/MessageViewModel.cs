@@ -18,6 +18,8 @@ namespace Market.Web.ViewModels
         public string ReceiverName { get; set; }
         public string ReceiverId { get; set; }
 
+        public bool IsCurrentUserMessage { get; set; }
+
         public string OfferHeader { get; set; }
 
         public bool SenderDeleted { get; set; }

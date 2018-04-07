@@ -21,6 +21,9 @@ namespace Market.Data.Configuration
             HasMany(u => u.Orders).WithRequired(u => u.Buyer).HasForeignKey(m => m.BuyerId);
             HasMany(u => u.Orders).WithRequired(u => u.Seller).HasForeignKey(m => m.SellerId);
             HasMany(u => u.Orders).WithOptional(u => u.Moderator).HasForeignKey(m => m.ModeratorId);
+            HasMany(m => m.Dialogs).WithMany(m => m.Users);
+
+
         }
     }
 }

@@ -54,6 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration\AccountInfoConfiguration.cs" />
+    <Compile Include="Configuration\DialogConfiguration.cs" />
     <Compile Include="Configuration\FeedbackConfiguration.cs" />
     <Compile Include="Configuration\FilterConfiguration.cs" />
     <Compile Include="Configuration\FilterItemConfiguration.cs" />
@@ -131,9 +132,18 @@
     <Compile Include="Migrations\201804021724048_Middleman.Designer.cs">
       <DependentUpon>201804021724048_Middleman.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201804031655060_Dialogs.cs" />
+    <Compile Include="Migrations\201804031655060_Dialogs.Designer.cs">
+      <DependentUpon>201804031655060_Dialogs.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804041138238_DialogUsers.cs" />
+    <Compile Include="Migrations\201804041138238_DialogUsers.Designer.cs">
+      <DependentUpon>201804041138238_DialogUsers.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\AccountInfoRepository.cs" />
+    <Compile Include="Repositories\DialogRepository.cs" />
     <Compile Include="Repositories\FeedbackRepository.cs" />
     <Compile Include="Repositories\FilterItemRepository.cs" />
     <Compile Include="Repositories\FilterRepository.cs" />
@@ -199,6 +209,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201804021724048_Middleman.resx">
       <DependentUpon>201804021724048_Middleman.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804031655060_Dialogs.resx">
+      <DependentUpon>201804031655060_Dialogs.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804041138238_DialogUsers.resx">
+      <DependentUpon>201804041138238_DialogUsers.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

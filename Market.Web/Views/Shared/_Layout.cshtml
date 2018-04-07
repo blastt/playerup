@@ -88,10 +88,67 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/jqueryval")
     @Scripts.Render("~/bundles/bootstrap")
-    
-    <script src="~/Scripts/Main.js"></script>
-    @RenderSection("scripts", required: false)
 
+    <script src="~/Scripts/Main.js"></script>
+
+    <script src="~/Scripts/jquery.signalR-2.2.3.min.js"></script>
+    <!--Ссылка на автоматически сгенерированный скрипт хаба SignalR -->
+    <script src="~/signalr/hubs"></script>
+    <script type="text/javascript">
+        
+
+        $(function () {
+
+            var messageHub = $.connection.messageHub;
+
+            messageHub.client.updateMessage = function (counter) {
+
+                drowMessage(counter);
+                
+            };
+
+            messageHub.client.updateMessageInDialog = function (userName, companionId, companionName, counter,lastMessage,date, dialogId) {
+
+                drowMessageInDialog(userName, companionId, companionName, counter, lastMessage, date,  dialogId);
+                SetDialogsClickable();
+                SetDeleteDialogClickable();
+            };
+
+            messageHub.client.addMessage = function (senderId, receiverName, senderName, messageBody, date) {
+             
+                var messagesContainer = $('#messages-col');
+                var messageBlock = $('#message-block-element').last().clone();
+                
+                messageBlock.find('#message-block-img').attr('src', '/profile/photo?UserId=' + senderId);
+                messageBlock.find('#sender-name').text(senderName);
+                messageBlock.find('#created-date').text(date);
+                messageBlock.find('#message-body').text(messageBody);
+                messageBlock.removeAttr('style');
+                messagesContainer.append(messageBlock);
+                
+                $('#messageBody').val('');
+                var objDiv = $('#messages-col');
+                objDiv.scrollTop(objDiv[0].scrollHeight);
+                
+
+            };
+
+            messageHub.client.addDialog = function (companionId, companionName, counter, messageBody, date, dialogId) {
+
+                var dialogsTable = $('#dialogs-table');
+                var dialogBlock = $('#dialog-block').clone();
+                dialogBlock.attr('id', 'message-row-' + dialogId);
+                
+                dialogBlock.removeAttr('style');     
+                
+                dialogsTable.append(dialogBlock);
+                
+            };
+            $.connection.hub.start();
+
+        });
+        
+    </script>
     @*<script>
             window.addEventListener('offline', function (e) { console.log('offline'); });
 
@@ -107,5 +164,6 @@
             }
 
         </script>*@
+    @RenderSection("scripts", required: false)
 </body>
 </html>
