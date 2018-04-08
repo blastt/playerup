@@ -240,10 +240,10 @@
     <Compile Include="Controllers\Admin\GameController.cs" />
     <Compile Include="Controllers\CheckoutController.cs" />
     <Compile Include="Controllers\DialogController.cs" />
+    <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\FeedbackController.cs" />
     <Compile Include="Controllers\GodController.cs" />
     <Compile Include="Controllers\HelpController.cs" />
-    <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\MessageController.cs" />
     <Compile Include="Controllers\Moderator\ModeratorController.cs" />
@@ -310,6 +310,7 @@
     <Content Include="Content\Images\arrow.png" />
     <Content Include="Content\Images\Csgo\Icons\csgo.png" />
     <Content Include="Content\Images\Dota2\Icons\dota2.png" />
+    <Content Include="Content\Images\error.png" />
     <Content Include="Content\Images\Hearthstone\Ranks\asia.png" />
     <Content Include="Content\Images\Hearthstone\Ranks\europe.png" />
     <Content Include="Content\Images\logo1.png" />
@@ -578,6 +579,7 @@
     <Content Include="Views\Account\UpdatePhoneNumberError.cshtml" />
     <Content Include="Views\Offer\_CreateOfferConfirmationError.cshtml" />
     <Content Include="Views\Offer\_CreateOfferFilterError.cshtml" />
+    <Content Include="Views\Error\NotFound.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

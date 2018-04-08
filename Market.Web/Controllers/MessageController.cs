@@ -409,7 +409,7 @@ namespace Market.Web.Controllers
 
             foreach (var d in user.Dialogs)
             {
-                if (d.Messages.Any(m => !m.IsViewed))
+                if (d.Messages.Any(m => !m.IsViewed && m.SenderId != User.Identity.GetUserId()))
                 {
                     newDialogsCount++;
                 }
@@ -436,6 +436,11 @@ namespace Market.Web.Controllers
         [HttpPost]
         public JsonResult New(MessageViewModel model)
         {
+            
+            if (model.MessageBody.Trim() == "")
+            {
+                return Json(new { });
+            }
             if (ModelState.IsValid)
             {
                 // Поменять(Не проверять на наличие оффера)                
@@ -477,6 +482,7 @@ namespace Market.Web.Controllers
                         if (d.Messages.Any(m => !m.IsViewed))
                         {
                             newDialogsCount++;
+                            continue;
                         }
                     }
                     foreach (var d in user.Dialogs)

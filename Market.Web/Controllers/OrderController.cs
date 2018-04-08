@@ -46,7 +46,7 @@ namespace Market.Web.Controllers
                 return View(model);
             }
 
-            return HttpNotFound("Lol");
+            return HttpNotFound();
             
         }
 
@@ -70,7 +70,7 @@ namespace Market.Web.Controllers
                 return View(model);
             }
 
-            return HttpNotFound("Lol");
+            return HttpNotFound();
 
         }
 
@@ -91,7 +91,7 @@ namespace Market.Web.Controllers
                 
             }
             
-            return HttpNotFound("Lol");
+            return HttpNotFound();
 
         }
 
@@ -112,7 +112,7 @@ namespace Market.Web.Controllers
                 
             }
 
-            return HttpNotFound("Lol");
+            return HttpNotFound();
 
         }
 

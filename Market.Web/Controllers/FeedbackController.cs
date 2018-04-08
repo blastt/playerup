@@ -67,7 +67,7 @@ namespace Market.Web.Controllers
                 return View(model);                
             }
 
-            return HttpNotFound("Ошибка");           
+            return HttpNotFound();           
 
             //ViewBag.UserProfileId = new SelectList(db.UserProfiles, "Id", "Discription");            
         }
@@ -117,7 +117,7 @@ namespace Market.Web.Controllers
                 }
             }
 
-            return HttpNotFound("Ошибка");
+            return HttpNotFound();
         }
 
         // GET: Feedback/Create
@@ -133,7 +133,7 @@ namespace Market.Web.Controllers
                 return View(model);
             }
 
-            return HttpNotFound("Ошибка");
+            return HttpNotFound();
 
             //ViewBag.UserProfileId = new SelectList(db.UserProfiles, "Id", "Discription");            
         }
@@ -209,7 +209,7 @@ namespace Market.Web.Controllers
                 }
             }
 
-            return HttpNotFound("Ошибка");
+            return HttpNotFound();
         }
 
         public PartialViewResult FeedbackListInfo(SearchFeedbacksInfoViewModel searchInfo)

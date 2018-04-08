@@ -152,9 +152,10 @@
             });
             messageInput.keypress(function (e) {
                 if (e.which == 13) {
-
-                    CreateNewMessage()
-                    SetMessagesViewed();
+                    if (messageInput.val().trim() !== '') {
+                        CreateNewMessage();
+                        SetMessagesViewed();
+                    }
                 }
             });
         });
@@ -187,9 +188,12 @@
     </script>
     <script type="text/javascript">
         var btn = document.getElementById("send");
-
+        var messageInput = $('#messageBody');
         btn.onclick = function () {
-            CreateNewMessage();
+            if (messageInput.val().trim() !== '') {
+                CreateNewMessage();
+            }
+            
         }
 
         function CreateNewMessage() {
