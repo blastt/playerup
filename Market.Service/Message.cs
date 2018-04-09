@@ -72,7 +72,7 @@ namespace Market.Service
             var message = messagesRepository.GetById(id);
             if (message != null)
             {
-                message.IsViewed = true;
+                message.ToViewed = true;
             }
         }
 

@@ -206,7 +206,6 @@ function closeAllSelect(elmnt) {
 }
 
 function CalculatePrice() {
-
     var sellerPay = $('#sellerPay').is(':checked');
     var price = $('#ListingPrice').val();
     var floatPrice = parseFloat(price)

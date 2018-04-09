@@ -1,93 +1,113 @@
 ﻿@using System.Globalization
-@model Trader.DAL.Entities.OfferViewModel
-
+@model Market.Web.ViewModels.EditOfferViewModel
 @{
-    ViewBag.Title = "Edit";
+    ViewBag.Title = "Create";
 }
+
 
 <div class="container">
     <div class="col-lg-12" style="align-items: center; display: flex; justify-content: center">
         <div class="col-lg-8 " style="margin-top:30px">
-
-            @using (Html.BeginForm("Edit", "Offer", FormMethod.Post))
+            @using (Html.BeginForm("Edit", "Offer", FormMethod.Post, new { id = "editForm" }))
             {
-                @Html.HiddenFor(m => m.UserProfileId)
+                @Html.HiddenFor(m => m.Id)
+                @*@Html.HiddenFor(m => m.ClientProfileId)*@
+
 
                 <div class="form-group">
+
                     @Html.LabelFor(m => m.Games, new { @class = "control-label" })
-
-
-                    @Html.EditorFor(m => m.Game, "EnumGames", new { games = Model.Games })
-
+                    @Html.DropDownListFor(m => m.Game, Model.Games, new { @class = "form-control", id = "game", onchange = "SelectFilterItem(value, false);" })
 
                 </div>
-                <div class="form-group">
-                    <div id="rank"></div>
-                    @*@Html.LabelFor(m => m.FilterByList, new { @class = "control-label" })
-                        @Html.EditorFor(m => m.Filter, "EnumRanks", new { ranks = Model.GetRanks(Model.Game) })*@
+                <div id="filter-item">
+
                 </div>
 
                 <div class="form-group">
                     @Html.LabelFor(m => m.SteamLogin, new { @class = "control-label" })
 
-                    @Html.EditorFor(m => m.SteamLogin, "SteamLoginTemplate")
+                    @Html.TextBoxFor(m => m.SteamLogin, "", new { @class = "form-control", @for = "textBox", @readonly="readonly" })
 
-                    
+                    @Html.ValidationMessageFor(m => m.SteamLogin)
 
                 </div>
-
 
                 <div class="form-group">
                     @Html.LabelFor(m => m.Header, new { @class = "control-label" })
 
-                    @Html.EditorFor(m => m.Header, "HeaderTemplate")
+                    <input class="form-control" type="text" name="header" value="@Model.Header" />
 
-                    @Html.ValidationMessage("Header")
+                    @Html.ValidationMessageFor(m => m.Header)
 
                 </div>
 
                 <div class="form-group">
                     @Html.LabelFor(m => m.Discription, new { @class = "control-label" })
-
-                    @Html.EditorFor(m => m.Discription, "DiscriptionTemplate")
+                    @Html.TextArea("discription", Model.Discription, 10, 0, new { @class = "form-control", style = "resize: none" })
+               
                     @Html.ValidationMessageFor(m => m.Discription)
+
                 </div>
 
                 <div class="form-group">
 
-                    <div class="col-md-4" style="padding: 0px; margin-right: 40px">
+                    <div class="col-md-5" style="padding: 0px; margin-right: 40px">
                         @Html.LabelFor(m => m.Price, new { @class = "control-label" })
                         <div class="input-group">
 
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">@NumberFormatInfo.CurrentInfo.CurrencySymbol</span>
-                            </div>
 
-                            @Html.EditorFor(m => m.Price, "PriceTemplate")
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">$</span>
+                            </div>
+                            <input class="form-control" autocomplete = "off" id = "ListingPrice" type="text" name="price" value="@Math.Round(Model.Price,0)" onchange = "CalculatePrice()" />
                             @Html.ValidationMessageFor(m => m.Price)
                         </div>
 
                     </div>
                 </div>
                 <div class="form-group">
-                    <div class="col-md-4" style="padding: 0px">
-                        @Html.Label("Получите:", new { @class = "control-label" })
+                    <div class="col-md-5" style="padding: 0px">
+                        @Html.Label("Стоимость безопасной сделки", new { @class = "control-label" })
                         <div class="input-group">
+
+
                             <div class="input-group-prepend">
-                                <span class="input-group-text">@NumberFormatInfo.CurrentInfo.CurrencySymbol</span>
+                                <span class="input-group-text">$</span>
                             </div>
-                            @Html.TextBox("EstPrice", "", new { @class = "form-control", id = "EstimatedPayout", @readonly = "" })
+                            <input class="form-control" readonly = "" id="guaranteePrice" type="text" name="guaranteePrice" onchange="CalculatePrice()" />
+
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-5" style="padding: 0px">
+                        @Html.Label("Вы получите", new { @class = "control-label" })
+                        <div class="input-group">
+
+
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">$</span>
+                            </div>
+                            <input class="form-control" readonly="" id="EstimatedPayout" type="text" name="EstPayout" />
                         </div>
 
                     </div>
                 </div>
+                <div class="form-group">
+                    <div class="custom-control custom-checkbox mr-sm-2">
 
-                <div class="confirm-buton">
-                    <div class="form-group">
-                        <input class="btn btn-info btn-lg" type="submit" name="edit" value="Применить" />
+                        @Html.CheckBox("SellerPaysMiddleman", Model.SellerPaysMiddleman, new { @class = "custom-control-input", @id = "sellerPay", @checked = "checked" })
+
+                        <label class="custom-control-label" for="sellerPay">Оплатить безопасную сделку вместо покупателя</label>
                     </div>
                 </div>
-                
+                <div class="confirm-buton">
+                    <div class="form-group">
+                        <input class="btn btn-submit" type="submit" name="create" value="Изменить" />
+                    </div>
+                </div>
+
             }
         </div>
     </div>
@@ -95,16 +115,20 @@
 
 
 
+
+
 @section scripts
-                {
+{
     @*Ненавязивый JavaScript для выполнения запроса на сервер без полного обновления страницы*@
-    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
-    <script src="~/Scripts/myScripts.js"></script>
+    @*<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>*@
+
+    <script src="~/Scripts/CreateOffer.js">
+
+        
+    </script>
     <script>
         $(document).ready(function () {
-            ajaxRanks('@Model.Game', false);
-            CalcPrice($("#ListingPrice").val());
+            CalculatePrice();
         });
     </script>
-
 }

@@ -44,7 +44,7 @@ namespace Market.Web.Mappings
                .ForMember(o => o.Messages, map => map.MapFrom(vm => vm.Messages))
                .ForMember(o => o.Users, map => map.MapFrom(vm => vm.Users))
 
-                .ForMember(o => o.CountOfNewMessages, map => map.MapFrom(vm => vm.Messages.Where(m => !m.IsViewed)));
+                .ForMember(o => o.CountOfNewMessages, map => map.MapFrom(vm => vm.Messages.Where(m => !m.ToViewed)));
 
 
 
@@ -63,20 +63,21 @@ namespace Market.Web.Mappings
                .ForMember(o => o.Game, map => map.MapFrom(vm => vm.Game))
                .ForPath(o => o.User, map => map.MapFrom(vm => vm.UserProfile));
 
-            CreateMap<Offer, CreateOfferViewModel> ()
+            CreateMap<Offer, CreateOfferViewModel>()
                 .ForMember(o => o.Header, map => map.MapFrom(vm => vm.Header))
                 .ForMember(o => o.Discription, map => map.MapFrom(vm => vm.Discription))
-                .ForMember(o => o.Filters, map => map.MapFrom(vm => vm.Filters))
+                .ForMember(o => o.SellerPaysMiddleman, map => map.MapFrom(vm => vm.SellerPaysMiddleman))
                 .ForMember(o => o.SteamLogin, map => map.MapFrom(vm => vm.SteamLogin))
-                .ForMember(o => o.Price, map => map.MapFrom(vm => vm.Price));
+                .ForMember(o => o.Price, map => map.MapFrom(vm => vm.Price))
+                .ForAllOtherMembers(opt => opt.Ignore());
 
-            //CreateMap<Offer, EditOfferViewModel>()
-            //    .ForMember(o => o.Header, map => map.MapFrom(vm => vm.Header))
-            //    .ForMember(o => o.Discription, map => map.MapFrom(vm => vm.Discription))
-            //    .ForMember(o => o.Filter, map => map.MapFrom(vm => vm.Filter))
-            //    .ForMember(o => o.Game, map => map.MapFrom(vm => vm.Game))
-            //    .ForMember(o => o.SteamLogin, map => map.MapFrom(vm => vm.SteamLogin))
-            //    .ForMember(o => o.Price, map => map.MapFrom(vm => vm.Price));
+            CreateMap<Offer, EditOfferViewModel>()
+                .ForMember(o => o.Header, map => map.MapFrom(vm => vm.Header))
+                .ForMember(o => o.Discription, map => map.MapFrom(vm => vm.Discription))
+                .ForMember(o => o.SellerPaysMiddleman, map => map.MapFrom(vm => vm.SellerPaysMiddleman))
+                .ForMember(o => o.SteamLogin, map => map.MapFrom(vm => vm.SteamLogin))
+                .ForMember(o => o.Price, map => map.MapFrom(vm => vm.Price))
+                .ForAllOtherMembers(opt => opt.Ignore());
 
             CreateMap<Offer, DetailsOfferViewModel>()
                .ForMember(o => o.Header, map => map.MapFrom(vm => vm.Header))
@@ -157,7 +158,8 @@ namespace Market.Web.Mappings
 
             CreateMap<MessageViewModel, Message>()
                 .ForMember(o => o.Id, map => map.MapFrom(vm => vm.Id))
-                .ForMember(o => o.IsViewed, map => map.MapFrom(vm => vm.IsViewed))
+                .ForMember(o => o.ToViewed, map => map.MapFrom(vm => vm.ToViewed))
+                .ForMember(o => o.FromViewed, map => map.MapFrom(vm => vm.FromViewed))
                 .ForMember(o => o.MessageBody, map => map.MapFrom(vm => vm.MessageBody))
                 .ForMember(o => o.ReceiverDeleted, map => map.MapFrom(vm => vm.ReceiverDeleted))
                 .ForMember(o => o.SenderDeleted, map => map.MapFrom(vm => vm.SenderDeleted))

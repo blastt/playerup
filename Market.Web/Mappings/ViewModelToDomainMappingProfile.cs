@@ -35,13 +35,14 @@ namespace Market.Web.Mappings
                 .ForMember(o => o.Price, map => map.MapFrom(vm => vm.Price))
                 .ForAllOtherMembers(opt => opt.Ignore());
 
-            //CreateMap<EditOfferViewModel, Offer>()
-            //    .ForMember(o => o.Header, map => map.MapFrom(vm => vm.Header))
-            //    .ForMember(o => o.Discription, map => map.MapFrom(vm => vm.Discription))
-            //    .ForMember(o => o.Filters, map => map.MapFrom(vm => vm.Filters))
-            //    .ForMember(o => o.Game, map => map.MapFrom(vm => vm.Game))
-            //    .ForMember(o => o.SteamLogin, map => map.MapFrom(vm => vm.SteamLogin))
-            //    .ForMember(o => o.Price, map => map.MapFrom(vm => vm.Price));
+            CreateMap<EditOfferViewModel, Offer>()
+                .ForMember(o => o.Id, map => map.MapFrom(vm => vm.Id))
+                .ForMember(o => o.Header, map => map.MapFrom(vm => vm.Header))
+                .ForMember(o => o.SellerPaysMiddleman, map => map.MapFrom(vm => vm.SellerPaysMiddleman))
+                .ForMember(o => o.SteamLogin, map => map.MapFrom(vm => vm.SteamLogin))
+                .ForMember(o => o.Discription, map => map.MapFrom(vm => vm.Discription))
+                .ForMember(o => o.Price, map => map.MapFrom(vm => vm.Price))
+                .ForAllOtherMembers(opt => opt.Ignore());
 
             //CreateMap<DetailsOfferViewModel, Offer>()
             //   .ForMember(o => o.Header, map => map.MapFrom(vm => vm.Header))
@@ -85,7 +86,8 @@ namespace Market.Web.Mappings
 
             CreateMap<MessageViewModel, Message>()
                .ForMember(o => o.Id, map => map.MapFrom(vm => vm.Id))
-               .ForMember(o => o.IsViewed, map => map.MapFrom(vm => vm.IsViewed))
+               .ForMember(o => o.ToViewed, map => map.MapFrom(vm => vm.ToViewed))
+                .ForMember(o => o.FromViewed, map => map.MapFrom(vm => vm.FromViewed))
                .ForMember(o => o.MessageBody, map => map.MapFrom(vm => vm.MessageBody))
                .ForMember(o => o.ReceiverDeleted, map => map.MapFrom(vm => vm.ReceiverDeleted))
                .ForMember(o => o.SenderDeleted, map => map.MapFrom(vm => vm.SenderDeleted))

@@ -24,15 +24,17 @@
                         <th>Заголовок</th>
                         <th>Описание</th>
                         <th>Цена</th>
+                        <th></th>
                     </tr>
                     @foreach (var offer in Model.Offers)
                     {
-                        <tr>
-                            <td>@offer.Game.Name</td>
-                            <td>@offer.Header</td>
-                            <td>@offer.Discription</td>
-                            <td>@offer.Price</td>
-                        </tr>
+                    <tr>
+                        <td>@offer.Game.Name</td>
+                        <td>@offer.Header</td>
+                        <td>@offer.Discription</td>
+                        <td>@offer.Price</td>
+                        <td>@Html.ActionLink("Редактировать","Edit","Offer", new { id = offer.Id },null)</td>
+                    </tr>
                     }
 
                 </table>

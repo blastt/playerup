@@ -316,234 +316,7 @@ namespace Market.Web.Controllers
             };
             
             return PartialView("_OfferListInfo", model);
-        }
-
-        //public ViewResult All()
-        //{
-        //    IEnumerable<Offer> offers = _db.Offers.Find(m => m.UserProfileId == User.Identity.GetUserId());
-        //    OfferListViewModel model = new OfferListViewModel
-        //    {
-        //        Offers = new List<OfferViewModel>(),
-        //    };
-        //    foreach (var offer in offers)
-        //    {
-        //        model.Offers.Add(new OfferViewModel
-        //        {
-        //            Id = offer.Id,
-        //            Discription = offer.Discription,
-        //            EndDate = offer.EndDate,
-        //            Filter = offer.Filter,
-        //            Game = offer.Game,
-        //            Header = offer.Header,
-        //            Price = offer.Price,
-        //            StartDate = offer.StartDate,
-        //            SteamLogin = offer.SteamLogin,
-        //            User = offer.UserProfile,
-        //            Views = offer.Views
-        //        });
-        //    }
-        //    return View(model);
-        //}
-
-        // Change Status offer 
-        // Create OfferStatus
-        //public ViewResult Active()
-        //{
-        //    IEnumerable<Offer> offers = _db.Offers.Find(m => m.UserProfileId == User.Identity.GetUserId()).Where(m => m.Order == null);
-        //    OfferListViewModel model = new OfferListViewModel
-        //    {
-        //        Offers = new List<OfferViewModel>(),
-        //    };
-        //    foreach (var offer in offers)
-        //    {
-        //        model.Offers.Add(new OfferViewModel
-        //        {
-        //            Id = offer.Id,
-        //            Discription = offer.Discription,
-        //            EndDate = offer.EndDate,
-        //            Filter = offer.Filter,
-        //            Game = offer.Game,
-        //            Header = offer.Header,
-        //            Price = offer.Price,
-        //            StartDate = offer.StartDate,
-        //            SteamLogin = offer.SteamLogin,
-        //            User = offer.UserProfile,
-        //            Views = offer.Views
-        //        });
-        //    }
-        //    return View(model);
-        //}
-
-        // Change Status offer 
-        // Create OfferStatus
-        //public ViewResult Closed()
-        //{
-        //    IEnumerable<Offer> offers = _db.Offers.Find(m => m.UserProfileId == User.Identity.GetUserId()).Where(m => m.Order != null);
-        //    OfferListViewModel model = new OfferListViewModel
-        //    {
-        //        Offers = new List<OfferViewModel>(),
-        //    };
-        //    foreach (var offer in offers)
-        //    {
-        //        model.Offers.Add(new OfferViewModel
-        //        {
-        //            Id = offer.Id,
-        //            Discription = offer.Discription,
-        //            EndDate = offer.EndDate,
-        //            Filter = offer.Filter,
-        //            Game = offer.Game,
-        //            Header = offer.Header,
-        //            Price = offer.Price,
-        //            StartDate = offer.StartDate,
-        //            SteamLogin = offer.SteamLogin,
-        //            User = offer.UserProfile,
-        //            Views = offer.Views
-        //        });
-        //    }
-        //    return View(model);
-        //}
-        //public PartialViewResult OfferList(OfferListViewModel model)
-        //{
-        //    // parse filter array to string for storing it in the database
-
-
-
-        //    IEnumerable<Offer> offers = _offerService.GetOffers().Where(o => o.Game.Value == model.Game.Value).Where(o => o);
-
-
-        //    //if (searchInfo.IsOnline)
-        //    //{
-        //    //    offers = from offer in offers
-        //    //             where offer.UserProfile.IsOnline == true
-        //    //             select offer;
-        //    //}
-        //    //if (searchInfo.MaxPrice != 0)
-        //    //{
-        //    //    offers = from offer in offers
-        //    //             where offer.Price >= searchInfo.MinPrice &&
-        //    //                    offer.Price <= searchInfo.MaxPrice
-        //    //             select offer;
-        //    //}
-
-
-        //    //if (!string.IsNullOrEmpty(searchInfo.SearchString))
-        //    //{
-        //    //    offers = _offerService.Search(searchInfo.SearchString, searchInfo.SearchInDescription, offers);
-        //    //}
-
-        //    //var model = new OfferListViewModel
-        //    //{
-        //    //    Offers = new List<OfferViewModel>(),
-        //    //    //Offers = offers.Skip((searchInfo.Page - 1) * pageSize).Take(pageSize),
-        //    //    SearchingInfo = searchInfo,
-        //    //    PagingInfo = new PagingInfo
-        //    //    {
-        //    //        CurrentPage = searchInfo.Page,
-        //    //        PageSize = pageSize,
-        //    //        TotalItems = offers.Count()
-        //    //    }
-        //    //};
-        //    foreach (var offer in offers)
-        //    {
-        //        model.Offers.Add(new OfferViewModel
-        //        {
-        //            Id = offer.Id,
-        //            Discription = offer.Discription,
-        //            EndDate = offer.EndDate,
-        //            Filter = offer.Filter,
-        //            Game = offer.Game,
-        //            Header = offer.Header,
-        //            Price = offer.Price,
-        //            StartDate = offer.StartDate,
-        //            SteamLogin = offer.SteamLogin,
-        //            User = offer.UserProfile,
-        //            Views = offer.Views
-        //        });
-        //    }
-        //    //model.Offers = model.Offers.Skip((searchInfo.Page - 1) * pageSize).Take(pageSize).ToList();
-        //    return PartialView("_OfferList", model);
-
-        // Get Ajax offer list
-        //public PartialViewResult OfferList(Game game, string[] Filters = null)
-        //{
-        //    // parse filter array to string for storing it in the database
-        //    if (Filters != null)
-        //    {
-        //        foreach (var filter in Filters)
-        //        {
-        //            searchInfo.Filter += $"{filter},";
-        //        }
-        //        searchInfo.Filter = searchInfo.Filter.TrimEnd(',');
-        //    }
-
-
-        //    IEnumerable<Offer> offers = _db.Offers.GetAll();
-        //    if (searchInfo.Game != "all")
-        //    {
-        //        offers = offers.Where(m => m.Game == searchInfo.Game);
-        //        offers = _offerService.Filter(searchInfo.Filter, searchInfo.Game, offers);
-        //    }
-        //    offers = _offerService.OrderBy(searchInfo.OrderBy, offers);
-
-
-        //    if (searchInfo.IsOnline)
-        //    {
-        //        offers = from offer in offers
-        //                 where offer.UserProfile.IsOnline == true
-        //                 select offer;
-        //    }
-        //    if (searchInfo.MaxPrice != 0)
-        //    {
-        //        offers = from offer in offers
-        //                 where offer.Price >= searchInfo.MinPrice &&
-        //                        offer.Price <= searchInfo.MaxPrice
-        //                 select offer;
-        //    }
-
-
-        //    if (!string.IsNullOrEmpty(searchInfo.SearchString))
-        //    {
-        //        offers = _offerService.Search(searchInfo.SearchString, searchInfo.SearchInDescription, offers);
-        //    }
-
-        //    var model = new OfferListViewModel
-        //    {
-        //        Offers = new List<OfferViewModel>(),
-        //        //Offers = offers.Skip((searchInfo.Page - 1) * pageSize).Take(pageSize),
-        //        SearchingInfo = searchInfo,
-        //        PagingInfo = new PagingInfo
-        //        {
-        //            CurrentPage = searchInfo.Page,
-        //            PageSize = pageSize,
-        //            TotalItems = offers.Count()
-        //        }
-        //    };
-        //    foreach (var offer in offers)
-        //    {
-        //        model.Offers.Add(new OfferViewModel
-        //        {
-        //            Id = offer.Id,
-        //            Discription = offer.Discription,
-        //            EndDate = offer.EndDate,
-        //            Filter = offer.Filter,
-        //            Game = offer.Game,
-        //            Header = offer.Header,
-        //            Price = offer.Price,
-        //            StartDate = offer.StartDate,
-        //            SteamLogin = offer.SteamLogin,
-        //            User = offer.UserProfile,
-        //            Views = offer.Views
-        //        });
-        //    }
-        //    model.Offers = model.Offers.Skip((searchInfo.Page - 1) * pageSize).Take(pageSize).ToList();
-        //    return PartialView("_OfferList", model);
-        //}
-
-        //public ActionResult Buy()
-        //{
-        //    var gameList = new OfferViewModel().Games.Skip(1);
-        //    return View(gameList);
-        //}
+        }        
 
         [Authorize]
         public ActionResult Create()
@@ -556,19 +329,9 @@ namespace Market.Web.Controllers
             {
                 games.Add(new SelectListItem { Value = game.Value, Text = game.Name });
             }
-            IList<SelectListItem> filters = new List<SelectListItem>();
-            foreach (var filter in _filterService.GetFilters())
-            {
-                filters.Add(new SelectListItem { Value = filter.Value, Text = filter.Text });
-            }
-            IList<SelectListItem> filterItems = new List<SelectListItem>();
-            foreach (var filterItem in _filterItemService.GetFilterItems())
-            {
-                filterItems.Add(new SelectListItem { Value = filterItem.Value, Text = filterItem.Name });
-            }
+
             model.Games = games;
-            model.Filters = filters;
-            model.FilterItems = filterItems;
+
             return View(model);
         }
 
@@ -704,34 +467,132 @@ namespace Market.Web.Controllers
         //    return Json(new { Success = true });
         //}
 
-        //public ActionResult Edit(int? id = 1)
-        //{
-        //    Offer offer = _db.Offers.Get(id.ToString());
-        //    ApplicationUser user = _db.Users.Get(User.Identity.GetUserId<string>());
-        //    OfferViewModel model = new OfferViewModel()
-        //    {
-        //        Id = offer.Id,
-        //        Header = offer.Header,
-        //        Discription = offer.Discription,
-        //        EndDate = offer.EndDate,
-        //        Game = offer.Game,
-        //        Price = offer.Price,
-        //        StartDate = offer.StartDate,
-        //        SteamLogin = offer.SteamLogin,
-        //        Filter = offer.Filter
+        public ActionResult Edit(int? id = 1)
+        {
+            //EditOfferViewModel model = new EditOfferViewModel();
 
-        //    };
-        //    if (offer != null && user != null)
-        //    {
-        //        if (user.UserProfile.Offers.Contains(offer))
-        //        {
-        //            return View(model);
-        //        }
 
-        //    }
-        //    return HttpNotFound("You are has no this offer");
+            IList<SelectListItem> games = new List<SelectListItem>();
+            foreach (var game in _gameService.GetGames())
+            {
+                games.Add(new SelectListItem { Value = game.Value, Text = game.Name });
+            }
 
-        //}
+
+            if (id != null)
+            {
+                Offer offer = _offerService.GetOffer(id.Value);
+                if (offer != null && offer.UserProfileId == User.Identity.GetUserId())
+                {
+                    var model = Mapper.Map<Offer, EditOfferViewModel>(offer);
+                    model.Game = offer.Game.Value;
+                    model.Games = games;
+
+                    return View(model);
+                    
+                }
+                
+            }
+            return HttpNotFound();
+
+        }
+
+        [HttpPost]
+        public ActionResult Edit(EditOfferViewModel model)
+        {
+            //EditOfferViewModel model = new EditOfferViewModel();
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            var userProfile = _userProfileService.GetUserProfileById(User.Identity.GetUserId());
+            if (userProfile != null)
+            {
+                var appUser = userProfile.ApplicationUser;
+                if (appUser != null)
+                {
+                    //if(!(appUser.PhoneNumberConfirmed && appUser.EmailConfirmed))
+                    //{
+                    //    return HttpNotFound("you are not confirmed email or phone number");
+                    //}
+                }
+
+            }
+            else
+            {
+                return View("_CreateOfferConfirmationError");
+            }
+
+            Offer offer = Mapper.Map<EditOfferViewModel, Offer>(model);
+
+            Game game = _gameService.GetGameByValue(model.Game);
+            var gameFilters = _filterService.GetFilters().Where(f => f.Game == game).ToList();
+            var modelFilters = model.FilterValues;
+            var gameFilterItems = _filterItemService.GetFilterItems().Where(f => f.Filter.Game == game).ToList();
+            var modelFilterItems = model.FilterItemValues;
+            if (game != null && modelFilters.Count() == gameFilters.Count())
+            {
+                for (int i = 0; i < gameFilters.Count; i++)
+                {
+                    if (gameFilters[i].Value != modelFilters[i])
+                    {
+                        return View("CreateOfferFiltersError");
+                    }
+
+                    bool isContainsFilterItems = false;
+                    foreach (var fItem in gameFilters[i].FilterItems)
+                    {
+                        if (fItem.Value == modelFilterItems[i])
+                        {
+                            offer.FilterItems.Add(fItem);
+                            offer.Filters.Add(gameFilters[i]);
+                            isContainsFilterItems = true;
+                        }
+                    }
+                    if (!isContainsFilterItems)
+                    {
+                        return View("_CreateOfferFilterError");
+                    }
+                    isContainsFilterItems = false;
+
+                }
+
+
+
+            }
+            else
+            {
+                return View("_CreateOfferFilterError");
+            }
+
+
+
+            offer.MiddlemanPrice = 0;
+
+            if (model.Price < 3000)
+            {
+                offer.MiddlemanPrice = 300;
+
+            }
+            else if (model.Price < 15000)
+            {
+                offer.MiddlemanPrice = model.Price * Convert.ToDecimal(0.1);
+            }
+            else
+            {
+                offer.MiddlemanPrice = 1500;
+            }
+
+
+            offer.Game = game;
+            _filterService.SaveFilter();
+            offer.UserProfileId = User.Identity.GetUserId();
+            _offerService.UpdateOffer(offer);
+            _offerService.SaveOffer();
+
+            return RedirectToAction("Buy");
+
+        }
 
         //[HttpPost]
         //public ActionResult Edit(OfferViewModel model, string[] Filters)

@@ -193,7 +193,7 @@ namespace Market.Web.Controllers
                     IList<Dialog> readDialogs = new List<Dialog>();
                     foreach (var dialog in dialogs)
                     {
-                        if (dialog.Messages.Any(m => m.IsViewed))
+                        if (dialog.Messages.Any(m => m.ToViewed))
                         {
                             readDialogs.Add(dialog);
                         }
@@ -205,7 +205,7 @@ namespace Market.Web.Controllers
                     IList<Dialog> unreadDialogs = new List<Dialog>();
                     foreach (var dialog in dialogs)
                     {
-                        if (dialog.Messages.Any(m => !m.IsViewed))
+                        if (dialog.Messages.Any(m => !m.ToViewed))
                         {
                             unreadDialogs.Add(dialog);
                         }
@@ -246,7 +246,7 @@ namespace Market.Web.Controllers
                 var otherUser = d.Users.FirstOrDefault(u => u.Id != User.Identity.GetUserId());
                 d.otherUserId = otherUser.Id;
                 d.otherUserName = otherUser.Name;
-                d.CountOfNewMessages = d.Messages.Where(m => !m.IsViewed && m.SenderId != currentUser.Id).Count();
+                d.CountOfNewMessages = d.Messages.Where(m => !m.ToViewed && m.SenderId != currentUser.Id).Count();
                 
             }
             return View(model);
@@ -313,7 +313,7 @@ namespace Market.Web.Controllers
                 var otherUser = d.Users.FirstOrDefault(u => u.Id != User.Identity.GetUserId());
                 d.otherUserId = otherUser.Id;
                 d.otherUserName = otherUser.Name;
-                d.CountOfNewMessages = d.Messages.Where(m => !m.IsViewed && m.SenderId != currentUser.Id).Count();
+                d.CountOfNewMessages = d.Messages.Where(m => !m.ToViewed && m.SenderId != currentUser.Id).Count();
                 if (d.CountOfNewMessages != 0)
                 {
                     dialogs.Add(d);
@@ -396,10 +396,10 @@ namespace Market.Web.Controllers
                 var dialogMessagessAll = dialog.Messages;
                 if (dialogMessagessAll != null)
                 {
-                    var messages = dialog.Messages.Where(m => m.SenderId != User.Identity.GetUserId() && m.IsViewed == false);
+                    var messages = dialog.Messages.Where(m => m.SenderId != User.Identity.GetUserId() && m.ToViewed == false);
                     foreach (var message in messages)
                     {
-                        message.IsViewed = true;
+                        message.ToViewed = true;
                     }
                 }
                 
@@ -409,7 +409,7 @@ namespace Market.Web.Controllers
 
             foreach (var d in user.Dialogs)
             {
-                if (d.Messages.Any(m => !m.IsViewed && m.SenderId != User.Identity.GetUserId()))
+                if (d.Messages.Any(m => !m.ToViewed && m.SenderId != User.Identity.GetUserId()))
                 {
                     newDialogsCount++;
                 }
@@ -450,7 +450,7 @@ namespace Market.Web.Controllers
                 {
                     
                     Message message = Mapper.Map<MessageViewModel, Message>(model);
-                    message.IsViewed = false;
+                    message.FromViewed = true;
                     message.SenderId = User.Identity.GetUserId();
                     message.CreatedDate = DateTime.Now;
                     var up = _userProfileService.GetUserProfiles();
@@ -475,26 +475,13 @@ namespace Market.Web.Controllers
                     _messageService.SaveMessage();
                     int newDialogsCount = 0;
 
+                    //d.CountOfNewMessages = d.Messages.Where(m => !m.ToViewed && m.SenderId != currentUser.Id).Count();
+                    newDialogsCount = _dialogService.UnreadDialogsForUserCount(user.Id);
                     
-
-                    foreach (var d in user.Dialogs)
-                    {
-                        if (d.Messages.Any(m => !m.IsViewed))
-                        {
-                            newDialogsCount++;
-                            continue;
-                        }
-                    }
                     foreach (var d in user.Dialogs)
                     {
                         int messageInDialogCount = 0;
-                        foreach (var m in d.Messages)
-                        {
-                            if (!m.IsViewed)
-                            {
-                                messageInDialogCount++;
-                            }
-                        }
+                        messageInDialogCount = _dialogService.UnreadMessagesInDialogCount(d);
                         var lastMessage = d.Messages.LastOrDefault();
                         if (lastMessage != null)
                         {
@@ -571,21 +558,7 @@ namespace Market.Web.Controllers
         public JsonResult GetMessagessCount()
         {
             string currentUserId = User.Identity.GetUserId();
-            int dialogsCount = 0;
-
-            foreach (var dialog in _dialogService.GetDialogs().Where(d => d.Users.Any(u => u.Id == currentUserId)))
-            {
-                if(dialog.Messages != null)
-                {
-
-                    if (dialog.Messages.Any(m => !m.IsViewed && m.ReceiverId == currentUserId))
-                    {
-                        dialogsCount++;
-                    }
-                    
-                }
-                
-            }
+            int dialogsCount = _dialogService.UnreadDialogsForUserCount(currentUserId);
             
 
             return Json(dialogsCount);

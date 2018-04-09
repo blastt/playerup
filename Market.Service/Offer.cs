@@ -15,6 +15,7 @@ namespace Market.Service
         //IEnumerable<Offer> GetCategoryGadgets(string categoryName, string gadgetName = null);
         Offer GetOffer(int id);
         void CreateOffer(Offer offer);
+        void UpdateOffer(Offer offer);
         void SaveOffer();
     }
 
@@ -47,6 +48,11 @@ namespace Market.Service
         public void CreateOffer(Offer offer)
         {
             offersRepository.Add(offer);
+        }
+
+        public void UpdateOffer(Offer offer)
+        {
+            offersRepository.Update(offer);
         }
 
         public void SaveOffer()

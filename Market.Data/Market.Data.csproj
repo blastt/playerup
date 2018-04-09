@@ -140,6 +140,10 @@
     <Compile Include="Migrations\201804041138238_DialogUsers.Designer.cs">
       <DependentUpon>201804041138238_DialogUsers.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201804081025105_FromToViewed.cs" />
+    <Compile Include="Migrations\201804081025105_FromToViewed.Designer.cs">
+      <DependentUpon>201804081025105_FromToViewed.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\AccountInfoRepository.cs" />
@@ -215,6 +219,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201804041138238_DialogUsers.resx">
       <DependentUpon>201804041138238_DialogUsers.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804081025105_FromToViewed.resx">
+      <DependentUpon>201804081025105_FromToViewed.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

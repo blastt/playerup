@@ -16,6 +16,8 @@ namespace Market.Service
         Dialog GetDialog(int id);
         void CreateDialog(Dialog message);
         void SaveDialog();
+        int UnreadDialogsForUserCount(string userId);
+        int UnreadMessagesInDialogCount(Dialog dialog);
     }
 
     public class DialogService : IDialogService
@@ -43,11 +45,41 @@ namespace Market.Service
             var dialog = dialogsRepository.GetById(id);
             return dialog;
         }
-
-
         public void CreateDialog(Dialog dialog)
         {
             dialogsRepository.Add(dialog);
+        }
+
+        public int UnreadDialogsForUserCount(string userId)
+        {
+            int unreadDialogsCount = 0;
+            foreach (var d in GetDialogs().Where(d => d.Users.Any(u => u.Id == userId)))
+            {
+                if (d.Messages != null)
+                {
+
+                    if (d.Messages.Any(m => !m.ToViewed && m.ReceiverId == userId))
+                    {
+                        unreadDialogsCount++;
+                    }
+
+                }
+
+            }
+            return unreadDialogsCount;
+        }
+
+        public int UnreadMessagesInDialogCount(Dialog dialog)
+        {
+            int messagesInDialogCount = 0;
+            foreach (var m in dialog.Messages)
+            {
+                if (!m.ToViewed)
+                {
+                    messagesInDialogCount++;
+                }
+            }
+            return messagesInDialogCount;
         }
 
         public void SaveDialog()

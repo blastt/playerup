@@ -45,7 +45,7 @@ namespace Market.Web.Controllers
                     }
                     foreach (var message in dialog.Messages.Where(m => m.SenderId != currentUserId))
                     {
-                        message.IsViewed = true;
+                        message.ToViewed = true;
                     }
                     _messageService.SaveMessage();
                     var model = Mapper.Map<Dialog, DialogViewModel>(dialog);

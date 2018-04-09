@@ -10,7 +10,8 @@ namespace Market.Web.ViewModels
         public int Id { get; set; }
         public string Subject { get; set; }
         public string MessageBody { get; set; } = "";
-        public bool IsViewed { get; set; }
+        public bool FromViewed { get; set; }
+        public bool ToViewed { get; set; }
         //public string SenderId { get; set; }
         //public string ReceiverId { get; set; }
         public string SenderName { get; set; }

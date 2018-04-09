@@ -1551,3 +1551,24 @@ dl dd a{
     padding: 20px 30px;
     border-bottom: 1px solid #e9eaea;
 }
+
+.nav-login {
+    color: #6c757d;
+    padding: 8px 15px;
+    border: 1px solid #6c757d;
+    border-radius: 10px;
+    display: block;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+    .nav-login:hover {
+        text-decoration: none;
+        color: #fff;
+        background-color: #6c757d;
+        padding: 8px 15px;
+        border: 1px solid #6c757d;
+        border-radius: 10px;
+        display: block;
+        font-weight: 500;
+    }
