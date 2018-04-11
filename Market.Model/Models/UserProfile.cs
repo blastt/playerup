@@ -16,6 +16,7 @@ namespace Market.Model.Models
         public int Rating { get; set; }
         public int Positive { get; set; }
         public int Negative { get; set; }
+        public decimal Balance { get; set; }
         public string Discription { get; set; }
         public bool IsOnline { get; set; }
         //public double Balance { get; set; }

@@ -424,7 +424,6 @@ namespace Market.Web.Controllers
             
 
             offer.Game = game;
-            _filterService.SaveFilter();
             offer.UserProfile = _userProfileService.GetUserProfileById(User.Identity.GetUserId());
             _offerService.CreateOffer(offer);
             _offerService.SaveOffer();
@@ -585,7 +584,6 @@ namespace Market.Web.Controllers
 
 
             offer.Game = game;
-            _filterService.SaveFilter();
             offer.UserProfileId = User.Identity.GetUserId();
             _offerService.UpdateOffer(offer);
             _offerService.SaveOffer();

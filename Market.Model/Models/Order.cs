@@ -32,6 +32,10 @@ namespace Market.Model.Models
         public bool BuyerChecked { get; set; }
         public bool SellerChecked { get; set; }
 
+        public decimal Sum { get; set; } // сумма заказа
+        public decimal? Amount { get; set; } // сумма, которую заплатали с учетом комиссии
+        public decimal? WithdrawAmount { get; set; } // сумма, которую заплатали без учета комиссии
+
         public virtual Offer Offer { get; set; }
 
         public virtual ICollection<OrderStatus> OrderStatuses { get; set; } = new List<OrderStatus>();

@@ -466,7 +466,6 @@ namespace Market.Web.Controllers
                         };
                         
                         _dialogService.CreateDialog(dialog);
-                        _messageService.SaveMessage();
                         AddDialog(user.Name, currentUser.Name, user.Id, user.Name, 1, "", "123", dialog.Id);
                     }
                     

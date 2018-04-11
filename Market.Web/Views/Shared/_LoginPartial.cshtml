@@ -13,7 +13,7 @@
                     <img class="notice" src="~/Content/Images/notice.png" />
 
                 </a>
-                
+
             </li>
             //messagess - count
 
@@ -21,10 +21,13 @@
                 <a href="@Url.Action("Inbox", "Message")">
                     <img class="message" src="~/Content/Images/message.png" />
                 </a>
-                
+
             </li>
             <li class="nav-item">
-                <img class="img-circle avatar-small" src="@Url.Action("Photo", "Profile" , new { UserId = User.Identity.GetUserId() })" alt="Alternate Text" />
+                <span class="nav-link">@Html.Action("GetBalance","Profile", new { userId = User.Identity.GetUserId() })</span>
+            </li>
+            <li class="nav-item">
+                <img class="img-circle avatar-small" src="@Url.Action("Photo", "Profile" , new { userId = User.Identity.GetUserId() })" alt="Alternate Text" />
             </li>
             <li class="nav-item dropdown">
                 <a class="dropdown-toggle nav-link" data-toggle="dropdown" href="#" id="download" aria-expanded="true" aria-atomic="true">
@@ -51,7 +54,7 @@
     else
     {
         <li class="nav-item">
-            @Html.ActionLink("Регистрация", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink", @class="nav-login" })
+            @Html.ActionLink("Регистрация", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink", @class = "nav-login" })
         </li>
         <li class="nav-item">
             @Html.ActionLink("Выполнить вход", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink", @class = "nav-login" })
