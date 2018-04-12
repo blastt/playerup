@@ -196,15 +196,15 @@ namespace Trader.WEB.Controllers
 
         //    return RedirectToAction("List","Offer");
         //}
-        public string GetBalance(string userId)
-        {
-            UserProfile profile = _userProfileService.GetUserProfileById(userId);
-            if (profile != null)
-            {
-                return string.Format("{0} руб.", profile.Balance);
-            }
-            return "";
-        }
+        //public string GetBalance(string userId)
+        //{
+        //    UserProfile profile = _userProfileService.GetUserProfileById(userId);
+        //    if (profile != null)
+        //    {
+        //        return string.Format("{0} руб.", profile.Balance);
+        //    }
+        //    return "";
+        //}
 
         public FileContentResult Photo(string userId)
         {

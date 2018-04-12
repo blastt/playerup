@@ -48,14 +48,10 @@ namespace Market.Service
 
         public void CreateMessage(Message message)
         {
-            var prevMessages = messagesRepository.GetMany(p => (p.ReceiverId == message.ReceiverId && p.SenderId == message.SenderId) ||
-            (p.ReceiverId == message.SenderId && p.SenderId == message.ReceiverId));
+            
 
             // if true
-            if (prevMessages.Count() != 0)
-            {
-                message.ParentMessageId = prevMessages.LastOrDefault().Id;
-            }
+            
             
             messagesRepository.Add(message);
             

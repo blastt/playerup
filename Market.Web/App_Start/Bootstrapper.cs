@@ -7,6 +7,7 @@ using Market.Web.Mappings;
 using Marketplace.Data.Infrastructure;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Web;
@@ -28,7 +29,8 @@ namespace Market.Web.App_Start
             builder.RegisterControllers(Assembly.GetExecutingAssembly());
             builder.RegisterType<UnitOfWork>().As<IUnitOfWork>().InstancePerRequest();
             builder.RegisterType<DbFactory>().As<IDbFactory>().InstancePerRequest();
-
+            builder.RegisterType<CultureInfo>().As<IFormatProvider>().InstancePerRequest().WithParameter("name","en-US");
+            
             #region Repositories
 
             builder.RegisterAssemblyTypes(typeof(OfferRepository).Assembly)

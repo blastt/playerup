@@ -582,6 +582,7 @@
     <Content Include="Views\Offer\_CreateOfferFilterError.cshtml" />
     <Content Include="Views\Error\NotFound.cshtml" />
     <Content Include="Views\Offer\Edit.cshtml" />
+    <Content Include="Views\Offer\_OfferItem.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

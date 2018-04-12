@@ -21,26 +21,25 @@ namespace Market.Model.Models
         public string Header { get; set; }
 
         public string Discription { get; set; }
-        public string SteamLogin { get; set; }
+        public string AccountLogin { get; set; }
 
         public OfferState State { get; set; }
 
         public decimal Price { get; set; }
 
-        [Display(Name = "Просмотров")]
         public int Views { get; set; }
 
         public bool SellerPaysMiddleman { get; set; }
 
         public decimal MiddlemanPrice { get; set; }
 
-        [Display(Name = "Дата создания")]
         public DateTime DateCreated { get; set; } = DateTime.Now;
         public DateTime? DateDeleted { get; set; }
 
 
-
+        public virtual int GameId { get; set; }
         public virtual Game Game { get; set; }
+
         public virtual Order Order { get; set; }
         public virtual string UserProfileId { get; set; }
         public virtual UserProfile UserProfile { get; set; }

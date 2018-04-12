@@ -12,9 +12,8 @@ namespace Market.Data.Configuration
         {
             ToTable("Feedbacks");
             Property(f => f.Comment).IsRequired().HasMaxLength(50);
-            Property(f => f.DateLeft).IsRequired();
             Property(f => f.Grade).IsRequired();
-            Property(f => f.OfferHeader).IsRequired().HasMaxLength(100);
+
 
         }
     }

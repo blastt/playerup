@@ -23,9 +23,9 @@
                 </a>
 
             </li>
-            <li class="nav-item">
+            @*<li class="nav-item">
                 <span class="nav-link">@Html.Action("GetBalance","Profile", new { userId = User.Identity.GetUserId() })</span>
-            </li>
+            </li>*@
             <li class="nav-item">
                 <img class="img-circle avatar-small" src="@Url.Action("Photo", "Profile" , new { userId = User.Identity.GetUserId() })" alt="Alternate Text" />
             </li>

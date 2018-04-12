@@ -1,6 +1,7 @@
 ﻿using Market.Model.Models;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
@@ -12,9 +13,15 @@ namespace Market.Web.ViewModels
         public string Header { get; set; }
         public Game Game { get; set; }
         public string Discription { get; set; }
+
+        [DataType(DataType.Currency)]
         public decimal Price { get; set; }
         public int Views { get; set; }
         public DateTime? DateCreated { get; set; } = DateTime.Now;
+
+        public string UserName { get; set; }
+        public string UserId { get; set; }
+        public int Rating { get; set; }
         public UserProfile UserProfile { get; set; }
 
         public IEnumerable<Filter> Filters { get; set; }

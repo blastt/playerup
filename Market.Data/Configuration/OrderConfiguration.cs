@@ -12,6 +12,7 @@ namespace Market.Data.Configuration
         {
             ToTable("Orders");
             HasRequired(o => o.Offer).WithOptional(o => o.Order).WillCascadeOnDelete(false);
+            HasOptional(o => o.Feedback).WithRequired(f => f.Order);
 
         }
     }

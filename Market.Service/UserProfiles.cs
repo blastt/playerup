@@ -44,6 +44,8 @@ namespace Market.Service
             return userProfile;
         }
 
+        
+
         public UserProfile GetUserProfileByName(string name)
         {
             var userProfile = userProfilesRepository.GetUserByName(name);

@@ -7,9 +7,9 @@ namespace Market.Web.ExtentionMethods
 {
     public static class CurrencyExtentions
     {
-        public static string GetStringPrice(this decimal price, string format, IFormatProvider formatProvider)
+        public static string GetStringPrice(this decimal price, string format, IFormatProvider provider)
         {
-            return string.Format(formatProvider,format, price);
+            return string.Format(provider,format, price);
         }
     }
 }

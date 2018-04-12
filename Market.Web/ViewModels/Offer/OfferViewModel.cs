@@ -15,13 +15,21 @@ namespace Market.Web.ViewModels
         public string Discription { get; set; }
         public Game Game { get; set; }
 
-        [DisplayFormat(DataFormatString = "{0:n0}")]
+        [DataType(DataType.Currency)]
         public decimal Price { get; set; }
+        
         public bool SellerPaysMiddleman { get; set; }
+
+        [DataType(DataType.Currency)]
         public decimal MiddlemanPrice { get; set; }
         public DateTime? DateCreated { get; set; } = DateTime.Now;
         public UserProfile User { get; set; }
-        
+
+        public string UserName { get; set; }
+        public string UserId { get; set; }
+        public int Rating { get; set; }
+
+
         public IList<Filter> Filters { get; set; }
         public IList<FilterItem> FilterItems { get; set; }
 

@@ -36,6 +36,9 @@ namespace Market.Model.Models
         public decimal? Amount { get; set; } // сумма, которую заплатали с учетом комиссии
         public decimal? WithdrawAmount { get; set; } // сумма, которую заплатали без учета комиссии
 
+        public virtual Feedback Feedback { get; set; }
+
+        public virtual int OfferId { get; set; }
         public virtual Offer Offer { get; set; }
 
         public virtual ICollection<OrderStatus> OrderStatuses { get; set; } = new List<OrderStatus>();

@@ -20,8 +20,11 @@ namespace Market.Web.ViewModels
         public string ConfirmSteamPassword { get; set; }
         public string SteamEmail { get; set; }
         public string AdditionalInformation { get; set; }
-
+        [Required]
         public string ModeratorId { get; set; }
+        [Required]
         public string BuyerId { get; set; }
+        [Required]
+        public string SellerId { get; set; }
     }
 }

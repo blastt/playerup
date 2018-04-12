@@ -11,11 +11,11 @@ namespace Market.Model.Models
     public class Message
     {
         public int Id { get; set; }
-        public string Subject { get; set; }
+        //public string Subject { get; set; }
         public string MessageBody { get; set; }
         public bool FromViewed { get; set; }
         public bool ToViewed { get; set; }
-        public int ParentMessageId { get; set; }
+        //public int ParentMessageId { get; set; }
         
         public bool SenderDeleted { get; set; }
         public bool ReceiverDeleted { get; set; }

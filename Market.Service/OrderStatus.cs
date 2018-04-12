@@ -14,6 +14,7 @@ namespace Market.Service
         IEnumerable<OrderStatus> GetOrderStatuses();
         OrderStatus GetOrderStatus(int id);
         OrderStatus GetOrderStatusByValue(string name);
+        OrderStatus GetCurrentOrderStatus(Order order);
         void CreateOrderStatus(OrderStatus message);
         void SaveOrderStatus();
     }
@@ -21,12 +22,14 @@ namespace Market.Service
     public class OrderStatusService : IOrderStatusService
     {
         private readonly IOrderStatusRepository orderStatusesRepository;
+        private readonly IOrderRepository ordersRepository;
         private readonly IUnitOfWork unitOfWork;
 
-        public OrderStatusService(IOrderStatusRepository orderStatusesRepository, IUnitOfWork unitOfWork)
+        public OrderStatusService(IOrderStatusRepository orderStatusesRepository, IOrderRepository ordersRepository, IUnitOfWork unitOfWork)
         {
             this.orderStatusesRepository = orderStatusesRepository;
             this.unitOfWork = unitOfWork;
+            this.ordersRepository = ordersRepository;
         }
 
         #region IOrderStatusService Members
@@ -42,6 +45,17 @@ namespace Market.Service
         {
             var orderStatus = orderStatusesRepository.GetById(id);
             return orderStatus;
+        }
+
+        public OrderStatus GetCurrentOrderStatus(Order order)
+        {
+            if (order != null)
+            {
+                var currentOrderStatus = order.OrderStatuses.OrderBy(o => o.DateFinished).LastOrDefault();
+                return currentOrderStatus;
+            }
+            return null;
+            
         }
 
 

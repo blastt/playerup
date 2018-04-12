@@ -14,6 +14,7 @@ namespace Market.Service
         IEnumerable<Order> GetOrders();
         //IEnumerable<Offer> GetCategoryGadgets(string categoryName, string gadgetName = null);
         Order GetOrder(int id);
+        Order GetOrder(string accountLogin, string moderatorId, string sellerId, string buyerId);
         void CreateOrder(Order order);
         void SaveOrder();
     }
@@ -42,6 +43,14 @@ namespace Market.Service
         {
             var order = ordersRepository.GetById(id);
             return order;
+        }
+
+        public Order GetOrder(string accountLogin, string moderatorId, string sellerId, string buyerId)
+        {            
+            Order order = ordersRepository.GetMany(o => o.Offer.AccountLogin == accountLogin && 
+            o.ModeratorId == moderatorId && o.BuyerId == buyerId && o.SellerId == sellerId).FirstOrDefault();            
+            return order;
+            
         }
 
         public void CreateOrder(Order order)

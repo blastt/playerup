@@ -19,11 +19,10 @@ namespace Market.Model.Models
         public int Id { get; set; }
         public Emotions Grade { get; set; }
         public string Comment { get; set; }
-        public DateTime? DateLeft { get; set; }
-   
-        public string OfferId { get; set; }        
+        public DateTime? DateLeft { get; set; } = DateTime.Now;
 
-        public string OfferHeader { get; set; }
+        public virtual int OrderId { get; set; }
+        public virtual Order Order { get; set; }
 
         public virtual string SenderId { get; set; }
         public virtual string ReceiverId { get; set; }

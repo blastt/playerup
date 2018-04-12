@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Market.Model.Models;
+using Market.Web.ExtentionMethods;
 using Market.Web.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -15,8 +16,11 @@ namespace Market.Web.Mappings
             get { return "DomainToViewModelMappings"; }
         }
 
+
+        
         public DomainToViewModelMappingProfile()
         {
+            
             CreateMap<Offer, OfferViewModel>();
             CreateMap<Order, OrderViewModel>();
             CreateMap<Game, GameViewModel>();
@@ -61,13 +65,17 @@ namespace Market.Web.Mappings
                .ForMember(o => o.DateCreated, map => map.MapFrom(vm => vm.DateCreated))
                .ForMember(o => o.Price, map => map.MapFrom(vm => vm.Price))
                .ForMember(o => o.Game, map => map.MapFrom(vm => vm.Game))
+               .ForMember(o => o.UserId, map => map.MapFrom(vm => vm.UserProfileId))
+               .ForPath(o => o.Rating, map => map.MapFrom(vm => vm.UserProfile.Positive - vm.UserProfile.Negative))
+               .ForPath(o => o.UserName, map => map.MapFrom(vm => vm.UserProfile.Name))
+               .ForMember(o => o.Game, map => map.MapFrom(vm => vm.Game))
                .ForPath(o => o.User, map => map.MapFrom(vm => vm.UserProfile));
 
             CreateMap<Offer, CreateOfferViewModel>()
                 .ForMember(o => o.Header, map => map.MapFrom(vm => vm.Header))
                 .ForMember(o => o.Discription, map => map.MapFrom(vm => vm.Discription))
                 .ForMember(o => o.SellerPaysMiddleman, map => map.MapFrom(vm => vm.SellerPaysMiddleman))
-                .ForMember(o => o.SteamLogin, map => map.MapFrom(vm => vm.SteamLogin))
+                .ForMember(o => o.SteamLogin, map => map.MapFrom(vm => vm.AccountLogin))
                 .ForMember(o => o.Price, map => map.MapFrom(vm => vm.Price))
                 .ForAllOtherMembers(opt => opt.Ignore());
 
@@ -75,7 +83,7 @@ namespace Market.Web.Mappings
                 .ForMember(o => o.Header, map => map.MapFrom(vm => vm.Header))
                 .ForMember(o => o.Discription, map => map.MapFrom(vm => vm.Discription))
                 .ForMember(o => o.SellerPaysMiddleman, map => map.MapFrom(vm => vm.SellerPaysMiddleman))
-                .ForMember(o => o.SteamLogin, map => map.MapFrom(vm => vm.SteamLogin))
+                .ForMember(o => o.SteamLogin, map => map.MapFrom(vm => vm.AccountLogin))
                 .ForMember(o => o.Price, map => map.MapFrom(vm => vm.Price))
                 .ForAllOtherMembers(opt => opt.Ignore());
 
@@ -85,6 +93,9 @@ namespace Market.Web.Mappings
                .ForMember(o => o.Filters, map => map.MapFrom(vm => vm.Filters))
                .ForMember(o => o.FilterItems, map => map.MapFrom(vm => vm.FilterItems))
                .ForMember(o => o.Game, map => map.MapFrom(vm => vm.Game))
+               .ForMember(o => o.UserId, map => map.MapFrom(vm => vm.UserProfileId))
+               .ForPath(o => o.Rating, map => map.MapFrom(vm => vm.UserProfile.Positive - vm.UserProfile.Negative))
+               .ForPath(o => o.UserName, map => map.MapFrom(vm => vm.UserProfile.Name))
                .ForPath(o => o.UserProfile, map => map.MapFrom(vm => vm.UserProfile))
                .ForMember(o => o.Views, map => map.MapFrom(vm => vm.Views))
                .ForMember(o => o.DateCreated, map => map.MapFrom(vm => vm.DateCreated))
@@ -169,15 +180,12 @@ namespace Market.Web.Mappings
                 .ForPath(o => o.SenderName, map => map.MapFrom(vm => vm.Sender.Name))
                 .ForPath(o => o.ReceiverName, map => map.MapFrom(vm => vm.Receiver.Name))
                 .ReverseMap()
-                .ForMember(o => o.CreatedDate, map => map.MapFrom(vm => vm.CreatedDate))
-                .ForMember(o => o.Subject, map => map.MapFrom(vm => vm.Subject));
+                .ForMember(o => o.CreatedDate, map => map.MapFrom(vm => vm.CreatedDate));
 
             CreateMap<NewMessageViewModel, Message>()
-                .ForMember(o => o.Subject, map => map.MapFrom(vm => vm.Subject))
                 .ForMember(o => o.MessageBody, map => map.MapFrom(vm => vm.MessageBody));
 
             CreateMap<DetailsMessageViewModel, Message>()
-               .ForMember(o => o.Subject, map => map.MapFrom(vm => vm.Subject))
                .ForMember(o => o.MessageBody, map => map.MapFrom(vm => vm.MessageBody))
                .ReverseMap()
                .ForPath(o => o.SenderName, map => map.MapFrom(vm => vm.Sender.Name))
@@ -212,7 +220,6 @@ namespace Market.Web.Mappings
                 .ForMember(o => o.PositiveFeedbacks, map => map.MapFrom(vm => vm.Positive))
                 .ForMember(o => o.NegativeFeedbacks, map => map.MapFrom(vm => vm.Negative))
                 .ForMember(o => o.IsOnline, map => map.MapFrom(vm => vm.IsOnline))
-                .ForMember(o => o.Rating, map => map.MapFrom(vm => vm.Rating))
                 .ForMember(o => o.Name, map => map.MapFrom(vm => vm.Name))
                 .ForMember(o => o.RegistrationDate, map => map.MapFrom(vm => vm.RegistrationDate));
 

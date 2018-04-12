@@ -31,7 +31,7 @@ namespace Market.Web.Mappings
                 .ForMember(o => o.Header, map => map.MapFrom(vm => vm.Header))
                 .ForMember(o => o.SellerPaysMiddleman, map => map.MapFrom(vm => vm.SellerPaysMiddleman))
                 .ForMember(o => o.Discription, map => map.MapFrom(vm => vm.Discription))
-                .ForMember(o => o.SteamLogin, map => map.MapFrom(vm => vm.SteamLogin))
+                .ForMember(o => o.AccountLogin, map => map.MapFrom(vm => vm.SteamLogin))
                 .ForMember(o => o.Price, map => map.MapFrom(vm => vm.Price))
                 .ForAllOtherMembers(opt => opt.Ignore());
 
@@ -39,7 +39,7 @@ namespace Market.Web.Mappings
                 .ForMember(o => o.Id, map => map.MapFrom(vm => vm.Id))
                 .ForMember(o => o.Header, map => map.MapFrom(vm => vm.Header))
                 .ForMember(o => o.SellerPaysMiddleman, map => map.MapFrom(vm => vm.SellerPaysMiddleman))
-                .ForMember(o => o.SteamLogin, map => map.MapFrom(vm => vm.SteamLogin))
+                .ForMember(o => o.AccountLogin, map => map.MapFrom(vm => vm.SteamLogin))
                 .ForMember(o => o.Discription, map => map.MapFrom(vm => vm.Discription))
                 .ForMember(o => o.Price, map => map.MapFrom(vm => vm.Price))
                 .ForAllOtherMembers(opt => opt.Ignore());
@@ -97,15 +97,12 @@ namespace Market.Web.Mappings
                .ForPath(o => o.ReceiverName, map => map.MapFrom(vm => vm.Receiver.Name))              
                .ForPath(o => o.SenderName, map => map.MapFrom(vm => vm.Sender.Name))
                .ReverseMap()
-               .ForMember(o => o.CreatedDate, map => map.MapFrom(vm => vm.CreatedDate))
-               .ForMember(o => o.Subject, map => map.MapFrom(vm => vm.Subject));
+               .ForMember(o => o.CreatedDate, map => map.MapFrom(vm => vm.CreatedDate));
 
             CreateMap<NewMessageViewModel, Message>()
-                .ForMember(o => o.Subject, map => map.MapFrom(vm => vm.Subject))
                 .ForMember(o => o.MessageBody, map => map.MapFrom(vm => vm.MessageBody));
 
             CreateMap<DetailsMessageViewModel, Message>()
-               .ForMember(o => o.Subject, map => map.MapFrom(vm => vm.Subject))
                .ForMember(o => o.MessageBody, map => map.MapFrom(vm => vm.MessageBody))
                .ReverseMap()
                .ForPath(o => o.ReceiverName, map => map.MapFrom(vm => vm.Receiver.Name))
@@ -119,16 +116,16 @@ namespace Market.Web.Mappings
 
             CreateMap<FeedbackViewModel, Feedback>()
                .ForMember(o => o.Grade, map => map.MapFrom(vm => vm.Grade))
-               .ForMember(o => o.OfferHeader, map => map.MapFrom(vm => vm.OfferHeader))
+               .ForPath(o => o.Order.Offer.Header, map => map.MapFrom(vm => vm.OfferHeader))
                .ForMember(o => o.Comment, map => map.MapFrom(vm => vm.Comment))
                .ForMember(o => o.DateLeft, map => map.MapFrom(vm => vm.DateLeft));
 
 
             CreateMap<NewFeedbackViewModel, Feedback>()
                 .ForMember(o => o.Grade, map => map.MapFrom(vm => vm.Grade))
-               .ForMember(o => o.OfferHeader, map => map.MapFrom(vm => vm.OfferHeader))
+                .ForPath(o => o.Order.Offer.Header, map => map.MapFrom(vm => vm.OfferHeader))
                .ForMember(o => o.Comment, map => map.MapFrom(vm => vm.Comment))
-               .ForMember(o => o.OfferId, map => map.MapFrom(vm => vm.OfferId));
+               .ForPath(o => o.Order.Offer.Id, map => map.MapFrom(vm => vm.OfferId));
 
             #endregion
 

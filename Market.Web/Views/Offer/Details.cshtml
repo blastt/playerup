@@ -11,23 +11,23 @@
         <div class="row">
             <div class="col-md-3">
                 <div class="details-user-block">
-                    <img class="img-circle" src="@Url.Action("Photo", "Profile", new { UserId = Model.UserProfile.Id })" alt="Alternate Text" style="width:80px; height:80px" />
+                    <img class="img-circle" src="@Url.Action("Photo", "Profile", new { UserId = Model.UserId })" alt="Alternate Text" style="width:80px; height:80px" />
 
                     <div class="details-user-name-contact">
                         <div class="row">
                             <div class="col-lg-6 details-user-block-name">
-                                @Model.UserProfile.Name
+                                @Model.UserName
                             </div>
                             <div class="col-lg-6 details-user-block-contact">
                                 <input id="contact" type="button" value="Связаться" class="btn-contact" />
-                                @Html.HiddenFor(m => m.UserProfile.Id)
+                                @Html.HiddenFor(m => m.UserId)
                             </div>
                         </div>
                     </div>
 
                     <div class="details-user-rate-date">
                         <div class="row">
-                            <div class="col-sm-5 details-user-block-rate">Рейтинг: <span class="text-700">@Model.UserProfile.Rating</span></div>
+                            <div class="col-sm-5 details-user-block-rate">Рейтинг: <span class="text-700">@Model.Rating</span></div>
                             <div class="col-sm-7 details-user-block-date">
                                 Зарегистрирован @Model.UserProfile.RegistrationDate.ToShortDateString()
                             </div>

@@ -25,6 +25,8 @@ namespace Market.Web.Controllers.Moderator
             _accountInfoService = accountInfoService;
             _userProfileService = userProfileService;
         }
+
+       
         // GET: Moderator
         public ActionResult Panel()
         {
@@ -38,7 +40,7 @@ namespace Market.Web.Controllers.Moderator
 
             foreach (var order in _orderService.GetOrders())
             {
-                var currentOrderStatus = order.OrderStatuses.OrderBy(o => o.DateFinished).LastOrDefault();
+                var currentOrderStatus = _orderStatusService.GetCurrentOrderStatus(order);
 
                 if (currentOrderStatus.Value == "adminWating")
                 {
@@ -70,7 +72,7 @@ namespace Market.Web.Controllers.Moderator
             if(orderId != null)
             {
                 var order = _orderService.GetOrder(orderId.Value);
-                var currentOrderStatus = order.OrderStatuses.OrderBy(o => o.DateFinished).LastOrDefault();
+                var currentOrderStatus = _orderStatusService.GetCurrentOrderStatus(order);
                 if (currentOrderStatus != null)
                 {
                     if (order != null && currentOrderStatus.Value == "adminWating")
@@ -111,6 +113,7 @@ namespace Market.Web.Controllers.Moderator
                 {
                     var accInfo = order.AccountInfo;
                     var model = Mapper.Map<AccountInfo, AccountInfoViewModel>(accInfo);
+                    model.SellerId = order.SellerId;
                     model.BuyerId = order.BuyerId;
                     model.ModeratorId = order.ModeratorId;
                     return View(model);
@@ -132,51 +135,38 @@ namespace Market.Web.Controllers.Moderator
                     accInfo.Password = model.SteamPassword;
                     accInfo.Email = model.SteamEmail;
                     accInfo.AdditionalInformation = model.AdditionalInformation;
-
-                    var buyer = _userProfileService.GetUserProfileById(model.BuyerId);
-                    if(buyer != null)
-                    {
-
-                        var buyerOrder = buyer.Orders.Where(m => m.BuyerId == model.BuyerId && m.ModeratorId == User.Identity.GetUserId() && m.Offer.SteamLogin == model.SteamLogin).FirstOrDefault();
-                        if(buyerOrder != null)
-                        {
-                            var currentOrderStatus = buyerOrder.OrderStatuses.OrderBy(o => o.DateFinished).LastOrDefault();
-                            if (currentOrderStatus != null)
-                            {
-                                if (buyer != null && buyerOrder != null && currentOrderStatus.Value == "adminChecking")
-                                {
-                                    OrderStatus orderStatus = new OrderStatus
-                                    {
-                                        Value = "buyerConfirming",
-                                        Name = "Покупатель подтверждает получение",
-                                        FinisedName = "Гарант проверил данные",
-                                        DateFinished = DateTime.Now
-                                    };
-
-                                    if (orderStatus != null)
-                                    {
-                                        buyerOrder.BuyerChecked = false;
-                                        buyerOrder.SellerChecked = false;
-                                        buyerOrder.OrderStatuses.Add(orderStatus);
-                                        accInfo.BuyerId = buyer.Id;
-                                        _accountInfoService.UpdateAccountInfo(accInfo);
-                                        buyerOrder.AccountInfo = accInfo;
-                                        _orderService.SaveOrder();
-                                        return RedirectToAction("ProvideDataToBuyer", new { orderId = buyerOrder.Id });
-                                    }
-                                    
-                                }
-                            }
-                            
-                        }
-                        
-                    }
                     
+                    var buyerOrder = _orderService.GetOrder(model.SteamLogin, model.ModeratorId, model.SellerId, model.BuyerId);
+                    if (buyerOrder != null)
+                    {
+                        var currentOrderStatus = _orderStatusService.GetCurrentOrderStatus(buyerOrder);
+                        if (currentOrderStatus != null)
+                        {
+                            if (currentOrderStatus.Value == "adminChecking")
+                            {
+                                OrderStatus orderStatus = new OrderStatus
+                                {
+                                    Value = "buyerConfirming",
+                                    Name = "Покупатель подтверждает получение",
+                                    FinisedName = "Гарант проверил данные",
+                                    DateFinished = DateTime.Now
+                                };                                 
+                                buyerOrder.BuyerChecked = false;
+                                buyerOrder.SellerChecked = false;
+                                buyerOrder.OrderStatuses.Add(orderStatus);
+                                    
+                                accInfo.BuyerId = model.BuyerId;
+                                _accountInfoService.UpdateAccountInfo(accInfo);
+                                buyerOrder.AccountInfo = accInfo;
+                                _orderService.SaveOrder();
+                                return RedirectToAction("ProvideDataToBuyer", new { orderId = buyerOrder.Id });                                                                        
+                            }
+                        }                            
+                    }                                                              
                 }
             }
 
-            return HttpNotFound("fefwefww");
+            return HttpNotFound();
         }
-
     }
 }

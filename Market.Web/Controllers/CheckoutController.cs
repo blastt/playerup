@@ -43,19 +43,19 @@ namespace Trader.WEB.Controllers
                     FinisedName = "Заказ создан",
                     Name = "Поиск гаранта",
                     DateFinished = DateTime.Now
-            };
-                
-            offer.Order = new Order
-            {
-                BuyerChecked = false,
-                SellerChecked = false,
-                BuyerId = User.Identity.GetUserId(),
-                SellerId = model.SellerId,
-                DateCreated = DateTime.Now
-            };
-                
-            offer.Order.OrderStatuses.Add(orderStatus);
-            _offerService.SaveOffer();
+                };
+
+                offer.Order = new Order
+                {
+                    BuyerChecked = false,
+                    SellerChecked = false,
+                    BuyerId = User.Identity.GetUserId(),
+                    SellerId = model.SellerId,
+                    DateCreated = DateTime.Now
+                };
+
+                offer.Order.OrderStatuses.Add(orderStatus);
+                _offerService.SaveOffer();
 
                 var userProfiles = _userProfileService.GetUserProfiles()
                     .Where(u => u.ApplicationUser.Roles.Contains(new IdentityUserRole() { RoleId = "2", UserId = u.Id }));
@@ -68,7 +68,7 @@ namespace Trader.WEB.Controllers
                     });
                 }
                 return RedirectToAction("BuyDetails", "Order");
-                             
+
             }
             return View();
 
@@ -76,13 +76,31 @@ namespace Trader.WEB.Controllers
 
         // Provide data from seller to moderator
         [HttpGet]
-        public ActionResult ProvideData(string moderatorId)
+        public ActionResult ProvideData(int? Id, string moderatorId, string buyerId, string sellerId)
         {
-            AccountInfoViewModel model = new AccountInfoViewModel
+            if (Id != null && moderatorId != null && buyerId != null && sellerId != null)
             {
-                ModeratorId = moderatorId
-            };
-            return View(model);
+                Order order = _orderService.GetOrder(Id.Value);
+                var currentOrderStatus = _orderStatusService.GetCurrentOrderStatus(order);
+                if (sellerId == User.Identity.GetUserId())
+                {
+                    if (order.ModeratorId == moderatorId && order.SellerId == sellerId &&
+                    order.BuyerId == buyerId && currentOrderStatus.Value == "sellerProviding")
+                    {
+                        AccountInfoViewModel model = new AccountInfoViewModel
+                        {
+                            ModeratorId = moderatorId,
+                            SteamLogin = order.Offer.AccountLogin,
+                            BuyerId = buyerId,
+                            SellerId = sellerId
+
+                        };
+                        return View(model);
+                    }
+                }
+
+            }
+            return HttpNotFound();
         }
 
         [HttpPost]
@@ -90,7 +108,7 @@ namespace Trader.WEB.Controllers
         {
             if (ModelState.IsValid)
             {
-                var accountInfo = AutoMapper.Mapper.Map<AccountInfoViewModel, AccountInfo>(model);
+                var accountInfo = Mapper.Map<AccountInfoViewModel, AccountInfo>(model);
                 var moderator = _userProfileService.GetUserProfileById(model.ModeratorId);
 
                 bool moderIsInrole = false;
@@ -106,70 +124,58 @@ namespace Trader.WEB.Controllers
                 }
                 if (moderIsInrole)
                 {
-                    
-                    var order = _orderService.GetOrders().Where(o => o.Offer.SteamLogin == model.SteamLogin && o.ModeratorId == moderator.Id).FirstOrDefault();
-                    if(order != null)
+                    var order = _orderService.GetOrder(model.SteamLogin, model.ModeratorId, model.SellerId, model.BuyerId);
+                    if (order != null)
                     {
-                        var currentOrderStatus = order.OrderStatuses.OrderBy(o => o.DateFinished).LastOrDefault();
-                        if(currentOrderStatus != null)
+                        var currentOrderStatus = _orderStatusService.GetCurrentOrderStatus(order);
+                        if (currentOrderStatus != null)
                         {
                             if (order.AccountInfo == null && currentOrderStatus.Value == "sellerProviding")
                             {
-                   
                                 OrderStatus orderStatus = new OrderStatus
                                 {
                                     Value = "adminChecking",
                                     Name = "Гарант проверяет данные",
                                     FinisedName = "Продавец предоставил данные гаранту",
                                     DateFinished = DateTime.Now
-                            };
-
-
-
-                                if (orderStatus != null)
-                                {
-                                    order.BuyerChecked = false;
-                                    order.SellerChecked = false;
-                                    order.OrderStatuses.Add(orderStatus);
-                                    accountInfo.ModeratorId = moderator.Id;
-                                    order.AccountInfo = accountInfo;
-                                    _orderService.SaveOrder();
-                                    return RedirectToAction("ProvideData", new { moderatorId = moderator.Id });
-                                }
-                                
+                                };                                
+                                order.BuyerChecked = false;
+                                order.SellerChecked = false;
+                                order.OrderStatuses.Add(orderStatus);
+                                accountInfo.ModeratorId = model.ModeratorId;
+                                order.AccountInfo = accountInfo;
+                                _orderService.SaveOrder();
+                                return RedirectToAction("ProvideData", new { moderatorId = model.ModeratorId });                                
                             }
                         }
                     }
-                    
                 }
             }
-
-            return HttpNotFound("fefwefww");
+            return HttpNotFound();
         }
-
 
         public ActionResult ConfirmOrder(int? orderId)
         {
             if (orderId != null)
             {
                 var order = _orderService.GetOrder(orderId.Value);
-                if(order != null)
+                if (order != null)
                 {
-                    var currentOrderStatus = order.OrderStatuses.OrderBy(o => o.DateFinished).LastOrDefault();
+                    var currentOrderStatus = _orderStatusService.GetCurrentOrderStatus(order);
                     if (currentOrderStatus != null)
                     {
                         if (order.BuyerId == User.Identity.GetUserId() && currentOrderStatus.Value == "buyerConfirming")
                         {
-            
+
                             OrderStatus orderStatus = new OrderStatus
                             {
                                 Value = "payingToSeller",
                                 Name = "Отправка средств продавцу",
                                 FinisedName = "Покупатель подтвердил получение",
                                 DateFinished = DateTime.Now
-                        };
+                            };
 
-                            if(orderStatus != null)
+                            if (orderStatus != null)
                             {
                                 order.BuyerChecked = false;
                                 order.SellerChecked = false;
@@ -177,13 +183,13 @@ namespace Trader.WEB.Controllers
                                 _orderService.SaveOrder();
                                 return View();
                             }
-                            
+
                         }
                     }
                 }
-                
+
             }
-            return HttpNotFound("qqqq");
+            return HttpNotFound();
         }
     }
 }

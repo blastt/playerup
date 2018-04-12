@@ -12,7 +12,6 @@ namespace Market.Data.Configuration
         {
             ToTable("Messages");
             Property(m => m.MessageBody).IsRequired().HasMaxLength(200);
-
         }
     }
 }

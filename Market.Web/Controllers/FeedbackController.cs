@@ -108,8 +108,7 @@ namespace Market.Web.Controllers
                         Grade = model.Grade,
                         SenderId = User.Identity.GetUserId(),
                         ReceiverId = model.ReceiverId,
-                        OfferHeader = order.Offer.Header,
-                        OfferId = order.Offer.Id.ToString()
+                        Order = order
                     };
                     order.Buyer.Feedbacks.Add(feedback);
                     _feedbackService.SaveFeedback();
@@ -199,10 +198,10 @@ namespace Market.Web.Controllers
                         DateLeft = DateTime.Now,
                         Grade = model.Grade,
                         SenderId = User.Identity.GetUserId(),
-                        ReceiverId = model.ReceiverId,
-                        OfferHeader = order.Offer.Header,
-                        OfferId = order.Offer.Id.ToString()
+                        ReceiverId = model.ReceiverId,                        
+                        OrderId = order.Id
                     };
+                    
                     order.Seller.Feedbacks.Add(feedback);
                     _feedbackService.SaveFeedback();
                     return View(model);
