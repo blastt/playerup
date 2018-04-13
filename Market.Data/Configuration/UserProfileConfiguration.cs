@@ -14,8 +14,7 @@ namespace Market.Data.Configuration
             HasMany(u => u.Offers).WithRequired(u => u.UserProfile);
             
             HasRequired(o => o.ApplicationUser).WithRequiredDependent(o => o.UserProfile).WillCascadeOnDelete(false);
-            HasMany(m => m.FeedbacksAsSeller).WithRequired(m => m.Seller).HasForeignKey(m => m.SellerId).WillCascadeOnDelete(false);
-            HasMany(m => m.FeedbacksAsBuyer).WithRequired(m => m.Buyer).HasForeignKey(m => m.BuyerId).WillCascadeOnDelete(false);
+            HasMany(m => m.Feedbacks).WithRequired(m => m.User).HasForeignKey(m => m.UserId).WillCascadeOnDelete(false);
             HasMany(m => m.MessagesAsReceiver).WithRequired(m => m.Receiver).HasForeignKey(m => m.ReceiverId).WillCascadeOnDelete(false);
             HasMany(m => m.MessagesAsSender).WithRequired(m => m.Sender).HasForeignKey(m => m.SenderId).WillCascadeOnDelete(false);  
             HasMany(u => u.OrdersAsSeller).WithRequired(u => u.Seller).HasForeignKey(m => m.SellerId).WillCascadeOnDelete(false);

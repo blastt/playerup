@@ -39,7 +39,7 @@ namespace Market.Web.Controllers
         public PartialViewResult FeedbackList(string sellerId, int page = 1, string filter = "all")
         {
             FeedbackListViewModel model = new FeedbackListViewModel();
-            IEnumerable<Feedback> feedbacks = _feedbackService.GetFeedbacks().Where(m => m.SellerId == sellerId);
+            IEnumerable<Feedback> feedbacks = _feedbackService.GetFeedbacks().Where(m => m.UserId == sellerId);
             IList<FeedbackViewModel> feedbackViewModels = Mapper.Map<List<Feedback>, List<FeedbackViewModel>>(feedbacks.ToList());
             model.Feedbacks = feedbackViewModels.Skip((page - 1) * pageSize).Take(pageSize).ToList();
             model.PageInfo = new PageInfoViewModel()
@@ -81,40 +81,22 @@ namespace Market.Web.Controllers
         {
             if (model.ReceiverId != null && ModelState.IsValid && Enum.IsDefined(typeof(Emotions), model.Grade))
             {
-
-                Order order = null;//.Where(o => o.Id == model.OrderId && o.Buyer.Id == model.ReceiverId && o.Seller.Id == User.Identity.GetUserId() && !o.BuyerFeedbacked &&
-            //(o.OrderStatus == Status.PayingToSeller || o.OrderStatus == Status.ClosedSeccessfuly)).FirstOrDefault();
-                foreach (var o in _orderService.GetOrders())
+                if (model.OrderId != null)
                 {
-                    if (o.Id == model.OrderId && o.Buyer.Id == model.ReceiverId && o.Seller.Id == User.Identity.GetUserId() && !o.BuyerFeedbacked)
+                    Order order = _orderService.GetOrder(model.OrderId.Value);
+
+                    if (order != null && order.BuyerId == model.ReceiverId && order.SellerId == User.Identity.GetUserId() && !order.BuyerFeedbacked)
                     {
-                        var orderStatus = o.OrderStatuses.LastOrDefault();
-                        if(orderStatus != null)
-                        {
-                            if(orderStatus.Value == "payingToSeller" || orderStatus.Value == "closedSeccessfuly")
-                            {
-                                order = o;
-                            }
-                        }
+                        order.SellerFeedbacked = true;
+                        var feedback = Mapper.Map<GiveFeedbackViewModel, Feedback>(model);
+                        order.Feedback = feedback;
+                        order.Buyer.Feedbacks.Add(feedback);
+                        _feedbackService.CreateFeedback(feedback);
+                        _feedbackService.SaveFeedback();
+                        return View(model);
                     }
                 }
-                if (order != null)
-                {
-                    order.BuyerFeedbacked = true;
-                    var feedback = new Feedback
-                    {
-                        Comment = model.Comment,
-                        DateLeft = DateTime.Now,
-                        Grade = model.Grade,
-                        SellerId = User.Identity.GetUserId(),
-                        BuyerId = model.ReceiverId,
-                        Order = order
-                    };
-                    order.Buyer.FeedbacksAsBuyer.Add(feedback);
-                    _feedbackService.SaveFeedback();
-                    return View(model);
-                }
-            }
+            }           
 
             return HttpNotFound();
         }
@@ -144,76 +126,30 @@ namespace Market.Web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult GiveToSeller(GiveFeedbackViewModel model)
         {
-            //if (model.ReceiverId != null && ModelState.IsValid && Enum.IsDefined(typeof(Emotions), model.Grade))
-            //{
-
-            //    var order = _orderService.GetOrders().Where(o => o.Id == model.OrderId && o.Seller.Id == model.ReceiverId && o.BuyerId == User.Identity.GetUserId() && !o.SellerFeedbacked &&
-            //(o.OrderStatus == Status.PayingToSeller || o.OrderStatus == Status.ClosedSeccessfuly)).FirstOrDefault();
-            //    if (order != null)
-            //    {
-            //        order.SellerFeedbacked = true;
-            //        var feedback = new Feedback
-            //        {
-            //            Comment = model.Comment,
-            //            DateLeft = DateTime.Now,
-            //            Grade = model.Grade,
-            //            SenderId = User.Identity.GetUserId(),
-            //            ReceiverId = model.ReceiverId,
-            //            OfferHeader = order.Offer.Header,
-            //            OfferId = order.Offer.Id.ToString()
-            //        };
-            //        order.Seller.Feedbacks.Add(feedback);
-            //        _feedbackService.SaveFeedback();
-            //        return View(model);
-            //    }
-            //}
-
-            //return HttpNotFound("Ошибка");
 
             if (model.ReceiverId != null && ModelState.IsValid && Enum.IsDefined(typeof(Emotions), model.Grade))
             {
-
-                Order order = null;//.Where(o => o.Id == model.OrderId && o.Buyer.Id == model.ReceiverId && o.Seller.Id == User.Identity.GetUserId() && !o.BuyerFeedbacked &&
-                                   //(o.OrderStatus == Status.PayingToSeller || o.OrderStatus == Status.ClosedSeccessfuly)).FirstOrDefault();
-                foreach (var o in _orderService.GetOrders())
+                if (model.OrderId != null)
                 {
-                    if (o.Id == model.OrderId && o.Seller.Id == model.ReceiverId && o.BuyerId == User.Identity.GetUserId() && !o.SellerFeedbacked)
+                    Order order = _orderService.GetOrder(model.OrderId.Value);
+
+                    if (order != null && order.Seller.Id == model.ReceiverId && order.BuyerId == User.Identity.GetUserId() && !order.SellerFeedbacked)
                     {
-                        var orderStatus = o.OrderStatuses.LastOrDefault();
-                        if (orderStatus != null)
-                        {
-                            if (orderStatus.Value == "payingToSeller" || orderStatus.Value == "closedSeccessfuly")
-                            {
-                                order = o;
-                            }
-                        }
+                        order.BuyerFeedbacked = true;
+                        var feedback = Mapper.Map<GiveFeedbackViewModel, Feedback>(model);
+
+                        _feedbackService.CreateFeedback(feedback);
+                        _feedbackService.SaveFeedback();
+                        return View(model);
                     }
-                }
-                if (order != null)
-                {
-                    order.BuyerFeedbacked = true;
-                    var feedback = new Feedback
-                    {
-                        Comment = model.Comment,
-                        DateLeft = DateTime.Now,
-                        Grade = model.Grade,
-                        BuyerId = User.Identity.GetUserId(),
-                        SellerId = model.ReceiverId,                        
-                        OrderId = order.Id
-                    };
-                    
-                    order.Seller.FeedbacksAsSeller.Add(feedback);
-                    _feedbackService.SaveFeedback();
-                    return View(model);
-                }
+                }                
             }
-
             return HttpNotFound();
         }
 
         public PartialViewResult FeedbackListInfo(SearchFeedbacksInfoViewModel searchInfo)
         {
-            var feedbacks = _feedbackService.GetFeedbacks().Where(m => m.SellerId == searchInfo.UserId);
+            var feedbacks = _feedbackService.GetFeedbacks().Where(m => m.UserId == searchInfo.UserId);
             var modelFeedbacks = Mapper.Map<IEnumerable<Feedback>, IEnumerable<FeedbackViewModel>>(feedbacks);
             FeedbackListViewModel model = new FeedbackListViewModel
             {

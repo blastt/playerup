@@ -100,7 +100,7 @@ namespace Market.Web.Mappings
                .ForMember(o => o.Views, map => map.MapFrom(vm => vm.Views))
                .ForMember(o => o.DateCreated, map => map.MapFrom(vm => vm.DateCreated))
                .ForMember(o => o.Price, map => map.MapFrom(vm => vm.Price))
-               .ForPath(o => o.Feedbacks, map => map.MapFrom(vm => vm.UserProfile.FeedbacksAsSeller));
+               .ForPath(o => o.Feedbacks, map => map.MapFrom(vm => vm.UserProfile.Feedbacks));
 
             #endregion
 
@@ -195,13 +195,11 @@ namespace Market.Web.Mappings
 
             #endregion
 
-            //#region Feedback
+            #region Feedback
 
-            //CreateMap<FeedbackViewModel, Feedback>()
-            //   .ForMember(o => o.Grade, map => map.MapFrom(vm => vm.Grade))
-            //   .ForMember(o => o.OfferHeader, map => map.MapFrom(vm => vm.OfferHeader))
-            //   .ForMember(o => o.Comment, map => map.MapFrom(vm => vm.Comment))
-            //   .ForMember(o => o.DateLeft, map => map.MapFrom(vm => vm.DateLeft));
+            CreateMap<GiveFeedbackViewModel, Feedback>()
+               .ForMember(o => o.Grade, map => map.MapFrom(vm => vm.Grade))
+               .ForMember(o => o.Comment, map => map.MapFrom(vm => vm.Comment));
 
 
             //CreateMap<NewFeedbackViewModel, Feedback>()
@@ -210,7 +208,7 @@ namespace Market.Web.Mappings
             //   .ForMember(o => o.Comment, map => map.MapFrom(vm => vm.Comment))
             //   .ForMember(o => o.OfferId, map => map.MapFrom(vm => vm.OfferId));
 
-            //#endregion
+            #endregion
 
             #region UserProfile
 

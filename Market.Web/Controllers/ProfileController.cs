@@ -51,7 +51,7 @@ namespace Trader.WEB.Controllers
         {
             var profile = _userProfileService.GetUserProfileById(User.Identity.GetUserId());
 
-            if (profile.FeedbacksAsBuyer != null)
+            if (profile.Feedbacks != null)
             {
                 //FeedbackListViewModel model = new FeedbackListViewModel
                 //{
@@ -112,7 +112,7 @@ namespace Trader.WEB.Controllers
             model.NegativeFeedbackProcent = negProcent;
             model.CurrentUserId = User.Identity.GetUserId();
             model.OffersViewModel.Offers = Mapper.Map<IEnumerable<Offer>, IEnumerable<OfferViewModel>>(profile.Offers);
-            model.FeedbacksViewModel.Feedbacks = Mapper.Map<IEnumerable<Feedback>, IEnumerable<FeedbackViewModel>>(profile.FeedbacksAsBuyer);
+            model.FeedbacksViewModel.Feedbacks = Mapper.Map<IEnumerable<Feedback>, IEnumerable<FeedbackViewModel>>(profile.Feedbacks);
             var games = _gameService.GetGames();
             
             model.FeedbacksViewModel.PageInfo = new PageInfoViewModel

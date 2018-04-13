@@ -78,16 +78,22 @@ namespace Market.Web.Controllers
         {
             if(orderId != null)
             {
+
                 var order = _orderService.GetOrder(orderId.Value);
-                if (order.BuyerId == User.Identity.GetUserId())
+                if (order != null)
                 {
-                    order.BuyerChecked = true;
-                    _orderService.SaveOrder();
-                    DetailsOrderViewModel model = Mapper.Map<Order, DetailsOrderViewModel>(order);
-                    model.OrderStatuses = order.OrderStatuses.OrderBy(o => o.DateFinished).ToList();
-                    model.ModeratorId = order.MiddlemanId;
-                    return View(model);
+                    if (order.BuyerId == User.Identity.GetUserId())
+                    {
+                        order.BuyerChecked = true;
+                        _orderService.SaveOrder();
+                        DetailsOrderViewModel model = Mapper.Map<Order, DetailsOrderViewModel>(order);
+                        model.OrderStatuses = order.OrderStatuses.OrderBy(o => o.DateFinished).ToList();
+                        model.ModeratorId = order.MiddlemanId;
+                        return View(model);
+                    }
+
                 }
+                
                 
             }
             
@@ -100,14 +106,18 @@ namespace Market.Web.Controllers
             if (orderId != null)
             {
                 var order = _orderService.GetOrder(orderId.Value);
-                if (order.SellerId == User.Identity.GetUserId())
+                if (order != null)
                 {
-                    order.SellerChecked = true;
-                    _orderService.SaveOrder();
-                    DetailsOrderViewModel model = Mapper.Map<Order, DetailsOrderViewModel>(order);
-                    model.OrderStatuses = order.OrderStatuses.OrderBy(o => o.DateFinished).ToList();
-                    model.ModeratorId = order.MiddlemanId;
-                    return View(model);
+                   
+                    if (order.SellerId == User.Identity.GetUserId())
+                    {
+                        order.SellerChecked = true;
+                        _orderService.SaveOrder();
+                        DetailsOrderViewModel model = Mapper.Map<Order, DetailsOrderViewModel>(order);
+                        model.OrderStatuses = order.OrderStatuses.OrderBy(o => o.DateFinished).ToList();
+                        model.ModeratorId = order.MiddlemanId;
+                        return View(model);
+                    }
                 }
                 
             }
