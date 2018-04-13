@@ -36,10 +36,10 @@ namespace Market.Web.Controllers
 
 
 
-        public PartialViewResult FeedbackList(string receiverId, int page = 1, string filter = "all")
+        public PartialViewResult FeedbackList(string sellerId, int page = 1, string filter = "all")
         {
             FeedbackListViewModel model = new FeedbackListViewModel();
-            IEnumerable<Feedback> feedbacks = _feedbackService.GetFeedbacks().Where(m => m.ReceiverId == receiverId);
+            IEnumerable<Feedback> feedbacks = _feedbackService.GetFeedbacks().Where(m => m.SellerId == sellerId);
             IList<FeedbackViewModel> feedbackViewModels = Mapper.Map<List<Feedback>, List<FeedbackViewModel>>(feedbacks.ToList());
             model.Feedbacks = feedbackViewModels.Skip((page - 1) * pageSize).Take(pageSize).ToList();
             model.PageInfo = new PageInfoViewModel()
@@ -106,11 +106,11 @@ namespace Market.Web.Controllers
                         Comment = model.Comment,
                         DateLeft = DateTime.Now,
                         Grade = model.Grade,
-                        SenderId = User.Identity.GetUserId(),
-                        ReceiverId = model.ReceiverId,
+                        SellerId = User.Identity.GetUserId(),
+                        BuyerId = model.ReceiverId,
                         Order = order
                     };
-                    order.Buyer.Feedbacks.Add(feedback);
+                    order.Buyer.FeedbacksAsBuyer.Add(feedback);
                     _feedbackService.SaveFeedback();
                     return View(model);
                 }
@@ -197,12 +197,12 @@ namespace Market.Web.Controllers
                         Comment = model.Comment,
                         DateLeft = DateTime.Now,
                         Grade = model.Grade,
-                        SenderId = User.Identity.GetUserId(),
-                        ReceiverId = model.ReceiverId,                        
+                        BuyerId = User.Identity.GetUserId(),
+                        SellerId = model.ReceiverId,                        
                         OrderId = order.Id
                     };
                     
-                    order.Seller.Feedbacks.Add(feedback);
+                    order.Seller.FeedbacksAsSeller.Add(feedback);
                     _feedbackService.SaveFeedback();
                     return View(model);
                 }
@@ -213,7 +213,7 @@ namespace Market.Web.Controllers
 
         public PartialViewResult FeedbackListInfo(SearchFeedbacksInfoViewModel searchInfo)
         {
-            var feedbacks = _feedbackService.GetFeedbacks().Where(m => m.ReceiverId == searchInfo.UserId);
+            var feedbacks = _feedbackService.GetFeedbacks().Where(m => m.SellerId == searchInfo.UserId);
             var modelFeedbacks = Mapper.Map<IEnumerable<Feedback>, IEnumerable<FeedbackViewModel>>(feedbacks);
             FeedbackListViewModel model = new FeedbackListViewModel
             {

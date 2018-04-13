@@ -140,7 +140,7 @@ namespace Market.Web.Controllers
             ViewData["SearchString"] = searchString;
             ViewData["CurrentFilter"] = currentFilter;
             var currentUser = _userProfileService.GetUserProfileById(User.Identity.GetUserId());
-            var dialogs = _dialogService.GetDialogs().Where(d => d.Users.Any(u => u.Id == currentUser.Id));
+            var dialogs = _dialogService.GetUserDialogs(currentUser.Id);
 
             //var messages = _db.Messages.Find(m => m.ReceiverId == User.Identity.GetUserId());
 
@@ -218,11 +218,14 @@ namespace Market.Web.Controllers
             
             foreach (var d in model.Dialogs)
             {
-                var otherUser = d.Users.FirstOrDefault(u => u.Id != User.Identity.GetUserId());
-                d.otherUserId = otherUser.Id;
-                d.otherUserName = otherUser.Name;
-                d.CountOfNewMessages = d.Messages.Where(m => !m.ToViewed && m.SenderId != currentUser.Id).Count();
-                
+                var otherUserId = _dialogService.GetOtherUserInDialog(d.Id, User.Identity.GetUserId());
+                var otherUser = _userProfileService.GetUserProfileById(otherUserId);
+                if (otherUser != null)
+                {
+                    d.otherUserId = otherUser.Id;
+                    d.otherUserName = otherUser.Name;
+                    d.CountOfNewMessages = d.Messages.Where(m => !m.ToViewed && m.SenderId != currentUser.Id).Count();
+                }
             }
             return View(model);
         }
@@ -285,10 +288,14 @@ namespace Market.Web.Controllers
             
             foreach (var d in model.Dialogs)
             {
-                var otherUser = d.Users.FirstOrDefault(u => u.Id != User.Identity.GetUserId());
-                d.otherUserId = otherUser.Id;
-                d.otherUserName = otherUser.Name;
-                d.CountOfNewMessages = d.Messages.Where(m => !m.ToViewed && m.SenderId != currentUser.Id).Count();
+                var otherUserId = _dialogService.GetOtherUserInDialog(d.Id, User.Identity.GetUserId());
+                var otherUser = _userProfileService.GetUserProfileById(otherUserId);
+                if (otherUser != null)
+                {
+                    d.otherUserId = otherUser.Id;
+                    d.otherUserName = otherUser.Name;
+                    d.CountOfNewMessages = d.Messages.Where(m => !m.ToViewed && m.SenderId != currentUser.Id).Count();
+                }
                 if (d.CountOfNewMessages != 0)
                 {
                     dialogs.Add(d);
@@ -382,7 +389,7 @@ namespace Market.Web.Controllers
             var user = _userProfileService.GetUserProfileById(User.Identity.GetUserId());
             int newDialogsCount = 0;
 
-            foreach (var d in user.Dialogs)
+            foreach (var d in _dialogService.GetUserDialogs(user.Id))
             {
                 if (d.Messages.Any(m => !m.ToViewed && m.SenderId != User.Identity.GetUserId()))
                 {
@@ -418,60 +425,54 @@ namespace Market.Web.Controllers
             }
             if (ModelState.IsValid)
             {
-                // Поменять(Не проверять на наличие оффера)                
-                var user = _userProfileService.GetUserProfileById(model.ReceiverId);
-                var currentUser = _userProfileService.GetUserProfileById(User.Identity.GetUserId());
-                if (user != null)
+                             
+                var toUser = _userProfileService.GetUserProfileById(model.ReceiverId);
+                var fromUser = _userProfileService.GetUserProfileById(User.Identity.GetUserId());
+                if (toUser != null && fromUser!= null)
                 {
                     
                     Message message = Mapper.Map<MessageViewModel, Message>(model);
                     message.FromViewed = true;
-                    message.SenderId = User.Identity.GetUserId();
+                    message.SenderId = fromUser.Id;
                     message.CreatedDate = DateTime.Now;
-                    var up = _userProfileService.GetUserProfiles();
-                    var dialog = user.Dialogs.FirstOrDefault(d => d.Users.Any(u => u.Id == currentUser.Id));
-                    if (dialog == null)
+                    var privateDialog = _dialogService.GetPrivateDialog(toUser, fromUser);
+                    
+                    if (privateDialog == null)
                     {
-                        IList<UserProfile> dialogUsers = new List<UserProfile>();
-                        dialogUsers.Add(currentUser);
-                        dialogUsers.Add(user);
-                        dialog = new Dialog()
+                        privateDialog = new Dialog()
                         {
-                            Users = dialogUsers
+                            CreatorId = fromUser.Id,
+                            CompanionId = toUser.Id
                         };
                         
-                        _dialogService.CreateDialog(dialog);
-                        AddDialog(user.Name, currentUser.Name, user.Id, user.Name, 1, "", "123", dialog.Id);
+                        _dialogService.CreateDialog(privateDialog);
+                        privateDialog.Messages.Add(message);
+                        _messageService.SaveMessage();
+                        AddDialog(toUser.Name, fromUser.Name, toUser.Id, toUser.Name, privateDialog.Id);
+                    }
+                    else
+                    {
+                        privateDialog.Messages.Add(message);
+                        _messageService.SaveMessage();
                     }
                     
-                    dialog.Messages.Add(message);
-                    
-                    _messageService.SaveMessage();
                     int newDialogsCount = 0;
 
                     //d.CountOfNewMessages = d.Messages.Where(m => !m.ToViewed && m.SenderId != currentUser.Id).Count();
-                    newDialogsCount = _dialogService.UnreadDialogsForUserCount(user.Id);
-                    
-                    foreach (var d in user.Dialogs)
+                    newDialogsCount = _dialogService.UnreadDialogsForUserCount(toUser.Id);
+                    UpdateMessage(newDialogsCount, toUser.Name);
+                    foreach (var d in _dialogService.GetUserDialogs(toUser.Id))
                     {
                         int messageInDialogCount = 0;
                         messageInDialogCount = _dialogService.UnreadMessagesInDialogCount(d);
                         var lastMessage = d.Messages.LastOrDefault();
                         if (lastMessage != null)
-                        {
-                            var companion = d.Users.FirstOrDefault(u => u.Id == currentUser.Id);
-                            if (companion != null)
-                            {
-                                UpdateMessageInDialog(messageInDialogCount, lastMessage.MessageBody, lastMessage.CreatedDate.ToShortDateString(), d.Id, user.Name, companion.Id, companion.Name);
-                            }
-                            
+                        {                           
+                            UpdateMessageInDialog(messageInDialogCount, lastMessage.MessageBody, lastMessage.CreatedDate.ToShortDateString(), d.Id, toUser.Name, fromUser.Id, fromUser.Name);                                                       
                         }
                         
-                    }
-                    
-                    UpdateMessage(newDialogsCount, user.Name);
-                    
-                    AddMessage(currentUser.Id,user.Name, currentUser.Name, message.MessageBody, message.CreatedDate.ToString());
+                    }                    
+                    AddMessage(fromUser.Id, toUser.Name, fromUser.Name, message.MessageBody, message.CreatedDate.ToString());
                     return Json(new {  });
                 }
                 return Json("Error");
@@ -517,15 +518,15 @@ namespace Market.Web.Controllers
         }
 
         private void AddDialog(string receiverName, string senderName, string companionId,
-            string companionName,int counter, string messageBody, string date, int dialogId)
+            string companionName, int dialogId)
         {
             // Получаем контекст хаба
             var context =
                 Microsoft.AspNet.SignalR.GlobalHost.ConnectionManager.GetHubContext<MessageHub>();
             // отправляем сообщение
             //context.Clients.All.addMessage(senderId, receiverId, senderName, messageBody, date);
-            context.Clients.User(senderName).addDialog(companionId, companionName, counter, messageBody, date, dialogId);
-            context.Clients.User(receiverName).addDialog(companionId, companionName, counter, messageBody, date , dialogId);
+            context.Clients.User(senderName).addDialog(companionId, companionName, dialogId);
+            context.Clients.User(receiverName).addDialog(companionId, companionName, dialogId);
             //context.Clients. User(User.Identity.GetUserId()).updateMessage(messagesCounter);
         }
 

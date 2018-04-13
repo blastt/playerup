@@ -43,9 +43,8 @@ namespace Market.Model.Models
 
         public virtual ICollection<OrderStatus> OrderStatuses { get; set; } = new List<OrderStatus>();
 
-        public virtual string ModeratorId { get; set; }
-        public virtual UserProfile Moderator { get; set; }
-
+        public virtual string MiddlemanId { get; set; }
+        public virtual UserProfile Middleman { get; set; }
         public virtual string BuyerId { get; set; }
         public virtual UserProfile Buyer { get; set; }
         public virtual string SellerId { get; set; }

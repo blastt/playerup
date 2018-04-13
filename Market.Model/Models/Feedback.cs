@@ -24,10 +24,11 @@ namespace Market.Model.Models
         public virtual int OrderId { get; set; }
         public virtual Order Order { get; set; }
 
-        public virtual string SenderId { get; set; }
-        public virtual string ReceiverId { get; set; }
-        public virtual UserProfile Sender { get; set; }
-        public virtual UserProfile Receiver { get; set; }
+        public virtual string BuyerId { get; set; }
+        public virtual UserProfile Buyer { get; set; }
+
+        public virtual string SellerId { get; set; }
+        public virtual UserProfile Seller { get; set; }
 
     }
 }

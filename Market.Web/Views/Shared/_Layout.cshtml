@@ -101,7 +101,7 @@
 
             var messageHub = $.connection.messageHub;
 
-            messageHub.client.updateMessage = function (counter) {
+            messageHub.client.updateMessage = function (counter, name) {
 
                 drowMessage(counter);
                 
@@ -133,7 +133,7 @@
 
             };
 
-            messageHub.client.addDialog = function (companionId, companionName, counter, messageBody, date, dialogId) {
+            messageHub.client.addDialog = function (companionId, companionName, dialogId) {
 
                 var dialogsTable = $('#dialogs-table');
                 var dialogBlock = $('#dialog-block').clone();

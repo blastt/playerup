@@ -57,7 +57,7 @@ namespace Market.Web.Controllers.Moderator
 
         public ActionResult MyOrderList()
         {
-            var orders = _orderService.GetOrders().Where(o => o.ModeratorId == User.Identity.GetUserId());
+            var orders = _orderService.GetOrders().Where(o => o.MiddlemanId == User.Identity.GetUserId());
             var ordersViewModel = Mapper.Map<IEnumerable<Order>, IEnumerable<OrderViewModel>>(orders);
             OrderListViewModel model = new OrderListViewModel
             {
@@ -88,7 +88,7 @@ namespace Market.Web.Controllers.Moderator
                         order.BuyerChecked = false;
                         order.SellerChecked = false;
                         order.OrderStatuses.Add(orderStatus);
-                        order.ModeratorId = User.Identity.GetUserId();
+                        order.MiddlemanId= User.Identity.GetUserId();
                         _orderService.SaveOrder();
                         return RedirectToAction("MyOrderList");
                         
@@ -115,7 +115,7 @@ namespace Market.Web.Controllers.Moderator
                     var model = Mapper.Map<AccountInfo, AccountInfoViewModel>(accInfo);
                     model.SellerId = order.SellerId;
                     model.BuyerId = order.BuyerId;
-                    model.ModeratorId = order.ModeratorId;
+                    model.ModeratorId = order.MiddlemanId;
                     return View(model);
                 }
             }

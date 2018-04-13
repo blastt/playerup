@@ -45,10 +45,10 @@ namespace Market.Service
             return order;
         }
 
-        public Order GetOrder(string accountLogin, string moderatorId, string sellerId, string buyerId)
+        public Order GetOrder(string accountLogin, string middlemanId, string sellerId, string buyerId)
         {            
             Order order = ordersRepository.GetMany(o => o.Offer.AccountLogin == accountLogin && 
-            o.ModeratorId == moderatorId && o.BuyerId == buyerId && o.SellerId == sellerId).FirstOrDefault();            
+            o.MiddlemanId == middlemanId && o.BuyerId == buyerId && o.SellerId == sellerId).FirstOrDefault();            
             return order;
             
         }

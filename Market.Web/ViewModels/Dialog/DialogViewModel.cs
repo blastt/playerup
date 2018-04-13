@@ -18,7 +18,11 @@ namespace Market.Web.ViewModels
 
         public int CountOfNewMessages { get; set; }
 
-        public ICollection<UserProfileViewModel> Users { get; set; }
+        public string CreatorId { get; set; }
+        public UserProfile Creator { get; set; }
+
+        public string CompanionId { get; set; }
+        public UserProfile Companion { get; set; }
         public ICollection<MessageViewModel> Messages { get; set; }
     }
 }

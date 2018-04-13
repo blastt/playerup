@@ -61,7 +61,7 @@ namespace Trader.WEB.Controllers
                     .Where(u => u.ApplicationUser.Roles.Contains(new IdentityUserRole() { RoleId = "2", UserId = u.Id }));
                 foreach (var user in userProfiles)
                 {
-                    user.Messages.Add(new Message()
+                    user.MessagesAsReceiver.Add(new Message()
                     {
                         CreatedDate = DateTime.Now,
                         MessageBody = "Get"
@@ -84,7 +84,7 @@ namespace Trader.WEB.Controllers
                 var currentOrderStatus = _orderStatusService.GetCurrentOrderStatus(order);
                 if (sellerId == User.Identity.GetUserId())
                 {
-                    if (order.ModeratorId == moderatorId && order.SellerId == sellerId &&
+                    if (order.MiddlemanId == moderatorId && order.SellerId == sellerId &&
                     order.BuyerId == buyerId && currentOrderStatus.Value == "sellerProviding")
                     {
                         AccountInfoViewModel model = new AccountInfoViewModel

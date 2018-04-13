@@ -85,7 +85,7 @@ namespace Market.Web.Controllers
                     _orderService.SaveOrder();
                     DetailsOrderViewModel model = Mapper.Map<Order, DetailsOrderViewModel>(order);
                     model.OrderStatuses = order.OrderStatuses.OrderBy(o => o.DateFinished).ToList();
-                    model.ModeratorId = order.ModeratorId;
+                    model.ModeratorId = order.MiddlemanId;
                     return View(model);
                 }
                 
@@ -106,7 +106,7 @@ namespace Market.Web.Controllers
                     _orderService.SaveOrder();
                     DetailsOrderViewModel model = Mapper.Map<Order, DetailsOrderViewModel>(order);
                     model.OrderStatuses = order.OrderStatuses.OrderBy(o => o.DateFinished).ToList();
-                    model.ModeratorId = order.ModeratorId;
+                    model.ModeratorId = order.MiddlemanId;
                     return View(model);
                 }
                 

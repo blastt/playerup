@@ -14,16 +14,15 @@ namespace Market.Data.Configuration
             HasMany(u => u.Offers).WithRequired(u => u.UserProfile);
             
             HasRequired(o => o.ApplicationUser).WithRequiredDependent(o => o.UserProfile).WillCascadeOnDelete(false);
-            HasMany(m => m.Feedbacks).WithRequired(m => m.Sender).HasForeignKey(m => m.SenderId);
-            HasMany(m => m.Feedbacks).WithRequired(m => m.Receiver).HasForeignKey(m => m.ReceiverId);
-            HasMany(m => m.Messages).WithRequired(m => m.Sender).HasForeignKey(m => m.SenderId);
-            HasMany(m => m.Messages).WithRequired(m => m.Receiver).HasForeignKey(m => m.ReceiverId);
-            HasMany(u => u.Orders).WithRequired(u => u.Buyer).HasForeignKey(m => m.BuyerId);
-            HasMany(u => u.Orders).WithRequired(u => u.Seller).HasForeignKey(m => m.SellerId);
-            HasMany(u => u.Orders).WithOptional(u => u.Moderator).HasForeignKey(m => m.ModeratorId);
-            HasMany(m => m.Dialogs).WithMany(m => m.Users);
-
-
+            HasMany(m => m.FeedbacksAsSeller).WithRequired(m => m.Seller).HasForeignKey(m => m.SellerId).WillCascadeOnDelete(false);
+            HasMany(m => m.FeedbacksAsBuyer).WithRequired(m => m.Buyer).HasForeignKey(m => m.BuyerId).WillCascadeOnDelete(false);
+            HasMany(m => m.MessagesAsReceiver).WithRequired(m => m.Receiver).HasForeignKey(m => m.ReceiverId).WillCascadeOnDelete(false);
+            HasMany(m => m.MessagesAsSender).WithRequired(m => m.Sender).HasForeignKey(m => m.SenderId).WillCascadeOnDelete(false);  
+            HasMany(u => u.OrdersAsSeller).WithRequired(u => u.Seller).HasForeignKey(m => m.SellerId).WillCascadeOnDelete(false);
+            HasMany(u => u.OrdersAsBuyer).WithOptional(u => u.Buyer).HasForeignKey(m => m.BuyerId).WillCascadeOnDelete(false);
+            HasMany(u => u.OrdersAsMiddleman).WithOptional(u => u.Middleman).HasForeignKey(m => m.MiddlemanId).WillCascadeOnDelete(false);
+            HasMany(m => m.DialogsAsCreator).WithRequired(m => m.Creator).HasForeignKey(m => m.CreatorId).WillCascadeOnDelete(false);
+            HasMany(m => m.DialogsAsСompanion).WithRequired(m => m.Companion).HasForeignKey(m => m.CompanionId).WillCascadeOnDelete(false);
         }
     }
 }

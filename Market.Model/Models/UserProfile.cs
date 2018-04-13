@@ -23,10 +23,18 @@ namespace Market.Model.Models
         public string Name { get; set; }
 
         public virtual ApplicationUser ApplicationUser { get; set; }
-        public virtual ICollection<Message> Messages { get; set; } = new List<Message>();
+        public virtual ICollection<Message> MessagesAsSender { get; set; } = new List<Message>();
+        public virtual ICollection<Message> MessagesAsReceiver { get; set; } = new List<Message>();
         public virtual ICollection<Offer> Offers { get; set; } = new List<Offer>();
-        public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
-        public virtual ICollection<Feedback> Feedbacks { get; set; } = new List<Feedback>();
-        public virtual ICollection<Dialog> Dialogs { get; set; } = new List<Dialog>();
+
+        public virtual ICollection<Order> OrdersAsSeller { get; set; } = new List<Order>();
+        public virtual ICollection<Order> OrdersAsBuyer { get; set; } = new List<Order>();
+        public virtual ICollection<Order> OrdersAsMiddleman { get; set; } = new List<Order>();
+
+        public virtual ICollection<Feedback> FeedbacksAsBuyer { get; set; } = new List<Feedback>();
+        public virtual ICollection<Feedback> FeedbacksAsSeller { get; set; } = new List<Feedback>();
+
+        public virtual ICollection<Dialog> DialogsAsCreator { get; set; } = new List<Dialog>();
+        public virtual ICollection<Dialog> DialogsAsСompanion { get; set; } = new List<Dialog>();
     }
 }

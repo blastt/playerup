@@ -91,7 +91,6 @@ function drowMessage(count) {
 }
 
 function drowMessageInDialog(userName, companionId,companionName,count, lastMessage, newDate, dialogId) {
-
     var trId = '#message-row-' + dialogId;
 
     var tr = $(trId);

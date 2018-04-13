@@ -46,9 +46,9 @@ namespace Market.Web.Mappings
             CreateMap<Dialog, DialogViewModel>()
                .ForMember(o => o.Id, map => map.MapFrom(vm => vm.Id))
                .ForMember(o => o.Messages, map => map.MapFrom(vm => vm.Messages))
-               .ForMember(o => o.Users, map => map.MapFrom(vm => vm.Users))
-
-                .ForMember(o => o.CountOfNewMessages, map => map.MapFrom(vm => vm.Messages.Where(m => !m.ToViewed)));
+               .ForMember(o => o.Companion, map => map.MapFrom(vm => vm.Companion))
+               .ForMember(o => o.Creator, map => map.MapFrom(vm => vm.Creator))
+               .ForMember(o => o.CountOfNewMessages, map => map.MapFrom(vm => vm.Messages.Where(m => !m.ToViewed)));
 
 
 
@@ -100,7 +100,7 @@ namespace Market.Web.Mappings
                .ForMember(o => o.Views, map => map.MapFrom(vm => vm.Views))
                .ForMember(o => o.DateCreated, map => map.MapFrom(vm => vm.DateCreated))
                .ForMember(o => o.Price, map => map.MapFrom(vm => vm.Price))
-               .ForPath(o => o.Feedbacks, map => map.MapFrom(vm => vm.UserProfile.Feedbacks));
+               .ForPath(o => o.Feedbacks, map => map.MapFrom(vm => vm.UserProfile.FeedbacksAsSeller));
 
             #endregion
 
@@ -130,7 +130,7 @@ namespace Market.Web.Mappings
                 .ForPath(o => o.OfferHeader, map => map.MapFrom(vm => vm.Offer.Header))
                 .ForPath(o => o.OfferId, map => map.MapFrom(vm => vm.Offer.Id))
                 .ForPath(o => o.OfferPrice, map => map.MapFrom(vm => vm.Offer.Price))
-                .ForPath(o => o.ModeratorName, map => map.MapFrom(vm => vm.Moderator.Name))
+                .ForPath(o => o.ModeratorName, map => map.MapFrom(vm => vm.Middleman.Name))
                 .ForPath(o => o.SellerName, map => map.MapFrom(vm => vm.Seller.Name));
             #endregion
 

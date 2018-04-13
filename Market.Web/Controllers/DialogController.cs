@@ -32,16 +32,21 @@ namespace Market.Web.Controllers
             if (dialogId != null)
             {
                 Dialog dialog = _dialogService.GetDialog(dialogId.Value);
-                if (dialog != null && (dialog.Users.Any(u => u.Id == currentUserId)))
+                if (dialog != null && (_dialogService.GetUserDialogs(currentUserId).Count() != 0))
                 {
 
-                    dialogWithUserId = dialog.Users.FirstOrDefault(u => u.Id != currentUserId).Id;
-                    
-                       
+                    if (dialog.CompanionId == currentUserId)
+                    {
+                        dialogWithUserId = dialog.CreatorId;
+                    }
+                    else if (dialog.CreatorId == currentUserId)
+                    {
+                        dialogWithUserId = dialog.CompanionId;
+                    }                                                             
                     
                     if (dialogWithUserId == null)
                     {
-                        return HttpNotFound("Error");
+                        return HttpNotFound();
                     }
                     foreach (var message in dialog.Messages.Where(m => m.SenderId != currentUserId))
                     {
@@ -54,7 +59,7 @@ namespace Market.Web.Controllers
                     return View(model);
                 }
             }
-            return HttpNotFound("Error");
+            return HttpNotFound();
         }
     }
 }
