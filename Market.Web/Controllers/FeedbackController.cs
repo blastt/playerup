@@ -30,24 +30,71 @@ namespace Market.Web.Controllers
         }
         public ActionResult All()
         {
+            var user = _userProfileService.GetUserProfileById(User.Identity.GetUserId());
+            if (user != null)
+            {
+                var positiveFeedbacks = user.FeedbacksMy;
+                var positiveFeedbacksModel = Mapper.Map<IEnumerable<Feedback>, IEnumerable<FeedbackViewModel>>(positiveFeedbacks);
+                var model = new FeedbackListViewModel()
+                {
+                    Feedbacks = positiveFeedbacksModel
+                };
+                return View(model);
+            }
+            return HttpNotFound();
+        }
 
-            return View();
+        public ActionResult Positive()
+        {
+            var user = _userProfileService.GetUserProfileById(User.Identity.GetUserId());
+            if (user != null)
+            {
+                var positiveFeedbacks = user.FeedbacksMy.Where(f => f.Grade == Emotions.Good);
+                var positiveFeedbacksModel = Mapper.Map<IEnumerable<Feedback>, IEnumerable<FeedbackViewModel>>(positiveFeedbacks);
+                var model = new FeedbackListViewModel()
+                {
+                    Feedbacks = positiveFeedbacksModel
+                };
+                return View(model);
+            }
+            return HttpNotFound();
+        }
+
+        public ActionResult Negative()
+        {
+            var user = _userProfileService.GetUserProfileById(User.Identity.GetUserId());
+            if (user != null)
+            {
+                var positiveFeedbacks = user.FeedbacksMy.Where(f => f.Grade == Emotions.Bad);
+                var positiveFeedbacksModel = Mapper.Map<IEnumerable<Feedback>, IEnumerable<FeedbackViewModel>>(positiveFeedbacks);
+                var model = new FeedbackListViewModel()
+                {
+                    Feedbacks = positiveFeedbacksModel
+                };
+                return View(model);
+            }
+            return HttpNotFound();
         }
 
 
 
-        public PartialViewResult FeedbackList(string sellerId, int page = 1, string filter = "all")
+        public PartialViewResult FeedbackList(string userId, string filter, int page = 1)
         {
             FeedbackListViewModel model = new FeedbackListViewModel();
-            IEnumerable<Feedback> feedbacks = _feedbackService.GetFeedbacks().Where(m => m.UserId == sellerId);
-            IList<FeedbackViewModel> feedbackViewModels = Mapper.Map<List<Feedback>, List<FeedbackViewModel>>(feedbacks.ToList());
-            model.Feedbacks = feedbackViewModels.Skip((page - 1) * pageSize).Take(pageSize).ToList();
-            model.PageInfo = new PageInfoViewModel()
+            var user = _userProfileService.GetUserProfileById(userId);
+            if (user != null)
             {
-                PageSize = pageSize,
-                PageNumber = page,
-                TotalItems = feedbacks.Count()
-            };
+                IEnumerable<Feedback> feedbacks = user.FeedbacksMy;
+                IList<FeedbackViewModel> feedbackViewModels = Mapper.Map<List<Feedback>, List<FeedbackViewModel>>(feedbacks.ToList());
+                model.Feedbacks = feedbackViewModels.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+                model.PageInfo = new PageInfoViewModel()
+                {
+                    PageSize = pageSize,
+                    PageNumber = page,
+                    TotalItems = feedbacks.Count()
+                };
+                return PartialView("_FeedbackList", model);
+            }
             return PartialView("_FeedbackList", model);
         }
 
@@ -85,12 +132,13 @@ namespace Market.Web.Controllers
                 {
                     Order order = _orderService.GetOrder(model.OrderId.Value);
 
-                    if (order != null && order.BuyerId == model.ReceiverId && order.SellerId == User.Identity.GetUserId() && !order.BuyerFeedbacked)
+                    if (order != null && order.BuyerId == model.ReceiverId && order.SellerId == User.Identity.GetUserId() && !order.SellerFeedbacked)
                     {
                         order.SellerFeedbacked = true;
                         var feedback = Mapper.Map<GiveFeedbackViewModel, Feedback>(model);
-                        order.Feedback = feedback;
-                        order.Buyer.Feedbacks.Add(feedback);
+                        order.Feedbacks.Add(feedback);
+                        order.Buyer.FeedbacksMy.Add(feedback);
+                        order.Seller.FeedbacksToOthers.Add(feedback);
                         _feedbackService.CreateFeedback(feedback);
                         _feedbackService.SaveFeedback();
                         return View(model);
@@ -133,11 +181,13 @@ namespace Market.Web.Controllers
                 {
                     Order order = _orderService.GetOrder(model.OrderId.Value);
 
-                    if (order != null && order.Seller.Id == model.ReceiverId && order.BuyerId == User.Identity.GetUserId() && !order.SellerFeedbacked)
+                    if (order != null && order.Seller.Id == model.ReceiverId && order.BuyerId == User.Identity.GetUserId() && !order.BuyerFeedbacked)
                     {
                         order.BuyerFeedbacked = true;
                         var feedback = Mapper.Map<GiveFeedbackViewModel, Feedback>(model);
-
+                        order.Feedbacks.Add(feedback);
+                        order.Seller.FeedbacksMy.Add(feedback);
+                        order.Buyer.FeedbacksToOthers.Add(feedback);
                         _feedbackService.CreateFeedback(feedback);
                         _feedbackService.SaveFeedback();
                         return View(model);
@@ -149,23 +199,27 @@ namespace Market.Web.Controllers
 
         public PartialViewResult FeedbackListInfo(SearchFeedbacksInfoViewModel searchInfo)
         {
-            var feedbacks = _feedbackService.GetFeedbacks().Where(m => m.UserId == searchInfo.UserId);
-            var modelFeedbacks = Mapper.Map<IEnumerable<Feedback>, IEnumerable<FeedbackViewModel>>(feedbacks);
-            FeedbackListViewModel model = new FeedbackListViewModel
+            var user = _userProfileService.GetUserProfileById(searchInfo.UserId);
+            if (user != null)
             {
-                Feedbacks = modelFeedbacks,
-                PageInfo = new PageInfoViewModel
+                var modelFeedbacks = Mapper.Map<IEnumerable<Feedback>, IEnumerable<FeedbackViewModel>>(user.FeedbacksMy);
+                FeedbackListViewModel model = new FeedbackListViewModel
                 {
-                    PageSize = 4,
-                    PageNumber = searchInfo.Page,
-                    TotalItems = modelFeedbacks.Count()
-                },
-                SearchInfo = new SearchViewModel
-                {
-                    Page = searchInfo.Page
-                }
-            };
-            return PartialView("_FeedbackListInfo", model);
+                    Feedbacks = modelFeedbacks,
+                    PageInfo = new PageInfoViewModel
+                    {
+                        PageSize = 4,
+                        PageNumber = searchInfo.Page,
+                        TotalItems = modelFeedbacks.Count()
+                    },
+                    SearchInfo = new SearchViewModel
+                    {
+                        Page = searchInfo.Page
+                    }
+                };
+                return PartialView("_FeedbackListInfo", model);
+            }
+            return PartialView("_NoResults");
         }
         // GET: Feedback/Edit/5
         //public ActionResult Edit(int? id)

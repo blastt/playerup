@@ -1,0 +1,11 @@
+﻿@model Market.Web.ViewModels.OfferViewModel
+
+<tr>
+    <td>@Model.Game.Name</td>
+    <td>@Model.Header</td>
+    <td>@Model.Discription</td>
+    <td>@Html.DisplayFor(m => m.Price)</td>
+    <td>@Html.ActionLink("Просмотреть", "Details", "Offer", new { id = Model.Id }, new { @class = "lnk-details font-size-14" })</td>
+    <td>@Html.ActionLink("Редактировать", "Edit", "Offer", new { id = Model.Id }, new { @class = "lnk-edit font-size-14" })</td>
+    <td>@Html.ActionLink("Удалить", "Edit", "Offer", new { id = Model.Id }, new { @class = "lnk-remove font-size-14" })</td>
+</tr>

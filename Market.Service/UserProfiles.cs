@@ -37,6 +37,8 @@ namespace Market.Service
             return userProfile;
         }
 
+        
+
 
         public UserProfile GetUserProfileById(string id)
         {

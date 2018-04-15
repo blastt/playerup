@@ -16,10 +16,7 @@
             <div class="col-md-4">
                 <div class="info-user-block" style="text-align:center">
                     <img class="img-circle" src="@Url.Action("Photo", "Profile", new { UserId = Model.Id })" alt="Alternate Text" style="width:150px; height:150px" />
-                    @if (Model.Name == User.Identity.Name)
-                    {
-                        @Html.ActionLink("Обновить фотографию", "Upload", "Profile", null, new { @class = "btn btn-default", style = "width:220px;" })
-                    }
+                    
 
                     <div class=" info-name">
                         <div class="row">
@@ -151,7 +148,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h6 class="modal-title">Написать сообщение</h6>
+                <h4 class="modal-title">Написать сообщение</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span id="close" aria-hidden="true">×</span>
                 </button>
@@ -189,7 +186,7 @@
 
             </div>
             <div class="modal-footer">
-                <button id="sendMessage" type="button" onclick="SendMessage()" class="btn btn-info">Отправить</button>
+                <button id="sendMessage" type="button" onclick="SendMessage()" class="btn btn-submit">Отправить</button>
             </div>
 
 
@@ -208,8 +205,9 @@
     </div>
 </div>
 
+<input type="hidden" id="info-user-id" value="@Model.InfoUserId"/>
 <input type="hidden" id="receiver-id" value="@Model.Id" />
-<input type="hidden" id="user-id" value="@Model.CurrentUserId" />
+<input type="hidden" id="current-user-id" value="@Model.CurrentUserId" />
 @section scripts
 {
     <script type="text/javascript" src="~/Scripts/UserInfo.js">

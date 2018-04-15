@@ -33,9 +33,7 @@ namespace Market.Web.Mappings
             CreateMap<AccountInfo, AccountInfoViewModel>()
                 .ForMember(o => o.Id, map => map.MapFrom(vm => vm.Id))
               .ForMember(o => o.AdditionalInformation, map => map.MapFrom(vm => vm.AdditionalInformation))
-              .ForMember(o => o.BuyerId, map => map.MapFrom(vm => vm.BuyerId))
               .ForMember(o => o.SteamPassword, map => map.MapFrom(vm => vm.Password))
-              .ForMember(o => o.ModeratorId, map => map.MapFrom(vm => vm.ModeratorId))
               .ForMember(o => o.SteamLogin, map => map.MapFrom(vm => vm.Login))
               .ForMember(o => o.SteamEmail, map => map.MapFrom(vm => vm.Email));
 
@@ -100,7 +98,7 @@ namespace Market.Web.Mappings
                .ForMember(o => o.Views, map => map.MapFrom(vm => vm.Views))
                .ForMember(o => o.DateCreated, map => map.MapFrom(vm => vm.DateCreated))
                .ForMember(o => o.Price, map => map.MapFrom(vm => vm.Price))
-               .ForPath(o => o.Feedbacks, map => map.MapFrom(vm => vm.UserProfile.Feedbacks));
+               .ForPath(o => o.Feedbacks, map => map.MapFrom(vm => vm.UserProfile.FeedbacksMy));
 
             #endregion
 
@@ -197,9 +195,15 @@ namespace Market.Web.Mappings
 
             #region Feedback
 
-            CreateMap<GiveFeedbackViewModel, Feedback>()
+            CreateMap<Feedback, GiveFeedbackViewModel>()
                .ForMember(o => o.Grade, map => map.MapFrom(vm => vm.Grade))
                .ForMember(o => o.Comment, map => map.MapFrom(vm => vm.Comment));
+
+            CreateMap<Feedback, FeedbackViewModel>()
+              .ForMember(o => o.Grade, map => map.MapFrom(vm => vm.Grade))
+              .ForMember(o => o.Comment, map => map.MapFrom(vm => vm.Comment))
+              .ForPath(o => o.SenderName, map => map.MapFrom(vm => vm.UserFrom.Name))
+              .ForPath(o => o.OfferHeader, map => map.MapFrom(vm => vm.Order.Offer.Header));
 
 
             //CreateMap<NewFeedbackViewModel, Feedback>()
@@ -215,8 +219,6 @@ namespace Market.Web.Mappings
             CreateMap<UserProfile, InfoUserProfileViewModel > ()
                 .ForMember(o => o.Id, map => map.MapFrom(vm => vm.Id))
                 .ForMember(o => o.Avatar, map => map.MapFrom(vm => vm.Avatar))
-                .ForMember(o => o.PositiveFeedbacks, map => map.MapFrom(vm => vm.Positive))
-                .ForMember(o => o.NegativeFeedbacks, map => map.MapFrom(vm => vm.Negative))
                 .ForMember(o => o.IsOnline, map => map.MapFrom(vm => vm.IsOnline))
                 .ForMember(o => o.Name, map => map.MapFrom(vm => vm.Name))
                 .ForMember(o => o.RegistrationDate, map => map.MapFrom(vm => vm.RegistrationDate));

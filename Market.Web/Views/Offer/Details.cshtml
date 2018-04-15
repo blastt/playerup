@@ -88,16 +88,16 @@
             </div>
 
             <div class="col-md-4">
-                <div class="offer-description-block" style="height: 300px">
+                <div class="offer-buying-block" style="height: 300px">
                     <div style="text-align:center">
                         <h3>@Html.DisplayFor(m => m.Price)</h3>
                     </div>
                     <div style="text-align:center">
-                        @Html.ActionLink("Купить", "Pay", "Checkout", new { offerId = Model.Id, sellerId = Model.UserProfile.Id }, null);
+                        @*@Html.ActionLink("Купить", "Pay", "Checkout", new { offerId = Model.Id, sellerId = Model.UserProfile.Id }, null);*@
                         @using (Html.BeginForm("Pay", "Checkout"))
                         {
                             @Html.HiddenFor(m => m.Id)
-                            <input type="submit" name="buy" value="Купить" class=" btn btn-success" />
+                            <input type="submit" name="buy" value="Купить" class=" btn btn-buy-big font-size-18" />
                         }
 
                     </div>
@@ -127,9 +127,9 @@
     </div>
 
     <div class="row" id="feedback-list">
-
         @*@Html.Partial("_FeedbackList",Model.UserProfile.Feedbacks)*@
-        @Html.Action("FeedbackList", "Feedback", new { page = 1, receiverId = Model.UserProfile.Id, filter = "all" })
+        @*@Html.Partial("_FeedbackList", Model.Feedbacks)*@
+        @*@Html.Action("FeedbackList", "Feedback", new { page = 1, userId = Model.UserProfile.Id })*@
 
     </div>
 
@@ -198,7 +198,7 @@
 </div>
 <input type="hidden" id="page" value="1" />
 <input type="hidden" id="filter" value="all" />
-<input type="hidden" id="receiver-id" value="@Model.UserProfile.Id" />
+<input type="hidden" id="user-id" value="@Model.UserProfile.Id" />
 
 
 @section scripts
@@ -206,16 +206,19 @@
     <script type="text/javascript" src="~/Scripts/jquery-modal-send.js"></script>
     <script type="text/javascript" src="~/Scripts/jquery-modal.js"></script>
     <script>
+        $(document).ready(function () {
+            SearchFeedbacksDetails();
+        });
         function SelectPage(page) {
 
             $('#page').val(page);
-            SearchFeedbacks();
+            SearchFeedbacksDetails();
         }
-        function SearchFeedbacks() {
+        function SearchFeedbacksDetails() {
             var message = {
                 "page": $('#page').val(),
                 "filter": $('#filter').val(),
-                "receiverId": $('#receiver-id').val()
+                "userId": $('#user-id').val()
             };
             $.ajax({
                 url: '/Feedback/FeedbackList',

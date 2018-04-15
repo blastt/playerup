@@ -23,8 +23,11 @@ namespace Market.Model.Models
 
         public virtual Order Order { get; set; }
 
-        public virtual string UserId { get; set; }
-        public virtual UserProfile User { get; set; }
+        public virtual string UserToId { get; set; }
+        public virtual UserProfile UserTo { get; set; }
+
+        public virtual string UserFromId { get; set; }
+        public virtual UserProfile UserFrom { get; set; }
 
     }
 }

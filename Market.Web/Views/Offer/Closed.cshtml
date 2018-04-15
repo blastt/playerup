@@ -11,12 +11,12 @@
                 <p class="lead">Здесь отображается информация по предложениям</p>
             </div>
             @{Html.RenderAction("AccountMenu", "Account"); }
-            <div class="account-offer-container">
+            <div class="account-container">
                 @{Html.RenderPartial("_AccountOffersMenu", Model); }
                 <div class="form-inline form-offer-filter">
-                    <h2>
-                        <span class="text-gray text-300">Закрытые предложения:</span>
-                    </h2>
+                    <h3 class="mb-0 text-gray text-300">
+                        Закрытые предложения:
+                    </h3>
                 </div>
                 <table class="table table-white">
                     <tr>

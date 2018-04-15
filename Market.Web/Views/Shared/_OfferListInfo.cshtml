@@ -20,7 +20,7 @@
 
             </div>
             <div class="col-sm-4">
-                <input type="button" name="name" value="Поиск" class="btn btn-info" onclick="SearchOffersInfo()" />
+                <input type="button" name="name" value="Поиск" class="btn btn-search" onclick="SearchOffersInfo()" />
             </div>
         </div>
         <div class="row mb-3">
@@ -32,7 +32,7 @@
 
     </div>
 
-    <div class="table-offers">
+    <div class="table-offers text-center">
         <div class="offer-line">
             <div class="offer-game">
                 Игра
@@ -49,20 +49,8 @@
         </div>
         @foreach (var offer in Model.Offers)
         {
-            <div class="offer-line">
-                <div class="offer-game">
-                    @offer.Game.Name
-                </div>
-                <div class="offer-header">
-                    @offer.Header
-                </div>
-                <div class="offer-price">
-                    @offer.Price
-                </div>
-                <div class="offer-link">
-                    @Html.ActionLink("Детали", "Details", "Offer", new { id = offer.Id }, new { @class = "btn btn-info" })
-                </div>
-            </div>
+            @Html.Partial("_OfferInfoItem", offer)
+            
 
         }
     </div>

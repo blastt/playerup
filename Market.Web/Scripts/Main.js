@@ -1,4 +1,7 @@
-﻿
+﻿function TopFunction() {
+    
+}
+
 function SetDialogsClickable() {
     $(".clickable").each(function () {
         $(this).on('click', function (e) {

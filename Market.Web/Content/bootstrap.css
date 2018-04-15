@@ -95,7 +95,7 @@ h1, h2, h3, h4, h5, h6 {
 
 p {
   margin-top: 0;
-  margin-bottom: 1rem;
+  margin-bottom: 0px;
 }
 
 abbr[title],
@@ -380,27 +380,27 @@ h1, h2, h3, h4, h5, h6,
 }
 
 h1, .h1 {
-  font-size: 2.5rem;
+  font-size: 2em;
 }
 
 h2, .h2 {
-  font-size: 2rem;
+  font-size: 1.5em;
 }
 
 h3, .h3 {
-  font-size: 1.75rem;
+  font-size: 1.25em;
 }
 
 h4, .h4 {
-  font-size: 1.5rem;
+  font-size: 1em;
 }
 
 h5, .h5 {
-  font-size: 1.25rem;
+  font-size: 0.75em;
 }
 
 h6, .h6 {
-  font-size: 1rem;
+    font-size: 0.5em;
 }
 
 .lead {
@@ -1679,10 +1679,12 @@ pre code {
 }
 
 .table {
-  width: 100%;
-  max-width: 100%;
-  margin-bottom: 1rem;
-  background-color: transparent;
+    width: 100%;
+    max-width: 100%;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    /*margin-bottom: 1rem;*/
+    background-color: transparent;
 }
 
 .table th,
@@ -4514,6 +4516,7 @@ tbody.collapse.show {
 }
 
 .card-footer {
+    z-index:1031;
     margin-top: 50px;
     padding: 3rem 1.25rem;
     background-color: rgba(0, 0, 0, 0.03);

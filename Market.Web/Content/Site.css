@@ -7,7 +7,11 @@
     height:100%;
 }
 
-.content{
+.card-footer{
+    z-index:1030
+}
+
+.content {
     margin-top: 40px
 }
 
@@ -146,7 +150,7 @@ ul {
 }
 
 .img-circle {
-    margin-right: 10px;
+
     border: 0px;
     border-radius: 100px;
 }
@@ -445,8 +449,7 @@ ul {
 }
 
 .account-inner-list {
-    border-top-left-radius: 6px;
-    border-top-right-radius: 6px;
+    border-top-right-radius: 10px;
     padding-left: 0px;
     display: inline;
     margin-bottom: 0px;
@@ -499,11 +502,13 @@ ul {
     color: #333;
 }
 
-.account-offer-container {
+.account-container {
     background-clip: border-box;
     border: 1px solid #eff0f4;
     z-index: 1;
-    border-radius: 6px;
+    border-top-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px
 }
 
 .account-setting-container {
@@ -530,7 +535,6 @@ ul {
 }
 
 .page-info {
-    padding-top: 20px;
     padding-bottom: 30px
 }
 
@@ -711,7 +715,46 @@ div#users-contain {
     background-color: #62b2e2;
     color: white;
     padding: 6px 20px;
-    font-size: 18px;
+    font-weight: 300
+}
+
+.btn-search:hover {
+    border-radius: 50px;
+    background-color: rgba(98, 178, 226, 0.75);
+    color: white;
+    padding: 6px 20px;
+    font-weight: 300
+}
+
+.btn-submit {
+    border-radius: 50px;
+    background-color: #62b2e2;
+    color: white;
+    padding: 6px 20px;
+    font-weight: 300
+}
+    .btn-submit:hover {
+        border-radius: 50px;
+        background-color: rgba(98, 178, 226, 0.75);
+        color: white;
+        padding: 6px 20px;
+        font-weight: 300
+    }
+    
+
+.btn-details {
+    border-radius: 50px;
+    background-color: #90a7b5;
+    color: white;
+    padding: 6px 20px;
+    font-weight: 300
+}
+
+.btn-details:hover {
+    border-radius: 50px;
+    background-color: rgba(144, 167, 181, 0.75);
+    color: white;
+    padding: 6px 20px;
     font-weight: 300
 }
 
@@ -720,25 +763,53 @@ div#users-contain {
     background-color: #e98451;
     padding: 6px 20px;
     color: white;
-    font-size: 18px;
     font-weight: 300
 }
 
+    .btn-reset:hover {
+        border-radius: 50px;
+        background-color: rgba(233, 132, 81, 0.75);
+        color: white;
+        padding: 6px 20px;
+        font-weight: 300
+    }
+
+.btn-buy {
+    border-radius: 50px;
+    background-color: #62b2e2;
+    color: white;
+    padding: 6px 20px;
+    font-weight: 300
+}
+.btn-buy:hover {
+    border-radius: 50px;
+    background-color: rgba(98, 178, 226, 0.75);
+    color: white;
+    padding: 6px 20px;
+    font-weight: 300
+}
+
+.btn-buy-big {
+    border-radius: 50px;
+    background-color: #62b2e2;
+    color: white;
+    padding: 10px 50px;
+    font-weight: 400
+}
 
 
 .loader {
-    width: 100%;
-    height: 100%;
-    display: block;
-    position: absolute;
+    position: fixed;
     top: 0;
+    right: 0;
+    bottom: 0;
     left: 0;
-    z-index: 10;
-    padding-bottom: -20px;
-    padding-top: -150px;
     opacity: 0;
-    background-color: #636363;
-    box-shadow: 0 0 12px 0 #404040;
+    z-index: 10;
+    display: none;
+    overflow: hidden;
+    outline: 0;
+    background-color: rgba(0, 0, 0, 0.50);
 }
 .hidden {
     opacity: 1;
@@ -748,6 +819,28 @@ div#users-contain {
 
 
 .cssload-container {
+}
+
+.loader-wheel {
+    border: 16px solid #f3f3f3; /* Light grey */
+    border-top: 16px solid #3498db; /* Blue */
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 120px;
+    height: 120px;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 .cssload-whirlpool,
@@ -846,12 +939,7 @@ div#users-contain {
     margin-right: 7px
 }
 
-.btn-submit {
-    color: #fff;
-    background-color: #62b2e2;
-    border-color: #62b2e2;
-    margin-right: 7px
-}
+
 
 .table-white{
     background-color: #fff
@@ -871,6 +959,14 @@ div#users-contain {
 
 .offer-description-block {
     background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 3px 0 rgba(159,173,196,.4);
+    border-radius: 15px;
+}
+
+.offer-buying-block {
+    background-color: #fff;
+    padding-top: 80px;
     border-radius: 10px;
     box-shadow: 0 0 3px 0 rgba(159,173,196,.4);
     border-radius: 15px;
@@ -957,11 +1053,11 @@ div#users-contain {
 }
 
 .offer-game{
-    width: 33%
+    width: 24%
 }
 
 .offer-header{
-    width: 33%
+    width: 38%
 }
 
 .offer-price{
@@ -969,7 +1065,7 @@ div#users-contain {
 }
 
 .offer-link {
-    width: 14%;
+    width: 18%;
     text-align: right;
 }
 
@@ -1025,8 +1121,7 @@ div#users-contain {
 }
 
 .feedback-date {
-    width: 20%;
-    text-align: right
+    width: 20%
 }
 /*---Feedback List Item*/
 
@@ -1194,7 +1289,7 @@ i {
     margin-top: 60px
 }
 .buy-content {
-    margin-top: 120px
+    /*margin-top: 120px*/
 }
 
 .text-700 {
@@ -1205,36 +1300,11 @@ i {
     font-weight: 300
 }
 
-.btn-buy {
-    border-radius: 10px;
-    background-color: #62b2e2;
-    color: white;
-    
-    width: 60%
-}
-
-.btn-buy:hover {
-    border-radius: 10px;
-    background-color: rgba(98, 178, 226, 0.80);
-    color: white;
-    width: 60%
-}
-
-.btn-details {
-    border-radius: 10px;
-    background-color: #bfbfbf;
-    color: white;
-    width: 60%
-}
 
 
 
-    .btn-details:hover {
-        border-radius: 10px;
-        background-color: rgba(169, 169, 169, 0.60);
-        color: white;
-        width: 60%
-    }
+
+
 
 .footer-left {
 
@@ -1572,3 +1642,66 @@ dl dd a{
         display: block;
         font-weight: 500;
     }
+.font-size-14 {
+    font-size: 14px
+}
+
+.font-size-16{
+    font-size:16px
+}
+.font-size-18 {
+    font-size: 18px
+}
+
+.account-settings-body{
+    padding: 35px
+}
+
+.account-offer-game{
+    width: 10%;
+}
+
+.account-offer-header {
+    width: 20%;
+}
+
+.account-offer-description {
+    width: 20%;
+}
+
+.account-offer-price {
+    width: 10%;
+}
+
+.account-offer-view {
+    width: 12%;
+}
+
+.account-offer-edit {
+    width: 13%;
+}
+
+.account-offer-remove {
+    width: 10%;
+}
+
+.lnk-details {
+    padding: 8px 10px;
+    border: 1px solid #90a7b5;
+    border-radius: 15px;
+    color: #90a7b5
+}
+
+.lnk-edit {
+    padding: 8px 10px;
+    border: 1px solid #62b2e2;
+    border-radius: 15px;
+    color: #62b2e2
+}
+
+.lnk-remove {
+    padding: 8px 10px;
+    border: 1px solid #ff0000;
+    border-radius: 15px;
+    color: #ff0000
+}

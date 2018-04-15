@@ -21,12 +21,12 @@
                 <p class="lead">Здесь отображается информация по входящим и исходящим сообщениям</p>
             </div>
             @{Html.RenderAction("AccountMenu", "Account"); }
-            <div class="account-message-container">
+            <div class="account-container">
                 @{Html.RenderPartial("_AccountMessagesMenu", Model); }
 
                 <div class="form-inline form-offer-filter">
-                    <h3>
-                        <span class="text-gray text-300">Все сообщения:</span>
+                    <h3 class="mb-0 text-gray text-300">
+                        Все сообщения:
                     </h3>
                 </div>
                 @*@using (Html.BeginForm("Inbox", "Message", null, FormMethod.Get, new { @class = "form-inline form-message-filter" }))
@@ -104,7 +104,7 @@
                                     </div>
                                 }
 
-                                <img class="img-circle avatar-small" src="@Url.Action("Photo", "Profile", new { UserId = dialog.otherUserId })" alt="Alternate Text" />
+                                <img class="img-circle avatar-small mr-2" src="@Url.Action("Photo", "Profile", new { UserId = dialog.otherUserId })" alt="Alternate Text" />
 
                                 @dialog.otherUserName
                             </td>

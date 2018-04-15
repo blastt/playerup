@@ -98,7 +98,7 @@
                 <p class="lead">Здесь отображается информация по заказам</p>
             </div>
             @{Html.RenderAction("AccountMenu", "Account"); }
-            <div class="order-details-container">
+            <div class="account-container bg-white">
                 <div style="padding: 20px">
                     <a href="@Request.UrlReferrer"><span style="font-weight: 700">&#10218;</span> <span>Назад</span> </a>
                 </div>
@@ -158,7 +158,7 @@
 
                             }
                             else if ((Model.OrderStatuses.LastOrDefault().Value == "closedSeccessfuly" ||
-                            Model.OrderStatuses.LastOrDefault().Value == "payingToSeller") && !Model.BuyerFeedbacked)
+                            Model.OrderStatuses.LastOrDefault().Value == "payingToSeller") && !Model.SellerFeedbacked)
                             {
                                 using (Html.BeginForm("GiveToBuyer", "Feedback", null, FormMethod.Get, null))
                                 {

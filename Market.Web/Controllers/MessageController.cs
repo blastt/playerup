@@ -428,7 +428,7 @@ namespace Market.Web.Controllers
                              
                 var toUser = _userProfileService.GetUserProfileById(model.ReceiverId);
                 var fromUser = _userProfileService.GetUserProfileById(User.Identity.GetUserId());
-                if (toUser != null && fromUser!= null)
+                if (toUser != null && fromUser!= null && toUser.Id != fromUser.Id)
                 {
                     
                     Message message = Mapper.Map<MessageViewModel, Message>(model);

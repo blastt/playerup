@@ -61,11 +61,14 @@ namespace Market.Service
              
             var user2Dialogs = user2.DialogsAsCreator.Concat(user2.DialogsAsСompanion);
 
-            foreach (var d in user1Dialogs)
+            foreach (var d1 in user1Dialogs)
             {
-                if (user2Dialogs.Contains(d))
+                foreach (var d2 in user2Dialogs)
                 {
-                    return d;
+                    if (d1.Equals(d2) && (d1.CreatorId == user1.Id || d1.CreatorId == user2.Id) && (d2.CreatorId == user1.Id || d2.CreatorId == user2.Id))
+                    {
+                        return d1;
+                    }
                 }
             }
             return null;

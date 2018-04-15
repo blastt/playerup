@@ -172,6 +172,22 @@
     <Compile Include="Migrations\201804131824038_FeedbackTest.Designer.cs">
       <DependentUpon>201804131824038_FeedbackTest.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201804131955199_Name1.cs" />
+    <Compile Include="Migrations\201804131955199_Name1.Designer.cs">
+      <DependentUpon>201804131955199_Name1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804132001420_Ids.cs" />
+    <Compile Include="Migrations\201804132001420_Ids.Designer.cs">
+      <DependentUpon>201804132001420_Ids.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804132105308_OrderFeedbacks.cs" />
+    <Compile Include="Migrations\201804132105308_OrderFeedbacks.Designer.cs">
+      <DependentUpon>201804132105308_OrderFeedbacks.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804140918265_myandOtherFeedbacks.cs" />
+    <Compile Include="Migrations\201804140918265_myandOtherFeedbacks.Designer.cs">
+      <DependentUpon>201804140918265_myandOtherFeedbacks.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\AccountInfoRepository.cs" />
@@ -271,6 +287,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201804131824038_FeedbackTest.resx">
       <DependentUpon>201804131824038_FeedbackTest.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804131955199_Name1.resx">
+      <DependentUpon>201804131955199_Name1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804132001420_Ids.resx">
+      <DependentUpon>201804132001420_Ids.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804132105308_OrderFeedbacks.resx">
+      <DependentUpon>201804132105308_OrderFeedbacks.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804140918265_myandOtherFeedbacks.resx">
+      <DependentUpon>201804140918265_myandOtherFeedbacks.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

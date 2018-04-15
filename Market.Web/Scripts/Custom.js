@@ -21,6 +21,8 @@ $(document).ready(function () {
 function SelectPage(page) {
 
     $('#page').val(page);
+    
+    $('html, body').animate({ scrollTop: 0 }, 0);
     SearchOffers();
 }
 function ChangeGame(game) {

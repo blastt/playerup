@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="227175bf6d464b8da2fbc0449906f5e2" Name="Diagram1">
+        <EntityTypeShape EntityType="Model.C__MigrationHistory" Width="1.5" PointX="7.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.AccountInfo" Width="1.5" PointX="6.375" PointY="8.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.AspNetUser" Width="1.5" PointX="0.75" PointY="8" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.Dialog" Width="1.5" PointX="5.875" PointY="13.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.Feedback" Width="1.5" PointX="8.25" PointY="5.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.FilterItem" Width="1.5" PointX="3" PointY="1.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.Filter" Width="1.5" PointX="0.75" PointY="2" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.Game" Width="1.5" PointX="3" PointY="13.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.Message" Width="1.5" PointX="8.5" PointY="9.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.Offer" Width="1.5" PointX="5.25" PointY="2.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.Order" Width="1.5" PointX="10.5" PointY="4.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.OrderStatu" Width="1.5" PointX="12.75" PointY="6.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.UserProfile" Width="1.5" PointX="3" PointY="7.125" IsExpanded="true" />
+        <AssociationConnector Association="Model.FK_dbo_AccountInfos_dbo_Orders_Id" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK_dbo_AccountInfos_dbo_UserProfiles_BuyerId" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK_dbo_AccountInfos_dbo_UserProfiles_ModeratorId" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK_dbo_UserProfiles_dbo_AspNetUsers_Id" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK_dbo_Dialogs_dbo_UserProfiles_CompanionId" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK_dbo_Dialogs_dbo_UserProfiles_CreatorId" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK_dbo_Messages_dbo_Dialogs_DialogId" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK_dbo_Feedbacks_dbo_Orders_Id" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK_dbo_Feedbacks_dbo_UserProfiles_SenderId" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK_dbo_FilterItems_dbo_Filters_Filter_Id" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK_dbo_Filters_dbo_Games_Game_Id" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK_dbo_Offers_dbo_Games_Game_Id" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK_dbo_Messages_dbo_UserProfiles_ReceiverId" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK_dbo_Messages_dbo_UserProfiles_SenderId" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK_dbo_Offers_dbo_UserProfiles_UserProfileId" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK_dbo_Orders_dbo_Offers_Id" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK_dbo_Orders_dbo_UserProfiles_BuyerId" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK_dbo_Orders_dbo_UserProfiles_ModeratorId" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK_dbo_Orders_dbo_UserProfiles_SellerId" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK_dbo_Orders_dbo_UserProfiles_UserProfileId" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK_dbo_OrderStatus_dbo_Orders_OrderId" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FilterItemOffers" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FilterOffers" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

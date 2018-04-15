@@ -1,0 +1,16 @@
+﻿@model Market.Web.ViewModels.OfferViewModel
+
+<div class="offer-line">
+    <div class="offer-game">
+        @Model.Game.Name
+    </div>
+    <div class="offer-header">
+        @Model.Header
+    </div>
+    <div class="offer-price">
+        @Html.DisplayFor(m => m.Price)
+    </div>
+    <div class="offer-link">
+        @Html.ActionLink("Детали", "Details", "Offer", new { id = Model.Id }, new { @class = "btn btn-details" })
+    </div>
+</div>

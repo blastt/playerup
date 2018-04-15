@@ -11,30 +11,26 @@
                 <p class="lead">Здесь отображается информация по предложениям</p>
             </div>
             @{Html.RenderAction("AccountMenu", "Account"); }
-            <div class="account-offer-container">
+            <div class="account-container">
                 @{Html.RenderPartial("_AccountOffersMenu", Model); }
                 <div class="form-inline form-offer-filter">
-                    <h2>
-                        <span class="text-gray text-300">Активные предложения:</span>
-                    </h2>
+                    <h3 class="mb-0 text-gray text-300">
+                        Активные предложения:
+                    </h3>
                 </div>
-                <table class="table table-white">
+                <table class="table table-white text-center">
                     <tr>
-                        <th>Игра</th>
-                        <th>Заголовок</th>
-                        <th>Описание</th>
-                        <th>Цена</th>
-                        <th></th>
+                        <th class="account-offer-game">Игра</th>
+                        <th class="account-offer-header">Заголовок</th>
+                        <th class="account-offer-description">Описание</th>
+                        <th class="account-offer-price">Цена</th>
+                        <th class="account-offer-view"></th>
+                        <th class="account-offer-edit"></th>
+                        <th class="account-offer-remove"></th>
                     </tr>
                     @foreach (var offer in Model.Offers)
                     {
-                    <tr>
-                        <td>@offer.Game.Name</td>
-                        <td>@offer.Header</td>
-                        <td>@offer.Discription</td>
-                        <td>@offer.Price</td>
-                        <td>@Html.ActionLink("Редактировать","Edit","Offer", new { id = offer.Id },null)</td>
-                    </tr>
+                        @Html.Partial("_AccountOfferItem", offer)                    
                     }
 
                 </table>

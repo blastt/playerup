@@ -12,7 +12,12 @@ namespace Market.Service
     public interface IFeedbackService
     {
         IEnumerable<Feedback> GetFeedbacks();
+        int PositiveFeedbackCount(UserProfile user);
+        int NegativeFeedbackCount(UserProfile user);
+        double PositiveFeedbackProcent(int positiveFeedbacks, int negativeFeedbacks);
+        double NegativeFeedbackProcent(int positiveFeedbacks, int negativeFeedbacks);
         Feedback GetFeedback(int id);
+        
         void CreateFeedback(Feedback feedback);
         void SaveFeedback();
     }
@@ -36,6 +41,33 @@ namespace Market.Service
             return feedback;
         }
 
+        public int PositiveFeedbackCount(UserProfile user)
+        {
+            int positiveCount = user.FeedbacksMy.Where(f => f.Grade == Emotions.Good).Count();
+            return positiveCount;
+        }
+
+        public int NegativeFeedbackCount(UserProfile user)
+        {
+            int negativeCount = user.FeedbacksMy.Where(f => f.Grade == Emotions.Bad).Count();
+            return negativeCount;
+        }
+
+        public double PositiveFeedbackProcent(int positiveFeedbacks, int negativeFeedbacks)
+        {
+            int allFeedbackCount = positiveFeedbacks + negativeFeedbacks;
+
+            double pos = Math.Round((double)(100 * positiveFeedbacks) / (allFeedbackCount), 2);
+            return pos;
+        }
+
+        public double NegativeFeedbackProcent(int positiveFeedbacks, int negativeFeedbacks)
+        {
+            int allFeedbackCount = positiveFeedbacks + negativeFeedbacks;
+            
+            double neg = Math.Round((double)(100 * negativeFeedbacks) / (allFeedbackCount) , 2);
+            return neg;
+        }
 
         public Feedback GetFeedback(int id)
         {

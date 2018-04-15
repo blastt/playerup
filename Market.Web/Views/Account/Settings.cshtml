@@ -10,18 +10,21 @@
                 <p class="lead">Здесь вы можете изменить настройки учетной записи</p>
             </div>
             @{Html.RenderAction("AccountMenu", "Account"); }
-            <div class="account-setting-container">
+            <div class="account-container bg-white">
+                
                 <div class="row">
                     <div class="col-md-6">
 
+                        <div class="account-settings-body">
+                            @Html.Action("ConfirmEmailPartial")
 
-                        @Html.Action("ConfirmEmailPartial")
+                            @Html.Action("ConfirmPhoneNumberPartial")
 
-                        @Html.Action("ConfirmPhoneNumberPartial")
-
-                        @Html.Partial("UpdateEmail")
-                        @Html.Partial("UpdatePassword")
-                        @Html.Partial("UpdatePhoneNumber")
+                            @Html.Partial("UpdateEmail")
+                            @Html.Partial("UpdatePassword")
+                            @Html.Partial("UpdatePhoneNumber")
+                        </div>
+                        
 
                     </div>
                 </div>

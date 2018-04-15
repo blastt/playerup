@@ -12,7 +12,7 @@
             <div class="row">
                 <div class="col-sm-4">
                     <div class="item-rating">
-                        <img class="img-circle" align="left" src="@Url.Action("Photo", "Profile" , new { UserId = Model.UserId })" alt="Alternate Text" style="width:40px; height: 40px; margin-top:10px; margin-top:0px; margin-right:10px" />
+                        <img class="img-circle mr-2" align="left" src="@Url.Action("Photo", "Profile" , new { UserId = Model.UserId })" alt="Alternate Text" style="width:40px; height: 40px" />
                         @Html.ActionLink(Model.UserName, "Info", "Profile", new { id = Model.UserId }, null)
 
                         <br />

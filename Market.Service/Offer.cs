@@ -178,6 +178,7 @@ namespace Market.Service
         {
             IEnumerable<Offer> offers;
             offers = SearchOffersByGame(game);
+            offers = offers.Where(o => o.State == OfferState.active);
             offers = SearchOffersByPrice(offers,ref priceFrom,ref priceTo,ref minGamePrice, ref maxGamePrice);
             offers = SearchOffersBySearchString(offers, searchString,ref searchInDiscription);
             offers = SearchOffersByOnlineUser(offers,ref isOnline);

@@ -1,0 +1,1430 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Хранилище Model" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="__MigrationHistory">
+          <Key>
+            <PropertyRef Name="MigrationId" />
+            <PropertyRef Name="ContextKey" />
+          </Key>
+          <Property Name="MigrationId" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="ContextKey" Type="nvarchar" MaxLength="300" Nullable="false" />
+          <Property Name="Model" Type="varbinary(max)" Nullable="false" />
+          <Property Name="ProductVersion" Type="nvarchar" MaxLength="32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AccountInfos">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Login" Type="nvarchar(max)" />
+          <Property Name="Password" Type="nvarchar(max)" />
+          <Property Name="Email" Type="nvarchar(max)" />
+          <Property Name="AdditionalInformation" Type="nvarchar(max)" />
+          <Property Name="BuyerId" Type="nvarchar" MaxLength="128" />
+          <Property Name="ModeratorId" Type="nvarchar" MaxLength="128" />
+        </EntityType>
+        <EntityType Name="AspNetUsers">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="256" />
+          <Property Name="EmailConfirmed" Type="bit" Nullable="false" />
+          <Property Name="PasswordHash" Type="nvarchar(max)" />
+          <Property Name="SecurityStamp" Type="nvarchar(max)" />
+          <Property Name="PhoneNumber" Type="nvarchar(max)" />
+          <Property Name="PhoneNumberConfirmed" Type="bit" Nullable="false" />
+          <Property Name="TwoFactorEnabled" Type="bit" Nullable="false" />
+          <Property Name="LockoutEndDateUtc" Type="datetime" />
+          <Property Name="LockoutEnabled" Type="bit" Nullable="false" />
+          <Property Name="AccessFailedCount" Type="int" Nullable="false" />
+          <Property Name="UserName" Type="nvarchar" MaxLength="256" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Dialogs">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CreatorId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="CompanionId" Type="nvarchar" MaxLength="128" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Feedbacks">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Grade" Type="int" Nullable="false" />
+          <Property Name="Comment" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="DateLeft" Type="datetime" Nullable="false" />
+          <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+        </EntityType>
+        <EntityType Name="FilterItemOffers">
+          <Key>
+            <PropertyRef Name="FilterItem_Id" />
+            <PropertyRef Name="Offer_Id" />
+          </Key>
+          <Property Name="FilterItem_Id" Type="int" Nullable="false" />
+          <Property Name="Offer_Id" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="FilterItems">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar(max)" />
+          <Property Name="Value" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Image" Type="nvarchar(max)" />
+          <Property Name="Filter_Id" Type="int" Nullable="false" />
+          <Property Name="Rank" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="FilterOffers">
+          <Key>
+            <PropertyRef Name="Filter_Id" />
+            <PropertyRef Name="Offer_Id" />
+          </Key>
+          <Property Name="Filter_Id" Type="int" Nullable="false" />
+          <Property Name="Offer_Id" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Filters">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Value" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Text" Type="nvarchar(max)" />
+          <Property Name="Game_Id" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Games">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Value" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Image" Type="nvarchar(max)" />
+          <Property Name="Rank" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Messages">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MessageBody" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="SenderDeleted" Type="bit" Nullable="false" />
+          <Property Name="ReceiverDeleted" Type="bit" Nullable="false" />
+          <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+          <Property Name="SenderId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="ReceiverId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="DialogId" Type="int" Nullable="false" />
+          <Property Name="FromViewed" Type="bit" Nullable="false" />
+          <Property Name="ToViewed" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Offers">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Header" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Discription" Type="nvarchar" MaxLength="1000" Nullable="false" />
+          <Property Name="Price" Type="decimal" Precision="12" Scale="4" Nullable="false" />
+          <Property Name="Views" Type="int" Nullable="false" />
+          <Property Name="DateCreated" Type="datetime" Nullable="false" />
+          <Property Name="DateDeleted" Type="datetime" />
+          <Property Name="UserProfileId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="GameId" Type="int" Nullable="false" />
+          <Property Name="State" Type="int" Nullable="false" />
+          <Property Name="SellerPaysMiddleman" Type="bit" Nullable="false" />
+          <Property Name="MiddlemanPrice" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="AccountLogin" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Orders">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="SellerId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="DateCreated" Type="datetime" Nullable="false" />
+          <Property Name="BuyerId" Type="nvarchar" MaxLength="128" />
+          <Property Name="BuyerFeedbacked" Type="bit" Nullable="false" />
+          <Property Name="SellerFeedbacked" Type="bit" Nullable="false" />
+          <Property Name="MiddlemanId" Type="nvarchar" MaxLength="128" />
+          <Property Name="BuyerChecked" Type="bit" Nullable="false" />
+          <Property Name="SellerChecked" Type="bit" Nullable="false" />
+          <Property Name="Sum" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Amount" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="WithdrawAmount" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="OfferId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="OrderStatus">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar(max)" />
+          <Property Name="Value" Type="nvarchar(max)" />
+          <Property Name="OrderId" Type="int" Nullable="false" />
+          <Property Name="FinisedName" Type="nvarchar(max)" />
+          <Property Name="DateFinished" Type="datetime" />
+        </EntityType>
+        <EntityType Name="UserProfiles">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="Avatar" Type="varbinary(max)" />
+          <Property Name="Positive" Type="int" Nullable="false" />
+          <Property Name="Negative" Type="int" Nullable="false" />
+          <Property Name="Discription" Type="nvarchar(max)" />
+          <Property Name="IsOnline" Type="bit" Nullable="false" />
+          <Property Name="Name" Type="nvarchar(max)" />
+          <Property Name="RegistrationDate" Type="datetime" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_dbo_AccountInfos_dbo_Orders_Id">
+          <End Role="Orders" Type="Self.Orders" Multiplicity="1" />
+          <End Role="AccountInfos" Type="Self.AccountInfos" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Orders">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountInfos">
+              <PropertyRef Name="Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_AccountInfos_dbo_UserProfiles_BuyerId">
+          <End Role="UserProfiles" Type="Self.UserProfiles" Multiplicity="0..1" />
+          <End Role="AccountInfos" Type="Self.AccountInfos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserProfiles">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountInfos">
+              <PropertyRef Name="BuyerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_AccountInfos_dbo_UserProfiles_ModeratorId">
+          <End Role="UserProfiles" Type="Self.UserProfiles" Multiplicity="0..1" />
+          <End Role="AccountInfos" Type="Self.AccountInfos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserProfiles">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountInfos">
+              <PropertyRef Name="ModeratorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Dialogs_dbo_UserProfiles_CompanionId">
+          <End Role="UserProfiles" Type="Self.UserProfiles" Multiplicity="1" />
+          <End Role="Dialogs" Type="Self.Dialogs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserProfiles">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Dialogs">
+              <PropertyRef Name="CompanionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Dialogs_dbo_UserProfiles_CreatorId">
+          <End Role="UserProfiles" Type="Self.UserProfiles" Multiplicity="1" />
+          <End Role="Dialogs" Type="Self.Dialogs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserProfiles">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Dialogs">
+              <PropertyRef Name="CreatorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Feedbacks_dbo_Orders_Id">
+          <End Role="Orders" Type="Self.Orders" Multiplicity="1" />
+          <End Role="Feedbacks" Type="Self.Feedbacks" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Orders">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Feedbacks">
+              <PropertyRef Name="Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Feedbacks_dbo_UserProfiles_SenderId">
+          <End Role="UserProfiles" Type="Self.UserProfiles" Multiplicity="1" />
+          <End Role="Feedbacks" Type="Self.Feedbacks" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserProfiles">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Feedbacks">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_FilterItemOffers_dbo_FilterItems_FilterItem_Id">
+          <End Role="FilterItems" Type="Self.FilterItems" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="FilterItemOffers" Type="Self.FilterItemOffers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FilterItems">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="FilterItemOffers">
+              <PropertyRef Name="FilterItem_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_FilterItemOffers_dbo_Offers_Offer_Id">
+          <End Role="Offers" Type="Self.Offers" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="FilterItemOffers" Type="Self.FilterItemOffers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Offers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="FilterItemOffers">
+              <PropertyRef Name="Offer_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_FilterItems_dbo_Filters_Filter_Id">
+          <End Role="Filters" Type="Self.Filters" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="FilterItems" Type="Self.FilterItems" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Filters">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="FilterItems">
+              <PropertyRef Name="Filter_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_FilterOffers_dbo_Filters_Filter_Id">
+          <End Role="Filters" Type="Self.Filters" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="FilterOffers" Type="Self.FilterOffers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Filters">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="FilterOffers">
+              <PropertyRef Name="Filter_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_FilterOffers_dbo_Offers_Offer_Id">
+          <End Role="Offers" Type="Self.Offers" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="FilterOffers" Type="Self.FilterOffers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Offers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="FilterOffers">
+              <PropertyRef Name="Offer_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Filters_dbo_Games_Game_Id">
+          <End Role="Games" Type="Self.Games" Multiplicity="1" />
+          <End Role="Filters" Type="Self.Filters" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Games">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Filters">
+              <PropertyRef Name="Game_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Messages_dbo_Dialogs_DialogId">
+          <End Role="Dialogs" Type="Self.Dialogs" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Messages" Type="Self.Messages" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Dialogs">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Messages">
+              <PropertyRef Name="DialogId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Messages_dbo_UserProfiles_ReceiverId">
+          <End Role="UserProfiles" Type="Self.UserProfiles" Multiplicity="1" />
+          <End Role="Messages" Type="Self.Messages" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserProfiles">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Messages">
+              <PropertyRef Name="ReceiverId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Messages_dbo_UserProfiles_SenderId">
+          <End Role="UserProfiles" Type="Self.UserProfiles" Multiplicity="1" />
+          <End Role="Messages" Type="Self.Messages" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserProfiles">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Messages">
+              <PropertyRef Name="SenderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Offers_dbo_Games_Game_Id">
+          <End Role="Games" Type="Self.Games" Multiplicity="1" />
+          <End Role="Offers" Type="Self.Offers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Games">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Offers">
+              <PropertyRef Name="GameId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Offers_dbo_UserProfiles_UserProfileId">
+          <End Role="UserProfiles" Type="Self.UserProfiles" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Offers" Type="Self.Offers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserProfiles">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Offers">
+              <PropertyRef Name="UserProfileId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Orders_dbo_Offers_Id">
+          <End Role="Offers" Type="Self.Offers" Multiplicity="1" />
+          <End Role="Orders" Type="Self.Orders" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Offers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Orders_dbo_UserProfiles_BuyerId">
+          <End Role="UserProfiles" Type="Self.UserProfiles" Multiplicity="0..1" />
+          <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserProfiles">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="BuyerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Orders_dbo_UserProfiles_ModeratorId">
+          <End Role="UserProfiles" Type="Self.UserProfiles" Multiplicity="0..1" />
+          <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserProfiles">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="MiddlemanId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Orders_dbo_UserProfiles_SellerId">
+          <End Role="UserProfiles" Type="Self.UserProfiles" Multiplicity="1" />
+          <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserProfiles">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="SellerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Orders_dbo_UserProfiles_UserProfileId">
+          <End Role="UserProfiles" Type="Self.UserProfiles" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserProfiles">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="SellerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_OrderStatus_dbo_Orders_OrderId">
+          <End Role="Orders" Type="Self.Orders" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="OrderStatus" Type="Self.OrderStatus" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Orders">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="OrderStatus">
+              <PropertyRef Name="OrderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_UserProfiles_dbo_AspNetUsers_Id">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
+          <End Role="UserProfiles" Type="Self.UserProfiles" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserProfiles">
+              <PropertyRef Name="Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Хранилище ModelContainer">
+          <EntitySet Name="__MigrationHistory" EntityType="Self.__MigrationHistory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AccountInfos" EntityType="Self.AccountInfos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Dialogs" EntityType="Self.Dialogs" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Feedbacks" EntityType="Self.Feedbacks" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FilterItemOffers" EntityType="Self.FilterItemOffers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FilterItems" EntityType="Self.FilterItems" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FilterOffers" EntityType="Self.FilterOffers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Filters" EntityType="Self.Filters" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Games" EntityType="Self.Games" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Messages" EntityType="Self.Messages" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Offers" EntityType="Self.Offers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Orders" EntityType="Self.Orders" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OrderStatus" EntityType="Self.OrderStatus" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserProfiles" EntityType="Self.UserProfiles" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_dbo_AccountInfos_dbo_Orders_Id" Association="Self.FK_dbo_AccountInfos_dbo_Orders_Id">
+            <End Role="Orders" EntitySet="Orders" />
+            <End Role="AccountInfos" EntitySet="AccountInfos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_AccountInfos_dbo_UserProfiles_BuyerId" Association="Self.FK_dbo_AccountInfos_dbo_UserProfiles_BuyerId">
+            <End Role="UserProfiles" EntitySet="UserProfiles" />
+            <End Role="AccountInfos" EntitySet="AccountInfos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_AccountInfos_dbo_UserProfiles_ModeratorId" Association="Self.FK_dbo_AccountInfos_dbo_UserProfiles_ModeratorId">
+            <End Role="UserProfiles" EntitySet="UserProfiles" />
+            <End Role="AccountInfos" EntitySet="AccountInfos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Dialogs_dbo_UserProfiles_CompanionId" Association="Self.FK_dbo_Dialogs_dbo_UserProfiles_CompanionId">
+            <End Role="UserProfiles" EntitySet="UserProfiles" />
+            <End Role="Dialogs" EntitySet="Dialogs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Dialogs_dbo_UserProfiles_CreatorId" Association="Self.FK_dbo_Dialogs_dbo_UserProfiles_CreatorId">
+            <End Role="UserProfiles" EntitySet="UserProfiles" />
+            <End Role="Dialogs" EntitySet="Dialogs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Feedbacks_dbo_Orders_Id" Association="Self.FK_dbo_Feedbacks_dbo_Orders_Id">
+            <End Role="Orders" EntitySet="Orders" />
+            <End Role="Feedbacks" EntitySet="Feedbacks" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Feedbacks_dbo_UserProfiles_SenderId" Association="Self.FK_dbo_Feedbacks_dbo_UserProfiles_SenderId">
+            <End Role="UserProfiles" EntitySet="UserProfiles" />
+            <End Role="Feedbacks" EntitySet="Feedbacks" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_FilterItemOffers_dbo_FilterItems_FilterItem_Id" Association="Self.FK_dbo_FilterItemOffers_dbo_FilterItems_FilterItem_Id">
+            <End Role="FilterItems" EntitySet="FilterItems" />
+            <End Role="FilterItemOffers" EntitySet="FilterItemOffers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_FilterItemOffers_dbo_Offers_Offer_Id" Association="Self.FK_dbo_FilterItemOffers_dbo_Offers_Offer_Id">
+            <End Role="Offers" EntitySet="Offers" />
+            <End Role="FilterItemOffers" EntitySet="FilterItemOffers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_FilterItems_dbo_Filters_Filter_Id" Association="Self.FK_dbo_FilterItems_dbo_Filters_Filter_Id">
+            <End Role="Filters" EntitySet="Filters" />
+            <End Role="FilterItems" EntitySet="FilterItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_FilterOffers_dbo_Filters_Filter_Id" Association="Self.FK_dbo_FilterOffers_dbo_Filters_Filter_Id">
+            <End Role="Filters" EntitySet="Filters" />
+            <End Role="FilterOffers" EntitySet="FilterOffers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_FilterOffers_dbo_Offers_Offer_Id" Association="Self.FK_dbo_FilterOffers_dbo_Offers_Offer_Id">
+            <End Role="Offers" EntitySet="Offers" />
+            <End Role="FilterOffers" EntitySet="FilterOffers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Filters_dbo_Games_Game_Id" Association="Self.FK_dbo_Filters_dbo_Games_Game_Id">
+            <End Role="Games" EntitySet="Games" />
+            <End Role="Filters" EntitySet="Filters" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Messages_dbo_Dialogs_DialogId" Association="Self.FK_dbo_Messages_dbo_Dialogs_DialogId">
+            <End Role="Dialogs" EntitySet="Dialogs" />
+            <End Role="Messages" EntitySet="Messages" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Messages_dbo_UserProfiles_ReceiverId" Association="Self.FK_dbo_Messages_dbo_UserProfiles_ReceiverId">
+            <End Role="UserProfiles" EntitySet="UserProfiles" />
+            <End Role="Messages" EntitySet="Messages" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Messages_dbo_UserProfiles_SenderId" Association="Self.FK_dbo_Messages_dbo_UserProfiles_SenderId">
+            <End Role="UserProfiles" EntitySet="UserProfiles" />
+            <End Role="Messages" EntitySet="Messages" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Offers_dbo_Games_Game_Id" Association="Self.FK_dbo_Offers_dbo_Games_Game_Id">
+            <End Role="Games" EntitySet="Games" />
+            <End Role="Offers" EntitySet="Offers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Offers_dbo_UserProfiles_UserProfileId" Association="Self.FK_dbo_Offers_dbo_UserProfiles_UserProfileId">
+            <End Role="UserProfiles" EntitySet="UserProfiles" />
+            <End Role="Offers" EntitySet="Offers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Orders_dbo_Offers_Id" Association="Self.FK_dbo_Orders_dbo_Offers_Id">
+            <End Role="Offers" EntitySet="Offers" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Orders_dbo_UserProfiles_BuyerId" Association="Self.FK_dbo_Orders_dbo_UserProfiles_BuyerId">
+            <End Role="UserProfiles" EntitySet="UserProfiles" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Orders_dbo_UserProfiles_ModeratorId" Association="Self.FK_dbo_Orders_dbo_UserProfiles_ModeratorId">
+            <End Role="UserProfiles" EntitySet="UserProfiles" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Orders_dbo_UserProfiles_SellerId" Association="Self.FK_dbo_Orders_dbo_UserProfiles_SellerId">
+            <End Role="UserProfiles" EntitySet="UserProfiles" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Orders_dbo_UserProfiles_UserProfileId" Association="Self.FK_dbo_Orders_dbo_UserProfiles_UserProfileId">
+            <End Role="UserProfiles" EntitySet="UserProfiles" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_OrderStatus_dbo_Orders_OrderId" Association="Self.FK_dbo_OrderStatus_dbo_Orders_OrderId">
+            <End Role="Orders" EntitySet="Orders" />
+            <End Role="OrderStatus" EntitySet="OrderStatus" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_UserProfiles_dbo_AspNetUsers_Id" Association="Self.FK_dbo_UserProfiles_dbo_AspNetUsers_Id">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="UserProfiles" EntitySet="UserProfiles" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="C__MigrationHistory">
+          <Key>
+            <PropertyRef Name="MigrationId" />
+            <PropertyRef Name="ContextKey" />
+          </Key>
+          <Property Name="MigrationId" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ContextKey" Type="String" MaxLength="300" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Model" Type="Binary" MaxLength="Max" FixedLength="false" Nullable="false" />
+          <Property Name="ProductVersion" Type="String" MaxLength="32" FixedLength="false" Unicode="true" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AccountInfo">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Login" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Password" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="AdditionalInformation" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="BuyerId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="ModeratorId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Order" Relationship="Self.FK_dbo_AccountInfos_dbo_Orders_Id" FromRole="AccountInfos" ToRole="Orders" />
+          <NavigationProperty Name="UserProfile" Relationship="Self.FK_dbo_AccountInfos_dbo_UserProfiles_BuyerId" FromRole="AccountInfos" ToRole="UserProfiles" />
+          <NavigationProperty Name="UserProfile1" Relationship="Self.FK_dbo_AccountInfos_dbo_UserProfiles_ModeratorId" FromRole="AccountInfos" ToRole="UserProfiles" />
+        </EntityType>
+        <EntityType Name="AspNetUser">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="EmailConfirmed" Type="Boolean" Nullable="false" />
+          <Property Name="PasswordHash" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SecurityStamp" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneNumberConfirmed" Type="Boolean" Nullable="false" />
+          <Property Name="TwoFactorEnabled" Type="Boolean" Nullable="false" />
+          <Property Name="LockoutEndDateUtc" Type="DateTime" Precision="3" />
+          <Property Name="LockoutEnabled" Type="Boolean" Nullable="false" />
+          <Property Name="AccessFailedCount" Type="Int32" Nullable="false" />
+          <Property Name="UserName" Type="String" MaxLength="256" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="UserProfile" Relationship="Self.FK_dbo_UserProfiles_dbo_AspNetUsers_Id" FromRole="AspNetUsers" ToRole="UserProfiles" />
+        </EntityType>
+        <EntityType Name="Dialog">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CreatorId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="CompanionId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="UserProfile" Relationship="Self.FK_dbo_Dialogs_dbo_UserProfiles_CompanionId" FromRole="Dialogs" ToRole="UserProfiles" />
+          <NavigationProperty Name="UserProfile1" Relationship="Self.FK_dbo_Dialogs_dbo_UserProfiles_CreatorId" FromRole="Dialogs" ToRole="UserProfiles" />
+          <NavigationProperty Name="Messages" Relationship="Self.FK_dbo_Messages_dbo_Dialogs_DialogId" FromRole="Dialogs" ToRole="Messages" />
+        </EntityType>
+        <EntityType Name="Feedback">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Grade" Type="Int32" Nullable="false" />
+          <Property Name="Comment" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="DateLeft" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UserId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Order" Relationship="Self.FK_dbo_Feedbacks_dbo_Orders_Id" FromRole="Feedbacks" ToRole="Orders" />
+          <NavigationProperty Name="UserProfile" Relationship="Self.FK_dbo_Feedbacks_dbo_UserProfiles_SenderId" FromRole="Feedbacks" ToRole="UserProfiles" />
+        </EntityType>
+        <EntityType Name="FilterItem">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Value" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Image" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Filter_Id" Type="Int32" Nullable="false" />
+          <Property Name="Rank" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Filter" Relationship="Self.FK_dbo_FilterItems_dbo_Filters_Filter_Id" FromRole="FilterItems" ToRole="Filters" />
+          <NavigationProperty Name="Offers" Relationship="Self.FilterItemOffers" FromRole="FilterItems" ToRole="Offers" />
+        </EntityType>
+        <EntityType Name="Filter">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Value" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Text" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Game_Id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="FilterItems" Relationship="Self.FK_dbo_FilterItems_dbo_Filters_Filter_Id" FromRole="Filters" ToRole="FilterItems" />
+          <NavigationProperty Name="Game" Relationship="Self.FK_dbo_Filters_dbo_Games_Game_Id" FromRole="Filters" ToRole="Games" />
+          <NavigationProperty Name="Offers" Relationship="Self.FilterOffers" FromRole="Filters" ToRole="Offers" />
+        </EntityType>
+        <EntityType Name="Game">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Value" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Image" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Rank" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Filters" Relationship="Self.FK_dbo_Filters_dbo_Games_Game_Id" FromRole="Games" ToRole="Filters" />
+          <NavigationProperty Name="Offers" Relationship="Self.FK_dbo_Offers_dbo_Games_Game_Id" FromRole="Games" ToRole="Offers" />
+        </EntityType>
+        <EntityType Name="Message">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MessageBody" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="SenderDeleted" Type="Boolean" Nullable="false" />
+          <Property Name="ReceiverDeleted" Type="Boolean" Nullable="false" />
+          <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="SenderId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ReceiverId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="DialogId" Type="Int32" Nullable="false" />
+          <Property Name="FromViewed" Type="Boolean" Nullable="false" />
+          <Property Name="ToViewed" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Dialog" Relationship="Self.FK_dbo_Messages_dbo_Dialogs_DialogId" FromRole="Messages" ToRole="Dialogs" />
+          <NavigationProperty Name="UserProfile" Relationship="Self.FK_dbo_Messages_dbo_UserProfiles_ReceiverId" FromRole="Messages" ToRole="UserProfiles" />
+          <NavigationProperty Name="UserProfile1" Relationship="Self.FK_dbo_Messages_dbo_UserProfiles_SenderId" FromRole="Messages" ToRole="UserProfiles" />
+        </EntityType>
+        <EntityType Name="Offer">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Header" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Discription" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Price" Type="Decimal" Precision="12" Scale="4" Nullable="false" />
+          <Property Name="Views" Type="Int32" Nullable="false" />
+          <Property Name="DateCreated" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DateDeleted" Type="DateTime" Precision="3" />
+          <Property Name="UserProfileId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="GameId" Type="Int32" Nullable="false" />
+          <Property Name="State" Type="Int32" Nullable="false" />
+          <Property Name="SellerPaysMiddleman" Type="Boolean" Nullable="false" />
+          <Property Name="MiddlemanPrice" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="AccountLogin" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Game" Relationship="Self.FK_dbo_Offers_dbo_Games_Game_Id" FromRole="Offers" ToRole="Games" />
+          <NavigationProperty Name="UserProfile" Relationship="Self.FK_dbo_Offers_dbo_UserProfiles_UserProfileId" FromRole="Offers" ToRole="UserProfiles" />
+          <NavigationProperty Name="Order" Relationship="Self.FK_dbo_Orders_dbo_Offers_Id" FromRole="Offers" ToRole="Orders" />
+          <NavigationProperty Name="FilterItems" Relationship="Self.FilterItemOffers" FromRole="Offers" ToRole="FilterItems" />
+          <NavigationProperty Name="Filters" Relationship="Self.FilterOffers" FromRole="Offers" ToRole="Filters" />
+        </EntityType>
+        <EntityType Name="Order">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="SellerId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="DateCreated" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="BuyerId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="BuyerFeedbacked" Type="Boolean" Nullable="false" />
+          <Property Name="SellerFeedbacked" Type="Boolean" Nullable="false" />
+          <Property Name="MiddlemanId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="BuyerChecked" Type="Boolean" Nullable="false" />
+          <Property Name="SellerChecked" Type="Boolean" Nullable="false" />
+          <Property Name="Sum" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Amount" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="WithdrawAmount" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="OfferId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="AccountInfo" Relationship="Self.FK_dbo_AccountInfos_dbo_Orders_Id" FromRole="Orders" ToRole="AccountInfos" />
+          <NavigationProperty Name="Feedback" Relationship="Self.FK_dbo_Feedbacks_dbo_Orders_Id" FromRole="Orders" ToRole="Feedbacks" />
+          <NavigationProperty Name="Offer" Relationship="Self.FK_dbo_Orders_dbo_Offers_Id" FromRole="Orders" ToRole="Offers" />
+          <NavigationProperty Name="UserProfile" Relationship="Self.FK_dbo_Orders_dbo_UserProfiles_BuyerId" FromRole="Orders" ToRole="UserProfiles" />
+          <NavigationProperty Name="UserProfile1" Relationship="Self.FK_dbo_Orders_dbo_UserProfiles_ModeratorId" FromRole="Orders" ToRole="UserProfiles" />
+          <NavigationProperty Name="UserProfile2" Relationship="Self.FK_dbo_Orders_dbo_UserProfiles_SellerId" FromRole="Orders" ToRole="UserProfiles" />
+          <NavigationProperty Name="UserProfile3" Relationship="Self.FK_dbo_Orders_dbo_UserProfiles_UserProfileId" FromRole="Orders" ToRole="UserProfiles" />
+          <NavigationProperty Name="OrderStatus" Relationship="Self.FK_dbo_OrderStatus_dbo_Orders_OrderId" FromRole="Orders" ToRole="OrderStatus" />
+        </EntityType>
+        <EntityType Name="OrderStatu">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Value" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="OrderId" Type="Int32" Nullable="false" />
+          <Property Name="FinisedName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DateFinished" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Order" Relationship="Self.FK_dbo_OrderStatus_dbo_Orders_OrderId" FromRole="OrderStatus" ToRole="Orders" />
+        </EntityType>
+        <EntityType Name="UserProfile">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Avatar" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="Positive" Type="Int32" Nullable="false" />
+          <Property Name="Negative" Type="Int32" Nullable="false" />
+          <Property Name="Discription" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="IsOnline" Type="Boolean" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="RegistrationDate" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="AccountInfos" Relationship="Self.FK_dbo_AccountInfos_dbo_UserProfiles_BuyerId" FromRole="UserProfiles" ToRole="AccountInfos" />
+          <NavigationProperty Name="AccountInfos1" Relationship="Self.FK_dbo_AccountInfos_dbo_UserProfiles_ModeratorId" FromRole="UserProfiles" ToRole="AccountInfos" />
+          <NavigationProperty Name="AspNetUser" Relationship="Self.FK_dbo_UserProfiles_dbo_AspNetUsers_Id" FromRole="UserProfiles" ToRole="AspNetUsers" />
+          <NavigationProperty Name="Dialogs" Relationship="Self.FK_dbo_Dialogs_dbo_UserProfiles_CompanionId" FromRole="UserProfiles" ToRole="Dialogs" />
+          <NavigationProperty Name="Dialogs1" Relationship="Self.FK_dbo_Dialogs_dbo_UserProfiles_CreatorId" FromRole="UserProfiles" ToRole="Dialogs" />
+          <NavigationProperty Name="Feedbacks" Relationship="Self.FK_dbo_Feedbacks_dbo_UserProfiles_SenderId" FromRole="UserProfiles" ToRole="Feedbacks" />
+          <NavigationProperty Name="Messages" Relationship="Self.FK_dbo_Messages_dbo_UserProfiles_ReceiverId" FromRole="UserProfiles" ToRole="Messages" />
+          <NavigationProperty Name="Messages1" Relationship="Self.FK_dbo_Messages_dbo_UserProfiles_SenderId" FromRole="UserProfiles" ToRole="Messages" />
+          <NavigationProperty Name="Offers" Relationship="Self.FK_dbo_Offers_dbo_UserProfiles_UserProfileId" FromRole="UserProfiles" ToRole="Offers" />
+          <NavigationProperty Name="Orders" Relationship="Self.FK_dbo_Orders_dbo_UserProfiles_BuyerId" FromRole="UserProfiles" ToRole="Orders" />
+          <NavigationProperty Name="Orders1" Relationship="Self.FK_dbo_Orders_dbo_UserProfiles_ModeratorId" FromRole="UserProfiles" ToRole="Orders" />
+          <NavigationProperty Name="Orders2" Relationship="Self.FK_dbo_Orders_dbo_UserProfiles_SellerId" FromRole="UserProfiles" ToRole="Orders" />
+          <NavigationProperty Name="Orders3" Relationship="Self.FK_dbo_Orders_dbo_UserProfiles_UserProfileId" FromRole="UserProfiles" ToRole="Orders" />
+        </EntityType>
+        <Association Name="FK_dbo_AccountInfos_dbo_Orders_Id">
+          <End Role="Orders" Type="Self.Order" Multiplicity="1" />
+          <End Role="AccountInfos" Type="Self.AccountInfo" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Orders">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountInfos">
+              <PropertyRef Name="Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_AccountInfos_dbo_UserProfiles_BuyerId">
+          <End Role="UserProfiles" Type="Self.UserProfile" Multiplicity="0..1" />
+          <End Role="AccountInfos" Type="Self.AccountInfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserProfiles">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountInfos">
+              <PropertyRef Name="BuyerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_AccountInfos_dbo_UserProfiles_ModeratorId">
+          <End Role="UserProfiles" Type="Self.UserProfile" Multiplicity="0..1" />
+          <End Role="AccountInfos" Type="Self.AccountInfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserProfiles">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountInfos">
+              <PropertyRef Name="ModeratorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_UserProfiles_dbo_AspNetUsers_Id">
+          <End Role="AspNetUsers" Type="Self.AspNetUser" Multiplicity="1" />
+          <End Role="UserProfiles" Type="Self.UserProfile" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserProfiles">
+              <PropertyRef Name="Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Dialogs_dbo_UserProfiles_CompanionId">
+          <End Role="UserProfiles" Type="Self.UserProfile" Multiplicity="1" />
+          <End Role="Dialogs" Type="Self.Dialog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserProfiles">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Dialogs">
+              <PropertyRef Name="CompanionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Dialogs_dbo_UserProfiles_CreatorId">
+          <End Role="UserProfiles" Type="Self.UserProfile" Multiplicity="1" />
+          <End Role="Dialogs" Type="Self.Dialog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserProfiles">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Dialogs">
+              <PropertyRef Name="CreatorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Messages_dbo_Dialogs_DialogId">
+          <End Role="Dialogs" Type="Self.Dialog" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Messages" Type="Self.Message" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Dialogs">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Messages">
+              <PropertyRef Name="DialogId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Feedbacks_dbo_Orders_Id">
+          <End Role="Orders" Type="Self.Order" Multiplicity="1" />
+          <End Role="Feedbacks" Type="Self.Feedback" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Orders">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Feedbacks">
+              <PropertyRef Name="Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Feedbacks_dbo_UserProfiles_SenderId">
+          <End Role="UserProfiles" Type="Self.UserProfile" Multiplicity="1" />
+          <End Role="Feedbacks" Type="Self.Feedback" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserProfiles">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Feedbacks">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_FilterItems_dbo_Filters_Filter_Id">
+          <End Role="Filters" Type="Self.Filter" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="FilterItems" Type="Self.FilterItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Filters">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="FilterItems">
+              <PropertyRef Name="Filter_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Filters_dbo_Games_Game_Id">
+          <End Role="Games" Type="Self.Game" Multiplicity="1" />
+          <End Role="Filters" Type="Self.Filter" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Games">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Filters">
+              <PropertyRef Name="Game_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Offers_dbo_Games_Game_Id">
+          <End Role="Games" Type="Self.Game" Multiplicity="1" />
+          <End Role="Offers" Type="Self.Offer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Games">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Offers">
+              <PropertyRef Name="GameId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Messages_dbo_UserProfiles_ReceiverId">
+          <End Role="UserProfiles" Type="Self.UserProfile" Multiplicity="1" />
+          <End Role="Messages" Type="Self.Message" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserProfiles">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Messages">
+              <PropertyRef Name="ReceiverId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Messages_dbo_UserProfiles_SenderId">
+          <End Role="UserProfiles" Type="Self.UserProfile" Multiplicity="1" />
+          <End Role="Messages" Type="Self.Message" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserProfiles">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Messages">
+              <PropertyRef Name="SenderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Offers_dbo_UserProfiles_UserProfileId">
+          <End Role="UserProfiles" Type="Self.UserProfile" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Offers" Type="Self.Offer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserProfiles">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Offers">
+              <PropertyRef Name="UserProfileId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Orders_dbo_Offers_Id">
+          <End Role="Offers" Type="Self.Offer" Multiplicity="1" />
+          <End Role="Orders" Type="Self.Order" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Offers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Orders_dbo_UserProfiles_BuyerId">
+          <End Role="UserProfiles" Type="Self.UserProfile" Multiplicity="0..1" />
+          <End Role="Orders" Type="Self.Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserProfiles">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="BuyerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Orders_dbo_UserProfiles_ModeratorId">
+          <End Role="UserProfiles" Type="Self.UserProfile" Multiplicity="0..1" />
+          <End Role="Orders" Type="Self.Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserProfiles">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="MiddlemanId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Orders_dbo_UserProfiles_SellerId">
+          <End Role="UserProfiles" Type="Self.UserProfile" Multiplicity="1" />
+          <End Role="Orders" Type="Self.Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserProfiles">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="SellerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Orders_dbo_UserProfiles_UserProfileId">
+          <End Role="UserProfiles" Type="Self.UserProfile" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Orders" Type="Self.Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserProfiles">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="SellerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_OrderStatus_dbo_Orders_OrderId">
+          <End Role="Orders" Type="Self.Order" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="OrderStatus" Type="Self.OrderStatu" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Orders">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="OrderStatus">
+              <PropertyRef Name="OrderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FilterItemOffers">
+          <End Role="FilterItems" Type="Self.FilterItem" Multiplicity="*" />
+          <End Role="Offers" Type="Self.Offer" Multiplicity="*" />
+        </Association>
+        <Association Name="FilterOffers">
+          <End Role="Filters" Type="Self.Filter" Multiplicity="*" />
+          <End Role="Offers" Type="Self.Offer" Multiplicity="*" />
+        </Association>
+        <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="C__MigrationHistory" EntityType="Self.C__MigrationHistory" />
+          <EntitySet Name="AccountInfos" EntityType="Self.AccountInfo" />
+          <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUser" />
+          <EntitySet Name="Dialogs" EntityType="Self.Dialog" />
+          <EntitySet Name="Feedbacks" EntityType="Self.Feedback" />
+          <EntitySet Name="FilterItems" EntityType="Self.FilterItem" />
+          <EntitySet Name="Filters" EntityType="Self.Filter" />
+          <EntitySet Name="Games" EntityType="Self.Game" />
+          <EntitySet Name="Messages" EntityType="Self.Message" />
+          <EntitySet Name="Offers" EntityType="Self.Offer" />
+          <EntitySet Name="Orders" EntityType="Self.Order" />
+          <EntitySet Name="OrderStatus" EntityType="Self.OrderStatu" />
+          <EntitySet Name="UserProfiles" EntityType="Self.UserProfile" />
+          <AssociationSet Name="FK_dbo_AccountInfos_dbo_Orders_Id" Association="Self.FK_dbo_AccountInfos_dbo_Orders_Id">
+            <End Role="Orders" EntitySet="Orders" />
+            <End Role="AccountInfos" EntitySet="AccountInfos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_AccountInfos_dbo_UserProfiles_BuyerId" Association="Self.FK_dbo_AccountInfos_dbo_UserProfiles_BuyerId">
+            <End Role="UserProfiles" EntitySet="UserProfiles" />
+            <End Role="AccountInfos" EntitySet="AccountInfos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_AccountInfos_dbo_UserProfiles_ModeratorId" Association="Self.FK_dbo_AccountInfos_dbo_UserProfiles_ModeratorId">
+            <End Role="UserProfiles" EntitySet="UserProfiles" />
+            <End Role="AccountInfos" EntitySet="AccountInfos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_UserProfiles_dbo_AspNetUsers_Id" Association="Self.FK_dbo_UserProfiles_dbo_AspNetUsers_Id">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="UserProfiles" EntitySet="UserProfiles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Dialogs_dbo_UserProfiles_CompanionId" Association="Self.FK_dbo_Dialogs_dbo_UserProfiles_CompanionId">
+            <End Role="UserProfiles" EntitySet="UserProfiles" />
+            <End Role="Dialogs" EntitySet="Dialogs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Dialogs_dbo_UserProfiles_CreatorId" Association="Self.FK_dbo_Dialogs_dbo_UserProfiles_CreatorId">
+            <End Role="UserProfiles" EntitySet="UserProfiles" />
+            <End Role="Dialogs" EntitySet="Dialogs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Messages_dbo_Dialogs_DialogId" Association="Self.FK_dbo_Messages_dbo_Dialogs_DialogId">
+            <End Role="Dialogs" EntitySet="Dialogs" />
+            <End Role="Messages" EntitySet="Messages" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Feedbacks_dbo_Orders_Id" Association="Self.FK_dbo_Feedbacks_dbo_Orders_Id">
+            <End Role="Orders" EntitySet="Orders" />
+            <End Role="Feedbacks" EntitySet="Feedbacks" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Feedbacks_dbo_UserProfiles_SenderId" Association="Self.FK_dbo_Feedbacks_dbo_UserProfiles_SenderId">
+            <End Role="UserProfiles" EntitySet="UserProfiles" />
+            <End Role="Feedbacks" EntitySet="Feedbacks" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_FilterItems_dbo_Filters_Filter_Id" Association="Self.FK_dbo_FilterItems_dbo_Filters_Filter_Id">
+            <End Role="Filters" EntitySet="Filters" />
+            <End Role="FilterItems" EntitySet="FilterItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Filters_dbo_Games_Game_Id" Association="Self.FK_dbo_Filters_dbo_Games_Game_Id">
+            <End Role="Games" EntitySet="Games" />
+            <End Role="Filters" EntitySet="Filters" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Offers_dbo_Games_Game_Id" Association="Self.FK_dbo_Offers_dbo_Games_Game_Id">
+            <End Role="Games" EntitySet="Games" />
+            <End Role="Offers" EntitySet="Offers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Messages_dbo_UserProfiles_ReceiverId" Association="Self.FK_dbo_Messages_dbo_UserProfiles_ReceiverId">
+            <End Role="UserProfiles" EntitySet="UserProfiles" />
+            <End Role="Messages" EntitySet="Messages" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Messages_dbo_UserProfiles_SenderId" Association="Self.FK_dbo_Messages_dbo_UserProfiles_SenderId">
+            <End Role="UserProfiles" EntitySet="UserProfiles" />
+            <End Role="Messages" EntitySet="Messages" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Offers_dbo_UserProfiles_UserProfileId" Association="Self.FK_dbo_Offers_dbo_UserProfiles_UserProfileId">
+            <End Role="UserProfiles" EntitySet="UserProfiles" />
+            <End Role="Offers" EntitySet="Offers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Orders_dbo_Offers_Id" Association="Self.FK_dbo_Orders_dbo_Offers_Id">
+            <End Role="Offers" EntitySet="Offers" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Orders_dbo_UserProfiles_BuyerId" Association="Self.FK_dbo_Orders_dbo_UserProfiles_BuyerId">
+            <End Role="UserProfiles" EntitySet="UserProfiles" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Orders_dbo_UserProfiles_ModeratorId" Association="Self.FK_dbo_Orders_dbo_UserProfiles_ModeratorId">
+            <End Role="UserProfiles" EntitySet="UserProfiles" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Orders_dbo_UserProfiles_SellerId" Association="Self.FK_dbo_Orders_dbo_UserProfiles_SellerId">
+            <End Role="UserProfiles" EntitySet="UserProfiles" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Orders_dbo_UserProfiles_UserProfileId" Association="Self.FK_dbo_Orders_dbo_UserProfiles_UserProfileId">
+            <End Role="UserProfiles" EntitySet="UserProfiles" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_OrderStatus_dbo_Orders_OrderId" Association="Self.FK_dbo_OrderStatus_dbo_Orders_OrderId">
+            <End Role="Orders" EntitySet="Orders" />
+            <End Role="OrderStatus" EntitySet="OrderStatus" />
+          </AssociationSet>
+          <AssociationSet Name="FilterItemOffers" Association="Self.FilterItemOffers">
+            <End Role="FilterItems" EntitySet="FilterItems" />
+            <End Role="Offers" EntitySet="Offers" />
+          </AssociationSet>
+          <AssociationSet Name="FilterOffers" Association="Self.FilterOffers">
+            <End Role="Filters" EntitySet="Filters" />
+            <End Role="Offers" EntitySet="Offers" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище ModelContainer" CdmEntityContainer="Entities">
+          <EntitySetMapping Name="C__MigrationHistory">
+            <EntityTypeMapping TypeName="Model.C__MigrationHistory">
+              <MappingFragment StoreEntitySet="__MigrationHistory">
+                <ScalarProperty Name="MigrationId" ColumnName="MigrationId" />
+                <ScalarProperty Name="ContextKey" ColumnName="ContextKey" />
+                <ScalarProperty Name="Model" ColumnName="Model" />
+                <ScalarProperty Name="ProductVersion" ColumnName="ProductVersion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AccountInfos">
+            <EntityTypeMapping TypeName="Model.AccountInfo">
+              <MappingFragment StoreEntitySet="AccountInfos">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Login" ColumnName="Login" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="AdditionalInformation" ColumnName="AdditionalInformation" />
+                <ScalarProperty Name="BuyerId" ColumnName="BuyerId" />
+                <ScalarProperty Name="ModeratorId" ColumnName="ModeratorId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AspNetUsers">
+            <EntityTypeMapping TypeName="Model.AspNetUser">
+              <MappingFragment StoreEntitySet="AspNetUsers">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="EmailConfirmed" ColumnName="EmailConfirmed" />
+                <ScalarProperty Name="PasswordHash" ColumnName="PasswordHash" />
+                <ScalarProperty Name="SecurityStamp" ColumnName="SecurityStamp" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="PhoneNumberConfirmed" ColumnName="PhoneNumberConfirmed" />
+                <ScalarProperty Name="TwoFactorEnabled" ColumnName="TwoFactorEnabled" />
+                <ScalarProperty Name="LockoutEndDateUtc" ColumnName="LockoutEndDateUtc" />
+                <ScalarProperty Name="LockoutEnabled" ColumnName="LockoutEnabled" />
+                <ScalarProperty Name="AccessFailedCount" ColumnName="AccessFailedCount" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Dialogs">
+            <EntityTypeMapping TypeName="Model.Dialog">
+              <MappingFragment StoreEntitySet="Dialogs">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="CreatorId" ColumnName="CreatorId" />
+                <ScalarProperty Name="CompanionId" ColumnName="CompanionId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Feedbacks">
+            <EntityTypeMapping TypeName="Model.Feedback">
+              <MappingFragment StoreEntitySet="Feedbacks">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Grade" ColumnName="Grade" />
+                <ScalarProperty Name="Comment" ColumnName="Comment" />
+                <ScalarProperty Name="DateLeft" ColumnName="DateLeft" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FilterItems">
+            <EntityTypeMapping TypeName="Model.FilterItem">
+              <MappingFragment StoreEntitySet="FilterItems">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="Image" ColumnName="Image" />
+                <ScalarProperty Name="Filter_Id" ColumnName="Filter_Id" />
+                <ScalarProperty Name="Rank" ColumnName="Rank" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Filters">
+            <EntityTypeMapping TypeName="Model.Filter">
+              <MappingFragment StoreEntitySet="Filters">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="Text" ColumnName="Text" />
+                <ScalarProperty Name="Game_Id" ColumnName="Game_Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Games">
+            <EntityTypeMapping TypeName="Model.Game">
+              <MappingFragment StoreEntitySet="Games">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="Image" ColumnName="Image" />
+                <ScalarProperty Name="Rank" ColumnName="Rank" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Messages">
+            <EntityTypeMapping TypeName="Model.Message">
+              <MappingFragment StoreEntitySet="Messages">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="MessageBody" ColumnName="MessageBody" />
+                <ScalarProperty Name="SenderDeleted" ColumnName="SenderDeleted" />
+                <ScalarProperty Name="ReceiverDeleted" ColumnName="ReceiverDeleted" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="SenderId" ColumnName="SenderId" />
+                <ScalarProperty Name="ReceiverId" ColumnName="ReceiverId" />
+                <ScalarProperty Name="DialogId" ColumnName="DialogId" />
+                <ScalarProperty Name="FromViewed" ColumnName="FromViewed" />
+                <ScalarProperty Name="ToViewed" ColumnName="ToViewed" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Offers">
+            <EntityTypeMapping TypeName="Model.Offer">
+              <MappingFragment StoreEntitySet="Offers">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Header" ColumnName="Header" />
+                <ScalarProperty Name="Discription" ColumnName="Discription" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Views" ColumnName="Views" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="DateDeleted" ColumnName="DateDeleted" />
+                <ScalarProperty Name="UserProfileId" ColumnName="UserProfileId" />
+                <ScalarProperty Name="GameId" ColumnName="GameId" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="SellerPaysMiddleman" ColumnName="SellerPaysMiddleman" />
+                <ScalarProperty Name="MiddlemanPrice" ColumnName="MiddlemanPrice" />
+                <ScalarProperty Name="AccountLogin" ColumnName="AccountLogin" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Orders">
+            <EntityTypeMapping TypeName="Model.Order">
+              <MappingFragment StoreEntitySet="Orders">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="SellerId" ColumnName="SellerId" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="BuyerId" ColumnName="BuyerId" />
+                <ScalarProperty Name="BuyerFeedbacked" ColumnName="BuyerFeedbacked" />
+                <ScalarProperty Name="SellerFeedbacked" ColumnName="SellerFeedbacked" />
+                <ScalarProperty Name="MiddlemanId" ColumnName="MiddlemanId" />
+                <ScalarProperty Name="BuyerChecked" ColumnName="BuyerChecked" />
+                <ScalarProperty Name="SellerChecked" ColumnName="SellerChecked" />
+                <ScalarProperty Name="Sum" ColumnName="Sum" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="WithdrawAmount" ColumnName="WithdrawAmount" />
+                <ScalarProperty Name="OfferId" ColumnName="OfferId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OrderStatus">
+            <EntityTypeMapping TypeName="Model.OrderStatu">
+              <MappingFragment StoreEntitySet="OrderStatus">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
+                <ScalarProperty Name="FinisedName" ColumnName="FinisedName" />
+                <ScalarProperty Name="DateFinished" ColumnName="DateFinished" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserProfiles">
+            <EntityTypeMapping TypeName="Model.UserProfile">
+              <MappingFragment StoreEntitySet="UserProfiles">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Avatar" ColumnName="Avatar" />
+                <ScalarProperty Name="Positive" ColumnName="Positive" />
+                <ScalarProperty Name="Negative" ColumnName="Negative" />
+                <ScalarProperty Name="Discription" ColumnName="Discription" />
+                <ScalarProperty Name="IsOnline" ColumnName="IsOnline" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="RegistrationDate" ColumnName="RegistrationDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="FilterItemOffers" TypeName="Model.FilterItemOffers" StoreEntitySet="FilterItemOffers">
+            <EndProperty Name="FilterItems">
+              <ScalarProperty Name="Id" ColumnName="FilterItem_Id" />
+            </EndProperty>
+            <EndProperty Name="Offers">
+              <ScalarProperty Name="Id" ColumnName="Offer_Id" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="FilterOffers" TypeName="Model.FilterOffers" StoreEntitySet="FilterOffers">
+            <EndProperty Name="Filters">
+              <ScalarProperty Name="Id" ColumnName="Filter_Id" />
+            </EndProperty>
+            <EndProperty Name="Offers">
+              <ScalarProperty Name="Id" ColumnName="Offer_Id" />
+            </EndProperty>
+          </AssociationSetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

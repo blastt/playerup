@@ -142,7 +142,6 @@ namespace Trader.WEB.Controllers
                                 order.BuyerChecked = false;
                                 order.SellerChecked = false;
                                 order.OrderStatuses.Add(orderStatus);
-                                accountInfo.ModeratorId = model.ModeratorId;
                                 order.AccountInfo = accountInfo;
                                 _orderService.SaveOrder();
                                 return RedirectToAction("ProvideData", new { moderatorId = model.ModeratorId });                                

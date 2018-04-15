@@ -17,18 +17,20 @@ namespace Trader.WEB.Controllers
     {
 
         private readonly IUserProfileService _userProfileService;
+        private readonly IFeedbackService _feedbackService;
         private readonly IOfferService _offerService;
         private readonly IGameService _gameService;
         private readonly IFilterService _filterService;
         private readonly IFilterItemService _filterItemService;
         public int pageSize = 7;
-        public ProfileController(IOfferService offerService, IGameService gameService, IFilterService filterService, IFilterItemService filterItemService, IUserProfileService userProfileService)
+        public ProfileController(IOfferService offerService, IFeedbackService feedbackService, IGameService gameService, IFilterService filterService, IFilterItemService filterItemService, IUserProfileService userProfileService)
         {
             _offerService = offerService;
             _gameService = gameService;
             _filterService = filterService;
             _filterItemService = filterItemService;
             _userProfileService = userProfileService;
+            _feedbackService = feedbackService;
         }
 
         [Authorize]
@@ -51,7 +53,7 @@ namespace Trader.WEB.Controllers
         {
             var profile = _userProfileService.GetUserProfileById(User.Identity.GetUserId());
 
-            if (profile.Feedbacks != null)
+            if (profile.FeedbacksMy != null)
             {
                 //FeedbackListViewModel model = new FeedbackListViewModel
                 //{
@@ -86,33 +88,20 @@ namespace Trader.WEB.Controllers
                 return HttpNotFound();
             }
             var model = Mapper.Map<UserProfile, InfoUserProfileViewModel>(profile);
-            double posProcent = 0;
-            double negProcent = 0;
+            model.PositiveFeedbacks = _feedbackService.PositiveFeedbackCount(profile);
+            model.NegativeFeedbacks = _feedbackService.NegativeFeedbackCount(profile);
             int feedbackCount = model.NegativeFeedbacks + model.PositiveFeedbacks;
-            if (model.PositiveFeedbacks != 0 || model.NegativeFeedbacks != 0)
+            if (model.PositiveFeedbacks + model.NegativeFeedbacks != 0)
             {
-                if (model.PositiveFeedbacks == 0)
-                {
-                    model.NegativeFeedbacks = 100;
-                }
-                else
-                {
-                    negProcent = Math.Round((double)(100 * model.NegativeFeedbacks) / (feedbackCount), 2);
-                }
-                if (model.PositiveFeedbacks == 0)
-                {
-                    model.NegativeFeedbacks = 100;
-                }
-                else
-                {
-                    posProcent = Math.Round((double)(100 * model.PositiveFeedbacks) / (feedbackCount), 2);
-                }
+                model.PositiveFeedbackProcent = _feedbackService.PositiveFeedbackProcent(model.PositiveFeedbacks, model.NegativeFeedbacks);
+                model.NegativeFeedbackProcent = _feedbackService.NegativeFeedbackProcent(model.PositiveFeedbacks, model.NegativeFeedbacks);
             }
-            model.PositiveFeedbackProcent = posProcent;
-            model.NegativeFeedbackProcent = negProcent;
+            model.Rating = model.PositiveFeedbacks - model.NegativeFeedbacks;
             model.CurrentUserId = User.Identity.GetUserId();
+            model.InfoUserId = id;
             model.OffersViewModel.Offers = Mapper.Map<IEnumerable<Offer>, IEnumerable<OfferViewModel>>(profile.Offers);
-            model.FeedbacksViewModel.Feedbacks = Mapper.Map<IEnumerable<Feedback>, IEnumerable<FeedbackViewModel>>(profile.Feedbacks);
+            model.FeedbacksViewModel.Feedbacks = Mapper.Map<IEnumerable<Feedback>, IEnumerable<FeedbackViewModel>>(profile.FeedbacksMy);
+            
             var games = _gameService.GetGames();
             
             model.FeedbacksViewModel.PageInfo = new PageInfoViewModel

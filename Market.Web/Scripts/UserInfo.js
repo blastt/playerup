@@ -34,7 +34,7 @@ function SearchOffersInfo() {
     var g = $('#sort-game');
     var message = {
         "game": g.val(),
-        "userId": $('#user-id').val(),
+        "userId": $('#info-user-id').val(),
         "page": $('#page').val(),
         "searchString": $('#searchString').val()
     };
@@ -69,7 +69,7 @@ function SearchFeedbacksInfo() {
 
     var g = $('#game').val();
     var message = {
-        "userId": $('#user-id').val(),
+        "userId": $('#info-user-id').val(),
         "page": $('#page').val(),
         "searchString": $('#searchString').val()
 

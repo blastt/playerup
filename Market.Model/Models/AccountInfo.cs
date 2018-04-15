@@ -16,10 +16,5 @@ namespace Market.Model.Models
 
         public virtual Order Order { get; set; }
 
-        public virtual UserProfile Buyer { get; set; }
-        public virtual string BuyerId { get; set; }
-
-        public virtual UserProfile Moderator { get; set; }
-        public virtual string ModeratorId { get; set; }
     }
 }

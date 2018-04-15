@@ -114,6 +114,10 @@ namespace Market.Web.Mappings
 
             #region Feedback
 
+            CreateMap<GiveFeedbackViewModel, Feedback>()
+               .ForMember(o => o.Grade, map => map.MapFrom(vm => vm.Grade))
+               .ForPath(o => o.Comment, map => map.MapFrom(vm => vm.Comment));
+
             CreateMap<FeedbackViewModel, Feedback>()
                .ForMember(o => o.Grade, map => map.MapFrom(vm => vm.Grade))
                .ForPath(o => o.Order.Offer.Header, map => map.MapFrom(vm => vm.OfferHeader))

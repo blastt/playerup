@@ -583,6 +583,9 @@
     <Content Include="Views\Error\NotFound.cshtml" />
     <Content Include="Views\Offer\Edit.cshtml" />
     <Content Include="Views\Offer\_OfferItem.cshtml" />
+    <Content Include="Views\Offer\_OfferInfoItem.cshtml" />
+    <Content Include="Views\Feedback\FeedbacksAsSeller.cshtml" />
+    <Content Include="Views\Offer\_AccountOfferItem.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

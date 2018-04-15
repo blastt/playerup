@@ -15,10 +15,14 @@
 
 
             @{Html.RenderAction("AccountMenu", "Account"); }
-            <div class="account-offer-container">
+            <div class="account-container">
                 @{Html.RenderPartial("_AccountOrdersMenu", Model); }
+                <div class="form-inline form-offer-filter">
+                    <h3 class="mb-0 text-gray text-300">
+                        Заказы, где вы продавец:
+                    </h3>
+                </div>
 
-                
                 <table class="table table-hover">
                     <tr>
                         <th>Предложение</th>
@@ -28,28 +32,28 @@
                         <th></th>
                     </tr>
                     @foreach (var order in Model.Orders)
-                    {
-                        var clsBold = "";
-                        if (!order.SellerChecked)
-                        {
-                            clsBold = "font-weight-bold warning-row";
-                        }
+        {
+            var clsBold = "";
+            if (!order.SellerChecked)
+            {
+                clsBold = "font-weight-bold warning-row";
+            }
 
-                        <tr id="message-row-@order.Id" class="@clsBold">
-                            <td class="clickable  set-viewed-td" data-id="@order.Id">
-                                @if (!order.SellerChecked)
-                                {
-                                    <div class="set-viewed-icon"></div>
+            <tr id="message-row-@order.Id" class="@clsBold">
+                <td class="clickable  set-viewed-td" data-id="@order.Id">
+                    @if (!order.SellerChecked)
+        {
+            <div class="set-viewed-icon"></div>
 
-                                }
-                            </td>
-                            <td>@order.OfferHeader</td>
-                            <td>@order.BuyerName</td>
-                            <td>@order.OfferPrice</td>
-                            <td>@order.OrderStatuses.LastOrDefault().Name</td>
-                            <td>@Html.ActionLink("Детали", "SellDetails", "Order", new { orderId = order.Id }, null)</td>
-                        </tr>
-                    }
+}
+                </td>
+                <td>@order.OfferHeader</td>
+                <td>@order.BuyerName</td>
+                <td>@order.OfferPrice</td>
+                <td>@order.OrderStatuses.LastOrDefault().Name</td>
+                <td>@Html.ActionLink("Детали", "SellDetails", "Order", new { orderId = order.Id }, null)</td>
+            </tr>
+}
 
                 </table>
             </div>

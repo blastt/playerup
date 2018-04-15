@@ -22,7 +22,8 @@ namespace Market.Web.Controllers
         private readonly IGameService _gameService;
         private readonly IFilterService _filterService;
         private readonly IFilterItemService _filterItemService;
-        public int pageSize = 2;
+        public int pageSize = 4;
+        public int pageSizeInUserInfo = 10;
         public OfferController(IOfferService offerService, IGameService gameService, IFilterService filterService, IFilterItemService filterItemService, IUserProfileService userProfileService)
         {
             _offerService = offerService;
@@ -113,8 +114,7 @@ namespace Market.Web.Controllers
             
             //offer.Header.Replace(" ", "").ToLower().Contains(searchString.Replace(" ", "").ToLower()) || (searchInDescription ? (offer.Discription.Replace(" ", "").ToLower().Contains(searchString.Replace(" ", "").ToLower())) : searchInDescription)
             IEnumerable<Offer> offers = _offerService.SearchOffers(game, sort,ref isOnline,ref searchInDiscription,
-                searchString, ref page, pageSize,ref totalItems, ref minGamePrice, ref maxGamePrice, ref priceFrom, ref priceTo);
-
+                searchString, ref page, pageSize,ref totalItems, ref minGamePrice, ref maxGamePrice, ref priceFrom, ref priceTo);            
             IList<SelectListItem> ranks = new List<SelectListItem>
             {
                 new SelectListItem() { Text = "Все ранги", Value = "none", Selected = true }
@@ -200,10 +200,10 @@ namespace Market.Web.Controllers
             OfferListViewModel model = new OfferListViewModel
             {
                 Games = games,
-                Offers = modelOffers,
+                Offers = modelOffers.Skip((searchInfo.Page - 1) * pageSizeInUserInfo).Take(pageSizeInUserInfo).ToList(),
                 PageInfo = new PageInfoViewModel
                 {
-                    PageSize = pageSize,
+                    PageSize = pageSizeInUserInfo,
                     PageNumber = searchInfo.Page,
                     TotalItems = modelOffers.Count()
                 },
@@ -320,6 +320,7 @@ namespace Market.Web.Controllers
         {
             Offer offer = _offerService.GetOffer(id.Value);
             var model = Mapper.Map<Offer, DetailsOfferViewModel>(offer);
+
             return View(model);
 
         }

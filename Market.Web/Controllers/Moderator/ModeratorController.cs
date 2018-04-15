@@ -155,7 +155,6 @@ namespace Market.Web.Controllers.Moderator
                                 buyerOrder.SellerChecked = false;
                                 buyerOrder.OrderStatuses.Add(orderStatus);
                                     
-                                accInfo.BuyerId = model.BuyerId;
                                 _accountInfoService.UpdateAccountInfo(accInfo);
                                 buyerOrder.AccountInfo = accInfo;
                                 _orderService.SaveOrder();
