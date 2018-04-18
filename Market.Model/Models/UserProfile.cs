@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,14 +14,82 @@ namespace Market.Model.Models
     {
         public string Id { get; set; }
         public byte[] Avatar { get; set; }
-        public int Positive { get; set; }
-        public int Negative { get; set; }
-        //public decimal Balance { get; set; }
+
+
+        public int PositiveFeedbackCount
+        {
+            set;get;
+        }
+
+        public int NegativeFeedbackCount
+        {
+            set;get;
+        }
+
+        public int Rating
+        {
+            get
+            {
+                return PositiveFeedbackCount - NegativeFeedbackCount;
+            }
+            private set
+            {
+
+            }
+        }
+
+        public int AllFeedbackCount
+        {
+            get
+            {
+                return PositiveFeedbackCount + NegativeFeedbackCount;
+            }
+            private set
+            {
+
+            }
+        }
+
+        public double PositiveFeedbackProcent
+        {
+            get
+            {
+                if (AllFeedbackCount != 0)
+                {
+                    double pos = Math.Round((double)(100 * PositiveFeedbackCount) / (AllFeedbackCount), 2);
+                    return pos;
+                }
+                return 0;
+            }
+            private set
+            {
+
+            }
+        }
+
+        public double NegativeFeedbackProcent
+        {
+            get
+            {
+                if (AllFeedbackCount != 0)
+                {
+                    double neg = Math.Round((double)(100 * NegativeFeedbackCount) / (AllFeedbackCount), 2);
+                    return neg;
+                }
+                return 0;
+            }
+            private set
+            {
+
+            }
+        }
+
         public string Discription { get; set; }
         public bool IsOnline { get; set; }
         public DateTime RegistrationDate { get; set; }
 
         public string Name { get; set; }
+
 
         public virtual ApplicationUser ApplicationUser { get; set; }
         public virtual ICollection<Message> MessagesAsSender { get; set; } = new List<Message>();

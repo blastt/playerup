@@ -54,7 +54,7 @@ namespace Trader.WEB.Controllers
                     DateCreated = DateTime.Now
                 };
 
-                offer.Order.OrderStatuses.Add(orderStatus);
+                offer.Order.OrderStatuses.AddLast(orderStatus);
                 _offerService.SaveOffer();
 
                 var userProfiles = _userProfileService.GetUserProfiles()
@@ -141,7 +141,7 @@ namespace Trader.WEB.Controllers
                                 };                                
                                 order.BuyerChecked = false;
                                 order.SellerChecked = false;
-                                order.OrderStatuses.Add(orderStatus);
+                                order.OrderStatuses.AddLast(orderStatus);
                                 order.AccountInfo = accountInfo;
                                 _orderService.SaveOrder();
                                 return RedirectToAction("ProvideData", new { moderatorId = model.ModeratorId });                                
@@ -178,7 +178,7 @@ namespace Trader.WEB.Controllers
                             {
                                 order.BuyerChecked = false;
                                 order.SellerChecked = false;
-                                order.OrderStatuses.Add(orderStatus);
+                                order.OrderStatuses.AddLast(orderStatus);
                                 _orderService.SaveOrder();
                                 return View();
                             }

@@ -64,7 +64,7 @@ namespace Market.Web.Mappings
                .ForMember(o => o.Price, map => map.MapFrom(vm => vm.Price))
                .ForMember(o => o.Game, map => map.MapFrom(vm => vm.Game))
                .ForMember(o => o.UserId, map => map.MapFrom(vm => vm.UserProfileId))
-               .ForPath(o => o.Rating, map => map.MapFrom(vm => vm.UserProfile.Positive - vm.UserProfile.Negative))
+               .ForPath(o => o.Rating, map => map.MapFrom(vm => vm.UserProfile.Rating))
                .ForPath(o => o.UserName, map => map.MapFrom(vm => vm.UserProfile.Name))
                .ForMember(o => o.Game, map => map.MapFrom(vm => vm.Game))
                .ForPath(o => o.User, map => map.MapFrom(vm => vm.UserProfile));
@@ -92,7 +92,7 @@ namespace Market.Web.Mappings
                .ForMember(o => o.FilterItems, map => map.MapFrom(vm => vm.FilterItems))
                .ForMember(o => o.Game, map => map.MapFrom(vm => vm.Game))
                .ForMember(o => o.UserId, map => map.MapFrom(vm => vm.UserProfileId))
-               .ForPath(o => o.Rating, map => map.MapFrom(vm => vm.UserProfile.Positive - vm.UserProfile.Negative))
+               .ForPath(o => o.Rating, map => map.MapFrom(vm => vm.UserProfile.Rating))
                .ForPath(o => o.UserName, map => map.MapFrom(vm => vm.UserProfile.Name))
                .ForPath(o => o.UserProfile, map => map.MapFrom(vm => vm.UserProfile))
                .ForMember(o => o.Views, map => map.MapFrom(vm => vm.Views))
@@ -221,9 +221,18 @@ namespace Market.Web.Mappings
                 .ForMember(o => o.Avatar, map => map.MapFrom(vm => vm.Avatar))
                 .ForMember(o => o.IsOnline, map => map.MapFrom(vm => vm.IsOnline))
                 .ForMember(o => o.Name, map => map.MapFrom(vm => vm.Name))
+                .ForMember(o => o.AllFeedbackCount, map => map.MapFrom(vm => vm.AllFeedbackCount))
+                .ForMember(o => o.PositiveFeedbacks, map => map.MapFrom(vm => vm.PositiveFeedbackCount))
+                .ForMember(o => o.NegativeFeedbacks, map => map.MapFrom(vm => vm.NegativeFeedbackCount))
                 .ForMember(o => o.RegistrationDate, map => map.MapFrom(vm => vm.RegistrationDate));
 
             CreateMap<UserProfile, UserProfileViewModel>()
+                .ForMember(o => o.Id, map => map.MapFrom(vm => vm.Id))
+                .ForMember(o => o.Rating, map => map.MapFrom(vm => vm.Rating))
+                .ForMember(o => o.PositiveFeedbackProcent, map => map.MapFrom(vm => vm.PositiveFeedbackProcent))
+                .ForMember(o => o.NegativeFeedbackProcent, map => map.MapFrom(vm => vm.NegativeFeedbackProcent))
+                .ForMember(o => o.Positive, map => map.MapFrom(vm => vm.PositiveFeedbackCount))
+                .ForMember(o => o.Negative, map => map.MapFrom(vm => vm.NegativeFeedbackCount))
                 .ForMember(o => o.Id, map => map.MapFrom(vm => vm.Id))
                 .ForMember(o => o.Name, map => map.MapFrom(vm => vm.Name));
 

@@ -260,9 +260,12 @@ namespace Market.Web.Controllers
             {
                 return View("_CreateOfferConfirmationError");
             }
-
+            if (userProfile.Offers.Where(o => o.State == OfferState.active).Count() >= 10)
+            {
+                return View("CrateOfferLimitError");
+            }
             Offer offer = Mapper.Map<CreateOfferViewModel, Offer>(model);
-
+            
             Game game = _gameService.GetGameByValue(model.Game);
             var gameFilters = _filterService.GetFilters().Where(f => f.Game == game).ToList();
             var modelFilters = model.FilterValues;
@@ -302,10 +305,6 @@ namespace Market.Web.Controllers
             {
                 return View("_CreateOfferFilterError");
             }
-
-
-
-            offer.MiddlemanPrice = _offerService.CalculateMiddlemanPrice(offer.Price);
 
 
             offer.Game = game;
@@ -446,8 +445,6 @@ namespace Market.Web.Controllers
             {
                 return View("_CreateOfferFilterError");
             }
-
-            offer.MiddlemanPrice = _offerService.CalculateMiddlemanPrice(offer.Price);
             offer.Game = game;
             offer.UserProfileId = User.Identity.GetUserId();
             _offerService.UpdateOffer(offer);

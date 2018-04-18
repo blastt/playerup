@@ -15,6 +15,7 @@ namespace Market.Service
         //IEnumerable<Offer> GetCategoryGadgets(string categoryName, string gadgetName = null);
         Order GetOrder(int id);
         Order GetOrder(string accountLogin, string moderatorId, string sellerId, string buyerId);
+        void UpdateOrder(Order order);
         void CreateOrder(Order order);
         void SaveOrder();
     }
@@ -38,7 +39,10 @@ namespace Market.Service
             return orders;
         }
 
-
+        public void UpdateOrder(Order order)
+        {
+            ordersRepository.Update(order);
+        }
         public Order GetOrder(int id)
         {
             var order = ordersRepository.GetById(id);

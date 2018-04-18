@@ -32,7 +32,39 @@ namespace Market.Model.Models
         public bool BuyerChecked { get; set; }
         public bool SellerChecked { get; set; }
 
+        
         public decimal Sum { get; set; } // сумма заказа
+        
+
+        public decimal WithmiddlemanSum // сумма с учетом стоимости гаранта
+        {
+            get
+            {
+                decimal middlemanPrice = 0;
+
+                if (Sum < 3000)
+                {
+                    middlemanPrice = 300;
+
+                }
+                else if (Sum < 15000)
+                {
+                    middlemanPrice = Sum * Convert.ToDecimal(0.1);
+                }
+                else
+                {
+                    middlemanPrice = 1500;
+                }
+
+                return Sum - middlemanPrice;
+            }
+            private set
+            {
+                
+            }
+            
+        }
+
         public decimal? Amount { get; set; } // сумма, которую заплатали с учетом комиссии
         public decimal? WithdrawAmount { get; set; } // сумма, которую заплатали без учета комиссии
 
@@ -40,7 +72,7 @@ namespace Market.Model.Models
 
         public virtual Offer Offer { get; set; }
 
-        public virtual ICollection<OrderStatus> OrderStatuses { get; set; } = new List<OrderStatus>();
+        public virtual LinkedList<OrderStatus> OrderStatuses { get; set; } = new LinkedList<OrderStatus>();
 
         public virtual string MiddlemanId { get; set; }
         public virtual UserProfile Middleman { get; set; }

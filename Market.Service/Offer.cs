@@ -142,7 +142,7 @@ namespace Market.Service
                 case "bestSeller":
                     {
                         offers = from offer in offers
-                                 orderby (offer.UserProfile.Positive - offer.UserProfile.Negative) descending
+                                 orderby (offer.UserProfile.PositiveFeedbackCount - offer.UserProfile.NegativeFeedbackCount) descending
                                  select offer;
                         break;
                     }

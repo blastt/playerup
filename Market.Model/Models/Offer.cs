@@ -31,7 +31,34 @@ namespace Market.Model.Models
 
         public bool SellerPaysMiddleman { get; set; }
 
-        public decimal MiddlemanPrice { get; set; }
+        public decimal MiddlemanPrice
+        {
+            get
+            {
+                decimal middlemanPrice = 0;
+
+                if (Price < 3000)
+                {
+                    middlemanPrice = 300;
+
+                }
+                else if (Price < 15000)
+                {
+                    middlemanPrice = Price * Convert.ToDecimal(0.1);
+                }
+                else
+                {
+                    middlemanPrice = 1500;
+                }
+
+                return middlemanPrice;
+            }
+
+            private set
+            {
+
+            }
+        }
 
         public DateTime DateCreated { get; set; } = DateTime.Now;
         public DateTime? DateDeleted { get; set; }

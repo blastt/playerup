@@ -188,6 +188,34 @@
     <Compile Include="Migrations\201804140918265_myandOtherFeedbacks.Designer.cs">
       <DependentUpon>201804140918265_myandOtherFeedbacks.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201804152156410_Calculated.cs" />
+    <Compile Include="Migrations\201804152156410_Calculated.Designer.cs">
+      <DependentUpon>201804152156410_Calculated.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804152157424_Calculated1.cs" />
+    <Compile Include="Migrations\201804152157424_Calculated1.Designer.cs">
+      <DependentUpon>201804152157424_Calculated1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804160816489_LinkedList.cs" />
+    <Compile Include="Migrations\201804160816489_LinkedList.Designer.cs">
+      <DependentUpon>201804160816489_LinkedList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804160824231_LinkedList1.cs" />
+    <Compile Include="Migrations\201804160824231_LinkedList1.Designer.cs">
+      <DependentUpon>201804160824231_LinkedList1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804161402021_WithmiddlemanSum.cs" />
+    <Compile Include="Migrations\201804161402021_WithmiddlemanSum.Designer.cs">
+      <DependentUpon>201804161402021_WithmiddlemanSum.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804161923388_Calc.cs" />
+    <Compile Include="Migrations\201804161923388_Calc.Designer.cs">
+      <DependentUpon>201804161923388_Calc.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804171804347_null.cs" />
+    <Compile Include="Migrations\201804171804347_null.Designer.cs">
+      <DependentUpon>201804171804347_null.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\AccountInfoRepository.cs" />
@@ -299,6 +327,27 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201804140918265_myandOtherFeedbacks.resx">
       <DependentUpon>201804140918265_myandOtherFeedbacks.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804152156410_Calculated.resx">
+      <DependentUpon>201804152156410_Calculated.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804152157424_Calculated1.resx">
+      <DependentUpon>201804152157424_Calculated1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804160816489_LinkedList.resx">
+      <DependentUpon>201804160816489_LinkedList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804160824231_LinkedList1.resx">
+      <DependentUpon>201804160824231_LinkedList1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804161402021_WithmiddlemanSum.resx">
+      <DependentUpon>201804161402021_WithmiddlemanSum.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804161923388_Calc.resx">
+      <DependentUpon>201804161923388_Calc.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804171804347_null.resx">
+      <DependentUpon>201804171804347_null.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

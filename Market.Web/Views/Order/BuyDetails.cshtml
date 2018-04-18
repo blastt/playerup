@@ -28,7 +28,7 @@
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="alert alert-dismissible alert-warning">
-                                <span>Текущий статус заказа: <span class="text-700">@Model.OrderStatuses.LastOrDefault().Name</span></span>
+                                <span>Текущий статус заказа: <span class="text-700">@Model.OrderStatuses.Last().Name</span></span>
                             </div>
                         </div>
                     </div>
@@ -45,7 +45,7 @@
                             <label>Продавец</label>
                         </div>
                         <div class="order-details-col col-md-8">
-                            <span>@Html.ActionLink(Model.SellerName, "Info", "Profile", new { id = Model.SellerId }, null)</span>
+                            <span>@Html.ActionLink(Model.SellerName, "Info", "Profile", new { userName = Model.SellerName }, null)</span>
                         </div>
                     </div>
                     <div class="order-details-row row">
@@ -59,7 +59,7 @@
                     <div class="order-details-row row">
                         <div class="order-details-col col-md-5">
 
-                            @if (Model.OrderStatuses.LastOrDefault().Value == "buyerConfirming")
+                            @if (Model.OrderStatuses.Last().Value == "buyerConfirming")
                             {
                                 <div class="alert alert-dismissible alert-primary">
                                     <div class="row">
@@ -91,8 +91,8 @@
                                 }
 
                             }
-                            else if ((Model.OrderStatuses.LastOrDefault().Value == "closedSeccessfuly" ||
-                            Model.OrderStatuses.LastOrDefault().Value == "payingToSeller") && !Model.BuyerFeedbacked)
+                            else if ((Model.OrderStatuses.Last().Value == "closedSeccessfuly" ||
+                            Model.OrderStatuses.Last().Value == "payingToSeller") && !Model.BuyerFeedbacked)
                             {
                                 <div class="alert alert-dismissible alert-primary">
                                     <div class="row">

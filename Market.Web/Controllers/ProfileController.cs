@@ -80,25 +80,16 @@ namespace Trader.WEB.Controllers
         {            
             return View();
         }
-        public ActionResult Info(string id)
+        public ActionResult Info(string userName)
         {
-            var profile = _userProfileService.GetUserProfileById(id);
+            var profile = _userProfileService.GetUserProfileByName(userName);
             if (profile == null)
             {
                 return HttpNotFound();
             }
             var model = Mapper.Map<UserProfile, InfoUserProfileViewModel>(profile);
-            model.PositiveFeedbacks = _feedbackService.PositiveFeedbackCount(profile);
-            model.NegativeFeedbacks = _feedbackService.NegativeFeedbackCount(profile);
-            int feedbackCount = model.NegativeFeedbacks + model.PositiveFeedbacks;
-            if (model.PositiveFeedbacks + model.NegativeFeedbacks != 0)
-            {
-                model.PositiveFeedbackProcent = _feedbackService.PositiveFeedbackProcent(model.PositiveFeedbacks, model.NegativeFeedbacks);
-                model.NegativeFeedbackProcent = _feedbackService.NegativeFeedbackProcent(model.PositiveFeedbacks, model.NegativeFeedbacks);
-            }
-            model.Rating = model.PositiveFeedbacks - model.NegativeFeedbacks;
             model.CurrentUserId = User.Identity.GetUserId();
-            model.InfoUserId = id;
+            model.InfoUserId = profile.Id;
             model.OffersViewModel.Offers = Mapper.Map<IEnumerable<Offer>, IEnumerable<OfferViewModel>>(profile.Offers);
             model.FeedbacksViewModel.Feedbacks = Mapper.Map<IEnumerable<Feedback>, IEnumerable<FeedbackViewModel>>(profile.FeedbacksMy);
             

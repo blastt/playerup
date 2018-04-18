@@ -15,6 +15,7 @@ namespace Market.Service
         UserProfile GetUserProfileById(string id);
         UserProfile GetUserProfileByName(string name);
         void CreateUserProfile(UserProfile userProfile);
+        void UpdateUserProfile(UserProfile userProfile);
         void SaveUserProfile();
     }
 
@@ -46,7 +47,10 @@ namespace Market.Service
             return userProfile;
         }
 
-        
+        public void UpdateUserProfile(UserProfile userProfile)
+        {
+            userProfilesRepository.Update(userProfile);
+        }
 
         public UserProfile GetUserProfileByName(string name)
         {

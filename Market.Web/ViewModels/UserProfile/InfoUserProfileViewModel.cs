@@ -11,6 +11,10 @@ namespace Market.Web.ViewModels
         public string Id { get; set; }
         public string Avatar { get; set; }
         public string Name { get; set; }
+
+        
+
+        public int AllFeedbackCount { get; set; }
         public int PositiveFeedbacks { get; set; }
         public int NegativeFeedbacks { get; set; }
         public double PositiveFeedbackProcent { get; set; }
@@ -19,7 +23,6 @@ namespace Market.Web.ViewModels
         public bool IsOnline { get; set; }
         public int SoldItems { get; set; }
         public int ReturnedItems { get; set; }
-        
         public int Rating { get; set; }
         public string CurrentUserId { get; set; }
         public string InfoUserId { get; set; }

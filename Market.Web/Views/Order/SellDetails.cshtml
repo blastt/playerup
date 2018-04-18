@@ -131,7 +131,7 @@
                             <label>Продавец</label>
                         </div>
                         <div class="order-details-col col-md-8">
-                            <span>@Html.ActionLink(Model.BuyerName, "Info", "Profile", new { id = Model.BuyerId }, null)</span>
+                            <span>@Html.ActionLink(Model.BuyerName, "Info", "Profile", new { userName = Model.BuyerName }, null)</span>
                         </div>
                     </div>
                     <div class="order-details-row row">
@@ -145,7 +145,7 @@
                     <div class="order-details-row row">
                         <div class="order-details-col col-md-5">
 
-                            @if (Model.OrderStatuses.LastOrDefault().Value == "sellerProviding")
+                            @if (Model.OrderStatuses.Last().Value == "sellerProviding")
                             {
                                 using (Html.BeginForm("ProvideData", "Checkout", null, FormMethod.Get, null))
                                 {
@@ -157,8 +157,8 @@
                                 }
 
                             }
-                            else if ((Model.OrderStatuses.LastOrDefault().Value == "closedSeccessfuly" ||
-                            Model.OrderStatuses.LastOrDefault().Value == "payingToSeller") && !Model.SellerFeedbacked)
+                            else if ((Model.OrderStatuses.Last().Value == "closedSeccessfuly" ||
+                            Model.OrderStatuses.Last().Value == "payingToSeller") && !Model.SellerFeedbacked)
                             {
                                 using (Html.BeginForm("GiveToBuyer", "Feedback", null, FormMethod.Get, null))
                                 {

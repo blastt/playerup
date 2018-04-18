@@ -11,6 +11,7 @@ namespace Market.Data.Configuration
         public OrderConfiguration()
         {
             ToTable("Orders");
+            Property(o => o.WithmiddlemanSum).HasDatabaseGeneratedOption(System.ComponentModel.DataAnnotations.Schema.DatabaseGeneratedOption.Computed);
             HasRequired(o => o.Offer).WithOptional(o => o.Order).WillCascadeOnDelete(false);
 
         }

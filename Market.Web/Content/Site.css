@@ -1,6 +1,10 @@
 ﻿body {
     padding-top: 130px
 }
+
+th{
+    font-weight: 400
+}
 .test{
     position:absolute;
     width:100%;
@@ -1195,6 +1199,12 @@ div#users-contain {
     border: 1px solid #62b2e2;
     background-color: transparent
 
+}
+
+.btn-contact-gray {
+    color: #b9b9b9;
+    border: 1px solid #b9b9b9;
+    background-color: transparent
 }
 
 .user-info-feedbackscore{

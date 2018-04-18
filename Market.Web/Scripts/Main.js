@@ -6,7 +6,7 @@ function SetDialogsClickable() {
     $(".clickable").each(function () {
         $(this).on('click', function (e) {
             var id = $(this).data('id');
-            location.href = "/dialog/details?dialogId=" + id;
+            location.href = "/account/dialog/" + id;
         });
     });
 }

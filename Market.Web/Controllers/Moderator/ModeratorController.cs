@@ -87,7 +87,7 @@ namespace Market.Web.Controllers.Moderator
                         
                         order.BuyerChecked = false;
                         order.SellerChecked = false;
-                        order.OrderStatuses.Add(orderStatus);
+                        order.OrderStatuses.AddLast(orderStatus);
                         order.MiddlemanId= User.Identity.GetUserId();
                         _orderService.SaveOrder();
                         return RedirectToAction("MyOrderList");
@@ -153,7 +153,7 @@ namespace Market.Web.Controllers.Moderator
                                 };                                 
                                 buyerOrder.BuyerChecked = false;
                                 buyerOrder.SellerChecked = false;
-                                buyerOrder.OrderStatuses.Add(orderStatus);
+                                buyerOrder.OrderStatuses.AddLast(orderStatus);
                                     
                                 _accountInfoService.UpdateAccountInfo(accInfo);
                                 buyerOrder.AccountInfo = accInfo;

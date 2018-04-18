@@ -1,4 +1,6 @@
 ﻿@using System.Globalization
+@using Microsoft.AspNet.Identity
+
 @model Market.Web.ViewModels.DetailsOfferViewModel
 
 @{
@@ -19,7 +21,14 @@
                                 @Model.UserName
                             </div>
                             <div class="col-lg-6 details-user-block-contact">
-                                <input id="contact" type="button" value="Связаться" class="btn-contact" />
+                                @if (Model.UserId == User.Identity.GetUserId())
+                                {
+                                    <input id="contact" type="button" disabled value="Связаться" class="btn-contact-gray" />
+                                }
+                                else
+                                {
+                                    <input id="contact" type="button" value="Связаться" class="btn-contact" />
+                                }
                                 @Html.HiddenFor(m => m.UserId)
                             </div>
                         </div>
@@ -37,11 +46,11 @@
                         <div class="row">
                             <div class="col-sm-6 text-left">
                                 <i class="info-rate-line icon-smile-pos-green icon-info-rate"></i>
-                                <span class="feedbacks-counter text-700">@Model.UserProfile.Positive</span>
+                                <span class="feedbacks-counter text-700">@Model.UserProfile.PositiveFeedbackCount</span>
                             </div>
                             <div class="col-sm-6 text-right">
                                 <i class="info-rate-line icon-smile-neg-gray icon-info-rate"></i>
-                                <span class="feedbacks-counter text-700">@Model.UserProfile.Negative</span>
+                                <span class="feedbacks-counter text-700">@Model.UserProfile.NegativeFeedbackCount</span>
                             </div>
                         </div>
                     </div>
@@ -93,7 +102,7 @@
                         <h3>@Html.DisplayFor(m => m.Price)</h3>
                     </div>
                     <div style="text-align:center">
-                        @*@Html.ActionLink("Купить", "Pay", "Checkout", new { offerId = Model.Id, sellerId = Model.UserProfile.Id }, null);*@
+                        @Html.ActionLink("Купить", "Pay", "Checkout", new { offerId = Model.Id, sellerId = Model.UserProfile.Id }, null);
                         @using (Html.BeginForm("Pay", "Checkout"))
                         {
                             @Html.HiddenFor(m => m.Id)
@@ -141,7 +150,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h6 class="modal-title">Написать сообщение</h6>
+                <h3 class="modal-title">Написать сообщение</h3>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span id="close" aria-hidden="true">×</span>
                 </button>

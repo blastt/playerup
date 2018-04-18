@@ -136,10 +136,22 @@ namespace Market.Web.Controllers
                     {
                         order.SellerFeedbacked = true;
                         var feedback = Mapper.Map<GiveFeedbackViewModel, Feedback>(model);
+
+                        if (feedback.Grade == Emotions.Good)
+                        {
+                            order.Buyer.PositiveFeedbackCount++;
+                        }
+                        else if (feedback.Grade == Emotions.Bad)
+                        {
+                            order.Buyer.NegativeFeedbackCount++;
+                        }
                         order.Feedbacks.Add(feedback);
                         order.Buyer.FeedbacksMy.Add(feedback);
                         order.Seller.FeedbacksToOthers.Add(feedback);
                         _feedbackService.CreateFeedback(feedback);
+                        _orderService.UpdateOrder(order);
+                        _userProfileService.UpdateUserProfile(order.Seller);
+                        _userProfileService.UpdateUserProfile(order.Buyer);
                         _feedbackService.SaveFeedback();
                         return View(model);
                     }
@@ -185,10 +197,23 @@ namespace Market.Web.Controllers
                     {
                         order.BuyerFeedbacked = true;
                         var feedback = Mapper.Map<GiveFeedbackViewModel, Feedback>(model);
+
+                        if (feedback.Grade == Emotions.Good)
+                        {
+                            order.Seller.PositiveFeedbackCount++;
+                        }
+                        else if(feedback.Grade == Emotions.Bad)
+                        {
+                            order.Seller.NegativeFeedbackCount++;
+                        }
                         order.Feedbacks.Add(feedback);
                         order.Seller.FeedbacksMy.Add(feedback);
                         order.Buyer.FeedbacksToOthers.Add(feedback);
                         _feedbackService.CreateFeedback(feedback);
+                        
+                        _orderService.UpdateOrder(order);
+                        _userProfileService.UpdateUserProfile(order.Seller);
+                        _userProfileService.UpdateUserProfile(order.Buyer);
                         _feedbackService.SaveFeedback();
                         return View(model);
                     }
