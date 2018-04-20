@@ -78,7 +78,8 @@ function SearchOffers() {
                 }
 
             });
-            var urlPath = Router.action('Offer', 'Buy', { game: g });
+            //var page = $('#page').val();
+            var urlPath = Router.action('Offer', 'Buy', { game: g, page: page });
             window.history.pushState({ "html": response.html, "pageTitle": response.pageTitle }, "", urlPath);
             $('#loader').animate({ opacity: '0.0' }, 400, "", function () {
                 $('#loader').hide();

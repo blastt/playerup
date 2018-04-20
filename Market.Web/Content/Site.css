@@ -142,7 +142,7 @@ textarea {
 
 
 body {
-    background-color: #fbfbfb
+    background-color: #f6f6f6
 }
 
 ul {
@@ -186,7 +186,8 @@ ul {
     background-color: #62b2e2;
     font-weight: 700;
     color: #fff;
-    margin-right: 15px
+    margin-right: 15px;
+    box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.21);
 }
 
 .img-messages {
@@ -195,25 +196,31 @@ ul {
 }
 
 .filter {
-    color: #a5a5a5;
+    
     font-size: 14px;
-    padding: 15px
+    padding: 25px 20px
+}
+
+.filter-header {
+    padding-top: 5px;
+    
 }
 
 .filter-body {
     padding-top: 5px;
-    margin-bottom: 30px;
-    border-bottom: 1px solid #e4e4e4
+
 }
 
 .filter-specific {
     margin-bottom: 30px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1)
 }
 
 .filter-label {
     color: #404040;
-    font-weight: 700
+    font-weight: 400;
+    margin-bottom: 15px;
+    padding-bottom: 7px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05)
 }
 
 .filter-price-from {
@@ -291,10 +298,7 @@ ul {
     -webkit-align-items: center;
     -ms-flex-align: center;
     align-items: center;
-    border: 0;
-    border-style: solid;
-    border-color: #D2D2D2;
-    border-bottom-width: 1px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .game-filter-item {
@@ -719,7 +723,8 @@ div#users-contain {
     background-color: #62b2e2;
     color: white;
     padding: 6px 20px;
-    font-weight: 300
+    font-weight: 300;
+    box-shadow: 0 4px 15px 0px rgba(98, 178, 226, 0.70);
 }
 
 .btn-search:hover {
@@ -735,7 +740,8 @@ div#users-contain {
     background-color: #62b2e2;
     color: white;
     padding: 6px 20px;
-    font-weight: 300
+    font-weight: 300;
+    box-shadow: 0 4px 15px 0px rgba(98, 178, 226, 0.70);
 }
     .btn-submit:hover {
         border-radius: 50px;
@@ -748,34 +754,35 @@ div#users-contain {
 
 .btn-details {
     border-radius: 50px;
-    background-color: #90a7b5;
-    color: white;
+    background-color: #fff;
+    color: #62b2e2;
     padding: 6px 20px;
-    font-weight: 300
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    
 }
 
-.btn-details:hover {
-    border-radius: 50px;
-    background-color: rgba(144, 167, 181, 0.75);
-    color: white;
-    padding: 6px 20px;
-    font-weight: 300
-}
+    .btn-details:hover {
+        border-radius: 50px;
+        background-color: #fff;
+        color: rgba(98, 178, 226, 0.50);
+        padding: 6px 20px;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+    }
 
 .btn-reset {
     border-radius: 50px;
-    background-color: #e98451;
-    padding: 6px 20px;
+    background-color: rgba(98, 178, 226, 0.70);
     color: white;
-    font-weight: 300
+    padding: 6px 20px;
+    font-weight: 300;
 }
 
     .btn-reset:hover {
         border-radius: 50px;
-        background-color: rgba(233, 132, 81, 0.75);
+        background-color: rgba(98, 178, 226, 0.50);
         color: white;
         padding: 6px 20px;
-        font-weight: 300
+        font-weight: 300;
     }
 
 .btn-buy {
@@ -783,7 +790,8 @@ div#users-contain {
     background-color: #62b2e2;
     color: white;
     padding: 6px 20px;
-    font-weight: 300
+    font-weight: 300;
+    box-shadow: 0 4px 15px 0px rgba(98, 178, 226, 0.70);
 }
 .btn-buy:hover {
     border-radius: 50px;
@@ -1011,7 +1019,8 @@ div#users-contain {
 }
 
 .game-title{
-    font-size: 22px;
+    font-size: 16px;
+    
     color:#a9a9a9;
     font-weight: 300
 }
@@ -1031,10 +1040,6 @@ div#users-contain {
 
 .info-user-block {
     padding: 25px 40px;
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 0 3px 0 rgba(159,173,196,.4);
-    border-radius: 15px;
 }
 
 .info-teble-content {
@@ -1185,7 +1190,6 @@ div#users-contain {
 }
 
 .info-name-nick{
-    font-size: 18px;
     text-align: left
 }
 
@@ -1375,10 +1379,7 @@ dl dd a{
 }
 
 .messagess-count {
-    border-radius: 0px;
     padding: 1px 6px 2px;
-    
-    
     position: absolute;
     font-size: 12px;
     line-height: 16px;
@@ -1387,12 +1388,12 @@ dl dd a{
     color: white;
     text-align: center;
     border-radius: 50px;
-    background-color: #ff4e4e;
+    background-color: #62b2e2;
 }
 
 .message-count-icon-pos {
     margin-left: 15px;
-    border: 2px solid #fff;
+    border: 1px solid #fff;
 }
 
 .message-count-block-pos {
@@ -1425,19 +1426,11 @@ dl dd a{
     text-align: center;
     height: 300px;
     padding: 25px 30px;
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 0 3px 0 rgba(159,173,196,.4);
-    border-radius: 15px;
 }
 
 .details-offer-block {
     height: 300px;
     padding: 25px 40px;
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 0 3px 0 rgba(159,173,196,.4);
-    border-radius: 15px;
 }
 
 .details-user-name-contact {
@@ -1458,9 +1451,8 @@ dl dd a{
 }
 
 .details-user-rate-date {
-    margin-top: 15px;
-    margin-bottom: 15px;
-    padding-bottom: 15px;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
@@ -1475,8 +1467,8 @@ dl dd a{
 }
 
 .details-user-feedback {
-    margin-top: 10px;
-    margin-bottom: 10px;
+    margin-top: 5px;
+
 }
 
 .price-container {
@@ -1714,4 +1706,11 @@ dl dd a{
     border: 1px solid #ff0000;
     border-radius: 15px;
     color: #ff0000
+}
+
+.img-center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
 }

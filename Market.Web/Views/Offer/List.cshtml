@@ -25,14 +25,13 @@
         </div>
         
     </div>
-    <div class="col-lg-12">
+    <div class="col-lg-12 mb-2">
         @{var game = Model.Game == null ? "Все" : Model.Game.Name;}
-        <span class="game-title">Игра &#10148 <span style="font-weight:700">@game</span> </span>
+        <span class="game-title">Игра &#8594 <span>@game</span> </span>
         @Html.ActionLink("Продать аккаунт", "Create", null, new { @class = "btn btn-link-sell" })
     </div>
 </div>
-<div class="row" id="lll">
-    <input id="page1" value="22" />
+<div class="row mt-2" id="lll">
 
 
 
@@ -41,9 +40,6 @@
 
 
     <div class="col-lg-12">
-        <div class="offer-list">
-
-        </div>
         @Html.Partial("_OfferList", Model)
     </div>
 

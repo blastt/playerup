@@ -12,8 +12,8 @@
     <div class="main-block">
         <div class="row">
             <div class="col-md-3">
-                <div class="details-user-block">
-                    <img class="img-circle" src="@Url.Action("Photo", "Profile", new { UserId = Model.UserId })" alt="Alternate Text" style="width:80px; height:80px" />
+                <div class="card details-user-block">
+                    <img class="img-circle img-center" src="@Url.Action("Photo", "Profile", new { UserId = Model.UserId })" alt="Alternate Text" style="width:80px; height:80px" />
 
                     <div class="details-user-name-contact">
                         <div class="row">
@@ -58,7 +58,7 @@
                 </div>
             </div>
             <div class="col-md-5">
-                <div class="details-offer-block">
+                <div class="card details-offer-block">
                     <ul>
                         <li class="li-details">
                             <label class="label-details">Игра</label>
@@ -97,7 +97,7 @@
             </div>
 
             <div class="col-md-4">
-                <div class="offer-buying-block" style="height: 300px">
+                <div class="card offer-buying-block" style="height: 300px">
                     <div style="text-align:center">
                         <h3>@Html.DisplayFor(m => m.Price)</h3>
                     </div>
@@ -118,7 +118,7 @@
         <div class="row">
             <div class="col-md-12 offer-description">
 
-                <div class="offer-description-block" style="height: 300px">
+                <div class="card" style="height: 300px">
                     <div class="block-label">@Model.Header</div>
                     <div class="block-body">
                         <span>@Model.Discription</span>
