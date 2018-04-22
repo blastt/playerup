@@ -145,10 +145,17 @@ namespace Market.Web
             //);
             routes.MapRoute(
                 name: null,
-                url: "game/{game}",
-                defaults: new { controller = "Offer", action = "Buy", game = "csgo" }
+                url: "buy/{game}/{page}",
+                defaults: new { controller = "Offer", action = "Buy", game = UrlParameter.Optional,
+                    page = UrlParameter.Optional
+                }
             );
-            
+
+            routes.MapRoute(
+                    name: null,
+                    url: "offer/id{id}",
+                    defaults: new { controller = "Offer", action = "Details", id = UrlParameter.Optional }
+                );
 
             routes.MapRoute(
                     name: null,

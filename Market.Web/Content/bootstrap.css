@@ -4483,7 +4483,7 @@ tbody.collapse.show {
 .card-title {
     color: #3490ff;
     font-weight: 300;
-    margin-bottom: 0.75rem;
+    margin-bottom: 15px;
 }
 
 .card-subtitle {

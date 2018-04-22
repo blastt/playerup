@@ -15,7 +15,7 @@
 
 //------
 $(document).ready(function () {
-    ResetOffers();
+    SearchOffers();
 });
 
 function SelectPage(page) {
@@ -32,9 +32,9 @@ function ChangeGame(game) {
 }
 
 function SearchOffers() {
-
-    var g = $('#game').val();
-    var p = $('#page').val();
+    var game = $('#game').val();
+    var page = $('#page').val();
+    var searchString = $('#searchString').val();
     var filterItemValues = [];
     $(".selsel").each(function () {
         filterItemValues.push($(this).val());
@@ -44,14 +44,14 @@ function SearchOffers() {
         filterValues.push($(this).val());
     });
     var message = {
-        "page": p,
+        "page": page,
         "sort": $('#sort').val(),
         "isOnline": $('#isOnline').is(':checked'),
         "searchInDiscription": $('#searchInDiscription').is(':checked'),
-        "searchString": $('#searchString').val(),
+        "searchString": searchString,
         "filterItemValues": filterItemValues,
         "filterValues": filterItemValues,
-        "game": g,
+        "game": game,
         "priceFrom": $('#priceFrom').val(),
         "priceTo": $('#priceTo').val()
     };
@@ -73,13 +73,23 @@ function SearchOffers() {
 
             $('#list').html(response);
             $(".game-filter-item").each(function (index) {
-                if (this.dataset.game === g) {
+                if (this.dataset.game === game) {
                     $(this).addClass("active");
                     return;
                 }
 
             });
-            var urlPath = Router.action('Offer', 'Buy', { game: g, page: p });
+            var urlPath;
+            var routes = new Object();
+            if (game != "csgo") {
+                routes.game = game;
+                
+            }
+            if (page != "1") {
+                routes.page = page;
+            }
+
+            urlPath = Router.action('Offer', 'Buy', routes);
             window.history.pushState({ "html": response.html, "pageTitle": response.pageTitle }, "", urlPath);
             $('#loader').animate({ opacity: '0.0' }, 400, "", function () {
                 $('#loader').hide();
@@ -97,16 +107,12 @@ function SearchOffers() {
             slider();
 
             //SelectFilterItem(g, false);
-        },
-        error: function () {
-            alert("fff");
         }
     });
 }
 
 function ResetOffers() {
 
-    var p = $('#page').val();
     var g = $('#game').val();
     var filterItemValues = [];
     $(".selsel").each(function () {
@@ -117,7 +123,7 @@ function ResetOffers() {
         filterValues.push($(this).val());
     });
     var message = {
-        "page": p,
+        "page": 1,
         "sort": "bestSeller",
         "isOnline": false,
         "searchInDiscription": false,
@@ -130,7 +136,7 @@ function ResetOffers() {
         url: '/Offer/List',
         type: "POST",
         contentType: "application/json",
-        data: JSON.stringify({ searchInfo: message, page : p }),
+        data: JSON.stringify({ searchInfo: message }),
         dataType: "html",
         beforeSend: function () {
             $('#loader').show();
@@ -159,9 +165,6 @@ function ResetOffers() {
             slider();
 
             //SelectFilterItem(g, false);
-        },
-        error: function () {
-            alert("fff");
         }
     });
 }

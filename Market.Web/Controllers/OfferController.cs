@@ -317,10 +317,14 @@ namespace Market.Web.Controllers
 
         public ActionResult Details(int? id = 2)
         {
-            Offer offer = _offerService.GetOffer(id.Value);
-            var model = Mapper.Map<Offer, DetailsOfferViewModel>(offer);
+            if (id != null)
+            {
+                Offer offer = _offerService.GetOffer(id.Value);
+                var model = Mapper.Map<Offer, DetailsOfferViewModel>(offer);
 
-            return View(model);
+                return View(model);
+            }
+            return HttpNotFound();
 
         }
 

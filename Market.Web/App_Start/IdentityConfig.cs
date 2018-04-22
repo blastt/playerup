@@ -19,6 +19,7 @@ using Twilio.Clients;
 using Twilio;
 using Twilio.Rest.Api.V2010.Account;
 using Twilio.Types;
+using System.Net.Mail;
 
 namespace Market.Web
 {
@@ -36,6 +37,7 @@ namespace Market.Web
             var client = new SendGridClient(apiKey);
             var from = new EmailAddress("test@example.com", "Example User");
             var subject = message.Subject;
+            
             var to = new EmailAddress(message.Destination);
             var plainTextContent = message.Body;
             var htmlContent = message.Body;

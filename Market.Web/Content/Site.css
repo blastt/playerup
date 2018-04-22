@@ -178,7 +178,7 @@ ul {
 }
 
 .navbar-dark .navbar-nav .nav-link {
-    color: #fff;
+    color: #b9b9b9;
 }
 
 .btn-sell {
@@ -322,6 +322,11 @@ ul {
     font-weight: 700;
     font-size: 18px;
     color: #333
+}
+
+.nav-item.active {
+    webkit-box-shadow: inset 0px -5px 0px 0px #62b2e2;
+    box-shadow: inset 0px -4px 0px 0px #62b2e2;
 }
 
 .game-filter-item.active, .game-filter-item.all-games.active {

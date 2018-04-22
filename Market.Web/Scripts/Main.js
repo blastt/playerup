@@ -133,16 +133,32 @@ $(document).ready(function () {
     //        $(this.parentNode).addClass("current");
     //    }
     //});
+    var currentHref = window.location.href.split('/')[3];
+    $("#left-bar a").each(function () {
+        var elementHref = this.href.split('/')[3];
+
+        if (currentHref == "") {
+            currentHref = "buy";
+        }
+        //alert(currentHref + "ddddddddddd" + elementHref);
+        if (elementHref == currentHref) {
+            $(this.parentNode).addClass("active");
+            return (true);
+        }
+        
+    });
     $("#account-list a").each(function () {
 
-        if (this.href.split('/', 4)[3] == window.location.href.split('/', 4)[3]) {
+        if (this.href.split('/')[3] == currentHref) {
             $(this.parentNode).addClass("active");
+            return (true);
         }
     });
     $("#account-inner-list a").each(function () {
         if (this.href == window.location.href) {
 
             $(this).addClass("active");
+            return (true);
         }
     });
 

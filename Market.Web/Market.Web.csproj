@@ -280,6 +280,7 @@
     <Compile Include="ViewModels\Filter\FilterViewModel.cs" />
     <Compile Include="ViewModels\Game\CreateGameViewModel.cs" />
     <Compile Include="ViewModels\Game\GameViewModel.cs" />
+    <Compile Include="ViewModels\Help\ContactUsViewModel.cs" />
     <Compile Include="ViewModels\Message\DetailsMessageViewModel.cs" />
     <Compile Include="ViewModels\Message\MessageListViewModel.cs" />
     <Compile Include="ViewModels\Message\MessageViewModel.cs" />
@@ -590,6 +591,7 @@
     <Content Include="Views\Feedback\FeedbacksAsSeller.cshtml" />
     <Content Include="Views\Offer\_AccountOfferItem.cshtml" />
     <Content Include="Views\Offer\CrateOfferLimitError.cshtml" />
+    <Content Include="Views\Help\ContactUs.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
