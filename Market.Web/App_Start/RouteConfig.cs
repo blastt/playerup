@@ -100,7 +100,7 @@ namespace Market.Web
                     defaults: new { controller = "Account", action = "settings" }
                 );
 
-            
+
 
 
 
@@ -138,12 +138,17 @@ namespace Market.Web
             //    defaults: new { controller = "Offer", action = "List" }
             //);
 
-
+            //routes.MapRoute(
+            //    name: null,
+            //    url: "game/{game}/Page={page}",
+            //    defaults: new { controller = "Offer", action = "Buy", game = "csgo", page = "1" }
+            //);
             routes.MapRoute(
                 name: null,
                 url: "game/{game}",
                 defaults: new { controller = "Offer", action = "Buy", game = "csgo" }
             );
+            
 
             routes.MapRoute(
                     name: null,

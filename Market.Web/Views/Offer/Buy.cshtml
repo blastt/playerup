@@ -1,4 +1,4 @@
-﻿@model string
+﻿@model Market.Web.ViewModels.SearchOffersInfoViewModel
 @{
     ViewBag.Title = "Buy";
 }
@@ -17,8 +17,10 @@
         <div id="list">
 
         </div>
-        @{var game = Model == null ? "csgo" : Model; }
-        <input type="hidden" name="Game" id="game" value="@game" />
+        @{var game = Model.Game == null ? "csgo" : Model.Game; }
+        <input type="hidden" name="Game" id="game" value="@Model.Game" />
+        <input type="hidden" name="Page" id="page" value="@Model.Page" />
+        <input type="hidden" name="SearchString" id="searchString" value="@Model.SearchString" />
     </div>
     
 

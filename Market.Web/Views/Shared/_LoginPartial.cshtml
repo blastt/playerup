@@ -8,26 +8,28 @@
         {
             @Html.AntiForgeryToken()
 
-            <li class="nav-item" id="orders">
-                <a href="@Url.Action("OrderBuy", "Order")">
-                    <img class="notice" src="~/Content/Images/notice.png" />
+            <li class="nav-item position-relative" id="orders" style="padding-top: 20px">
+                <a href="@Url.Action("OrderBuy", "Order")" class="ml-0 mr-0" >
+                    <img width="25" height="25" class="notice" src="~/Content/Images/notices.svg" />
 
                 </a>
-
             </li>
             //messagess - count
 
-            <li class="nav-item" id="messagess">
-                <a href="@Url.Action("Inbox", "Message")">
-                    <img class="message" src="~/Content/Images/message.png" />
+            <li class="nav-item position-relative" id="messagess" style="padding-top: 20px">
+                <a href="@Url.Action("Inbox", "Message")" class="ml-0 mr-0">
+                    <img width="25" height="25" class="message" src="~/Content/Images/messages.svg" />
                 </a>
+
 
             </li>
             @*<li class="nav-item">
-                <span class="nav-link">@Html.Action("GetBalance","Profile", new { userId = User.Identity.GetUserId() })</span>
-            </li>*@
-            <li class="nav-item">
-                <img class="img-circle avatar-small" src="@Url.Action("Photo", "Profile" , new { userId = User.Identity.GetUserId() })" alt="Alternate Text" />
+                    <span class="nav-link">@Html.Action("GetBalance","Profile", new { userId = User.Identity.GetUserId() })</span>
+                </li>*@
+            <li class="nav-item" style="padding-top: 10px">
+                <a href="@Url.Action("Inbox", "Message")">
+                    <img class="img-circle avatar-small" src="@Url.Action("Photo", "Profile" , new { userId = User.Identity.GetUserId() })" alt="Alternate Text" />
+                </a>
             </li>
             <li class="nav-item dropdown">
                 <a class="dropdown-toggle nav-link" data-toggle="dropdown" href="#" id="download" aria-expanded="true" aria-atomic="true">

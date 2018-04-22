@@ -314,7 +314,10 @@
     <Content Include="Content\Images\error.png" />
     <Content Include="Content\Images\Hearthstone\Ranks\asia.png" />
     <Content Include="Content\Images\Hearthstone\Ranks\europe.png" />
+    <Content Include="Content\Images\logo.svg" />
     <Content Include="Content\Images\logo1.png" />
+    <Content Include="Content\Images\messages.svg" />
+    <Content Include="Content\Images\notices.svg" />
     <Content Include="Content\Images\payment-methods.png" />
     <Content Include="Content\Images\Csgo\Ranks\dmg.png" />
     <Content Include="Content\Images\Csgo\Ranks\ge.png" />

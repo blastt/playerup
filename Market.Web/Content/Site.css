@@ -172,7 +172,6 @@ ul {
 }
 
 .navbar {
-    padding: 20px;
     box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.21);
     position: absolute
     /*border-bottom: 1px solid #bababa*/
@@ -957,13 +956,7 @@ div#users-contain {
     background-color: #fff
 }
 
-.nav-item .message{
-    padding-top: 8px
-}
 
-.nav-item .notice {
-    padding-top: 8px
-}
 
 .current{
     background-color: aquamarine
@@ -1365,21 +1358,21 @@ dl dd a{
 
 .orders-count {
     border-radius: 0px;
-    margin-left: 15px;
-    border: 2px solid #fff;
+    border: 1px solid #fff;
     position: absolute;
+    left: 12px;
+    top: 12px;
     font-size: 12px;
     line-height: 16px;
-    width: 19px;
-    height: 19px;
+    min-width: 18px;
+    min-height: 18px;
     color: white;
     text-align: center;
     border-radius: 50px;
-    background-color: #ff4e4e;
+    background-color: #62b2e2;
 }
 
 .messagess-count {
-    padding: 1px 6px 2px;
     position: absolute;
     font-size: 12px;
     line-height: 16px;
@@ -1392,12 +1385,15 @@ dl dd a{
 }
 
 .message-count-icon-pos {
-    margin-left: 15px;
+    left: 17px;
+    top: 12px;
     border: 1px solid #fff;
 }
 
 .message-count-block-pos {
-    margin-left: 30px;
+    top: 6px;
+    left: 40px;
+    border: 1px solid #fff;
 }
 
 

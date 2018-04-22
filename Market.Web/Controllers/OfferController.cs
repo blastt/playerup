@@ -34,10 +34,10 @@ namespace Market.Web.Controllers
         }
 
         // GET: Offer
-        public ViewResult Buy(string game)
+        [HttpGet]
+        public ViewResult Buy(SearchOffersInfoViewModel model)
         {
-
-            return View((object)game);
+            return View(model);
         }
 
         public ViewResult Active()
