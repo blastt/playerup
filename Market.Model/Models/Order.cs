@@ -16,11 +16,11 @@ namespace Market.Model.Models
         AdminChecking,
         BuyerConfirming,        
         PayingToSeller,
-        ClosedSeccessfuly,
-        ColsedFelure,
-        BuyerCancelledEarly,
-        SellerCancelledEarly,
-        AdminCancelledEarly
+        ClosedSeccessfuly, // Успешно закрыт
+        ColsedFelure, // Неудачно закрыт
+        BuyerCancelledEarly, // Покупатель закрыл сделку
+        SellerCancelledEarly, // Продавец закрыл сделку
+        AdminCancelledEarly // Гарант закрыл сделку
 
     }
     public class Order
