@@ -222,6 +222,7 @@ namespace Market.Web.Mappings
                 .ForMember(o => o.IsOnline, map => map.MapFrom(vm => vm.IsOnline))
                 .ForMember(o => o.Name, map => map.MapFrom(vm => vm.Name))
                 .ForMember(o => o.AllFeedbackCount, map => map.MapFrom(vm => vm.AllFeedbackCount))
+                .ForMember(o => o.SuccessOrderRate, map => map.MapFrom(vm => vm.SuccessOrderRate))
                 .ForMember(o => o.PositiveFeedbacks, map => map.MapFrom(vm => vm.PositiveFeedbackCount))
                 .ForMember(o => o.NegativeFeedbacks, map => map.MapFrom(vm => vm.NegativeFeedbackCount))
                 .ForMember(o => o.RegistrationDate, map => map.MapFrom(vm => vm.RegistrationDate));

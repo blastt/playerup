@@ -14,6 +14,7 @@ namespace Market.Data.Configuration
             HasMany(u => u.Offers).WithRequired(u => u.UserProfile);
 
             Property(u => u.AllFeedbackCount).HasDatabaseGeneratedOption(System.ComponentModel.DataAnnotations.Schema.DatabaseGeneratedOption.Computed);
+            Property(u => u.SuccessOrderRate).HasDatabaseGeneratedOption(System.ComponentModel.DataAnnotations.Schema.DatabaseGeneratedOption.Computed);
 
             Property(u => u.Rating).HasDatabaseGeneratedOption(System.ComponentModel.DataAnnotations.Schema.DatabaseGeneratedOption.Computed);
             Property(u => u.PositiveFeedbackProcent).HasDatabaseGeneratedOption(System.ComponentModel.DataAnnotations.Schema.DatabaseGeneratedOption.Computed);

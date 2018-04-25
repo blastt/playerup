@@ -12,6 +12,8 @@ namespace Market.Web.ViewModels
         public virtual LinkedList<OrderStatus> OrderStatuses { get; set; } = new LinkedList<OrderStatus>();
         //public bool IsFeedbacked { get; set; }
 
+
+        public string CurrentStatusName { get; set; }
         public string OfferHeader { get; set; }
         public decimal OfferPrice { get; set; }
         public string OfferId { get; set; }

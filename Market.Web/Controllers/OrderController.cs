@@ -87,7 +87,10 @@ namespace Market.Web.Controllers
                         order.BuyerChecked = true;
                         _orderService.SaveOrder();
                         DetailsOrderViewModel model = Mapper.Map<Order, DetailsOrderViewModel>(order);
+
+                        model.CurrentStatusName = order.OrderStatuses.Last.Value.Name;
                         model.OrderStatuses = order.OrderStatuses;
+                        model.OrderStatuses.RemoveLast();
                         model.ModeratorId = order.MiddlemanId;
                         return View(model);
                     }
@@ -114,7 +117,9 @@ namespace Market.Web.Controllers
                         order.SellerChecked = true;
                         _orderService.SaveOrder();
                         DetailsOrderViewModel model = Mapper.Map<Order, DetailsOrderViewModel>(order);
+                        model.CurrentStatusName = order.OrderStatuses.Last.Value.Name;
                         model.OrderStatuses = order.OrderStatuses;
+                        model.OrderStatuses.RemoveLast();
                         model.ModeratorId = order.MiddlemanId;
                         return View(model);
                     }

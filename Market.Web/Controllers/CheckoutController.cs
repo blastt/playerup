@@ -2,12 +2,13 @@
 using Market.Model.Models;
 using Market.Service;
 using Market.Web.ViewModels;
-using Market.Web.ViewModels.Checkout;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 
@@ -28,33 +29,63 @@ namespace Trader.WEB.Controllers
             _offerService = offerService;
             _accountInfoService = accountInfoService;
         }
+
+        [HttpGet]
+        public ActionResult Checkoutme(int? offerId)
+        {
+            if (offerId != null)
+            {
+                var offer = _offerService.GetOffer(offerId.Value);
+                if (offer != null && offer.Order == null)
+                {
+                    CheckoutViewModel model = new CheckoutViewModel()
+                    {
+                        OfferHeader = offer.Header,
+                        OfferId = offer.Id,
+                        OrderSum = offer.Price,
+                        Game = offer.Game.Name,
+                        Quantity = 1,
+                        SellerId = offer.UserProfile.Id
+                    };
+                    return View(model);
+                }
+            }
+            return HttpNotFound();
+        }
         // GET: Checkout
         // This method must be called after payment
-        public ActionResult Pay(CheckoutViewModel model)
+        [HttpPost]
+        public ActionResult Checkoutme(CheckoutViewModel model)
         {
             //UserProfile buyer = _db.UserProfiles.Get(User.Identity.GetUserId());
             Offer offer = _offerService.GetOffer(model.OfferId);
             if (offer != null && offer.Order == null && offer.State == OfferState.active)
             {
                 offer.State = OfferState.closed;
-                OrderStatus orderStatus = new OrderStatus
+                OrderStatus orderStatus1 = new OrderStatus
                 {
-                    Value = "adminWating",
+                    Value = "orderCreating",
                     FinisedName = "Заказ создан",
-                    Name = "Поиск гаранта",
+                    Name = "Заказ создается",
                     DateFinished = DateTime.Now
+                };
+
+                OrderStatus orderStatus2 = new OrderStatus
+                {
+                    Value = "buyerPaying",
+                    FinisedName = "Покупатель оплатил заказ",
+                    Name = "Покупатель оплачивает заказ",
                 };
 
                 offer.Order = new Order
                 {
-                    BuyerChecked = false,
-                    SellerChecked = false,
                     BuyerId = User.Identity.GetUserId(),
                     SellerId = model.SellerId,
                     DateCreated = DateTime.Now
                 };
 
-                offer.Order.OrderStatuses.AddLast(orderStatus);
+                offer.Order.OrderStatuses.AddLast(orderStatus1);
+                offer.Order.OrderStatuses.AddLast(orderStatus2);
                 _offerService.SaveOffer();
 
                 var userProfiles = _userProfileService.GetUserProfiles()
@@ -67,12 +98,90 @@ namespace Trader.WEB.Controllers
                         MessageBody = "Get"
                     });
                 }
-                return RedirectToAction("BuyDetails", "Order");
+                return RedirectToAction("Paid", "Checkout", new { id = offer.Order.Id  });
 
             }
             return View();
 
         }
+
+        [HttpGet]
+        public ActionResult Paid()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public void Paid(int? Id)
+        {
+            if (Id != null)
+            {
+                Order order = _orderService.GetOrder(Id.Value);
+                if (order != null)
+                {
+                    var currentOrderStatus = _orderStatusService.GetCurrentOrderStatus(order);
+
+                    currentOrderStatus.DateFinished = DateTime.Now;
+                    OrderStatus orderStatus = new OrderStatus
+                    {
+                        Value = "MiddlemanSearching",
+                        Name = "Поиск гаранта",
+                        FinisedName = "Гарант найден",
+                    };
+                    order.BuyerChecked = false;
+                    order.SellerChecked = false;
+                    order.OrderStatuses.AddLast(orderStatus);
+                    _orderService.UpdateOrder(order);
+                    _orderService.SaveOrder();
+                }                                 
+            }
+
+        }
+
+        private bool CheckSign(HttpContext context)
+        {
+            var secretKey = "sfewkf342o";
+            var pars = new SortedDictionary<string, string>();
+            var keys = context.Request.Form.AllKeys;
+            foreach (var key in keys.Where(key => key.IndexOf("ik_") >= 0 && key != "ik_sign"))
+                pars.Add(key, context.Request.Form[key]);
+            var hash = string.Join(":", pars.Select(x => x.Value).ToArray().Concat(new[] { secretKey }));
+            var md5 = new MD5CryptoServiceProvider();
+            return Convert.ToBase64String(md5.ComputeHash(Encoding.UTF8.GetBytes(hash))) == context.Request.Form["ik_sign"];
+        }
+
+        
+        //public ActionResult Paid(int? Id, string moderatorId, string buyerId, string sellerId)
+        //{
+        //    if (Id != null && moderatorId != null && buyerId != null && sellerId != null)
+        //    {
+        //        Order order = _orderService.GetOrder(Id.Value);
+        //        var currentOrderStatus = _orderStatusService.GetCurrentOrderStatus(order);
+        //        if (sellerId == User.Identity.GetUserId())
+        //        {
+        //            if (order.MiddlemanId == moderatorId && order.SellerId == sellerId &&
+        //            order.BuyerId == buyerId && currentOrderStatus.Value == "buyerPaying")
+        //            {
+        //                currentOrderStatus.DateFinished = DateTime.Now;
+        //                OrderStatus orderStatus = new OrderStatus
+        //                {
+        //                    Value = "MiddlemanSearching",
+        //                    Name = "Поиск гаранта",
+        //                    FinisedName = "Гарант найден",
+        //                };
+        //                order.BuyerChecked = false;
+        //                order.SellerChecked = false;
+        //                order.OrderStatuses.AddLast(orderStatus);
+        //                _orderService.UpdateOrder(order);
+        //                _orderService.SaveOrder();
+        //                return View();
+        //            }
+        //        }
+
+        //    }
+        //    return HttpNotFound();
+
+        //}
 
         // Provide data from seller to moderator
         [HttpGet]
@@ -132,12 +241,12 @@ namespace Trader.WEB.Controllers
                         {
                             if (order.AccountInfo == null && currentOrderStatus.Value == "sellerProviding")
                             {
+                                currentOrderStatus.DateFinished = DateTime.Now;
                                 OrderStatus orderStatus = new OrderStatus
                                 {
-                                    Value = "adminChecking",
+                                    Value = "middlemanChecking",
                                     Name = "Гарант проверяет данные",
-                                    FinisedName = "Продавец предоставил данные гаранту",
-                                    DateFinished = DateTime.Now
+                                    FinisedName = "Гарант проверил данные"
                                 };                                
                                 order.BuyerChecked = false;
                                 order.SellerChecked = false;
@@ -165,13 +274,12 @@ namespace Trader.WEB.Controllers
                     {
                         if (order.BuyerId == User.Identity.GetUserId() && currentOrderStatus.Value == "buyerConfirming")
                         {
-
+                            currentOrderStatus.DateFinished = DateTime.Now;
                             OrderStatus orderStatus = new OrderStatus
                             {
                                 Value = "payingToSeller",
                                 Name = "Отправка средств продавцу",
-                                FinisedName = "Покупатель подтвердил получение",
-                                DateFinished = DateTime.Now
+                                FinisedName = "Средства продавцу отправлены"
                             };
 
                             if (orderStatus != null)

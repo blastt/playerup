@@ -28,7 +28,7 @@
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="alert alert-dismissible alert-warning">
-                                <span>Текущий статус заказа: <span class="text-700">@Model.OrderStatuses.Last().Name</span></span>
+                                <span>Текущий статус заказа: <span class="text-700">@Model.CurrentStatusName</span></span>
                             </div>
                         </div>
                     </div>
@@ -136,7 +136,6 @@
 
                 </div>
                 <div class="order-details-log-body">
-
                     @foreach (var status in Model.OrderStatuses)
                     {
 

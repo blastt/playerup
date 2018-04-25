@@ -55,6 +55,7 @@ function SearchOffers() {
         "priceFrom": $('#priceFrom').val(),
         "priceTo": $('#priceTo').val()
     };
+
     $.ajax({
         url: '/Offer/List',
         type: "POST",
@@ -62,8 +63,8 @@ function SearchOffers() {
         data: JSON.stringify({ searchInfo: message }),
         dataType: "html",
         beforeSend: function () {
-            $('#loader').show();
-            $('#loader').animate({ opacity: '0.7' }, 400);
+            alert("");
+            
 
 
 
@@ -96,7 +97,7 @@ function SearchOffers() {
             });
 
 
-
+            
 
 
             if (typeof s !== "undefined") {
@@ -105,8 +106,11 @@ function SearchOffers() {
 
 
             slider();
-
+            
             //SelectFilterItem(g, false);
+        },
+        error: function (response) {
+            alert("error");
         }
     });
 }
@@ -114,6 +118,7 @@ function SearchOffers() {
 function ResetOffers() {
 
     var g = $('#game').val();
+    
     var filterItemValues = [];
     $(".selsel").each(function () {
         filterItemValues.push($(this).val());

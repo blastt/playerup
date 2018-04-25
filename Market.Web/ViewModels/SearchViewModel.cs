@@ -10,11 +10,12 @@ namespace Market.Web.ViewModels
     {
         public int Page { get; set; } = 1;
         public string Sort { get; set; } = "bestSeller";
+        public string[] Filters { get; set; }
         public bool IsOnline { get; set; }
         public bool SearchInDiscription { get; set; }
         public string SearchString { get; set; } = "";
         public string[] FilterValues { get; set; }
-        public string[] FilterItemValues { get; set; }
+        public string[] FilterItemValues { get; set; } = new string [] { };
         public string Game { get; set; } = "all";
 
         public decimal MinGamePrice { get; set; }

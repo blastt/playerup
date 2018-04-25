@@ -18,12 +18,12 @@ namespace Market.Model.Models
 
         public int PositiveFeedbackCount
         {
-            set;get;
+            set; get;
         }
 
         public int NegativeFeedbackCount
         {
-            set;get;
+            set; get;
         }
 
         public int Rating
@@ -76,6 +76,28 @@ namespace Market.Model.Models
                     double neg = Math.Round((double)(100 * NegativeFeedbackCount) / (AllFeedbackCount), 2);
                     return neg;
                 }
+                return 0;
+            }
+            private set
+            {
+
+            }
+        }
+
+        public int SuccessOrderRate
+        {
+
+            get
+            {
+                var ordersAsSeller = OrdersAsSeller.Where(o => o.OrderStatuses.Last.Value.Value == "usersFeedbacking" ||
+                o.OrderStatuses.Last.Value.Value == "finishing");
+                var ordersAsBuyer = OrdersAsBuyer.Where(o => o.OrderStatuses.Last.Value.Value == "usersFeedbacking" ||
+                o.OrderStatuses.Last.Value.Value == "finishing");
+                if (ordersAsSeller != null && ordersAsBuyer != null)
+                {
+                    return ordersAsBuyer.Count() + ordersAsSeller.Count();
+                }
+                
                 return 0;
             }
             private set

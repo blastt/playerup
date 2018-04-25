@@ -17,6 +17,7 @@ namespace Market.Web.ViewModels
         public int AllFeedbackCount { get; set; }
         public int PositiveFeedbacks { get; set; }
         public int NegativeFeedbacks { get; set; }
+        public int SuccessOrderRate { get; set; }
         public double PositiveFeedbackProcent { get; set; }
         public double NegativeFeedbackProcent { get; set; }
         public DateTime RegistrationDate { get; set; }

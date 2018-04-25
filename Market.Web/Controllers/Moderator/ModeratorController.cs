@@ -42,7 +42,7 @@ namespace Market.Web.Controllers.Moderator
             {
                 var currentOrderStatus = _orderStatusService.GetCurrentOrderStatus(order);
 
-                if (currentOrderStatus.Value == "adminWating")
+                if (currentOrderStatus.Value == "middlemanSearching")
                 {
                     orders.Add(order);
                 }
@@ -75,14 +75,14 @@ namespace Market.Web.Controllers.Moderator
                 var currentOrderStatus = _orderStatusService.GetCurrentOrderStatus(order);
                 if (currentOrderStatus != null)
                 {
-                    if (order != null && currentOrderStatus.Value == "adminWating")
+                    if (order != null && currentOrderStatus.Value == "middlemanChecking")
                     {
+                        currentOrderStatus.DateFinished = DateTime.Now;
                         OrderStatus orderStatus = new OrderStatus
                         {
                             Value = "sellerProviding",
                             Name = "Продавец предоставляет информацию гаранту",
-                            FinisedName = "Гарант найден",
-                            DateFinished = DateTime.Now
+                            FinisedName = "Продавец предоставил информацию гаранту",
                         };
                         
                         order.BuyerChecked = false;
@@ -142,14 +142,14 @@ namespace Market.Web.Controllers.Moderator
                         var currentOrderStatus = _orderStatusService.GetCurrentOrderStatus(buyerOrder);
                         if (currentOrderStatus != null)
                         {
-                            if (currentOrderStatus.Value == "adminChecking")
+                            if (currentOrderStatus.Value == "middlemanChecking")
                             {
+                                currentOrderStatus.DateFinished = DateTime.Now;
                                 OrderStatus orderStatus = new OrderStatus
                                 {
                                     Value = "buyerConfirming",
                                     Name = "Покупатель подтверждает получение",
-                                    FinisedName = "Гарант проверил данные",
-                                    DateFinished = DateTime.Now
+                                    FinisedName = "Поккупатель подтвердил получение",
                                 };                                 
                                 buyerOrder.BuyerChecked = false;
                                 buyerOrder.SellerChecked = false;

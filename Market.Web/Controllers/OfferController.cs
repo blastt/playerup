@@ -113,8 +113,26 @@ namespace Market.Web.Controllers
 
             
             //offer.Header.Replace(" ", "").ToLower().Contains(searchString.Replace(" ", "").ToLower()) || (searchInDescription ? (offer.Discription.Replace(" ", "").ToLower().Contains(searchString.Replace(" ", "").ToLower())) : searchInDescription)
-            IEnumerable<Offer> offers = _offerService.SearchOffers(game, sort,ref isOnline,ref searchInDiscription,
-                searchString, ref page, pageSize,ref totalItems, ref minGamePrice, ref maxGamePrice, ref priceFrom, ref priceTo);            
+            IEnumerable<Offer> foundOffers = _offerService.SearchOffers(game, sort,ref isOnline,ref searchInDiscription,
+                searchString, ref page, pageSize,ref totalItems, ref minGamePrice, ref maxGamePrice, ref priceFrom, ref priceTo);
+            IList<Offer> offers = new List<Offer>();
+            if (searchInfo.FilterItemValues.Count() != 0)
+            {
+                foreach (var offer in foundOffers)
+                {
+                    if (offer.FilterItems.Count == searchInfo.FilterItemValues.Count())
+                    {
+                        for (int i = 0; i < offer.FilterItems.Count; i++)
+                        {
+                            if (offer.FilterItems[i].Value == searchInfo.FilterItemValues[i])
+                            {
+                                offers.Add(offer);
+                            }
+                        }
+                    }                   
+                }
+            }
+            
             IList<SelectListItem> ranks = new List<SelectListItem>
             {
                 new SelectListItem() { Text = "Все ранги", Value = "none", Selected = true }
