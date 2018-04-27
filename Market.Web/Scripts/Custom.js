@@ -35,22 +35,20 @@ function SearchOffers() {
     var game = $('#game').val();
     var page = $('#page').val();
     var searchString = $('#searchString').val();
-    var filterItemValues = [];
-    $(".selsel").each(function () {
-        filterItemValues.push($(this).val());
+    var filters = [];
+    $(".image-select").each(function () {              
+        filters.push({ "attribute": $(this).find('.selselsel').val(), "value": $(this).find('.selsel').val() })
     });
-    var filterValues = [];
-    $(".selselsel").each(function () {
-        filterValues.push($(this).val());
-    });
+    
+
     var message = {
         "page": page,
         "sort": $('#sort').val(),
         "isOnline": $('#isOnline').is(':checked'),
         "searchInDiscription": $('#searchInDiscription').is(':checked'),
         "searchString": searchString,
-        "filterItemValues": filterItemValues,
-        "filterValues": filterItemValues,
+        
+        "jsonFilters": filters,
         "game": game,
         "priceFrom": $('#priceFrom').val(),
         "priceTo": $('#priceTo').val()
@@ -63,9 +61,10 @@ function SearchOffers() {
         data: JSON.stringify({ searchInfo: message }),
         dataType: "html",
         beforeSend: function () {
-            alert("");
             
-
+            
+            $('#loader').show();
+            $('#loader').animate({ opacity: '0.7' }, 400);
 
 
         },
@@ -73,6 +72,8 @@ function SearchOffers() {
             var s = $('#sort').val();
 
             $('#list').html(response);
+
+            SelectFilterItem(game, true);
             $(".game-filter-item").each(function (index) {
                 if (this.dataset.game === game) {
                     $(this).addClass("active");
@@ -118,23 +119,18 @@ function SearchOffers() {
 function ResetOffers() {
 
     var g = $('#game').val();
-    
-    var filterItemValues = [];
-    $(".selsel").each(function () {
-        filterItemValues.push($(this).val());
+    var filters = [];
+    $(".image-select").each(function () {
+        filters.push({ "attribute": $(this).find('.selselsel').val(), "value": "empty" })
     });
-    var filterValues = [];
-    $(".selselsel").each(function () {
-        filterValues.push($(this).val());
-    });
+
     var message = {
         "page": 1,
         "sort": "bestSeller",
         "isOnline": false,
         "searchInDiscription": false,
         "searchString": "",
-        "filterItemValues": "all",
-        "filterValues": "all",
+        "jsonFilters": filters,
         "game": g
     };
     $.ajax({
@@ -151,6 +147,7 @@ function ResetOffers() {
         success: function (response) {
 
             $('#list').html(response);
+            SelectFilterItem(g, true);
             $(".game-filter-item").each(function (index) {
 
                 if (this.dataset.game === g) {

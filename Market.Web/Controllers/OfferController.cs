@@ -116,19 +116,34 @@ namespace Market.Web.Controllers
             IEnumerable<Offer> foundOffers = _offerService.SearchOffers(game, sort,ref isOnline,ref searchInDiscription,
                 searchString, ref page, pageSize,ref totalItems, ref minGamePrice, ref maxGamePrice, ref priceFrom, ref priceTo);
             IList<Offer> offers = new List<Offer>();
-            if (searchInfo.FilterItemValues.Count() != 0)
+            if (searchInfo.JsonFilters.Count != 0)
             {
+                bool equals = false;
                 foreach (var offer in foundOffers)
                 {
-                    if (offer.FilterItems.Count == searchInfo.FilterItemValues.Count())
+                    if (offer.FilterItems.Count == searchInfo.JsonFilters.Count)
                     {
                         for (int i = 0; i < offer.FilterItems.Count; i++)
                         {
-                            if (offer.FilterItems[i].Value == searchInfo.FilterItemValues[i])
+
+                            if (offer.FilterItems[i].Value != searchInfo.JsonFilters[i].Value && searchInfo.JsonFilters[i].Value != "empty")
                             {
-                                offers.Add(offer);
+                                if (offer.Filters[i].Value == searchInfo.JsonFilters[i].Attribute)
+                                {
+                                    equals = false;
+                                    break;
+                                }
+                                
+                                
                             }
+
+                            equals = true;
                         }
+                        if (equals)
+                        {
+                            offers.Add(offer);
+                        }                        
+                        equals = false;
                     }                   
                 }
             }

@@ -1,12 +1,4 @@
-﻿$(document).ready(function () {
-    
-    var game = $('#game').val();
-    $(':checkbox').change(function () {
-        CalculatePrice();
-    });
-    SelectFilterItem(game, true);
-});
-function CustomSelect() {
+﻿function CustomSelect() {
     var x, i, j, selElmnt, a, b, c;
     /*look for any elements with the class "custom-select":*/
     x = document.getElementsByClassName("custom-select");
@@ -74,28 +66,6 @@ function CustomSelect() {
     document.addEventListener("click", closeAllSelect);
 }
 
-function AddOption() {
-    div = $("<div></div>");
-    div.addClass("image-select");
-    div.addClass("form-group");
-    label = $("<label for='Filter.Value'>" + ranks[rank].Name + "</label>")
-    select = $("<select class='selsel' id='filterItemValues' name='FilterItemValues'></select>");
-    var defaultOption = $('<option>Выберите ранг</option>').val('empty');
-    hidden2 = $('<input type="hidden" class="selselsel" id="filters" name="FilterValues" value="' + ranks[rank].Value + '">');
-    select.append(defaultOption);
-    for (var item in ranks[rank].FilterItems) {
-
-        var url = "../../Content/Images/" + ranks[rank].GameValue + "/Ranks/" + ranks[rank].FilterItems[item].Image;
-        var option = $('<option data-url="' + url + '"></option>').val(ranks[rank].FilterItems[item].Value).text(ranks[rank].FilterItems[item].Name);
-
-        select.append(option);
-    }
-    div.append(select);
-
-    div.append(hidden2);
-    return div;
-}
-
 function CreateFilters(ranks) {
     var label, hidden, hidden2;
     var select;
@@ -104,8 +74,24 @@ function CreateFilters(ranks) {
 
     mainDiv.empty();
     for (var rank in ranks) {
-        
-        mainDiv.append(label).append(AddOption());
+        div = $("<div></div>");
+        div.addClass("image-select");
+        div.addClass("form-group");
+        select = $("<select class='selsel' id='filterItemValues' name='FilterItemValues'></select>");
+        var defaultOption = $('<option>'+ranks[rank].Name+'</option>').val('empty');
+        hidden2 = $('<input type="hidden" class="selselsel" id="filters" name="FilterValues" value="' + ranks[rank].Value + '">');
+        select.append(defaultOption);
+        for (var item in ranks[rank].FilterItems) {
+
+            var url = "../../Content/Images/" + ranks[rank].GameValue + "/Ranks/" + ranks[rank].FilterItems[item].Image;
+            var option = $('<option data-url="' + url + '"></option>').val(ranks[rank].FilterItems[item].Value).text(ranks[rank].FilterItems[item].Name);
+
+            select.append(option);
+        }
+        div.append(select);
+
+        div.append(hidden2);
+        mainDiv.append(div);
 
     }
     myfunction();
@@ -208,35 +194,4 @@ function closeAllSelect(elmnt) {
             x[i].classList.add("select-hide");
         }
     }
-}
-
-function CalculatePrice() {
-    var sellerPay = $('#sellerPay').is(':checked');
-    var price = $('#ListingPrice').val();
-    var floatPrice = parseFloat(price)
-    var guaranteePrice = 0;
-    var newPrice = 0;
-    if (!isNaN(floatPrice)) {
-        if (sellerPay) {
-            if (floatPrice < 3000) {
-                guaranteePrice = 300;
-
-            }
-            else if (floatPrice < 15000) {
-                guaranteePrice = floatPrice * 0.1;
-            }
-            else {
-                guaranteePrice = 1500;
-            }
-            newPrice = floatPrice - guaranteePrice;
-        }
-        else {
-            newPrice = floatPrice;
-        }
-        guaranteePrice = Math.round(guaranteePrice);
-        newPrice = Math.round(newPrice);
-        $('#guaranteePrice').val(guaranteePrice).text(guaranteePrice);
-        $('#EstimatedPayout').val(newPrice).text(newPrice);
-    }
-
 }

@@ -6,6 +6,12 @@ using System.Web;
 
 namespace Market.Web.ViewModels
 {
+    public class JsonFilter
+    {
+        public string Attribute { get; set; }
+        public string Value { get; set; }
+    }
+
     public class SearchViewModel
     {
         public int Page { get; set; } = 1;
@@ -14,6 +20,7 @@ namespace Market.Web.ViewModels
         public bool IsOnline { get; set; }
         public bool SearchInDiscription { get; set; }
         public string SearchString { get; set; } = "";
+        public IList<JsonFilter> JsonFilters { get; set; } = new List<JsonFilter>();
         public string[] FilterValues { get; set; }
         public string[] FilterItemValues { get; set; } = new string [] { };
         public string Game { get; set; } = "all";
