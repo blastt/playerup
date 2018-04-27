@@ -180,8 +180,6 @@ namespace Market.Web.Controllers
             {
                 Filters = _filterService.GetFilters().Where(m => m.Game.Value == searchInfo.Game),
                 Game = _gameService.GetGameByValue(searchInfo.Game),
-
-                Games = gameViewModels,
                 Offers = offerViewModels,
                 SearchInfo = new SearchViewModel()
                 {
@@ -204,6 +202,71 @@ namespace Market.Web.Controllers
                 }
             };
 
+            return PartialView("_OfferBlock", offerViewModels);
+        }
+
+        public PartialViewResult Reset(SearchViewModel searchInfo)
+        {
+            decimal minGamePrice = 0;
+            decimal maxGamePrice = 0;
+            int page = 1;
+            string sort = "bestSeller";
+            bool isOnline = false;
+            bool searchInDiscription = false;
+            string searchString = "";
+            string game = searchInfo.Game;
+            int totalItems = 0;
+            decimal priceFrom = 0;
+            decimal priceTo = 0;
+
+            IEnumerable<Offer> offers = _offerService.SearchOffers(game, sort, ref isOnline, ref searchInDiscription,
+                searchString, ref page, pageSize, ref totalItems, ref minGamePrice, ref maxGamePrice, ref priceFrom, ref priceTo);
+
+            var offerViewModels = Mapper.Map<IEnumerable<Offer>, IEnumerable<OfferViewModel>>(offers);
+            var games = _gameService.GetGames();
+            var gameViewModels = Mapper.Map<IEnumerable<Game>, IEnumerable<GameViewModel>>(games);
+
+            var filterDict = new Dictionary<Model.Models.Filter, FilterItem>();
+
+            foreach (var offer in offerViewModels)
+            {
+                if (offer.Filters.Count() == offer.FilterItems.Count())
+                {
+                    for (int i = 0; i < offer.Filters.Count; i++)
+                    {
+
+                        filterDict.Add(offer.Filters[i], offer.FilterItems[i]);
+                    }
+                    offer.FilterFilterItem = filterDict;
+                    filterDict = new Dictionary<Model.Models.Filter, FilterItem>();
+                }
+            }
+
+            var model = new OfferListViewModel()
+            {
+                Filters = _filterService.GetFilters().Where(m => m.Game.Value == searchInfo.Game),
+                Game = _gameService.GetGameByValue(searchInfo.Game),
+                Games = gameViewModels,
+                Offers = offerViewModels,
+                SearchInfo = new SearchViewModel()
+                {
+                    SearchString = searchString,
+                    IsOnline = isOnline,
+                    SearchInDiscription = searchInDiscription,
+                    MinGamePrice = minGamePrice,
+                    MaxGamePrice = maxGamePrice,
+                    PriceFrom = priceFrom,
+                    PriceTo = priceTo,
+                    Game = game,
+                    Page = 1
+                },
+                PageInfo = new PageInfoViewModel()
+                {
+                    PageNumber = page,
+                    PageSize = pageSize,
+                    TotalItems = totalItems
+                }
+            };
             return PartialView("List", model);
         }
 

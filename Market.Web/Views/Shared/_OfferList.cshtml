@@ -6,16 +6,19 @@
 <div class="row">
 
     @Html.Partial("_SearchPanel", Model.SearchInfo)
-    @if (Model.Offers.Count() != 0)
-    {
-        @Html.Partial("_OfferBlock", Model.Offers)
-    }
-    else
-    {
-        <div class="col-lg-9">
-            @Html.Partial("_NoResults", Model.Offers)
-        </div>
-    }
+    <div class="col-lg-9" id="offer-block">
+        @if (Model.Offers.Count() != 0)
+        {
+            @Html.Partial("_OfferBlock", Model.Offers)
+        }
+        else
+        {
+            <div class="col-lg-9">
+                @Html.Partial("_NoResults", Model.Offers)
+            </div>
+        }
+    </div>
+
     <div class="col-lg-3"></div>
     <div class="col-lg-9">
         @if (Model.Offers.Count() != 0)
@@ -24,5 +27,5 @@
         }
 
     </div>
-    
+
 </div>

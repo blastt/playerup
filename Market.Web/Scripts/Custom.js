@@ -15,7 +15,7 @@
 
 //------
 $(document).ready(function () {
-    SearchOffers();
+    ResetOffers();
 });
 
 function SelectPage(page) {
@@ -71,16 +71,9 @@ function SearchOffers() {
         success: function (response) {
             var s = $('#sort').val();
 
-            $('#list').html(response);
+            $('#offer-block').html(response);
 
-            SelectFilterItem(game, true);
-            $(".game-filter-item").each(function (index) {
-                if (this.dataset.game === game) {
-                    $(this).addClass("active");
-                    return;
-                }
-
-            });
+            
             var urlPath;
             var routes = new Object();
             if (game != "csgo") {
@@ -134,7 +127,7 @@ function ResetOffers() {
         "game": g
     };
     $.ajax({
-        url: '/Offer/List',
+        url: '/Offer/Reset',
         type: "POST",
         contentType: "application/json",
         data: JSON.stringify({ searchInfo: message }),

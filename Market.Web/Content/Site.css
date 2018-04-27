@@ -87,9 +87,9 @@ textarea {
     }
 
 .select-selected {
-    background-color: #fff;
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    border-radius: 10px
+    /*background-color: #fff;*/
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    /*border-radius: 10px*/
 }
     /*style the arrow inside the select element:*/
     .select-selected:after {
@@ -111,7 +111,7 @@ textarea {
 .select-items div, .select-selected {
     padding: 8px 12px;
     
-    line-height: 2;
+    line-height: 40px;
     cursor: pointer;
     user-select: none;
 }
