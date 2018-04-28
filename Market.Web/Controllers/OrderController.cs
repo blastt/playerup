@@ -47,7 +47,7 @@ namespace Market.Web.Controllers
             }
 
             return HttpNotFound();
-            
+
         }
 
         public ActionResult OrderSell()
@@ -76,7 +76,7 @@ namespace Market.Web.Controllers
 
         public ActionResult BuyDetails(int? orderId)
         {
-            if(orderId != null)
+            if (orderId != null)
             {
 
                 var order = _orderService.GetOrder(orderId.Value);
@@ -87,7 +87,40 @@ namespace Market.Web.Controllers
                         order.BuyerChecked = true;
                         _orderService.SaveOrder();
                         DetailsOrderViewModel model = Mapper.Map<Order, DetailsOrderViewModel>(order);
+                        var currentStatus = order.OrderStatuses.Last.Value.Value;
+                        if (currentStatus == "buyerPaying" || currentStatus == "orderCreating" || currentStatus == "adminWating"
+                            || currentStatus == "sellerProviding" || currentStatus == "adminChecking")
+                        {
+                            model.ShowCloseButton = true;
+                        }
+                        if (currentStatus == "buyerPaying")
+                        {
+                            model.ShowPayButton = true;
+                        }
+                        if ((currentStatus == "closedSeccessfuly" ||
+                            currentStatus == "payingToSeller") && !order.BuyerFeedbacked)
+                        {
+                            model.ShowFeedbackToSeller = true;
+                        }
+                        if ((currentStatus == "closedSeccessfuly" ||
+                            currentStatus == "payingToSeller") && !order.SellerFeedbacked)
+                        {
+                            model.ShowFeedbackToBuyer = true;
+                        }
+                        if (currentStatus == "buyerConfirming" || currentStatus == "closedSeccessfuly" || currentStatus == "payingToSeller")
+                        {
+                            model.ShowAccountInfo = true;
+                        }
 
+                        if (currentStatus == "buyerConfirming")
+                        {
+                            model.ShowConfirm = true;
+                        }
+
+                        if (currentStatus == "sellerProviding")
+                        {
+                            model.ShowProvideData = true;
+                        }
                         model.CurrentStatusName = order.OrderStatuses.Last.Value.Name;
                         model.OrderStatuses = order.OrderStatuses;
                         model.OrderStatuses.RemoveLast();
@@ -96,10 +129,59 @@ namespace Market.Web.Controllers
                     }
 
                 }
-                
-                
+
+
             }
-            
+
+            return HttpNotFound();
+
+        }
+
+        public ActionResult Close(int? orderId)
+        {
+            string userId = User.Identity.GetUserId();
+            if (userId != null && orderId != null)
+            {
+                var order = _orderService.GetOrder(orderId.Value);
+                if (order.OrderStatuses.Any(s => s.Value == "buyerPaying" || s.Value == "orderCreating" || s.Value == "adminWating"
+                || s.Value == "sellerProviding" || s.Value == "adminChecking"))
+                {
+                    if (userId == order.BuyerId)
+                    {
+                        order.OrderStatuses.AddLast(new OrderStatus()
+                        {
+                            FinisedName = "Заказ закрыт покупателем",
+                            Value = "buyerClosed",
+                            DateFinished = DateTime.Now
+                        });
+                        _orderService.SaveOrder();
+                        return View();
+                    }
+                    else if (userId == order.SellerId)
+                    {
+                        order.OrderStatuses.AddLast(new OrderStatus()
+                        {
+                            FinisedName = "Заказ закрыт продавцом",
+                            Value = "sellerClosed",
+                            DateFinished = DateTime.Now
+                        });
+                        _orderService.SaveOrder();
+                        return View();
+                    }
+                    else if (userId == order.BuyerId)
+                    {
+                        order.OrderStatuses.AddLast(new OrderStatus()
+                        {
+                            FinisedName = "Заказ закрыт гарантом",
+                            Value = "middlemanClosed",
+                            DateFinished = DateTime.Now
+                        });
+                        _orderService.SaveOrder();
+                        return View();
+                    }
+                }
+
+            }
             return HttpNotFound();
 
         }
@@ -111,12 +193,46 @@ namespace Market.Web.Controllers
                 var order = _orderService.GetOrder(orderId.Value);
                 if (order != null)
                 {
-                   
+
                     if (order.SellerId == User.Identity.GetUserId())
                     {
                         order.SellerChecked = true;
                         _orderService.SaveOrder();
                         DetailsOrderViewModel model = Mapper.Map<Order, DetailsOrderViewModel>(order);
+                        var currentStatus = order.OrderStatuses.Last.Value.Value;
+                        if (currentStatus == "buyerPaying" || currentStatus == "orderCreating" || currentStatus == "adminWating"
+                            || currentStatus == "sellerProviding" || currentStatus == "adminChecking")
+                        {
+                            model.ShowCloseButton = true;
+                        }
+                        if (currentStatus == "buyerPaying")
+                        {
+                            model.ShowPayButton = true;
+                        }
+                        if ((currentStatus == "closedSeccessfuly" ||
+                            currentStatus == "payingToSeller") && !order.BuyerFeedbacked)
+                        {
+                            model.ShowFeedbackToSeller = true;
+                        }
+                        if ((currentStatus == "closedSeccessfuly" ||
+                            currentStatus == "payingToSeller") && !order.SellerFeedbacked)
+                        {
+                            model.ShowFeedbackToBuyer = true;
+                        }
+                        if (currentStatus == "buyerConfirming" || currentStatus == "closedSeccessfuly" || currentStatus == "payingToSeller")
+                        {
+                            model.ShowAccountInfo = true;
+                        }
+
+                        if (currentStatus == "buyerConfirming")
+                        {
+                            model.ShowConfirm = true;
+                        }
+
+                        if (currentStatus == "sellerProviding")
+                        {
+                            model.ShowProvideData = true;
+                        }
                         model.CurrentStatusName = order.OrderStatuses.Last.Value.Name;
                         model.OrderStatuses = order.OrderStatuses;
                         model.OrderStatuses.RemoveLast();
@@ -124,7 +240,7 @@ namespace Market.Web.Controllers
                         return View(model);
                     }
                 }
-                
+
             }
 
             return HttpNotFound();

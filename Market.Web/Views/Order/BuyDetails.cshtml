@@ -58,8 +58,8 @@
                     </div>
                     <div class="order-details-row row">
                         <div class="order-details-col col-md-5">
-
-                            @if (Model.OrderStatuses.Last().Value == "buyerConfirming")
+                            @{ var currentStatus = Model.OrderStatuses.Last().Value; }
+                            @if (Model.ShowAccountInfo)
                             {
                                 <div class="alert alert-dismissible alert-primary">
                                     <div class="row">
@@ -81,8 +81,9 @@
                                         </div>
                                     </div>
                                 </div>
-
-
+                            }
+                            @if (Model.ShowConfirm)
+                            {
                                 using (Html.BeginForm("ConfirmOrder", "Checkout", null, FormMethod.Get, null))
                                 {
                                     @Html.HiddenFor(m => m.ModeratorId)
@@ -91,29 +92,8 @@
                                 }
 
                             }
-                            else if ((Model.OrderStatuses.Last().Value == "closedSeccessfuly" ||
-                            Model.OrderStatuses.Last().Value == "payingToSeller") && !Model.BuyerFeedbacked)
+                            else if (Model.ShowFeedbackToSeller)
                             {
-                                <div class="alert alert-dismissible alert-primary">
-                                    <div class="row">
-                                        <div class="col-lg-12">
-                                            <label>Логин:</label>
-                                            @Html.DisplayFor(m => m.AccountInfo.Login)
-                                        </div>
-                                        <div class="col-lg-12">
-                                            <label>Пароль:</label>
-                                            @Html.DisplayFor(m => m.AccountInfo.Password)
-                                        </div>
-                                        <div class="col-lg-12">
-                                            <label>Почта:</label>
-                                            @Html.DisplayFor(m => m.AccountInfo.Email)
-                                        </div>
-                                        <div class="col-lg-12">
-                                            <label>Дополнительная информация:</label>
-                                            @Html.DisplayFor(m => m.AccountInfo.AdditionalInformation)
-                                        </div>
-                                    </div>
-                                </div>
 
                                 using (Html.BeginForm("GiveToSeller", "Feedback", null, FormMethod.Get, null))
                                 {
@@ -121,6 +101,15 @@
                                     @Html.Hidden("OrderId", Model.Id)
                                     <input type="submit" value="Оставить отзыв продавцу" class="btn btn-leavefeedback" />
                                 }
+                            }
+                            @if (Model.ShowCloseButton)
+                            {
+                                @Html.ActionLink("Закрыть сделку", "Close", "Order", new { orderId = Model.Id }, new { @class = "btn btn-close" })
+                            }
+
+                            @if (Model.ShowPayButton)
+                            {
+                                @Html.ActionLink("Оплатить", "Close", "Order", new { orderId = Model.Id }, new { })
                             }
                         </div>
                     </div>

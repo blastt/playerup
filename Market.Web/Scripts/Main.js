@@ -148,8 +148,8 @@ $(document).ready(function () {
         
     });
     $("#account-list a").each(function () {
-
-        if (this.href.split('/')[3] == currentHref) {
+        //alert(this.href.split('/')[4] + "/////////////" + window.location.href.split('/')[4] );
+        if (this.href.split('/')[4] == window.location.href.split('/')[4]) {
             $(this.parentNode).addClass("active");
             return (true);
         }

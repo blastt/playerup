@@ -256,6 +256,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\DateHelpers.cs" />
+    <Compile Include="Helpers\OrderStatusHelpers.cs" />
     <Compile Include="Helpers\PagingHelpers.cs" />
     <Compile Include="Hubs\MessageHub.cs" />
     <Compile Include="Hubs\ProxyMessage.cs" />
@@ -314,10 +315,12 @@
     <Content Include="Content\Images\Csgo\Icons\csgo.png" />
     <Content Include="Content\Images\Dota2\Icons\dota2.png" />
     <Content Include="Content\Images\error.png" />
+    <Content Include="Content\Images\facebook.svg" />
     <Content Include="Content\Images\Hearthstone\Ranks\asia.png" />
     <Content Include="Content\Images\Hearthstone\Ranks\europe.png" />
     <Content Include="Content\Images\logo.svg" />
     <Content Include="Content\Images\logo1.png" />
+    <Content Include="Content\Images\mail.svg" />
     <Content Include="Content\Images\messages.svg" />
     <Content Include="Content\Images\notices.svg" />
     <Content Include="Content\Images\payment-methods.png" />
@@ -375,12 +378,17 @@
     <Content Include="Content\Images\success.png" />
     <Content Include="Content\Images\total-reviews.png" />
     <Content Include="Content\Images\trash.png" />
+    <Content Include="Content\Images\vk.svg" />
     <Content Include="Content\Images\Wot\Ranks\asia.png" />
     <Content Include="Content\Images\Wot\Ranks\china.png" />
     <Content Include="Content\Images\Wot\Ranks\europe.png" />
     <Content Include="Content\Images\Wot\Ranks\korea.png" />
     <Content Include="Content\Images\Wot\Ranks\russia.png" />
     <Content Include="Content\Images\Wot\Ranks\usa.png" />
+    <Content Include="Content\jquery-ui.css" />
+    <Content Include="Content\jquery-ui.min.css" />
+    <Content Include="Content\jquery-ui.structure.css" />
+    <Content Include="Content\jquery-ui.structure.min.css" />
     <Content Include="Content\range-slider.css" />
     <Content Include="Content\Images\Warface\Icons\warface.png" />
     <Content Include="Content\Images\Warframe\Icons\warframe.png" />
@@ -422,6 +430,7 @@
     <None Include="compilerconfig.json.defaults">
       <DependentUpon>compilerconfig.json</DependentUpon>
     </None>
+    <Content Include="package.json" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\Filters.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />

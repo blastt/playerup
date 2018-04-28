@@ -724,6 +724,14 @@ div#users-contain {
 
 
 /*----------------------------------------------*/
+.btn-close {
+    border-radius: 50px;
+    background-color: #ff5656;
+    color: white;
+    padding: 6px 20px;
+    font-weight: 300;
+    box-shadow: 0 4px 15px 0px rgba(98, 178, 226, 0.70);
+}
 
 .btn-search {
     border-radius: 50px;
@@ -1476,6 +1484,7 @@ dl dd a{
 }
 
 .price-container {
+
     margin-right: 0px;
     margin-left: 0px;
 }
@@ -1727,6 +1736,16 @@ dl dd a{
 .checkout-details-body {
     border-bottom: 1px solid rgba(0, 0, 0, 0.05);
     margin-bottom: 10px;
+}
+
+.ul-footer li{
+    padding: 14px 14px;
+    display:inline;
+}
+
+.ul-social li {
+    padding-right: 10px;
+    display: inline;
 }
 
 .checkout-details-notice {

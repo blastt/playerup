@@ -144,8 +144,12 @@
                     </div>
                     <div class="order-details-row row">
                         <div class="order-details-col col-md-5">
+                            @if (Model.ShowCloseButton)
+                            {
+                                @Html.ActionLink("Закрыть сделку", "Close", "Order", new { orderId = Model.Id }, new { @class = "btn btn-close" })
+                            }
 
-                            @if (Model.OrderStatuses.Last().Value == "sellerProviding")
+                            @if (Model.ShowProvideData)
                             {
                                 using (Html.BeginForm("ProvideData", "Checkout", null, FormMethod.Get, null))
                                 {
@@ -157,8 +161,7 @@
                                 }
 
                             }
-                            else if ((Model.OrderStatuses.Last().Value == "closedSeccessfuly" ||
-                            Model.OrderStatuses.Last().Value == "payingToSeller") && !Model.SellerFeedbacked)
+                            else if (Model.ShowFeedbackToBuyer)
                             {
                                 using (Html.BeginForm("GiveToBuyer", "Feedback", null, FormMethod.Get, null))
                                 {
@@ -168,6 +171,9 @@
                                     <input type="submit" value="Оставить отзыв покупателю" class="btn btn-leavefeedback" />
                                 }
                             }
+
+
+
                         </div>
                     </div>
 

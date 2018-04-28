@@ -45,12 +45,13 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group mb-4">
                         <div class="filter-label">
                             <span>ЦЕНА</span>
                         </div>
 
 
+                       
                         <div class="price-container row">
                             <div class="filter-price-from">
                                 @Html.TextBox("PriceFrom", Math.Round(Model.PriceFrom, 0), new { @class = "form-control form-control-sm", id = "priceFrom" })
@@ -66,34 +67,31 @@
                                 @Html.TextBox("PriceTo", Math.Round(Model.PriceTo, 0), new { @class = "form-control form-control-sm", id = "priceTo" })
                             </div>
                         </div>
-                        <section class="range-slider">
-                            <span class="rangeValues"></span>
-                            <input value="@Math.Round(Model.PriceFrom, 0)" min="@Math.Round(Model.MinGamePrice, 0)" max="@Math.Round(Model.MaxGamePrice, 0)" step="1" type="range">
-                            <input value="@Math.Round(Model.PriceTo, 0)" min="@Math.Round(Model.MinGamePrice, 0)" max="@Math.Round(Model.MaxGamePrice, 0)" step="1" type="range">
-                        </section>
+                        <div id="slider-range"></div>
 
-                        <div id="slider_price"></div>
                     </div>
+
+
+
                     <div class="form-group">
-                        <div id="filter-item" class="filter-group">
+                        <div id="filter-item">
 
                         </div>
                     </div>
-                    </div>
-
                 </div>
-            @*<div class="filter-specific">
-            <label class="filter-label">
-                <span>РАНГ</span>
-            </label>
-            <div id="filter-item">
 
             </div>
-        </div>*@
-            
-            
-            
+            @*<div class="filter-specific">
+                    <label class="filter-label">
+                        <span>РАНГ</span>
+                    </label>
+                    <div id="filter-item">
+
+                    </div>
+                </div>*@
+
+
+
         </div>
     </form>
 </div>
-

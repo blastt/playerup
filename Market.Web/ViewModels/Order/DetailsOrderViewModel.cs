@@ -18,6 +18,14 @@ namespace Market.Web.ViewModels
         public decimal OfferPrice { get; set; }
         public string OfferId { get; set; }
 
+        public bool ShowPayButton { get; set; }
+        public bool ShowCloseButton { get; set; }
+        public bool ShowFeedbackToBuyer { get; set; }
+        public bool ShowFeedbackToSeller { get; set; }
+        public bool ShowAccountInfo { get; set; }
+        public bool ShowConfirm { get; set; }
+        public bool ShowProvideData { get; set; }
+
         public string ModeratorId { get; set; }
         public string ModeratorName { get; set; }
 
