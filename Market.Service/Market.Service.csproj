@@ -51,6 +51,7 @@
     <Compile Include="Order.cs" />
     <Compile Include="OrderStatus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StatusLog.cs" />
     <Compile Include="UserProfiles.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -13,8 +13,8 @@ namespace Market.Data.Configuration
     {
         public OrderStatusConfiguration()
         {
-            ToTable("OrderStatus");
-            HasRequired(o => o.Order).WithMany(o => o.OrderStatuses).HasForeignKey(o => o.OrderId);
+            ToTable("OrderStatuses");
+           
 
         }
     }

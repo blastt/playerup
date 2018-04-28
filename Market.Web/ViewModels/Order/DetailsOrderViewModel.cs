@@ -9,7 +9,7 @@ namespace Market.Web.ViewModels
     public class DetailsOrderViewModel
     {
         public int Id { get; set; }
-        public virtual LinkedList<OrderStatus> OrderStatuses { get; set; } = new LinkedList<OrderStatus>();
+        public IEnumerable<StatusLog> StatusLogs { get; set; }
         //public bool IsFeedbacked { get; set; }
 
 

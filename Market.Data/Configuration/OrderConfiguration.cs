@@ -13,6 +13,7 @@ namespace Market.Data.Configuration
             ToTable("Orders");
             Property(o => o.WithmiddlemanSum).HasDatabaseGeneratedOption(System.ComponentModel.DataAnnotations.Schema.DatabaseGeneratedOption.Computed);
             HasRequired(o => o.Offer).WithOptional(o => o.Order).WillCascadeOnDelete(false);
+            HasRequired(o => o.CurrentStatus).WithMany(s => s.Orders).HasForeignKey(o => o.CurrentStatusId).WillCascadeOnDelete(false); ;
 
         }
     }

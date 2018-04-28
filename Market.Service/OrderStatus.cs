@@ -13,8 +13,7 @@ namespace Market.Service
     {
         IEnumerable<OrderStatus> GetOrderStatuses();
         OrderStatus GetOrderStatus(int id);
-        OrderStatus GetOrderStatusByValue(string name);
-        OrderStatus GetCurrentOrderStatus(Order order);
+        OrderStatus GetOrderStatusByValue(OrderStatuses value);
         void CreateOrderStatus(OrderStatus message);
         void SaveOrderStatus();
     }
@@ -47,15 +46,11 @@ namespace Market.Service
             return orderStatus;
         }
 
-        public OrderStatus GetCurrentOrderStatus(Order order)
+        public OrderStatus GetOrderStatusByValue(OrderStatuses value)
         {
-            if (order != null)
-            {
-                var currentOrderStatus = order.OrderStatuses.OrderBy(o => o.DateFinished).LastOrDefault();
-                return currentOrderStatus;
-            }
-            return null;
-            
+
+            var orderStatus = orderStatusesRepository.GetOrderStatusByValue(value);
+            return orderStatus;
         }
 
 
@@ -69,10 +64,6 @@ namespace Market.Service
             unitOfWork.Commit();
         }
 
-        public OrderStatus GetOrderStatusByValue(string name)
-        {
-            return orderStatusesRepository.GetOrderStatusByValue(name);
-        }
 
         #endregion
 

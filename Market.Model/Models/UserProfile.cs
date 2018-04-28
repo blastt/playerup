@@ -89,10 +89,10 @@ namespace Market.Model.Models
 
             get
             {
-                var ordersAsSeller = OrdersAsSeller.Where(o => o.OrderStatuses.Last.Value.Value == "usersFeedbacking" ||
-                o.OrderStatuses.Last.Value.Value == "finishing");
-                var ordersAsBuyer = OrdersAsBuyer.Where(o => o.OrderStatuses.Last.Value.Value == "usersFeedbacking" ||
-                o.OrderStatuses.Last.Value.Value == "finishing");
+                var ordersAsSeller = OrdersAsSeller.Where(o => o.CurrentStatus.Value == OrderStatuses.Feedbacking ||
+                o.CurrentStatus.Value == OrderStatuses.ClosedSuccessfully);
+                var ordersAsBuyer = OrdersAsBuyer.Where(o => o.CurrentStatus.Value == OrderStatuses.Feedbacking ||
+                o.CurrentStatus.Value == OrderStatuses.ClosedSuccessfully);
                 if (ordersAsSeller != null && ordersAsBuyer != null)
                 {
                     return ordersAsBuyer.Count() + ordersAsSeller.Count();

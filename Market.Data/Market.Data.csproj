@@ -63,6 +63,7 @@
     <Compile Include="Configuration\OfferConfiguration.cs" />
     <Compile Include="Configuration\OrderConfiguration.cs" />
     <Compile Include="Configuration\OrderStatusConfiguration.cs" />
+    <Compile Include="Configuration\StatusLogConfiguration.cs" />
     <Compile Include="Configuration\UserProfileConfiguration.cs" />
     <Compile Include="Infrastructure\DBFactory.cs" />
     <Compile Include="Infrastructure\Disposable.cs" />
@@ -72,153 +73,9 @@
     <Compile Include="Infrastructure\RepositoryBase.cs" />
     <Compile Include="Infrastructure\UnitOfWork.cs" />
     <Compile Include="MarketEntities.cs" />
-    <Compile Include="Migrations\201803151902507_New.cs" />
-    <Compile Include="Migrations\201803151902507_New.Designer.cs">
-      <DependentUpon>201803151902507_New.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201803151906448_New1.cs" />
-    <Compile Include="Migrations\201803151906448_New1.Designer.cs">
-      <DependentUpon>201803151906448_New1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201803151935365_New2.cs" />
-    <Compile Include="Migrations\201803151935365_New2.Designer.cs">
-      <DependentUpon>201803151935365_New2.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201803151937406_Rank.cs" />
-    <Compile Include="Migrations\201803151937406_Rank.Designer.cs">
-      <DependentUpon>201803151937406_Rank.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201803171414027_Order.cs" />
-    <Compile Include="Migrations\201803171414027_Order.Designer.cs">
-      <DependentUpon>201803171414027_Order.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201803181141182_Buyer feedbacked.cs" />
-    <Compile Include="Migrations\201803181141182_Buyer feedbacked.Designer.cs">
-      <DependentUpon>201803181141182_Buyer feedbacked.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201803181313418_Moder.cs" />
-    <Compile Include="Migrations\201803181313418_Moder.Designer.cs">
-      <DependentUpon>201803181313418_Moder.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201803181815318_AccInfos.cs" />
-    <Compile Include="Migrations\201803181815318_AccInfos.Designer.cs">
-      <DependentUpon>201803181815318_AccInfos.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201803201815293_orderViewed.cs" />
-    <Compile Include="Migrations\201803201815293_orderViewed.Designer.cs">
-      <DependentUpon>201803201815293_orderViewed.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201803292159472_OrderStatus.cs" />
-    <Compile Include="Migrations\201803292159472_OrderStatus.Designer.cs">
-      <DependentUpon>201803292159472_OrderStatus.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201803292211317_OrderStatusNew.cs" />
-    <Compile Include="Migrations\201803292211317_OrderStatusNew.Designer.cs">
-      <DependentUpon>201803292211317_OrderStatusNew.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201803301705329_OrderStatus1.cs" />
-    <Compile Include="Migrations\201803301705329_OrderStatus1.Designer.cs">
-      <DependentUpon>201803301705329_OrderStatus1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201803311536327_datefinished.cs" />
-    <Compile Include="Migrations\201803311536327_datefinished.Designer.cs">
-      <DependentUpon>201803311536327_datefinished.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201804010922513_OfferState.cs" />
-    <Compile Include="Migrations\201804010922513_OfferState.Designer.cs">
-      <DependentUpon>201804010922513_OfferState.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201804021724048_Middleman.cs" />
-    <Compile Include="Migrations\201804021724048_Middleman.Designer.cs">
-      <DependentUpon>201804021724048_Middleman.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201804031655060_Dialogs.cs" />
-    <Compile Include="Migrations\201804031655060_Dialogs.Designer.cs">
-      <DependentUpon>201804031655060_Dialogs.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201804041138238_DialogUsers.cs" />
-    <Compile Include="Migrations\201804041138238_DialogUsers.Designer.cs">
-      <DependentUpon>201804041138238_DialogUsers.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201804081025105_FromToViewed.cs" />
-    <Compile Include="Migrations\201804081025105_FromToViewed.Designer.cs">
-      <DependentUpon>201804081025105_FromToViewed.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201804091546387_amount.cs" />
-    <Compile Include="Migrations\201804091546387_amount.Designer.cs">
-      <DependentUpon>201804091546387_amount.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201804120936555_orderFeedback.cs" />
-    <Compile Include="Migrations\201804120936555_orderFeedback.Designer.cs">
-      <DependentUpon>201804120936555_orderFeedback.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201804121853583_Name.cs" />
-    <Compile Include="Migrations\201804121853583_Name.Designer.cs">
-      <DependentUpon>201804121853583_Name.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201804130946400_feedbackRelation.cs" />
-    <Compile Include="Migrations\201804130946400_feedbackRelation.Designer.cs">
-      <DependentUpon>201804130946400_feedbackRelation.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201804131614572_Feedbackss.cs" />
-    <Compile Include="Migrations\201804131614572_Feedbackss.Designer.cs">
-      <DependentUpon>201804131614572_Feedbackss.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201804131658140_FeedbackDateTime.cs" />
-    <Compile Include="Migrations\201804131658140_FeedbackDateTime.Designer.cs">
-      <DependentUpon>201804131658140_FeedbackDateTime.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201804131824038_FeedbackTest.cs" />
-    <Compile Include="Migrations\201804131824038_FeedbackTest.Designer.cs">
-      <DependentUpon>201804131824038_FeedbackTest.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201804131955199_Name1.cs" />
-    <Compile Include="Migrations\201804131955199_Name1.Designer.cs">
-      <DependentUpon>201804131955199_Name1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201804132001420_Ids.cs" />
-    <Compile Include="Migrations\201804132001420_Ids.Designer.cs">
-      <DependentUpon>201804132001420_Ids.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201804132105308_OrderFeedbacks.cs" />
-    <Compile Include="Migrations\201804132105308_OrderFeedbacks.Designer.cs">
-      <DependentUpon>201804132105308_OrderFeedbacks.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201804140918265_myandOtherFeedbacks.cs" />
-    <Compile Include="Migrations\201804140918265_myandOtherFeedbacks.Designer.cs">
-      <DependentUpon>201804140918265_myandOtherFeedbacks.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201804152156410_Calculated.cs" />
-    <Compile Include="Migrations\201804152156410_Calculated.Designer.cs">
-      <DependentUpon>201804152156410_Calculated.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201804152157424_Calculated1.cs" />
-    <Compile Include="Migrations\201804152157424_Calculated1.Designer.cs">
-      <DependentUpon>201804152157424_Calculated1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201804160816489_LinkedList.cs" />
-    <Compile Include="Migrations\201804160816489_LinkedList.Designer.cs">
-      <DependentUpon>201804160816489_LinkedList.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201804160824231_LinkedList1.cs" />
-    <Compile Include="Migrations\201804160824231_LinkedList1.Designer.cs">
-      <DependentUpon>201804160824231_LinkedList1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201804161402021_WithmiddlemanSum.cs" />
-    <Compile Include="Migrations\201804161402021_WithmiddlemanSum.Designer.cs">
-      <DependentUpon>201804161402021_WithmiddlemanSum.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201804161923388_Calc.cs" />
-    <Compile Include="Migrations\201804161923388_Calc.Designer.cs">
-      <DependentUpon>201804161923388_Calc.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201804171804347_null.cs" />
-    <Compile Include="Migrations\201804171804347_null.Designer.cs">
-      <DependentUpon>201804171804347_null.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201804241930113_SuccessRate.cs" />
-    <Compile Include="Migrations\201804241930113_SuccessRate.Designer.cs">
-      <DependentUpon>201804241930113_SuccessRate.cs</DependentUpon>
+    <Compile Include="Migrations\201804281432327_Name.cs" />
+    <Compile Include="Migrations\201804281432327_Name.Designer.cs">
+      <DependentUpon>201804281432327_Name.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -232,6 +89,7 @@
     <Compile Include="Repositories\OfferRepository.cs" />
     <Compile Include="Repositories\OrderRepository.cs" />
     <Compile Include="Repositories\OrderStatusRepository.cs" />
+    <Compile Include="Repositories\StatusLogRepository.cs" />
     <Compile Include="Repositories\UserProfileRepository.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -245,116 +103,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201803151902507_New.resx">
-      <DependentUpon>201803151902507_New.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201803151906448_New1.resx">
-      <DependentUpon>201803151906448_New1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201803151935365_New2.resx">
-      <DependentUpon>201803151935365_New2.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201803151937406_Rank.resx">
-      <DependentUpon>201803151937406_Rank.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201803171414027_Order.resx">
-      <DependentUpon>201803171414027_Order.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201803181141182_Buyer feedbacked.resx">
-      <DependentUpon>201803181141182_Buyer feedbacked.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201803181313418_Moder.resx">
-      <DependentUpon>201803181313418_Moder.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201803181815318_AccInfos.resx">
-      <DependentUpon>201803181815318_AccInfos.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201803201815293_orderViewed.resx">
-      <DependentUpon>201803201815293_orderViewed.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201803292159472_OrderStatus.resx">
-      <DependentUpon>201803292159472_OrderStatus.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201803292211317_OrderStatusNew.resx">
-      <DependentUpon>201803292211317_OrderStatusNew.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201803301705329_OrderStatus1.resx">
-      <DependentUpon>201803301705329_OrderStatus1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201803311536327_datefinished.resx">
-      <DependentUpon>201803311536327_datefinished.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201804010922513_OfferState.resx">
-      <DependentUpon>201804010922513_OfferState.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201804021724048_Middleman.resx">
-      <DependentUpon>201804021724048_Middleman.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201804031655060_Dialogs.resx">
-      <DependentUpon>201804031655060_Dialogs.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201804041138238_DialogUsers.resx">
-      <DependentUpon>201804041138238_DialogUsers.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201804081025105_FromToViewed.resx">
-      <DependentUpon>201804081025105_FromToViewed.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201804091546387_amount.resx">
-      <DependentUpon>201804091546387_amount.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201804120936555_orderFeedback.resx">
-      <DependentUpon>201804120936555_orderFeedback.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201804121853583_Name.resx">
-      <DependentUpon>201804121853583_Name.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201804130946400_feedbackRelation.resx">
-      <DependentUpon>201804130946400_feedbackRelation.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201804131614572_Feedbackss.resx">
-      <DependentUpon>201804131614572_Feedbackss.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201804131658140_FeedbackDateTime.resx">
-      <DependentUpon>201804131658140_FeedbackDateTime.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201804131824038_FeedbackTest.resx">
-      <DependentUpon>201804131824038_FeedbackTest.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201804131955199_Name1.resx">
-      <DependentUpon>201804131955199_Name1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201804132001420_Ids.resx">
-      <DependentUpon>201804132001420_Ids.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201804132105308_OrderFeedbacks.resx">
-      <DependentUpon>201804132105308_OrderFeedbacks.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201804140918265_myandOtherFeedbacks.resx">
-      <DependentUpon>201804140918265_myandOtherFeedbacks.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201804152156410_Calculated.resx">
-      <DependentUpon>201804152156410_Calculated.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201804152157424_Calculated1.resx">
-      <DependentUpon>201804152157424_Calculated1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201804160816489_LinkedList.resx">
-      <DependentUpon>201804160816489_LinkedList.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201804160824231_LinkedList1.resx">
-      <DependentUpon>201804160824231_LinkedList1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201804161402021_WithmiddlemanSum.resx">
-      <DependentUpon>201804161402021_WithmiddlemanSum.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201804161923388_Calc.resx">
-      <DependentUpon>201804161923388_Calc.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201804171804347_null.resx">
-      <DependentUpon>201804171804347_null.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201804241930113_SuccessRate.resx">
-      <DependentUpon>201804241930113_SuccessRate.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201804281432327_Name.resx">
+      <DependentUpon>201804281432327_Name.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

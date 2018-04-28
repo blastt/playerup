@@ -40,9 +40,8 @@ namespace Market.Web.Controllers.Moderator
 
             foreach (var order in _orderService.GetOrders())
             {
-                var currentOrderStatus = _orderStatusService.GetCurrentOrderStatus(order);
 
-                if (currentOrderStatus.Value == "middlemanSearching")
+                if (order.CurrentStatus.Value == OrderStatuses.MiddlemanFinding)
                 {
                     orders.Add(order);
                 }
@@ -72,22 +71,21 @@ namespace Market.Web.Controllers.Moderator
             if(orderId != null)
             {
                 var order = _orderService.GetOrder(orderId.Value);
-                var currentOrderStatus = _orderStatusService.GetCurrentOrderStatus(order);
-                if (currentOrderStatus != null)
+                if (order.CurrentStatus != null)
                 {
-                    if (order != null && currentOrderStatus.Value == "middlemanChecking")
+                    if (order != null && order.CurrentStatus.Value == OrderStatuses.MidddlemanChecking)
                     {
-                        currentOrderStatus.DateFinished = DateTime.Now;
-                        OrderStatus orderStatus = new OrderStatus
+                        order.StatusLogs.Add(new StatusLog()
                         {
-                            Value = "sellerProviding",
-                            Name = "Продавец предоставляет информацию гаранту",
-                            FinisedName = "Продавец предоставил информацию гаранту",
-                        };
+                            OldStatus = order.CurrentStatus,
+                            NewStatus = _orderStatusService.GetOrderStatusByValue(OrderStatuses.SellerProviding),
+                            TimeStamp = DateTime.Now
+                        });
+                        order.CurrentStatus = _orderStatusService.GetOrderStatusByValue(OrderStatuses.SellerProviding);
+
                         
                         order.BuyerChecked = false;
                         order.SellerChecked = false;
-                        order.OrderStatuses.AddLast(orderStatus);
                         order.MiddlemanId= User.Identity.GetUserId();
                         _orderService.SaveOrder();
                         return RedirectToAction("MyOrderList");
@@ -139,21 +137,22 @@ namespace Market.Web.Controllers.Moderator
                     var buyerOrder = _orderService.GetOrder(model.SteamLogin, model.ModeratorId, model.SellerId, model.BuyerId);
                     if (buyerOrder != null)
                     {
-                        var currentOrderStatus = _orderStatusService.GetCurrentOrderStatus(buyerOrder);
-                        if (currentOrderStatus != null)
+                        if (buyerOrder.CurrentStatus != null)
                         {
-                            if (currentOrderStatus.Value == "middlemanChecking")
+                            if (buyerOrder.CurrentStatus.Value == OrderStatuses.MidddlemanChecking)
                             {
-                                currentOrderStatus.DateFinished = DateTime.Now;
-                                OrderStatus orderStatus = new OrderStatus
+                                buyerOrder.StatusLogs.Add(new StatusLog()
                                 {
-                                    Value = "buyerConfirming",
-                                    Name = "Покупатель подтверждает получение",
-                                    FinisedName = "Поккупатель подтвердил получение",
-                                };                                 
+                                    OldStatus = buyerOrder.CurrentStatus,
+                                    NewStatus = _orderStatusService.GetOrderStatusByValue(OrderStatuses.BuyerConfirming),
+                                    TimeStamp = DateTime.Now
+                                });
+                                buyerOrder.CurrentStatus = _orderStatusService.GetOrderStatusByValue(OrderStatuses.BuyerConfirming);
+
+                            
                                 buyerOrder.BuyerChecked = false;
                                 buyerOrder.SellerChecked = false;
-                                buyerOrder.OrderStatuses.AddLast(orderStatus);
+
                                     
                                 _accountInfoService.UpdateAccountInfo(accInfo);
                                 buyerOrder.AccountInfo = accInfo;

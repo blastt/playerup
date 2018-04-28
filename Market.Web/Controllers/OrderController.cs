@@ -14,12 +14,14 @@ namespace Market.Web.Controllers
     public class OrderController : Controller
     {
         private readonly IUserProfileService _userProfileService;
+        private readonly IOrderStatusService _orderStatusService;
         private readonly IOfferService _offerService;
         private readonly IOrderService _orderService;
         private readonly IGameService _gameService;
         public int pageSize = 5;
-        public OrderController(IOfferService offerService, IGameService gameService, IOrderService orderService, IUserProfileService userProfileService)
+        public OrderController(IOfferService offerService, IOrderStatusService orderStatusService, IGameService gameService, IOrderService orderService, IUserProfileService userProfileService)
         {
+            _orderStatusService = orderStatusService;
             _offerService = offerService;
             _gameService = gameService;
             _orderService = orderService;
@@ -87,43 +89,48 @@ namespace Market.Web.Controllers
                         order.BuyerChecked = true;
                         _orderService.SaveOrder();
                         DetailsOrderViewModel model = Mapper.Map<Order, DetailsOrderViewModel>(order);
-                        var currentStatus = order.OrderStatuses.Last.Value.Value;
-                        if (currentStatus == "buyerPaying" || currentStatus == "orderCreating" || currentStatus == "adminWating"
-                            || currentStatus == "sellerProviding" || currentStatus == "adminChecking")
+                        
+                        var currentStatus = order.CurrentStatus.Value;
+                        if (currentStatus == OrderStatuses.BuyerPaying || 
+                            currentStatus == OrderStatuses.OrderCreating || 
+                            currentStatus == OrderStatuses.MiddlemanFinding|| 
+                            currentStatus == OrderStatuses.SellerProviding || 
+                            currentStatus == OrderStatuses.MidddlemanChecking)
                         {
                             model.ShowCloseButton = true;
                         }
-                        if (currentStatus == "buyerPaying")
+                        if (currentStatus == OrderStatuses.BuyerPaying)
                         {
                             model.ShowPayButton = true;
                         }
-                        if ((currentStatus == "closedSeccessfuly" ||
-                            currentStatus == "payingToSeller") && !order.BuyerFeedbacked)
+                        if ((currentStatus == OrderStatuses.ClosedSuccessfully ||
+                            currentStatus == OrderStatuses.PayingToSeller) && !order.BuyerFeedbacked)
                         {
                             model.ShowFeedbackToSeller = true;
                         }
-                        if ((currentStatus == "closedSeccessfuly" ||
-                            currentStatus == "payingToSeller") && !order.SellerFeedbacked)
+                        if ((currentStatus == OrderStatuses.ClosedSuccessfully ||
+                            currentStatus == OrderStatuses.PayingToSeller) && !order.SellerFeedbacked)
                         {
                             model.ShowFeedbackToBuyer = true;
                         }
-                        if (currentStatus == "buyerConfirming" || currentStatus == "closedSeccessfuly" || currentStatus == "payingToSeller")
+                        if (currentStatus == OrderStatuses.BuyerConfirming || 
+                            currentStatus == OrderStatuses.ClosedSuccessfully || 
+                            currentStatus == OrderStatuses.PayingToSeller)
                         {
                             model.ShowAccountInfo = true;
                         }
 
-                        if (currentStatus == "buyerConfirming")
+                        if (currentStatus == OrderStatuses.BuyerConfirming)
                         {
                             model.ShowConfirm = true;
                         }
 
-                        if (currentStatus == "sellerProviding")
+                        if (currentStatus == OrderStatuses.SellerProviding)
                         {
                             model.ShowProvideData = true;
                         }
-                        model.CurrentStatusName = order.OrderStatuses.Last.Value.Name;
-                        model.OrderStatuses = order.OrderStatuses;
-                        model.OrderStatuses.RemoveLast();
+                        model.CurrentStatusName = order.CurrentStatus.DuringName;
+                        model.StatusLogs = order.StatusLogs;
                         model.ModeratorId = order.MiddlemanId;
                         return View(model);
                     }
@@ -143,41 +150,41 @@ namespace Market.Web.Controllers
             if (userId != null && orderId != null)
             {
                 var order = _orderService.GetOrder(orderId.Value);
-                if (order.OrderStatuses.Any(s => s.Value == "buyerPaying" || s.Value == "orderCreating" || s.Value == "adminWating"
-                || s.Value == "sellerProviding" || s.Value == "adminChecking"))
+                if (order.CurrentStatus.Value == OrderStatuses.BuyerPaying ||
+                    order.CurrentStatus.Value == OrderStatuses.OrderCreating ||
+                    order.CurrentStatus.Value == OrderStatuses.MiddlemanFinding ||
+                        order.CurrentStatus.Value == OrderStatuses.SellerProviding ||
+                    order.CurrentStatus.Value == OrderStatuses.MidddlemanChecking)
                 {
                     if (userId == order.BuyerId)
                     {
-                        order.OrderStatuses.AddLast(new OrderStatus()
+                        var orderStatus = _orderStatusService.GetOrderStatusByValue(OrderStatuses.BuyerClosed);
+                        if (orderStatus != null)
                         {
-                            FinisedName = "Заказ закрыт покупателем",
-                            Value = "buyerClosed",
-                            DateFinished = DateTime.Now
-                        });
-                        _orderService.SaveOrder();
-                        return View();
+                            order.CurrentStatus = orderStatus;
+                            _orderService.SaveOrder();
+                            return View();
+                        }                                               
                     }
                     else if (userId == order.SellerId)
                     {
-                        order.OrderStatuses.AddLast(new OrderStatus()
+                        var orderStatus = _orderStatusService.GetOrderStatusByValue(OrderStatuses.SellerClosed);
+                        if (orderStatus != null)
                         {
-                            FinisedName = "Заказ закрыт продавцом",
-                            Value = "sellerClosed",
-                            DateFinished = DateTime.Now
-                        });
-                        _orderService.SaveOrder();
-                        return View();
+                            order.CurrentStatus = orderStatus;
+                            _orderService.SaveOrder();
+                            return View();
+                        }
                     }
-                    else if (userId == order.BuyerId)
+                    else if (userId == order.MiddlemanId)
                     {
-                        order.OrderStatuses.AddLast(new OrderStatus()
+                        var orderStatus = _orderStatusService.GetOrderStatusByValue(OrderStatuses.MiddlemanClosed);
+                        if (orderStatus != null)
                         {
-                            FinisedName = "Заказ закрыт гарантом",
-                            Value = "middlemanClosed",
-                            DateFinished = DateTime.Now
-                        });
-                        _orderService.SaveOrder();
-                        return View();
+                            order.CurrentStatus = orderStatus;
+                            _orderService.SaveOrder();
+                            return View();
+                        }
                     }
                 }
 
@@ -193,52 +200,57 @@ namespace Market.Web.Controllers
                 var order = _orderService.GetOrder(orderId.Value);
                 if (order != null)
                 {
-
-                    if (order.SellerId == User.Identity.GetUserId())
+                    if (order.BuyerId == User.Identity.GetUserId())
                     {
-                        order.SellerChecked = true;
+                        order.BuyerChecked = true;
                         _orderService.SaveOrder();
                         DetailsOrderViewModel model = Mapper.Map<Order, DetailsOrderViewModel>(order);
-                        var currentStatus = order.OrderStatuses.Last.Value.Value;
-                        if (currentStatus == "buyerPaying" || currentStatus == "orderCreating" || currentStatus == "adminWating"
-                            || currentStatus == "sellerProviding" || currentStatus == "adminChecking")
+
+                        var currentStatus = order.CurrentStatus.Value;
+                        if (currentStatus == OrderStatuses.BuyerPaying ||
+                            currentStatus == OrderStatuses.OrderCreating ||
+                            currentStatus == OrderStatuses.MiddlemanFinding ||
+                            currentStatus == OrderStatuses.SellerProviding ||
+                            currentStatus == OrderStatuses.MidddlemanChecking)
                         {
                             model.ShowCloseButton = true;
                         }
-                        if (currentStatus == "buyerPaying")
+                        if (currentStatus == OrderStatuses.BuyerPaying)
                         {
                             model.ShowPayButton = true;
                         }
-                        if ((currentStatus == "closedSeccessfuly" ||
-                            currentStatus == "payingToSeller") && !order.BuyerFeedbacked)
+                        if ((currentStatus == OrderStatuses.ClosedSuccessfully ||
+                            currentStatus == OrderStatuses.PayingToSeller) && !order.BuyerFeedbacked)
                         {
                             model.ShowFeedbackToSeller = true;
                         }
-                        if ((currentStatus == "closedSeccessfuly" ||
-                            currentStatus == "payingToSeller") && !order.SellerFeedbacked)
+                        if ((currentStatus == OrderStatuses.ClosedSuccessfully ||
+                            currentStatus == OrderStatuses.PayingToSeller) && !order.SellerFeedbacked)
                         {
                             model.ShowFeedbackToBuyer = true;
                         }
-                        if (currentStatus == "buyerConfirming" || currentStatus == "closedSeccessfuly" || currentStatus == "payingToSeller")
+                        if (currentStatus == OrderStatuses.BuyerConfirming ||
+                            currentStatus == OrderStatuses.ClosedSuccessfully ||
+                            currentStatus == OrderStatuses.PayingToSeller)
                         {
                             model.ShowAccountInfo = true;
                         }
 
-                        if (currentStatus == "buyerConfirming")
+                        if (currentStatus == OrderStatuses.BuyerConfirming)
                         {
                             model.ShowConfirm = true;
                         }
 
-                        if (currentStatus == "sellerProviding")
+                        if (currentStatus == OrderStatuses.SellerProviding)
                         {
                             model.ShowProvideData = true;
                         }
-                        model.CurrentStatusName = order.OrderStatuses.Last.Value.Name;
-                        model.OrderStatuses = order.OrderStatuses;
-                        model.OrderStatuses.RemoveLast();
+                        model.CurrentStatusName = order.CurrentStatus.DuringName;
+                        model.StatusLogs = order.StatusLogs;
                         model.ModeratorId = order.MiddlemanId;
                         return View(model);
                     }
+
                 }
 
             }

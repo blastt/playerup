@@ -13,14 +13,14 @@ namespace Market.Data.Repositories
         public OrderStatusRepository(IDbFactory dbFactory)
             : base(dbFactory) { }
 
-        public OrderStatus GetOrderStatusByValue(string name)
+        public OrderStatus GetOrderStatusByValue(OrderStatuses value)
         {
-            return DbContext.OrderStatuses.FirstOrDefault(g => g.Value == name);
+            return DbContext.OrderStatuses.FirstOrDefault(g => g.Value == value);
         }
     }
 
     public interface IOrderStatusRepository : IRepository<OrderStatus>
     {
-        OrderStatus GetOrderStatusByValue(string userName);
+        OrderStatus GetOrderStatusByValue(OrderStatuses value);
     }
 }

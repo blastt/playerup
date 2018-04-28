@@ -72,7 +72,9 @@ namespace Market.Model.Models
 
         public virtual Offer Offer { get; set; }
 
-        public virtual LinkedList<OrderStatus> OrderStatuses { get; set; } = new LinkedList<OrderStatus>();
+        public virtual int CurrentStatusId { get; set; }
+        public virtual OrderStatus CurrentStatus { get; set; }
+        public virtual IList<StatusLog> StatusLogs { get; set; }
 
         public virtual string MiddlemanId { get; set; }
         public virtual UserProfile Middleman { get; set; }

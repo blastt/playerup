@@ -2,17 +2,18 @@
     padding-top: 130px
 }
 
-th{
+th {
     font-weight: 400
 }
-.test{
-    position:absolute;
-    width:100%;
-    height:100%;
+
+.test {
+    position: absolute;
+    width: 100%;
+    height: 100%;
 }
 
-.card-footer{
-    z-index:1030
+.card-footer {
+    z-index: 1030
 }
 
 .content {
@@ -48,12 +49,12 @@ input[type="checkbox"].input-validation-error {
     display: none;
 }
 
-.nav-item{
+.nav-item {
     margin-left: 10px;
     margin-right: 10px
 }
 
-.navbar-nav{
+.navbar-nav {
     margin-left: 40px
 }
 /* Set padding to keep content from hitting the edges */
@@ -110,13 +111,12 @@ textarea {
 /*style the items (options), including the selected item:*/
 .select-items div, .select-selected {
     padding: 8px 12px;
-    
     line-height: 40px;
     cursor: pointer;
     user-select: none;
 }
 
-.filter-group{
+.filter-group {
     margin-top: 60px
 }
 /*style items (options):*/
@@ -157,7 +157,6 @@ ul {
 }
 
 .img-circle {
-
     border: 0px;
     border-radius: 100px;
 }
@@ -198,19 +197,16 @@ ul {
 }
 
 .filter {
-    
     font-size: 14px;
     padding: 25px 20px
 }
 
 .filter-header {
     padding-top: 5px;
-    
 }
 
 .filter-body {
     padding-top: 5px;
-
 }
 
 .filter-specific {
@@ -391,8 +387,7 @@ ul {
 }
 
 .offer-details-rank {
-    padding-left:0px;
-
+    padding-left: 0px;
     text-align: center;
 }
 
@@ -415,6 +410,7 @@ ul {
     width: 100%;
     margin-top: 5px
 }
+
 .feed-item-info {
     padding-top: 5px
 }
@@ -438,13 +434,13 @@ ul {
 
 .feed-item-leftby {
     width: auto;
-
     font-size: small
 }
 
 .feed-count-label {
     font-weight: 700
 }
+
 .account-list {
     padding-left: 0px;
     height: 44px;
@@ -476,7 +472,6 @@ ul {
 }
 
 .account-menu-item {
-    
     color: #a2d7ff;
     display: inline;
     padding: 10px 35px;
@@ -724,6 +719,38 @@ div#users-contain {
 
 
 /*----------------------------------------------*/
+.btn-signin {
+    border-radius: 50px;
+    background-color: #62b2e2;
+    color: white;
+    padding: 6px 20px;
+    font-weight: 300;
+}
+
+    .btn-signin:hover {
+        border-radius: 50px;
+        background-color: #72caff;
+        color: white;
+        padding: 6px 20px;
+        font-weight: 300
+    }
+
+.btn-signup {
+    border-radius: 50px;
+    background-color: #62b2e2;
+    color: white;
+    padding: 6px 20px;
+    font-weight: 300;
+}
+
+    .btn-signup:hover {
+        border-radius: 50px;
+        background-color: #72caff;
+        color: white;
+        padding: 6px 20px;
+        font-weight: 300
+    }
+
 .btn-close {
     border-radius: 50px;
     background-color: #ff5656;
@@ -742,13 +769,13 @@ div#users-contain {
     box-shadow: 0 4px 15px 0px rgba(98, 178, 226, 0.70);
 }
 
-.btn-search:hover {
-    border-radius: 50px;
-    background-color: rgba(98, 178, 226, 0.75);
-    color: white;
-    padding: 6px 20px;
-    font-weight: 300
-}
+    .btn-search:hover {
+        border-radius: 50px;
+        background-color: rgba(98, 178, 226, 0.75);
+        color: white;
+        padding: 6px 20px;
+        font-weight: 300
+    }
 
 .btn-submit {
     border-radius: 50px;
@@ -758,6 +785,7 @@ div#users-contain {
     font-weight: 300;
     box-shadow: 0 4px 15px 0px rgba(98, 178, 226, 0.70);
 }
+
     .btn-submit:hover {
         border-radius: 50px;
         background-color: rgba(98, 178, 226, 0.75);
@@ -765,7 +793,7 @@ div#users-contain {
         padding: 6px 20px;
         font-weight: 300
     }
-    
+
 
 .btn-details {
     border-radius: 50px;
@@ -773,7 +801,6 @@ div#users-contain {
     color: #62b2e2;
     padding: 6px 20px;
     border: 1px solid rgba(0, 0, 0, 0.1);
-    
 }
 
     .btn-details:hover {
@@ -808,13 +835,14 @@ div#users-contain {
     font-weight: 300;
     box-shadow: 0 4px 15px 0px rgba(98, 178, 226, 0.70);
 }
-.btn-buy:hover {
-    border-radius: 50px;
-    background-color: rgba(98, 178, 226, 0.75);
-    color: white;
-    padding: 6px 20px;
-    font-weight: 300
-}
+
+    .btn-buy:hover {
+        border-radius: 50px;
+        background-color: rgba(98, 178, 226, 0.75);
+        color: white;
+        padding: 6px 20px;
+        font-weight: 300
+    }
 
 .btn-buy-big {
     border-radius: 50px;
@@ -838,6 +866,7 @@ div#users-contain {
     outline: 0;
     background-color: rgba(0, 0, 0, 0.50);
 }
+
 .hidden {
     opacity: 1;
 }
@@ -968,13 +997,13 @@ div#users-contain {
 
 
 
-.table-white{
+.table-white {
     background-color: #fff
 }
 
 
 
-.current{
+.current {
     background-color: aquamarine
 }
 
@@ -993,7 +1022,7 @@ div#users-contain {
     border-radius: 15px;
 }
 
-.block-label{
+.block-label {
     padding-top: 20px;
     padding-left: 30px;
     color: #a9a9a9
@@ -1002,7 +1031,6 @@ div#users-contain {
 .block-body {
     padding-top: 20px;
     padding-left: 20px;
-    
 }
 
 .label-details {
@@ -1011,26 +1039,25 @@ div#users-contain {
     color: #a9a9a9
 }
 
-.main-block{
+.main-block {
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     padding-bottom: 50px;
     margin-top: 60px;
     margin-bottom: 30px
 }
 
-.positive-feedback{
-    background-image:url(Images/smile-pos.png);
+.positive-feedback {
+    background-image: url(Images/smile-pos.png);
     width: 16px
 }
 
-.offer-list{
+.offer-list {
     margin-top: 30px
 }
 
-.game-title{
+.game-title {
     font-size: 16px;
-    
-    color:#a9a9a9;
+    color: #a9a9a9;
     font-weight: 300
 }
 
@@ -1040,12 +1067,11 @@ div#users-contain {
     float: right
 }
 
-.btn-link-sell:hover {
-    border: 1px solid #62b2e2;
-    background-color:#62b2e2;
-    color: #fff;
-    
-}
+    .btn-link-sell:hover {
+        border: 1px solid #62b2e2;
+        background-color: #62b2e2;
+        color: #fff;
+    }
 
 .info-user-block {
     padding: 25px 40px;
@@ -1070,15 +1096,15 @@ div#users-contain {
     border-bottom-right-radius: 15px;
 }
 
-.offer-game{
+.offer-game {
     width: 24%
 }
 
-.offer-header{
+.offer-header {
     width: 38%
 }
 
-.offer-price{
+.offer-price {
     width: 20%
 }
 
@@ -1126,7 +1152,7 @@ div#users-contain {
     padding: 10px 0;
 }
 
-.feedback-grade{
+.feedback-grade {
     width: 10%
 }
 
@@ -1143,7 +1169,7 @@ div#users-contain {
 }
 /*---Feedback List Item*/
 
-.text-gray{
+.text-gray {
     color: #a9a9a9
 }
 
@@ -1191,27 +1217,26 @@ div#users-contain {
         border-bottom: 1px solid #ffffff;
         position: relative;
     }
-.info-name{
+
+.info-name {
     margin-top: 20px;
     margin-bottom: 20px;
     padding-bottom: 20px;
     border-bottom: 1px solid rgba(0, 0, 0, 0.1)
 }
 
-.info-name-nick{
+.info-name-nick {
     text-align: left
 }
 
 .info-name-contact {
-    text-align:right
+    text-align: right
 }
 
-.btn-contact{
-    color:#62b2e2;
-   
+.btn-contact {
+    color: #62b2e2;
     border: 1px solid #62b2e2;
     background-color: transparent
-
 }
 
 .btn-contact-gray {
@@ -1220,8 +1245,7 @@ div#users-contain {
     background-color: transparent
 }
 
-.user-info-feedbackscore{
-
+.user-info-feedbackscore {
 }
 
 .info-rate-date {
@@ -1230,11 +1254,11 @@ div#users-contain {
     border-bottom: 1px solid rgba(0, 0, 0, 0.1)
 }
 
-.info-rate{
+.info-rate {
     text-align: left
 }
 
-.info-date{
+.info-date {
     text-align: right;
     font-size: 12px;
     font-weight: 300
@@ -1276,15 +1300,15 @@ i {
     line-height: 100%;
 }
 
-.ul-info-rate{
+.ul-info-rate {
     padding-left: 0px;
 }
 
-.li-info-rate{
+.li-info-rate {
     padding: 10px 0px;
 }
 
-.icon-info-rate{
+.icon-info-rate {
     margin-right: 5px
 }
 
@@ -1293,12 +1317,12 @@ i {
     margin-bottom: 20px;
 }
 
-.page-container{
+.page-container {
     margin-top: 20px;
     margin-bottom: 20px
 }
 
-.user-info-title{
+.user-info-title {
     margin-bottom: 20px;
     font-size: 18px
 }
@@ -1308,9 +1332,10 @@ i {
     line-height: 100%;
 }
 
-.user-info-content{
+.user-info-content {
     margin-top: 60px
 }
+
 .buy-content {
     /*margin-top: 120px*/
 }
@@ -1330,7 +1355,6 @@ i {
 
 
 .footer-left {
-
     width: 40%;
 }
 
@@ -1338,21 +1362,21 @@ i {
     width: 40%;
 }
 
-.footer-right{
+.footer-right {
     width: 20%
 }
 
 dl dt {
     font-weight: 700;
-
     padding-bottom: 16px;
     font-size: 26px
 }
-dl dd a{
+
+dl dd a {
     font-size: 14px;
     color: #333
 }
-    /*\e60b === \e605*/
+/*\e60b === \e605*/
 
 .order-details-container {
     background-clip: border-box;
@@ -1363,9 +1387,9 @@ dl dd a{
 }
 
 
-.order-details-body{
+.order-details-body {
     padding: 20px;
-    padding-top:0px;
+    padding-top: 0px;
 }
 
 .warning-row {
@@ -1413,15 +1437,14 @@ dl dd a{
 }
 
 
-.page-header{
+.page-header {
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     padding-bottom: 5px;
     margin-bottom: 30px;
 }
 
-.help-content{
+.help-content {
     margin-top: 80px;
-    
 }
 
 
@@ -1480,11 +1503,9 @@ dl dd a{
 
 .details-user-feedback {
     margin-top: 5px;
-
 }
 
 .price-container {
-
     margin-right: 0px;
     margin-left: 0px;
 }
@@ -1509,7 +1530,6 @@ dl dd a{
 
 .order-details-log-head {
     padding: 20px;
-
 }
 
 .order-details-log-body {
@@ -1538,11 +1558,9 @@ dl dd a{
 
 .node-circle {
     margin-left: 0px;
-    
-   bottom: -9px;
-
+    bottom: -9px;
     position: absolute;
-    vertical-align:bottom;
+    vertical-align: bottom;
     font-size: 12px;
     line-height: 16px;
     width: 18px;
@@ -1578,21 +1596,20 @@ dl dd a{
     padding: 20px;
 }
 
-.success-block{
+.success-block {
     font-weight: 700;
     font-size: 22px;
     margin-bottom: 50px
 }
 
-.line-height-40{
+.line-height-40 {
     line-height: 40px;
     margin-bottom: 0px
 }
 
-.message-container{
+.message-container {
     padding: 30px;
     background-color: #fff;
-
 }
 
 .message-inputs {
@@ -1657,22 +1674,24 @@ dl dd a{
         display: block;
         font-weight: 500;
     }
+
 .font-size-14 {
     font-size: 14px
 }
 
-.font-size-16{
-    font-size:16px
+.font-size-16 {
+    font-size: 16px
 }
+
 .font-size-18 {
     font-size: 18px
 }
 
-.account-settings-body{
+.account-settings-body {
     padding: 35px
 }
 
-.account-offer-game{
+.account-offer-game {
     width: 10%;
 }
 
@@ -1738,9 +1757,9 @@ dl dd a{
     margin-bottom: 10px;
 }
 
-.ul-footer li{
+.ul-footer li {
     padding: 14px 14px;
-    display:inline;
+    display: inline;
 }
 
 .ul-social li {

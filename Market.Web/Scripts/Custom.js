@@ -16,7 +16,6 @@
 //------
 $(document).ready(function () {
     ResetOffers();
-    H();
 });
 
 

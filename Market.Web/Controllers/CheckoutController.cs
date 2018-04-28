@@ -62,30 +62,28 @@ namespace Trader.WEB.Controllers
             if (offer != null && offer.Order == null && offer.State == OfferState.active)
             {
                 offer.State = OfferState.closed;
-                OrderStatus orderStatus1 = new OrderStatus
-                {
-                    Value = "orderCreating",
-                    FinisedName = "Заказ создан",
-                    Name = "Заказ создается",
-                    DateFinished = DateTime.Now
-                };
 
-                OrderStatus orderStatus2 = new OrderStatus
+                offer.Order.StatusLogs.Add(new StatusLog()
                 {
-                    Value = "buyerPaying",
-                    FinisedName = "Покупатель оплатил заказ",
-                    Name = "Покупатель оплачивает заказ",
-                };
-
+                    OldStatus = null,
+                    NewStatus = _orderStatusService.GetOrderStatusByValue(OrderStatuses.OrderCreating),
+                    TimeStamp = DateTime.Now
+                });
+                offer.Order.StatusLogs.Add(new StatusLog()
+                {
+                    OldStatus = offer.Order.CurrentStatus,
+                    NewStatus = _orderStatusService.GetOrderStatusByValue(OrderStatuses.BuyerPaying),
+                    TimeStamp = DateTime.Now
+                });
                 offer.Order = new Order
                 {
                     BuyerId = User.Identity.GetUserId(),
                     SellerId = model.SellerId,
-                    DateCreated = DateTime.Now
+                    DateCreated = DateTime.Now,
+                    CurrentStatus = _orderStatusService.GetOrderStatusByValue(OrderStatuses.BuyerPaying)
                 };
 
-                offer.Order.OrderStatuses.AddLast(orderStatus1);
-                offer.Order.OrderStatuses.AddLast(orderStatus2);
+                _offerService.UpdateOffer(offer);
                 _offerService.SaveOffer();
 
                 var userProfiles = _userProfileService.GetUserProfiles()
@@ -98,7 +96,7 @@ namespace Trader.WEB.Controllers
                         MessageBody = "Get"
                     });
                 }
-                return RedirectToAction("Paid", "Checkout", new { id = offer.Order.Id  });
+                return RedirectToAction("Paid", "Checkout", new { id = offer.Order.Id });
 
             }
             return View();
@@ -119,21 +117,18 @@ namespace Trader.WEB.Controllers
                 Order order = _orderService.GetOrder(Id.Value);
                 if (order != null)
                 {
-                    var currentOrderStatus = _orderStatusService.GetCurrentOrderStatus(order);
-
-                    currentOrderStatus.DateFinished = DateTime.Now;
-                    OrderStatus orderStatus = new OrderStatus
+                    order.StatusLogs.Add(new StatusLog()
                     {
-                        Value = "MiddlemanSearching",
-                        Name = "Поиск гаранта",
-                        FinisedName = "Гарант найден",
-                    };
+                        OldStatus = order.CurrentStatus,
+                        NewStatus = _orderStatusService.GetOrderStatusByValue(OrderStatuses.MiddlemanFinding),
+                        TimeStamp = DateTime.Now
+                    });
+                    order.CurrentStatus = _orderStatusService.GetOrderStatusByValue(OrderStatuses.MiddlemanFinding);
                     order.BuyerChecked = false;
                     order.SellerChecked = false;
-                    order.OrderStatuses.AddLast(orderStatus);
                     _orderService.UpdateOrder(order);
                     _orderService.SaveOrder();
-                }                                 
+                }
             }
 
         }
@@ -150,7 +145,7 @@ namespace Trader.WEB.Controllers
             return Convert.ToBase64String(md5.ComputeHash(Encoding.UTF8.GetBytes(hash))) == context.Request.Form["ik_sign"];
         }
 
-        
+
         //public ActionResult Paid(int? Id, string moderatorId, string buyerId, string sellerId)
         //{
         //    if (Id != null && moderatorId != null && buyerId != null && sellerId != null)
@@ -190,11 +185,10 @@ namespace Trader.WEB.Controllers
             if (Id != null && moderatorId != null && buyerId != null && sellerId != null)
             {
                 Order order = _orderService.GetOrder(Id.Value);
-                var currentOrderStatus = _orderStatusService.GetCurrentOrderStatus(order);
                 if (sellerId == User.Identity.GetUserId())
                 {
                     if (order.MiddlemanId == moderatorId && order.SellerId == sellerId &&
-                    order.BuyerId == buyerId && currentOrderStatus.Value == "sellerProviding")
+                    order.BuyerId == buyerId && order.CurrentStatus.Value == OrderStatuses.SellerProviding)
                     {
                         AccountInfoViewModel model = new AccountInfoViewModel
                         {
@@ -236,24 +230,24 @@ namespace Trader.WEB.Controllers
                     var order = _orderService.GetOrder(model.SteamLogin, model.ModeratorId, model.SellerId, model.BuyerId);
                     if (order != null)
                     {
-                        var currentOrderStatus = _orderStatusService.GetCurrentOrderStatus(order);
-                        if (currentOrderStatus != null)
+                        if (order.CurrentStatus != null)
                         {
-                            if (order.AccountInfo == null && currentOrderStatus.Value == "sellerProviding")
+                            if (order.AccountInfo == null && order.CurrentStatus.Value == OrderStatuses.SellerProviding)
                             {
-                                currentOrderStatus.DateFinished = DateTime.Now;
-                                OrderStatus orderStatus = new OrderStatus
+                                order.StatusLogs.Add(new StatusLog()
                                 {
-                                    Value = "middlemanChecking",
-                                    Name = "Гарант проверяет данные",
-                                    FinisedName = "Гарант проверил данные"
-                                };                                
+                                    OldStatus = order.CurrentStatus,
+                                    NewStatus = _orderStatusService.GetOrderStatusByValue(OrderStatuses.MidddlemanChecking),
+                                    TimeStamp = DateTime.Now
+                                });
+                                order.CurrentStatus = _orderStatusService.GetOrderStatusByValue(OrderStatuses.MidddlemanChecking);
+
+
                                 order.BuyerChecked = false;
                                 order.SellerChecked = false;
-                                order.OrderStatuses.AddLast(orderStatus);
                                 order.AccountInfo = accountInfo;
                                 _orderService.SaveOrder();
-                                return RedirectToAction("ProvideData", new { moderatorId = model.ModeratorId });                                
+                                return RedirectToAction("ProvideData", new { moderatorId = model.ModeratorId });
                             }
                         }
                     }
@@ -269,27 +263,24 @@ namespace Trader.WEB.Controllers
                 var order = _orderService.GetOrder(orderId.Value);
                 if (order != null)
                 {
-                    var currentOrderStatus = _orderStatusService.GetCurrentOrderStatus(order);
-                    if (currentOrderStatus != null)
+                    if (order.CurrentStatus != null)
                     {
-                        if (order.BuyerId == User.Identity.GetUserId() && currentOrderStatus.Value == "buyerConfirming")
+                        if (order.BuyerId == User.Identity.GetUserId() && order.CurrentStatus.Value == OrderStatuses.BuyerConfirming)
                         {
-                            currentOrderStatus.DateFinished = DateTime.Now;
-                            OrderStatus orderStatus = new OrderStatus
+                            order.StatusLogs.Add(new StatusLog()
                             {
-                                Value = "payingToSeller",
-                                Name = "Отправка средств продавцу",
-                                FinisedName = "Средства продавцу отправлены"
-                            };
-
-                            if (orderStatus != null)
-                            {
-                                order.BuyerChecked = false;
-                                order.SellerChecked = false;
-                                order.OrderStatuses.AddLast(orderStatus);
-                                _orderService.SaveOrder();
-                                return View();
-                            }
+                                OldStatus = order.CurrentStatus,
+                                NewStatus = _orderStatusService.GetOrderStatusByValue(OrderStatuses.PayingToSeller),
+                                TimeStamp = DateTime.Now
+                            });
+                            order.CurrentStatus = _orderStatusService.GetOrderStatusByValue(OrderStatuses.PayingToSeller);
+                            
+                            order.BuyerChecked = false;
+                            order.SellerChecked = false;
+                            
+                            _orderService.SaveOrder();
+                            return View();
+                            
 
                         }
                     }

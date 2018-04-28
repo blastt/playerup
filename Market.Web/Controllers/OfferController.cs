@@ -564,13 +564,9 @@ namespace Market.Web.Controllers
             if (offer != null)
             {
                 if (offer.Order != null)
-                {
-                    OrderStatus orderStatus = offer.Order.OrderStatuses.OrderBy(m => m.DateFinished).LastOrDefault();
-                    if (orderStatus != null && orderStatus.Value == "")
-                    {
-                        exists = false;
-                        return Json(!exists, JsonRequestBehavior.AllowGet);
-                    }
+                {                    
+                    exists = false;
+                    return Json(!exists, JsonRequestBehavior.AllowGet);                    
                 }
                 exists = true;
                 return Json(!exists, JsonRequestBehavior.AllowGet);

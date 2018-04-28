@@ -38,6 +38,7 @@
         a.addEventListener("click", function (e) {
             /*when the select box is clicked, close any other select boxes,
             and open/close the current select box:*/
+            
             e.stopPropagation();
             closeAllSelect(this);
             this.nextSibling.classList.toggle("select-hide");
@@ -63,6 +64,7 @@
             }
         }
     }
+    alert("");
     document.addEventListener("click", closeAllSelect);
 }
 
