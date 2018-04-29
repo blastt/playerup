@@ -31,7 +31,7 @@ namespace Market.Model.Models
 
         public bool SellerPaysMiddleman { get; set; }
 
-        public decimal MiddlemanPrice
+        public decimal? MiddlemanPrice
         {
             get
             {

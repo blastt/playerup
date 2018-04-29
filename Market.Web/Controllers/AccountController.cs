@@ -348,7 +348,16 @@ namespace Market.Web.Controllers
                     return HttpNotFound("User exists!");
                 }
                 var user = new ApplicationUser { UserName = model.UserName, Email = model.Email };
-                
+                byte[] imageData = System.IO.File.ReadAllBytes(Server.MapPath("~/Content/Images/noavatar.png"));
+                UserProfile profile = new UserProfile
+                {
+                    Id = user.Id,                                       
+                    Avatar = imageData,
+                    Name = user.UserName,
+                    RegistrationDate = DateTime.Now,
+                    ApplicationUser = user
+                };
+                _userProfileService.CreateUserProfile(profile);
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
@@ -359,18 +368,7 @@ namespace Market.Web.Controllers
                     string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                     var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     await UserManager.SendEmailAsync(user.Id, "Подтверждение учетной записи", "Подтвердите вашу учетную запись, щелкнув <a href=\"" + callbackUrl + "\">здесь</a>");
-                    byte[] imageData = System.IO.File.ReadAllBytes(Server.MapPath("~/Content/Images/noavatar.png"));
-
-                    UserProfile profile = new UserProfile
-                    {
-                        Id = user.Id,
-                        Avatar = imageData,
-                        Name = user.UserName,
-                        RegistrationDate = DateTime.Now
-                    };
-                    _userProfileService.CreateUserProfile(profile);                    
-                    user.UserProfile = profile;
-                    _userProfileService.SaveUserProfile();
+                    
 
 
                     return RedirectToAction("Index", "Home");

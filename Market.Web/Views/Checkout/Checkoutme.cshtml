@@ -54,7 +54,7 @@
         </div>
         <div class="col-lg-4">
             <div class="card p-4 text-center">
-                @using (Html.BeginForm("Checkotme", "Checkout", FormMethod.Post))
+                @using (Html.BeginForm("Checkoutme", "Checkout", FormMethod.Post))
                 {
                     <input type="hidden" name="offerId" value="@Model.OfferId" />
                     <input type="hidden" name="sellerId" value="@Model.SellerId" />

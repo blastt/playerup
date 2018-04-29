@@ -146,7 +146,7 @@
                         <div class="order-details-col col-md-5">
                             @if (Model.ShowCloseButton)
                             {
-                                @Html.ActionLink("Закрыть сделку", "Close", "Order", new { orderId = Model.Id }, new { @class = "btn btn-close" })
+                                @Html.ActionLink("Закрыть сделку", "Close", "Order", new { orderId = Model.Id }, new { @class = "btn btn-close mr-3" })
                             }
 
                             @if (Model.ShowProvideData)
@@ -157,7 +157,7 @@
                                     @Html.HiddenFor(m => m.Id)
                                     @Html.HiddenFor(m => m.BuyerId)
                                     @Html.HiddenFor(m => m.SellerId)
-                                    <input type="submit" value="Предоставить данные" class="btn btn-provide" />
+                                    <input type="submit" value="Предоставить данные" class="btn btn-provide mr-3" />
                                 }
 
                             }
@@ -168,7 +168,7 @@
                                     @Html.Hidden("receiverId", Model.BuyerId)
                                     @Html.Hidden("OrderId", Model.Id)
 
-                                    <input type="submit" value="Оставить отзыв покупателю" class="btn btn-leavefeedback" />
+                                    <input type="submit" value="Оставить отзыв покупателю" class="btn btn-leavefeedback mr-3" />
                                 }
                             }
 
@@ -189,13 +189,13 @@
                 </div>
                 <div class="order-details-log-body">
 
-                    @foreach (var status in Model.OrderStatuses)
+                    @foreach (var status in Model.StatusLogs)
                     {
 
                         <div class="order-details-node">
                             <div class="node-circle"></div>
-                            <div class="node-name">@status.FinisedName</div>
-                            <div class="node-date">@status.DateFinished</div>
+                            <div class="node-name">@status.OldStatus.FinishedName</div>
+                            <div class="node-date">@status.TimeStamp</div>
                         </div>
 
                     }

@@ -26,7 +26,7 @@ namespace Market.Model.Models
             set; get;
         }
 
-        public int Rating
+        public int? Rating
         {
             get
             {
@@ -38,7 +38,7 @@ namespace Market.Model.Models
             }
         }
 
-        public int AllFeedbackCount
+        public int? AllFeedbackCount
         {
             get
             {
@@ -50,13 +50,13 @@ namespace Market.Model.Models
             }
         }
 
-        public double PositiveFeedbackProcent
+        public double? PositiveFeedbackProcent
         {
             get
             {
                 if (AllFeedbackCount != 0)
                 {
-                    double pos = Math.Round((double)(100 * PositiveFeedbackCount) / (AllFeedbackCount), 2);
+                    double pos = Math.Round((double)(100 * PositiveFeedbackCount) / (PositiveFeedbackCount + NegativeFeedbackCount), 2);
                     return pos;
                 }
                 return 0;
@@ -67,13 +67,13 @@ namespace Market.Model.Models
             }
         }
 
-        public double NegativeFeedbackProcent
+        public double? NegativeFeedbackProcent
         {
             get
             {
                 if (AllFeedbackCount != 0)
                 {
-                    double neg = Math.Round((double)(100 * NegativeFeedbackCount) / (AllFeedbackCount), 2);
+                    double neg = Math.Round((double)(100 * NegativeFeedbackCount) / (PositiveFeedbackCount + NegativeFeedbackCount), 2);
                     return neg;
                 }
                 return 0;
@@ -84,7 +84,7 @@ namespace Market.Model.Models
             }
         }
 
-        public int SuccessOrderRate
+        public int? SuccessOrderRate
         {
 
             get

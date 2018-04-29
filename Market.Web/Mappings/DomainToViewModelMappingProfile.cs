@@ -106,11 +106,13 @@ namespace Market.Web.Mappings
 
             CreateMap<Order, OrderViewModel>()
                 .ForMember(o => o.BuyerChecked, map => map.MapFrom(vm => vm.BuyerChecked))
+
                 .ForMember(o => o.SellerChecked, map => map.MapFrom(vm => vm.SellerChecked))
                 .ForPath(o => o.Id, map => map.MapFrom(vm => vm.Id))
                 .ForPath(o => o.BuyerName, map => map.MapFrom(vm => vm.Buyer.Name))
                 .ForMember(o => o.DateCreated, map => map.MapFrom(vm => vm.DateCreated))
                 .ForPath(o => o.OfferHeader, map => map.MapFrom(vm => vm.Offer.Header))
+                .ForPath(o => o.CurrentStatus, map => map.MapFrom(vm => vm.CurrentStatus))
                 .ForPath(o => o.OfferId, map => map.MapFrom(vm => vm.Offer.Id))
                 .ForPath(o => o.OfferPrice, map => map.MapFrom(vm => vm.Offer.Price))
                 .ForPath(o => o.SellerName, map => map.MapFrom(vm => vm.Seller.Name));

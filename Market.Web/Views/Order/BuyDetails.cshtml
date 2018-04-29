@@ -58,7 +58,6 @@
                     </div>
                     <div class="order-details-row row">
                         <div class="order-details-col col-md-5">
-                            @{ var currentStatus = Model.OrderStatuses.Last().Value; }
                             @if (Model.ShowAccountInfo)
                             {
                                 <div class="alert alert-dismissible alert-primary">
@@ -88,7 +87,7 @@
                                 {
                                     @Html.HiddenFor(m => m.ModeratorId)
                                     @Html.Hidden("OrderId", Model.Id)
-                                    <input type="submit" value="Подтвердить получение" class="btn btn-provide" />
+                                    <input type="submit" value="Подтвердить получение" class="btn btn-provide mr-3" />
                                 }
 
                             }
@@ -99,17 +98,21 @@
                                 {
                                     @Html.Hidden("receiverId", Model.SellerId)
                                     @Html.Hidden("OrderId", Model.Id)
-                                    <input type="submit" value="Оставить отзыв продавцу" class="btn btn-leavefeedback" />
+                                    <input type="submit" value="Оставить отзыв продавцу" class="btn btn-leavefeedback mr-3" />
                                 }
                             }
                             @if (Model.ShowCloseButton)
                             {
-                                @Html.ActionLink("Закрыть сделку", "Close", "Order", new { orderId = Model.Id }, new { @class = "btn btn-close" })
+                                @Html.ActionLink("Закрыть сделку", "Close", "Order", new { orderId = Model.Id }, new { @class = "btn btn-close mr-3" })
                             }
 
                             @if (Model.ShowPayButton)
                             {
-                                @Html.ActionLink("Оплатить", "Close", "Order", new { orderId = Model.Id }, new { })
+                                using (Html.BeginForm("Paid","Checkout", FormMethod.Post))
+                                {
+                                    <input type="hidden" name="orderId" value="@Model.Id" />
+                                    <input type="submit" name="Pay" value="Оплатить" class="btn btn-pay mr-3" />
+                                }
                             }
                         </div>
                     </div>
@@ -125,13 +128,13 @@
 
                 </div>
                 <div class="order-details-log-body">
-                    @foreach (var status in Model.OrderStatuses)
+                    @foreach (var status in Model.StatusLogs)
                     {
 
                         <div class="order-details-node">
                             <div class="node-circle"></div>
-                            <div class="node-name">@status.FinisedName</div>
-                            <div class="node-date">@status.DateFinished</div>
+                            <div class="node-name">@status.OldStatus.FinishedName</div>
+                            <div class="node-date">@status.TimeStamp</div>
                         </div>
 
                     }

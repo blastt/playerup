@@ -719,6 +719,25 @@ div#users-contain {
 
 
 /*----------------------------------------------*/
+.btn-pay {
+    border-radius: 50px;
+    background-color: #62b2e2;
+    color: white;
+    padding: 6px 20px;
+    font-weight: 300;
+    box-shadow: 0 4px 15px 0px rgba(98, 178, 226, 0.70);
+}
+
+    .btn-pay:hover {
+        border-radius: 50px;
+        background-color: #72caff;
+        color: white;
+        padding: 6px 20px;
+        font-weight: 300;
+        box-shadow: 0 4px 15px 0px rgba(98, 178, 226, 0.70);
+    }
+
+
 .btn-signin {
     border-radius: 50px;
     background-color: #62b2e2;
@@ -727,13 +746,13 @@ div#users-contain {
     font-weight: 300;
 }
 
-    .btn-signin:hover {
-        border-radius: 50px;
-        background-color: #72caff;
-        color: white;
-        padding: 6px 20px;
-        font-weight: 300
-    }
+.btn-signin:hover {
+    border-radius: 50px;
+    background-color: #72caff;
+    color: white;
+    padding: 6px 20px;
+    font-weight: 300
+}
 
 .btn-signup {
     border-radius: 50px;
@@ -757,8 +776,16 @@ div#users-contain {
     color: white;
     padding: 6px 20px;
     font-weight: 300;
-    box-shadow: 0 4px 15px 0px rgba(98, 178, 226, 0.70);
+    box-shadow: 0 4px 15px 0px rgba(255, 86, 86, 0.7);
 }
+
+    .btn-close:hover {
+        border-radius: 50px;
+        background-color: rgba(255, 86, 86, 0.75);
+        color: white;
+        padding: 6px 20px;
+        font-weight: 300;
+    }
 
 .btn-search {
     border-radius: 50px;

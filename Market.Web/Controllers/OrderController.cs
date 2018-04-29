@@ -200,7 +200,7 @@ namespace Market.Web.Controllers
                 var order = _orderService.GetOrder(orderId.Value);
                 if (order != null)
                 {
-                    if (order.BuyerId == User.Identity.GetUserId())
+                    if (order.SellerId == User.Identity.GetUserId())
                     {
                         order.BuyerChecked = true;
                         _orderService.SaveOrder();

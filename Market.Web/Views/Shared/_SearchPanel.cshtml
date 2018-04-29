@@ -18,14 +18,14 @@
                     </div>
 
                     <div class="form-group">
-                        <div class="custom-control custom-checkbox mr-sm-2">
+                        <div class="custom-control custom-checkbox  mb-3">
                             @{ string checkedSerchInDiscription = Model.SearchInDiscription ? "checked" : ""; }
 
                             <input type="checkbox" @checkedSerchInDiscription class="custom-control-input" id="searchInDiscription" onchange="SearchOffers();">
 
                             <label class="custom-control-label" for="searchInDiscription">Искать в описании</label>
                         </div>
-                        <div class="custom-control custom-checkbox mr-sm-2">
+                        <div class="custom-control custom-checkbox ">
                             @{ string checkedOnline = Model.IsOnline ? "checked" : ""; }
 
                             <input type="checkbox" @checkedOnline class="custom-control-input" id="isOnline" onchange="SearchOffers();">
@@ -51,7 +51,7 @@
                         </div>
 
 
-                       
+
                         <div class="price-container row">
                             <div class="filter-price-from">
                                 @Html.TextBox("PriceFrom", Math.Round(Model.PriceFrom, 0), new { @class = "form-control form-control-sm", id = "priceFrom" })
@@ -68,7 +68,6 @@
                             </div>
                         </div>
                         <div id="slider-range"></div>
-
                     </div>
 
 

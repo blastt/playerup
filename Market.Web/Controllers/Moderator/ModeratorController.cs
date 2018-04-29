@@ -73,7 +73,7 @@ namespace Market.Web.Controllers.Moderator
                 var order = _orderService.GetOrder(orderId.Value);
                 if (order.CurrentStatus != null)
                 {
-                    if (order != null && order.CurrentStatus.Value == OrderStatuses.MidddlemanChecking)
+                    if (order != null && order.CurrentStatus.Value == OrderStatuses.MiddlemanFinding)
                     {
                         order.StatusLogs.Add(new StatusLog()
                         {

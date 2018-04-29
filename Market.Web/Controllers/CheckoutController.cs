@@ -61,27 +61,22 @@ namespace Trader.WEB.Controllers
             Offer offer = _offerService.GetOffer(model.OfferId);
             if (offer != null && offer.Order == null && offer.State == OfferState.active)
             {
+                offer.Order = new Order
+                {
+                    BuyerId = User.Identity.GetUserId(),
+                    SellerId = offer.UserProfileId,
+                    Sum = 123321,
+                    DateCreated = DateTime.Now
+                };
                 offer.State = OfferState.closed;
 
                 offer.Order.StatusLogs.Add(new StatusLog()
                 {
-                    OldStatus = null,
-                    NewStatus = _orderStatusService.GetOrderStatusByValue(OrderStatuses.OrderCreating),
-                    TimeStamp = DateTime.Now
-                });
-                offer.Order.StatusLogs.Add(new StatusLog()
-                {
-                    OldStatus = offer.Order.CurrentStatus,
+                    OldStatus = _orderStatusService.GetOrderStatusByValue(OrderStatuses.OrderCreating),
                     NewStatus = _orderStatusService.GetOrderStatusByValue(OrderStatuses.BuyerPaying),
                     TimeStamp = DateTime.Now
                 });
-                offer.Order = new Order
-                {
-                    BuyerId = User.Identity.GetUserId(),
-                    SellerId = model.SellerId,
-                    DateCreated = DateTime.Now,
-                    CurrentStatus = _orderStatusService.GetOrderStatusByValue(OrderStatuses.BuyerPaying)
-                };
+                offer.Order.CurrentStatus = _orderStatusService.GetOrderStatusByValue(OrderStatuses.BuyerPaying);
 
                 _offerService.UpdateOffer(offer);
                 _offerService.SaveOffer();
@@ -110,12 +105,13 @@ namespace Trader.WEB.Controllers
         }
 
         [HttpPost]
-        public void Paid(int? Id)
+        public void Paid(int? orderId)
         {
-            if (Id != null)
+            // Добавить логику оплаты
+            if (orderId != null)
             {
-                Order order = _orderService.GetOrder(Id.Value);
-                if (order != null)
+                Order order = _orderService.GetOrder(orderId.Value);
+                if (order != null && order.CurrentStatus.Value == OrderStatuses.BuyerPaying)
                 {
                     order.StatusLogs.Add(new StatusLog()
                     {
@@ -124,6 +120,32 @@ namespace Trader.WEB.Controllers
                         TimeStamp = DateTime.Now
                     });
                     order.CurrentStatus = _orderStatusService.GetOrderStatusByValue(OrderStatuses.MiddlemanFinding);
+                    order.BuyerChecked = false;
+                    order.SellerChecked = false;
+                    _orderService.UpdateOrder(order);
+                    _orderService.SaveOrder();
+                }
+            }
+
+        }
+
+        // этот метод вывызается когда средства были доставлены продавцу
+        [HttpPost]
+        public void SellerWasPaid(int? orderId)
+        {
+            // Добавить логику оплаты
+            if (orderId != null)
+            {
+                Order order = _orderService.GetOrder(orderId.Value);
+                if (order != null && order.CurrentStatus.Value == OrderStatuses.PayingToSeller)
+                {
+                    order.StatusLogs.Add(new StatusLog()
+                    {
+                        OldStatus = order.CurrentStatus,
+                        NewStatus = _orderStatusService.GetOrderStatusByValue(OrderStatuses.ClosedSuccessfully),
+                        TimeStamp = DateTime.Now
+                    });
+                    order.CurrentStatus = _orderStatusService.GetOrderStatusByValue(OrderStatuses.ClosedSuccessfully);
                     order.BuyerChecked = false;
                     order.SellerChecked = false;
                     _orderService.UpdateOrder(order);
@@ -219,7 +241,7 @@ namespace Trader.WEB.Controllers
                 {
                     foreach (var role in moderator.ApplicationUser.Roles)
                     {
-                        if (role.RoleId == "2" && role.UserId == moderator.Id)
+                        if (role.RoleId == "1" && role.UserId == moderator.Id)
                         {
                             moderIsInrole = true;
                         }

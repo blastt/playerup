@@ -20,6 +20,7 @@ namespace Market.Data.Configuration
             Property(u => u.PositiveFeedbackProcent).HasDatabaseGeneratedOption(System.ComponentModel.DataAnnotations.Schema.DatabaseGeneratedOption.Computed);
             Property(u => u.NegativeFeedbackProcent).HasDatabaseGeneratedOption(System.ComponentModel.DataAnnotations.Schema.DatabaseGeneratedOption.Computed);
 
+            
             HasRequired(o => o.ApplicationUser).WithRequiredDependent(o => o.UserProfile).WillCascadeOnDelete(false);
             HasMany(m => m.FeedbacksMy).WithRequired(m => m.UserTo).HasForeignKey(m => m.UserToId).WillCascadeOnDelete(false);
             HasMany(m => m.FeedbacksToOthers).WithRequired(m => m.UserFrom).HasForeignKey(m => m.UserFromId).WillCascadeOnDelete(false);

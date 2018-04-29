@@ -6,7 +6,7 @@
                 <h4 class="mb-0 font-weight-light"> Найдено предложений: <span style="font-weight:700">@Model.Count()</span></h4> 
             </div>
             <div class="col-md-5">
-                <select class="form-control" id="sort" onchange="SearchOffers();">
+                <select class="custom-select" id="sort" onchange="SearchOffers();">
                     <option value="bestSeller" selected="selected">Лучшие продавцы</option>
                     <option value="priceDesc">От дорогих к дешевым</option>
                     <option value="priceAsc">От дешевых к дорогим</option>
@@ -36,7 +36,7 @@
                                                                                                     };
                 }
 
-                @Html.DropDownList("currency", currencyList, new { @class = "form-control", onchange = "submitAjaxForm(1);" })
+                @Html.DropDownList("currency", currencyList, new { @class = "custom-select", onchange = "submitAjaxForm(1);" })
             </div>
         </div>
 
