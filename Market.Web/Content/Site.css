@@ -22,7 +22,10 @@ th {
 
 /* styles for validation helpers */
 .field-validation-error {
-    color: #b94a48;
+    width: 100%;
+    margin-top: 0.25rem;
+    font-size: 80%;
+    color: #FF0039;
 }
 
 .field-validation-valid {
@@ -30,7 +33,7 @@ th {
 }
 
 .input-validation-error {
-    border: 1px solid #b94a48;
+    border: 1px solid #FF0039;
 }
 
 .valid {
@@ -182,6 +185,8 @@ ul {
 .navbar-dark .navbar-nav .nav-link {
     color: #b9b9b9;
 }
+
+
 
 .btn-sell {
     background-color: #62b2e2;
@@ -719,6 +724,24 @@ div#users-contain {
 
 
 /*----------------------------------------------*/
+.btn-activate {
+    border-radius: 50px;
+    /*background-color: #62b2e2;*/
+    border: 1px solid #62b2e2;
+    color: #62b2e2;
+    padding: 6px 20px;
+    font-weight: 400;
+}
+
+    .btn-activate:hover {
+        border-radius: 50px;
+        background-color: #62b2e2;
+        border: 1px solid #62b2e2;
+        color: #ffffff;
+        padding: 6px 20px;
+        font-weight: 400;
+    }
+
 .btn-pay {
     border-radius: 50px;
     background-color: #62b2e2;
@@ -1425,14 +1448,13 @@ dl dd a {
 
 .orders-count {
     border-radius: 0px;
-    border: 1px solid #fff;
+    border: 2px solid #333;
     position: absolute;
-    left: 12px;
+    left: 10px;
     top: 12px;
-    font-size: 12px;
+    font-size: 11px;
     line-height: 16px;
-    min-width: 18px;
-    min-height: 18px;
+    padding: 0px 5px;
     color: white;
     text-align: center;
     border-radius: 50px;
@@ -1441,10 +1463,9 @@ dl dd a {
 
 .messagess-count {
     position: absolute;
-    font-size: 12px;
+    font-size: 11px;
     line-height: 16px;
-    min-width: 18px;
-    min-height: 18px;
+    padding: 0px 5px;
     color: white;
     text-align: center;
     border-radius: 50px;
@@ -1452,9 +1473,9 @@ dl dd a {
 }
 
 .message-count-icon-pos {
-    left: 17px;
+    left: 13px;
     top: 12px;
-    border: 1px solid #fff;
+    border: 2px solid #333;
 }
 
 .message-count-block-pos {
@@ -1538,20 +1559,15 @@ dl dd a {
 }
 
 .order-details-node {
-    min-height: 120px;
     font-size: 14px;
     position: relative;
-    float: left;
-    -webkit-box-flex: 0;
-    -ms-flex: 0 0 16%;
-    flex: 0 0 16%;
-    width: 16%;
     padding-bottom: 20px;
-    border-bottom: 1px solid #a9a9a9
+    border-left: 1px solid #a9a9a9
 }
 
 .order-details-head {
     padding: 20px;
+    background-color: #fff
 }
 
 
@@ -1561,22 +1577,19 @@ dl dd a {
 
 .order-details-log-body {
     min-height: 150px;
-    padding: 20px;
+    padding: 40px;
     padding-top: 0px;
 }
 
 .node-name {
-    padding-left: 25px;
-    margin-bottom: 10px;
-    -webkit-box-flex: 0;
-    -ms-flex: 0 0 100%;
-    flex: 0 0 100%;
-    max-width: 100%;
+    padding-left:30px;
+
+
     font-weight: 700
 }
 
 .node-date {
-    padding-left: 25px;
+    padding-left: 30px;
     -webkit-box-flex: 0;
     -ms-flex: 0 0 100%;
     flex: 0 0 100%;
@@ -1585,17 +1598,33 @@ dl dd a {
 
 .node-circle {
     margin-left: 0px;
-    bottom: -9px;
+    left: -7px;
     position: absolute;
     vertical-align: bottom;
     font-size: 12px;
     line-height: 16px;
-    width: 18px;
-    height: 18px;
+    width: 13px;
+    height: 13px;
     color: white;
     text-align: center;
     border-radius: 50px;
     background-color: #62b2e2;
+}
+
+.node-circle-final {
+    margin-left: 0px;
+    left: -7px;
+    bottom: -12px;
+    position: absolute;
+    vertical-align: bottom;
+    font-size: 12px;
+    line-height: 16px;
+    width: 13px;
+    height: 13px;
+    color: white;
+    text-align: center;
+    border-radius: 50px;
+    background-color: #98ff9a;
 }
 
 .order-details-title {
@@ -1702,6 +1731,10 @@ dl dd a {
         font-weight: 500;
     }
 
+.font-size-12{
+    font-size: 12px
+}
+
 .font-size-14 {
     font-size: 14px
 }
@@ -1723,11 +1756,18 @@ dl dd a {
 }
 
 .account-offer-header {
+    width: 30%;
+}
+.account-offer-header-inactive {
     width: 20%;
 }
 
-.account-offer-description {
-    width: 20%;
+.account-offer-activate {
+    width: 10%;
+}
+
+.account-offer-date {
+    width: 10%;
 }
 
 .account-offer-price {

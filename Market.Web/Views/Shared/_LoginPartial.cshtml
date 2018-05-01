@@ -9,8 +9,8 @@
             @Html.AntiForgeryToken()
 
             <li class="nav-item position-relative" id="orders" style="padding-top: 20px">
-                <a href="@Url.Action("OrderBuy", "Order")" class="ml-0 mr-0" >
-                    <img width="25" height="25" class="notice" src="~/Content/Images/notices.svg" />
+                <a href="@Url.Action("OrderBuy", "Order")" class="ml-0 mr-0">
+                    <img width="23" height="23" class="notice" src="~/Content/Images/notices.svg" />
 
                 </a>
             </li>
@@ -18,7 +18,7 @@
 
             <li class="nav-item position-relative" id="messagess" style="padding-top: 20px">
                 <a href="@Url.Action("Inbox", "Message")" class="ml-0 mr-0">
-                    <img width="25" height="25" class="message" src="~/Content/Images/messages.svg" />
+                    <img width="23" height="23" class="message" src="~/Content/Images/messages.svg" />
                 </a>
 
 
@@ -26,6 +26,25 @@
             @*<li class="nav-item">
                     <span class="nav-link">@Html.Action("GetBalance","Profile", new { userId = User.Identity.GetUserId() })</span>
                 </li>*@
+            <li class="nav-item position-relative" id="messagess" style="padding-top: 20px">
+                <a href="@Url.Action("Inbox", "Message")" class="ml-0 mr-0">
+                    <img width="23" height="23" class="message" src="~/Content/Images/cashin.svg" />
+                </a>
+
+
+            </li>
+            <li class="nav-item position-relative" id="messagess" style="padding-top: 20px">
+                <a href="@Url.Action("Inbox", "Message")" class="ml-0 mr-0">
+                    <img width="23" height="23" class="message" src="~/Content/Images/cashout.svg" />
+                </a>
+            </li>
+            <li class="nav-item">
+
+                <a href="@Url.Action("Inbox", "Message")" class="nav-link">
+                    <span class="text-700">@Html.Action("Balance", "Profile")</span>
+                </a>
+            </li>
+
             <li class="nav-item" style="padding-top: 10px">
                 <a href="@Url.Action("Inbox", "Message")">
                     <img class="img-circle avatar-small" src="@Url.Action("Photo", "Profile" , new { userId = User.Identity.GetUserId() })" alt="Alternate Text" />
@@ -43,13 +62,11 @@
                     @Html.ActionLink("Настройки", "Settings", "Account", null, new { @class = "dropdown-item" })
                     @Html.ActionLink("Отзывы", "All", "Feedback", null, new { @class = "dropdown-item" })
                     @Html.ActionLink("Фото", "Upload", "Profile", null, new { @class = "dropdown-item" })
+                    <a class="dropdown-item" href="javascript:document.getElementById('logoutForm').submit()">Выйти</a>
                 </div>
                 @* @Html.ActionLink(User.Identity.GetUserName(), "Info", "Profile", routeValues: new { prof = User.Identity.GetUserName() }, htmlAttributes: new { title = "Manage"  })*@
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="javascript:document.getElementById('logoutForm').submit()">Выйти</a>
-
-            </li>
+            
 
         }
     }

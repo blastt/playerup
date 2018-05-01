@@ -93,6 +93,14 @@
     <Compile Include="Migrations\201804282011250_NullableComputedFields3.Designer.cs">
       <DependentUpon>201804282011250_NullableComputedFields3.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201804291032064_Balance.cs" />
+    <Compile Include="Migrations\201804291032064_Balance.Designer.cs">
+      <DependentUpon>201804291032064_Balance.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804291319312_SumToSeller.cs" />
+    <Compile Include="Migrations\201804291319312_SumToSeller.Designer.cs">
+      <DependentUpon>201804291319312_SumToSeller.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\AccountInfoRepository.cs" />
@@ -133,6 +141,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201804282011250_NullableComputedFields3.resx">
       <DependentUpon>201804282011250_NullableComputedFields3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804291032064_Balance.resx">
+      <DependentUpon>201804291032064_Balance.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804291319312_SumToSeller.resx">
+      <DependentUpon>201804291319312_SumToSeller.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

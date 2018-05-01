@@ -22,7 +22,8 @@ namespace Market.Web.ViewModels
 
         [DataType(DataType.Currency)]
         public decimal MiddlemanPrice { get; set; }
-        public DateTime? DateCreated { get; set; } = DateTime.Now;
+        public DateTime DateCreated { get; set; }
+        public DateTime DateDeleted { get; set; }
         public UserProfile User { get; set; }
 
         public string UserName { get; set; }

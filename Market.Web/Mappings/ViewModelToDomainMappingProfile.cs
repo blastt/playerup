@@ -39,7 +39,6 @@ namespace Market.Web.Mappings
                 .ForMember(o => o.Id, map => map.MapFrom(vm => vm.Id))
                 .ForMember(o => o.Header, map => map.MapFrom(vm => vm.Header))
                 .ForMember(o => o.SellerPaysMiddleman, map => map.MapFrom(vm => vm.SellerPaysMiddleman))
-                .ForMember(o => o.AccountLogin, map => map.MapFrom(vm => vm.SteamLogin))
                 .ForMember(o => o.Discription, map => map.MapFrom(vm => vm.Discription))
                 .ForMember(o => o.Price, map => map.MapFrom(vm => vm.Price))
                 .ForAllOtherMembers(opt => opt.Ignore());

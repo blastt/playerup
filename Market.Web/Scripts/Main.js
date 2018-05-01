@@ -51,11 +51,11 @@ $(document).ready(function () {
         dataType: "json",
         success: function (response) {
             if (response != 0) {
-                var li = $('#orders');
+                var a = $('#orders').find('a');
                 var div = $('<div></div>');
                 div.text(response);
                 div.addClass('orders-count');
-                li.prepend(div);
+                a.prepend(div);
             }
         }
     });
@@ -75,12 +75,12 @@ $(document).ready(function () {
 function drowMessage(count) {
 
     if (count != 0) {
-        var li = $('#messagess');
+        var a = $('#messagess').find('a');
         var div = $('#top-counter');
         if (!div.length) {
             div = $('<div></div>').attr('id', 'top-counter');
             div.text(count);
-            li.prepend(div);
+            a.prepend(div);
         }
         div.text(count);
         div.addClass('messagess-count message-count-icon-pos');

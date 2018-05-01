@@ -13,7 +13,8 @@
             </div>
             @{Html.RenderAction("AccountMenu", "Account"); }
             <div class="account-container bg-white">
-                <div style="padding: 20px">
+                @*@{Html.RenderPartial("_AccountOrdersMenu", Model); }*@
+                <div class="back">
                     <a href="@Request.UrlReferrer"><span style="font-weight: 700">&#10218;</span> <span>Назад</span> </a>
                 </div>
 
@@ -59,61 +60,61 @@
                     <div class="order-details-row row">
                         <div class="order-details-col col-md-5">
                             @if (Model.ShowAccountInfo)
-                            {
-                                <div class="alert alert-dismissible alert-primary">
-                                    <div class="row">
-                                        <div class="col-lg-12">
-                                            <label>Логин:</label>
-                                            @Html.DisplayFor(m => m.AccountInfo.Login)
-                                        </div>
-                                        <div class="col-lg-12">
-                                            <label>Пароль:</label>
-                                            @Html.DisplayFor(m => m.AccountInfo.Password)
-                                        </div>
-                                        <div class="col-lg-12">
-                                            <label>Почта:</label>
-                                            @Html.DisplayFor(m => m.AccountInfo.Email)
-                                        </div>
-                                        <div class="col-lg-12">
-                                            <label>Дополнительная информация:</label>
-                                            @Html.DisplayFor(m => m.AccountInfo.AdditionalInformation)
-                                        </div>
-                                    </div>
-                                </div>
-                            }
+                {
+                    <div class="alert alert-dismissible alert-primary">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <label>Логин:</label>
+                                @Html.DisplayFor(m => m.AccountInfo.Login)
+                            </div>
+                            <div class="col-lg-12">
+                                <label>Пароль:</label>
+                                @Html.DisplayFor(m => m.AccountInfo.Password)
+                            </div>
+                            <div class="col-lg-12">
+                                <label>Почта:</label>
+                                @Html.DisplayFor(m => m.AccountInfo.Email)
+                            </div>
+                            <div class="col-lg-12">
+                                <label>Дополнительная информация:</label>
+                                @Html.DisplayFor(m => m.AccountInfo.AdditionalInformation)
+                            </div>
+                        </div>
+                    </div>
+    }
                             @if (Model.ShowConfirm)
-                            {
-                                using (Html.BeginForm("ConfirmOrder", "Checkout", null, FormMethod.Get, null))
-                                {
-                                    @Html.HiddenFor(m => m.ModeratorId)
-                                    @Html.Hidden("OrderId", Model.Id)
-                                    <input type="submit" value="Подтвердить получение" class="btn btn-provide mr-3" />
-                                }
+                {
+                    using (Html.BeginForm("ConfirmOrder", "Checkout", null, FormMethod.Get, null))
+                    {
+                        @Html.HiddenFor(m => m.ModeratorId)
+                        @Html.Hidden("OrderId", Model.Id)
+                        <input type="submit" value="Подтвердить получение" class="btn btn-provide mr-3" />
+        }
 
-                            }
-                            else if (Model.ShowFeedbackToSeller)
-                            {
+    }
+    else if (Model.ShowFeedbackToSeller)
+    {
 
-                                using (Html.BeginForm("GiveToSeller", "Feedback", null, FormMethod.Get, null))
-                                {
-                                    @Html.Hidden("receiverId", Model.SellerId)
-                                    @Html.Hidden("OrderId", Model.Id)
-                                    <input type="submit" value="Оставить отзыв продавцу" class="btn btn-leavefeedback mr-3" />
-                                }
-                            }
+        using (Html.BeginForm("GiveToSeller", "Feedback", null, FormMethod.Get, null))
+        {
+            @Html.Hidden("receiverId", Model.SellerId)
+            @Html.Hidden("OrderId", Model.Id)
+            <input type="submit" value="Оставить отзыв продавцу" class="btn btn-leavefeedback mr-3" />
+}
+}
                             @if (Model.ShowCloseButton)
-                            {
-                                @Html.ActionLink("Закрыть сделку", "Close", "Order", new { orderId = Model.Id }, new { @class = "btn btn-close mr-3" })
-                            }
+                {
+                    @Html.ActionLink("Закрыть сделку", "Close", "Order", new { orderId = Model.Id }, new { @class = "btn btn-close mr-3" })
+    }
 
                             @if (Model.ShowPayButton)
-                            {
-                                using (Html.BeginForm("Paid","Checkout", FormMethod.Post))
-                                {
-                                    <input type="hidden" name="orderId" value="@Model.Id" />
-                                    <input type="submit" name="Pay" value="Оплатить" class="btn btn-pay mr-3" />
-                                }
-                            }
+                {
+                    using (Html.BeginForm("Paid", "Checkout", FormMethod.Post))
+                    {
+                        <input type="hidden" name="orderId" value="@Model.Id" />
+                        <input type="submit" name="Pay" value="Оплатить" class="btn btn-pay mr-3" />
+        }
+    }
                         </div>
                     </div>
 
@@ -129,21 +130,37 @@
                 </div>
                 <div class="order-details-log-body">
                     @foreach (var status in Model.StatusLogs)
-                    {
-
-                        <div class="order-details-node">
-                            <div class="node-circle"></div>
-                            <div class="node-name">@status.OldStatus.FinishedName</div>
-                            <div class="node-date">@status.TimeStamp</div>
-                        </div>
-
-                    }
+        {
+            if (status.NewStatus.Value != Market.Model.Models.OrderStatuses.MiddlemanClosed &&
+                status.NewStatus.Value != Market.Model.Models.OrderStatuses.SellerClosed &&
+                status.NewStatus.Value != Market.Model.Models.OrderStatuses.BuyerClosed)
+            {
+                <div class="order-details-node">
+                    <div class="node-circle"></div>
+                    <div class="node-name">@status.OldStatus.FinishedName</div>
+                    <div class="node-date">@status.TimeStamp</div>
+                    <div class="node-circle-final"></div>
+                </div>
+}
+if (status.NewStatus.Value == Market.Model.Models.OrderStatuses.ClosedSuccessfully ||
+    status.NewStatus.Value == Market.Model.Models.OrderStatuses.MiddlemanClosed ||
+    status.NewStatus.Value == Market.Model.Models.OrderStatuses.SellerClosed ||
+    status.NewStatus.Value == Market.Model.Models.OrderStatuses.BuyerClosed)
+{
+            <div class="order-details-node">
+                <div class="node-circle"></div>
+                <div class="node-name">@status.NewStatus.FinishedName</div>
+                <div class="node-date">@status.TimeStamp</div>
+                <div class="node-circle-final"></div>
+            </div>
+}
+}
                 </div>
                 @*<div class="row">
-                        <div class="col-md-12">
-                            @Html.PageLinks(Model.PagingInfo, x => Url.Action("Inbox", new { page = x, sortOrder = ViewBag.CurrentSort, searchString = ViewBag.SearchString }))
-                        </div>
-                    </div>*@
+            <div class="col-md-12">
+                @Html.PageLinks(Model.PagingInfo, x => Url.Action("Inbox", new { page = x, sortOrder = ViewBag.CurrentSort, searchString = ViewBag.SearchString }))
+            </div>
+        </div>*@
             </div>
         </div>
 

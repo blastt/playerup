@@ -45,8 +45,9 @@ namespace Market.Web.ViewModels
         [Display(Name = "Отображаемая цена")]
         [Required(ErrorMessage = "Введите цену")]
         [DataType(DataType.Currency, ErrorMessage = "цена введена некорректно")]
-        [Range(50, 1000000, ErrorMessage = "Цена должна быть от 50 до 1000000 долларов")]
-        [RegularExpression(@"\d+(.\d{1,2})?", ErrorMessage = "цена введена некорректно")]
+        [Range(300, 1000000, ErrorMessage = "Цена должна быть от 300 до 1000000 рублей")]
+
+        [RegularExpression(@"^-?(?:\d+|\d{1,3}(?:\.\d{3})+)(?:,\d+)?$", ErrorMessage = "цена введена некорректно")]
         public decimal Price { get; set; }
 
         public EditOfferViewModel()

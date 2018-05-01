@@ -112,7 +112,7 @@ namespace Market.Model.Models
 
         public string Name { get; set; }
 
-
+        public decimal Balance { get; set; }
         public virtual ApplicationUser ApplicationUser { get; set; }
         public virtual ICollection<Message> MessagesAsSender { get; set; } = new List<Message>();
         public virtual ICollection<Message> MessagesAsReceiver { get; set; } = new List<Message>();

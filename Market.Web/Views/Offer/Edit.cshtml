@@ -27,7 +27,7 @@
                 <div class="form-group">
                     @Html.LabelFor(m => m.SteamLogin, new { @class = "control-label" })
 
-                    @Html.TextBoxFor(m => m.SteamLogin, "", new { @class = "form-control", @for = "textBox", @readonly="readonly" })
+                    @Html.TextBoxFor(m => m.SteamLogin, "", new { @class = "form-control", @for = "textBox", @readonly = "readonly" })
 
                     @Html.ValidationMessageFor(m => m.SteamLogin)
 
@@ -45,7 +45,7 @@
                 <div class="form-group">
                     @Html.LabelFor(m => m.Discription, new { @class = "control-label" })
                     @Html.TextArea("discription", Model.Discription, 10, 0, new { @class = "form-control", style = "resize: none" })
-               
+
                     @Html.ValidationMessageFor(m => m.Discription)
 
                 </div>
@@ -60,7 +60,7 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text">$</span>
                             </div>
-                            <input class="form-control" autocomplete = "off" id = "ListingPrice" type="text" name="price" value="@Math.Round(Model.Price,0)" onchange = "CalculatePrice()" />
+                            <input class="form-control" autocomplete="off" id="ListingPrice" type="text" name="price" value="@Math.Round(Model.Price,0)" onchange="CalculatePrice()" />
                             @Html.ValidationMessageFor(m => m.Price)
                         </div>
 
@@ -75,7 +75,7 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text">$</span>
                             </div>
-                            <input class="form-control" readonly = "" id="guaranteePrice" type="text" name="guaranteePrice" onchange="CalculatePrice()" />
+                            <input class="form-control" readonly="" id="guaranteePrice" type="text" name="guaranteePrice" onchange="CalculatePrice()" />
 
                         </div>
                     </div>
@@ -121,10 +121,10 @@
 {
     @*Ненавязивый JavaScript для выполнения запроса на сервер без полного обновления страницы*@
     @*<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>*@
+    <script src="~/Scripts/Filters.js"></script>
+        <script src="~/Scripts/CreateOffer.js">
 
-    <script src="~/Scripts/CreateOffer.js">
 
-        
     </script>
     <script>
         $(document).ready(function () {

@@ -22,9 +22,8 @@
                         Заказы, где вы покупатель:
                     </h3>
                 </div>
-                <table class="table table-hover">
+                <table class="table table-white">
                     <tr>
-                        <th></th>
                         <th>Предложение</th>
                         <th>Продавец</th>
                         <th>Цена</th>
@@ -33,26 +32,27 @@
                     </tr>
                     @foreach (var order in Model.Orders)
                     {
-                        var clsBold = "";
-                        if (!order.BuyerChecked)
-                        {
-                            clsBold = "font-weight-bold warning-row";
-                        }
+                        @*var clsBold = "";
+                            if (!order.BuyerChecked)
+                            {
+                                clsBold = "font-weight-bold warning-row";
+                            }
 
-                        <tr id="message-row-@order.Id" class="@clsBold">
-                            <td class="clickable  set-viewed-td" data-id="@order.Id">
-                                @if (!order.BuyerChecked)
-                                {
-                                    <div class="set-viewed-icon"></div>
+                            <tr id="message-row-@order.Id" class="@clsBold">
+                                <td class="clickable  set-viewed-td" data-id="@order.Id">
+                                    @if (!order.BuyerChecked)
+                                    {
+                                        <div class="set-viewed-icon"></div>
 
-                                }
-                            </td>
-                            <td>@order.OfferHeader</td>
-                            <td>@order.SellerName</td>
-                            <td>@order.OfferPrice</td>
-                            <td>@order.CurrentStatus</td>
-                            <td>@Html.ActionLink("Детали", "BuyDetails", "Order", new { orderId = order.Id }, null)</td>
-                        </tr>
+                                    }
+                                </td>
+                                <td>@order.OfferHeader</td>
+                                <td>@order.SellerName</td>
+                                <td>@order.OfferPrice</td>
+                                <td>@order.CurrentStatus.DuringName</td>
+                                <td>@Html.ActionLink("Детали", "BuyDetails", "Order", new { orderId = order.Id }, null)</td>
+                            </tr>*@
+                        @Html.Partial("_AccountOrderBuyItem", order)
                     }
 
                 </table>

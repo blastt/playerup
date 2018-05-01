@@ -8,14 +8,14 @@
                 <span>
                     @Model.Header
                 </span>
-            
+
             </div>
         </div>
         <div class="row  text-left">
             <div class="col-sm-12">
-                &#9755 @Html.ActionLink("Просмотреть", "Details", "Offer", new { id = Model.Id }, new { @class = "font-size-12 mr-3" })
-                &#9998 @Html.ActionLink("Редактировать", "Edit", "Offer", new { id = Model.Id }, new { @class = "font-size-12 mr-3" })
-                &#10006 @Html.ActionLink("Деактивировать", "Deactivate", "Offer", new { id = Model.Id }, new { @class = "font-size-12 mr-3" })
+                &#9755 @Html.ActionLink("Просмотреть", "Details", "Offer", new { id = Model.Id }, new { @class = "font-size-12 mr-2" })
+                &#9998 @Html.ActionLink("Редактировать", "Edit", "Offer", new { id = Model.Id }, new { @class = "font-size-12 mr-2" })
+                &#10006 @Html.ActionLink("Удалить", "Delete", "Offer", new { id = Model.Id }, new { @class = "font-size-12 mr-2" })
             </div>
 
         </div>
@@ -23,7 +23,7 @@
     <td>
         <div class="row">
             <div class="col-sm-12">
-                <span class="font-size-12">С: @Model.DateCreated.ToShortDateString()</span> 
+                <span class="font-size-12">С: @Model.DateCreated.ToShortDateString()</span>
             </div>
         </div>
         <div class="row">
@@ -33,5 +33,7 @@
         </div>
     </td>
     <td><span class="text-700">@Html.DisplayFor(m => m.Price)</span> </td>
+    <td>@Html.ActionLink("Активировать", "Activate", "Offer", new { id = Model.Id }, new { @class = "btn btn-activate font-size-14" })</td>
 
 </tr>
+

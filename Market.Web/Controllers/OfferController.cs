@@ -22,6 +22,7 @@ namespace Market.Web.Controllers
         private readonly IGameService _gameService;
         private readonly IFilterService _filterService;
         private readonly IFilterItemService _filterItemService;
+        private readonly int offerDays = 30;
         public int pageSize = 4;
         public int pageSizeInUserInfo = 10;
         public OfferController(IOfferService offerService, IGameService gameService, IFilterService filterService, IFilterItemService filterItemService, IUserProfileService userProfileService)
@@ -405,13 +406,14 @@ namespace Market.Web.Controllers
 
             offer.Game = game;
             offer.UserProfile = _userProfileService.GetUserProfileById(User.Identity.GetUserId());
+            offer.DateDeleted = offer.DateCreated.AddDays(offerDays);
             _offerService.CreateOffer(offer);
             _offerService.SaveOffer();
 
             return RedirectToAction("Buy");
         }
 
-        public ActionResult Details(int? id = 2)
+        public ActionResult Details(int? id = 1)
         {
             if (id != null)
             {
@@ -450,7 +452,55 @@ namespace Market.Web.Controllers
         //    _db.Save();
         //    return Json(new { Success = true });
         //}
-
+        [Authorize]
+        public ActionResult Deactivate(int? id = 1)
+        {
+            if (id != null)
+            {
+                var offer = _offerService.GetOffer(id.Value);
+                if (offer != null && offer.UserProfileId == User.Identity.GetUserId() && offer.State == OfferState.active)
+                {
+                    offer.State = OfferState.inactive;
+                    offer.DateDeleted = DateTime.Now;
+                    _offerService.SaveOffer();
+                    return View();
+                }
+            }
+            return HttpNotFound();
+        }
+        [Authorize]
+        public ActionResult Activate(int? id = 1)
+        {
+            if (id != null)
+            {
+                var offer = _offerService.GetOffer(id.Value);
+                if (offer != null && offer.UserProfileId == User.Identity.GetUserId() && offer.State == OfferState.inactive)
+                {
+                    offer.State = OfferState.active;
+                    offer.DateCreated = DateTime.Now;
+                    offer.DateDeleted = offer.DateCreated.AddDays(offerDays);
+                    _offerService.SaveOffer();
+                    return View();
+                }
+            }
+            return HttpNotFound();
+        }
+        [Authorize]
+        public ActionResult Delete(int? id = 1)
+        {
+            if (id != null)
+            {
+                var offer = _offerService.GetOffer(id.Value);
+                if (offer != null && offer.UserProfileId == User.Identity.GetUserId() && offer.State == OfferState.inactive)
+                {
+                    _offerService.Delete(offer);
+                    _offerService.SaveOffer();
+                    return View();
+                }
+            }
+            return HttpNotFound();
+        }
+        [Authorize]
         public ActionResult Edit(int? id = 1)
         {
             //EditOfferViewModel model = new EditOfferViewModel();
@@ -506,52 +556,62 @@ namespace Market.Web.Controllers
             {
                 return View("_CreateOfferConfirmationError");
             }
-
-            Offer offer = Mapper.Map<EditOfferViewModel, Offer>(model);
-
-            Game game = _gameService.GetGameByValue(model.Game);
-            var gameFilters = _filterService.GetFilters().Where(f => f.Game == game).ToList();
-            var modelFilters = model.FilterValues;
-            var gameFilterItems = _filterItemService.GetFilterItems().Where(f => f.Filter.Game == game).ToList();
-            var modelFilterItems = model.FilterItemValues;
-            if (game != null && modelFilters.Count() == gameFilters.Count())
+            var offer = _offerService.GetOffer(model.Id);
+            if (offer.UserProfileId == User.Identity.GetUserId() && offer.State == OfferState.active)
             {
-                for (int i = 0; i < gameFilters.Count; i++)
+                Game game = _gameService.GetGameByValue(model.Game);
+                offer.Price = model.Price;
+                offer.SellerPaysMiddleman = model.SellerPaysMiddleman;
+                offer.Game = game;
+                offer.Discription = model.Discription;
+                offer.Header = model.Header;
+
+                
+                var gameFilters = _filterService.GetFilters().Where(f => f.Game == game).ToList();
+                var modelFilters = model.FilterValues;
+                var gameFilterItems = _filterItemService.GetFilterItems().Where(f => f.Filter.Game == game).ToList();
+                var modelFilterItems = model.FilterItemValues;
+                if (game != null && modelFilters.Count() == gameFilters.Count())
                 {
-                    if (gameFilters[i].Value != modelFilters[i])
+                    offer.FilterItems.Clear();
+                    offer.Filters.Clear();
+                    for (int i = 0; i < gameFilters.Count; i++)
                     {
-                        return View("CreateOfferFiltersError");
-                    }
-
-                    bool isContainsFilterItems = false;
-                    foreach (var fItem in gameFilters[i].FilterItems)
-                    {
-                        if (fItem.Value == modelFilterItems[i])
+                        if (gameFilters[i].Value != modelFilters[i])
                         {
-                            offer.FilterItems.Add(fItem);
-                            offer.Filters.Add(gameFilters[i]);
-                            isContainsFilterItems = true;
+                            return View("CreateOfferFiltersError");
                         }
-                    }
-                    if (!isContainsFilterItems)
-                    {
-                        return View("_CreateOfferFilterError");
-                    }
-                    isContainsFilterItems = false;
 
+                        bool isContainsFilterItems = false;
+                        foreach (var fItem in gameFilters[i].FilterItems)
+                        {
+                            if (fItem.Value == modelFilterItems[i])
+                            {
+                                
+                                offer.FilterItems.Add(fItem);
+                                offer.Filters.Add(gameFilters[i]);
+                                isContainsFilterItems = true;
+                            }
+                        }
+                        if (!isContainsFilterItems)
+                        {
+                            return View("_CreateOfferFilterError");
+                        }
+                        isContainsFilterItems = false;
+
+                    }
                 }
-            }
-            else
-            {
-                return View("_CreateOfferFilterError");
-            }
-            offer.Game = game;
-            offer.UserProfileId = User.Identity.GetUserId();
-            _offerService.UpdateOffer(offer);
-            _offerService.SaveOffer();
+                else
+                {
+                    return View("_CreateOfferFilterError");
+                }
 
-            return RedirectToAction("Buy");
+                _offerService.SaveOffer();
 
+                return RedirectToAction("Buy");
+            }
+
+            return HttpNotFound();
         }
 
         

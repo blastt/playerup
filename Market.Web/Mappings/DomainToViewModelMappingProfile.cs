@@ -61,6 +61,7 @@ namespace Market.Web.Mappings
                .ForMember(o => o.Filters, map => map.MapFrom(vm => vm.Filters))
                .ForMember(o => o.FilterItems, map => map.MapFrom(vm => vm.FilterItems))
                .ForMember(o => o.DateCreated, map => map.MapFrom(vm => vm.DateCreated))
+               .ForMember(o => o.DateDeleted, map => map.MapFrom(vm => vm.DateDeleted))
                .ForMember(o => o.Price, map => map.MapFrom(vm => vm.Price))
                .ForMember(o => o.Game, map => map.MapFrom(vm => vm.Game))
                .ForMember(o => o.UserId, map => map.MapFrom(vm => vm.UserProfileId))

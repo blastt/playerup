@@ -14,6 +14,7 @@ namespace Market.Service
         IEnumerable<Offer> GetOffers();
         //IEnumerable<Offer> GetCategoryGadgets(string categoryName, string gadgetName = null);
         Offer GetOffer(int id);
+        void Delete(Offer offer);
         decimal CalculateMiddlemanPrice(decimal offerPrice);
         IEnumerable<Offer> SearchOffers(string game, string sort, ref bool isOnline, ref bool searchInDiscription,
             string searchString, ref int page, int pageSize,ref int totalItems, ref decimal minGamePrice, ref decimal maxGamePrice, ref decimal priceFrom, ref decimal priceTo);
@@ -46,6 +47,11 @@ namespace Market.Service
         {
             var offer = offersRepository.GetById(id);
             return offer;
+        }
+
+        public void Delete(Offer offer)
+        {
+            offersRepository.Delete(offer);
         }
 
         public void CreateOffer(Offer offer)

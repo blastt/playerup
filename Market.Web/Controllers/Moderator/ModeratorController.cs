@@ -75,7 +75,7 @@ namespace Market.Web.Controllers.Moderator
                 {
                     if (order != null && order.CurrentStatus.Value == OrderStatuses.MiddlemanFinding)
                     {
-                        order.StatusLogs.Add(new StatusLog()
+                        order.StatusLogs.AddLast(new StatusLog()
                         {
                             OldStatus = order.CurrentStatus,
                             NewStatus = _orderStatusService.GetOrderStatusByValue(OrderStatuses.SellerProviding),
@@ -141,7 +141,7 @@ namespace Market.Web.Controllers.Moderator
                         {
                             if (buyerOrder.CurrentStatus.Value == OrderStatuses.MidddlemanChecking)
                             {
-                                buyerOrder.StatusLogs.Add(new StatusLog()
+                                buyerOrder.StatusLogs.AddLast(new StatusLog()
                                 {
                                     OldStatus = buyerOrder.CurrentStatus,
                                     NewStatus = _orderStatusService.GetOrderStatusByValue(OrderStatuses.BuyerConfirming),

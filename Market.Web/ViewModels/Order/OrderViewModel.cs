@@ -1,6 +1,7 @@
 ﻿using Market.Model.Models;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
@@ -16,6 +17,8 @@ namespace Market.Web.ViewModels
         public bool SellerChecked { get; set; }
 
         public string OfferHeader { get; set; }
+
+        [DataType(DataType.Currency)]
         public decimal OfferPrice { get; set; }
         public string OfferId { get; set; }
         public string BuyerName { get; set; }

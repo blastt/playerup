@@ -263,6 +263,7 @@
     <Compile Include="Mappings\AutoMapperConfiguration.cs" />
     <Compile Include="Mappings\DomainToViewModelMappingProfile.cs" />
     <Compile Include="Mappings\ViewModelToDomainMappingProfile.cs" />
+    <Compile Include="ModelBinders\PriceBinder.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -312,6 +313,8 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Images\arrow.png" />
+    <Content Include="Content\Images\cashin.svg" />
+    <Content Include="Content\Images\cashout.svg" />
     <Content Include="Content\Images\Csgo\Icons\csgo.png" />
     <Content Include="Content\Images\Dota2\Icons\dota2.png" />
     <Content Include="Content\Images\error.png" />
@@ -604,6 +607,12 @@
     <Content Include="Views\Offer\CrateOfferLimitError.cshtml" />
     <Content Include="Views\Help\ContactUs.cshtml" />
     <Content Include="Views\Checkout\Checkoutme.cshtml" />
+    <Content Include="Views\Order\_AccountOrderBuyItem.cshtml" />
+    <Content Include="Views\Order\_AccountOrderSellItem.cshtml" />
+    <Content Include="Views\Offer\_AccountInactiveOfferItem.cshtml" />
+    <Content Include="Views\Offer\Deactivate.cshtml" />
+    <Content Include="Views\Offer\Activate.cshtml" />
+    <Content Include="Views\Offer\_AccountClosedOfferItem.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -11,7 +11,6 @@ namespace Market.Data.Configuration
         public OfferConfiguration()
         {
             ToTable("Offers");
-
             Property(o => o.Header).IsRequired().HasMaxLength(100);
 
             Property(o => o.MiddlemanPrice).HasDatabaseGeneratedOption(System.ComponentModel.DataAnnotations.Schema.DatabaseGeneratedOption.Computed);

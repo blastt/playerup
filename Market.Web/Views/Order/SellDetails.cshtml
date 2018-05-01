@@ -128,7 +128,7 @@
                     </div>
                     <div class="order-details-row row">
                         <div class="order-details-col col-md-4">
-                            <label>Продавец</label>
+                            <label>Покупатель</label>
                         </div>
                         <div class="order-details-col col-md-8">
                             <span>@Html.ActionLink(Model.BuyerName, "Info", "Profile", new { userName = Model.BuyerName }, null)</span>
@@ -192,12 +192,29 @@
                     @foreach (var status in Model.StatusLogs)
                     {
 
-                        <div class="order-details-node">
-                            <div class="node-circle"></div>
-                            <div class="node-name">@status.OldStatus.FinishedName</div>
-                            <div class="node-date">@status.TimeStamp</div>
-                        </div>
-
+                        if (status.NewStatus.Value != Market.Model.Models.OrderStatuses.MiddlemanClosed &&
+                            status.NewStatus.Value != Market.Model.Models.OrderStatuses.SellerClosed &&
+                            status.NewStatus.Value != Market.Model.Models.OrderStatuses.BuyerClosed)
+                        {
+                            <div class="order-details-node">
+                                <div class="node-circle"></div>
+                                <div class="node-name">@status.OldStatus.FinishedName</div>
+                                <div class="node-date">@status.TimeStamp</div>
+                                <div class="node-circle-final"></div>
+                            </div>
+                        }
+                        if (status.NewStatus.Value == Market.Model.Models.OrderStatuses.ClosedSuccessfully ||
+                        status.NewStatus.Value == Market.Model.Models.OrderStatuses.MiddlemanClosed ||
+                        status.NewStatus.Value == Market.Model.Models.OrderStatuses.SellerClosed ||
+                        status.NewStatus.Value == Market.Model.Models.OrderStatuses.BuyerClosed)
+                        {
+                            <div class="order-details-node">
+                                <div class="node-circle"></div>
+                                <div class="node-name">@status.NewStatus.FinishedName</div>
+                                <div class="node-date">@status.TimeStamp</div>
+                                <div class="node-circle-final"></div>
+                            </div>
+                        }
                     }
                 </div>
                 @*<div class="row">

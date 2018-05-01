@@ -13,11 +13,11 @@ namespace Market.Data.Repositories
         public OfferRepository(IDbFactory dbFactory)
             : base(dbFactory) { }
 
-
+        
     }
 
     public interface IOfferRepository : IRepository<Offer>
     {
-
+        
     }
 }

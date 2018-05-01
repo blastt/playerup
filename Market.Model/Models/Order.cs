@@ -68,13 +68,16 @@ namespace Market.Model.Models
         public decimal? Amount { get; set; } // сумма, которую заплатали с учетом комиссии
         public decimal? WithdrawAmount { get; set; } // сумма, которую заплатали без учета комиссии
 
+        public decimal? AmmountSellerGet { get; set; } // сумма, которую заплатали с учетом комиссии
+        public decimal? WithdrawAmountSellerGet { get; set; } // сумма, которую заплатали без учета комиссии
+
         public virtual ICollection<Feedback> Feedbacks { get; set; } = new List<Feedback>();
 
         public virtual Offer Offer { get; set; }
 
         public virtual int CurrentStatusId { get; set; }
         public virtual OrderStatus CurrentStatus { get; set; }
-        public virtual IList<StatusLog> StatusLogs { get; set; } = new List<StatusLog>();
+        public virtual LinkedList<StatusLog> StatusLogs { get; set; } = new LinkedList<StatusLog>();
 
         public virtual string MiddlemanId { get; set; }
         public virtual UserProfile Middleman { get; set; }

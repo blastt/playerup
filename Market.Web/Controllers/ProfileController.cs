@@ -110,7 +110,20 @@ namespace Trader.WEB.Controllers
             return View(model);
         }
 
-
+        public string Balance()
+        {
+            string userId = User.Identity.GetUserId();
+            decimal balance = 0;
+            if (userId != null)
+            {
+                UserProfile profile = _userProfileService.GetUserProfileById(userId);
+                if (profile != null)
+                {
+                    balance = profile.Balance;
+                }
+            }
+            return balance.ToString("C");
+        }
         //[HttpPost]
         //public new ActionResult Profile(ClientProfile profile)
         //{

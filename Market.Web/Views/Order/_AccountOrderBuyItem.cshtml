@@ -1,0 +1,15 @@
+﻿@model Market.Web.ViewModels.OrderViewModel
+@{var cls = "";
+    if (!Model.BuyerChecked)
+    {
+        cls = "warning-row";
+    } 
+}
+<tr id="message-row-@Model.Id" class="@cls">
+    @*<td class="clickable  set-viewed-td" data-id="@Model.Id"></td>*@
+    <td>@Html.DisplayFor(m => m.OfferHeader) </td>
+    <td>@Html.DisplayFor(m => m.SellerName) </td>
+    <td>@Html.DisplayFor(m => m.OfferPrice)</td>
+    <td>@Model.CurrentStatus.DuringName</td>
+    <td>@Html.ActionLink("Детали", "BuyDetails", "Order", new { orderId = Model.Id }, new { @class = "btn btn-details" })</td>
+</tr>

@@ -153,39 +153,36 @@ namespace Market.Web.Controllers
                 if (order.CurrentStatus.Value == OrderStatuses.BuyerPaying ||
                     order.CurrentStatus.Value == OrderStatuses.OrderCreating ||
                     order.CurrentStatus.Value == OrderStatuses.MiddlemanFinding ||
-                        order.CurrentStatus.Value == OrderStatuses.SellerProviding ||
+                    order.CurrentStatus.Value == OrderStatuses.SellerProviding ||
                     order.CurrentStatus.Value == OrderStatuses.MidddlemanChecking)
                 {
+                    OrderStatus newOrderStatus = null;
                     if (userId == order.BuyerId)
                     {
-                        var orderStatus = _orderStatusService.GetOrderStatusByValue(OrderStatuses.BuyerClosed);
-                        if (orderStatus != null)
-                        {
-                            order.CurrentStatus = orderStatus;
-                            _orderService.SaveOrder();
-                            return View();
-                        }                                               
+                        newOrderStatus = _orderStatusService.GetOrderStatusByValue(OrderStatuses.BuyerClosed);                                                                    
                     }
                     else if (userId == order.SellerId)
                     {
-                        var orderStatus = _orderStatusService.GetOrderStatusByValue(OrderStatuses.SellerClosed);
-                        if (orderStatus != null)
-                        {
-                            order.CurrentStatus = orderStatus;
-                            _orderService.SaveOrder();
-                            return View();
-                        }
+                        newOrderStatus = _orderStatusService.GetOrderStatusByValue(OrderStatuses.SellerClosed);
                     }
                     else if (userId == order.MiddlemanId)
                     {
-                        var orderStatus = _orderStatusService.GetOrderStatusByValue(OrderStatuses.MiddlemanClosed);
-                        if (orderStatus != null)
-                        {
-                            order.CurrentStatus = orderStatus;
-                            _orderService.SaveOrder();
-                            return View();
-                        }
+                        newOrderStatus = _orderStatusService.GetOrderStatusByValue(OrderStatuses.MiddlemanClosed);
                     }
+                    if (newOrderStatus != null)
+                    {
+                        order.StatusLogs.AddLast(new StatusLog()
+                        {
+                            OldStatus = order.CurrentStatus,
+                            NewStatus = newOrderStatus,
+                            TimeStamp = DateTime.Now
+                        });                     
+                        order.CurrentStatus = newOrderStatus;
+                        _orderService.SaveOrder();
+                        return View();
+                        
+                    }
+                    
                 }
 
             }
@@ -202,7 +199,7 @@ namespace Market.Web.Controllers
                 {
                     if (order.SellerId == User.Identity.GetUserId())
                     {
-                        order.BuyerChecked = true;
+                        order.SellerChecked = true;
                         _orderService.SaveOrder();
                         DetailsOrderViewModel model = Mapper.Map<Order, DetailsOrderViewModel>(order);
 
@@ -246,6 +243,7 @@ namespace Market.Web.Controllers
                             model.ShowProvideData = true;
                         }
                         model.CurrentStatusName = order.CurrentStatus.DuringName;
+                        
                         model.StatusLogs = order.StatusLogs;
                         model.ModeratorId = order.MiddlemanId;
                         return View(model);

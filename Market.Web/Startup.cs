@@ -1,6 +1,8 @@
-﻿using Microsoft.Owin;
+﻿using Market.Web.ModelBinders;
+using Microsoft.Owin;
 using Owin;
 using System.Globalization;
+using System.Web.Mvc;
 
 [assembly: OwinStartupAttribute(typeof(Market.Web.Startup))]
 namespace Market.Web
@@ -10,6 +12,7 @@ namespace Market.Web
         
         public void Configuration(IAppBuilder app)
         {
+
             CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("ru");
             ConfigureAuth(app);
             app.MapSignalR();

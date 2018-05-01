@@ -6,7 +6,6 @@
 {
     @Html.AntiForgeryToken()
     <hr />
-    @Html.ValidationSummary("", new { @class = "text-danger" })
     <div class="form-group">
         @Html.LabelFor(m => m.Password, new { @class = "control-label" })
        

@@ -35,8 +35,8 @@ namespace Trader.WEB.Controllers
         {
             if (offerId != null)
             {
-                var offer = _offerService.GetOffer(offerId.Value);
-                if (offer != null && offer.Order == null)
+                var offer = _offerService.GetOffer(offerId.Value);                
+                if (offer != null && offer.Order == null && offer.State == OfferState.active && offer.UserProfileId != User.Identity.GetUserId())
                 {
                     CheckoutViewModel model = new CheckoutViewModel()
                     {
@@ -59,18 +59,17 @@ namespace Trader.WEB.Controllers
         {
             //UserProfile buyer = _db.UserProfiles.Get(User.Identity.GetUserId());
             Offer offer = _offerService.GetOffer(model.OfferId);
-            if (offer != null && offer.Order == null && offer.State == OfferState.active)
+            if (offer != null && offer.Order == null && offer.State == OfferState.active && offer.UserProfileId != User.Identity.GetUserId())
             {
                 offer.Order = new Order
                 {
                     BuyerId = User.Identity.GetUserId(),
                     SellerId = offer.UserProfileId,
-                    Sum = 123321,
                     DateCreated = DateTime.Now
                 };
                 offer.State = OfferState.closed;
 
-                offer.Order.StatusLogs.Add(new StatusLog()
+                offer.Order.StatusLogs.AddLast(new StatusLog()
                 {
                     OldStatus = _orderStatusService.GetOrderStatusByValue(OrderStatuses.OrderCreating),
                     NewStatus = _orderStatusService.GetOrderStatusByValue(OrderStatuses.BuyerPaying),
@@ -82,7 +81,7 @@ namespace Trader.WEB.Controllers
                 _offerService.SaveOffer();
 
                 var userProfiles = _userProfileService.GetUserProfiles()
-                    .Where(u => u.ApplicationUser.Roles.Contains(new IdentityUserRole() { RoleId = "2", UserId = u.Id }));
+                    .Where(u => u.ApplicationUser.Roles.Contains(new IdentityUserRole() { RoleId = "1", UserId = u.Id }));
                 foreach (var user in userProfiles)
                 {
                     user.MessagesAsReceiver.Add(new Message()
@@ -91,7 +90,7 @@ namespace Trader.WEB.Controllers
                         MessageBody = "Get"
                     });
                 }
-                return RedirectToAction("Paid", "Checkout", new { id = offer.Order.Id });
+                return RedirectToAction("BuyDetails", "Order", new { id = offer.Order.Id });
 
             }
             return View();
@@ -105,7 +104,7 @@ namespace Trader.WEB.Controllers
         }
 
         [HttpPost]
-        public void Paid(int? orderId)
+        public ActionResult Paid(int? orderId)
         {
             // Добавить логику оплаты
             if (orderId != null)
@@ -113,19 +112,58 @@ namespace Trader.WEB.Controllers
                 Order order = _orderService.GetOrder(orderId.Value);
                 if (order != null && order.CurrentStatus.Value == OrderStatuses.BuyerPaying)
                 {
-                    order.StatusLogs.Add(new StatusLog()
+                    var mainCup = _userProfileService.GetUserProfileByName("palyerup");
+                    if (mainCup != null)
                     {
-                        OldStatus = order.CurrentStatus,
-                        NewStatus = _orderStatusService.GetOrderStatusByValue(OrderStatuses.MiddlemanFinding),
-                        TimeStamp = DateTime.Now
-                    });
-                    order.CurrentStatus = _orderStatusService.GetOrderStatusByValue(OrderStatuses.MiddlemanFinding);
-                    order.BuyerChecked = false;
-                    order.SellerChecked = false;
-                    _orderService.UpdateOrder(order);
-                    _orderService.SaveOrder();
+                        var seller = order.Seller;
+                        var buyer = order.Buyer;
+
+                        if (order.Offer.SellerPaysMiddleman)
+                        {
+                            order.Sum = order.Offer.Price;
+                            order.AmmountSellerGet = order.Offer.Price - order.Offer.MiddlemanPrice.Value;
+                            if (buyer.Balance >= order.Sum)
+                            {
+                                buyer.Balance -= order.Sum;
+                                mainCup.Balance += order.Sum;
+                            }
+                            else
+                            {
+                                return HttpNotFound("Недостаточно бабла");
+                            }
+                        }
+                        else
+                        {
+                            order.Sum = order.Offer.Price + order.Offer.MiddlemanPrice.Value;
+                            order.AmmountSellerGet = order.Offer.Price;
+                            if (buyer.Balance >= order.Offer.Order.Sum)
+                            {
+                                buyer.Balance -= order.Sum + order.Offer.MiddlemanPrice.Value;
+                                mainCup.Balance += order.Sum;
+                            }
+                            else
+                            {
+                                return HttpNotFound("Недостаточно бабла");
+                            }
+                        }
+                        order.StatusLogs.AddLast(new StatusLog()
+                        {
+                            OldStatus = order.CurrentStatus,
+                            NewStatus = _orderStatusService.GetOrderStatusByValue(OrderStatuses.MiddlemanFinding),
+                            TimeStamp = DateTime.Now
+                        });
+                        order.CurrentStatus = _orderStatusService.GetOrderStatusByValue(OrderStatuses.MiddlemanFinding);
+
+                        order.BuyerChecked = false;
+                        order.SellerChecked = false;
+                        _orderService.UpdateOrder(order);
+                        _orderService.SaveOrder();
+                        return RedirectToAction("BuyDetails", "Order", new { orderId = order.Id });
+                    }
+                    
                 }
             }
+            return View();
 
         }
 
@@ -139,7 +177,7 @@ namespace Trader.WEB.Controllers
                 Order order = _orderService.GetOrder(orderId.Value);
                 if (order != null && order.CurrentStatus.Value == OrderStatuses.PayingToSeller)
                 {
-                    order.StatusLogs.Add(new StatusLog()
+                    order.StatusLogs.AddLast(new StatusLog()
                     {
                         OldStatus = order.CurrentStatus,
                         NewStatus = _orderStatusService.GetOrderStatusByValue(OrderStatuses.ClosedSuccessfully),
@@ -256,7 +294,7 @@ namespace Trader.WEB.Controllers
                         {
                             if (order.AccountInfo == null && order.CurrentStatus.Value == OrderStatuses.SellerProviding)
                             {
-                                order.StatusLogs.Add(new StatusLog()
+                                order.StatusLogs.AddLast(new StatusLog()
                                 {
                                     OldStatus = order.CurrentStatus,
                                     NewStatus = _orderStatusService.GetOrderStatusByValue(OrderStatuses.MidddlemanChecking),
@@ -269,11 +307,12 @@ namespace Trader.WEB.Controllers
                                 order.SellerChecked = false;
                                 order.AccountInfo = accountInfo;
                                 _orderService.SaveOrder();
-                                return RedirectToAction("ProvideData", new { moderatorId = model.ModeratorId });
+                                return RedirectToAction("SellDetails", "Order", new { orderId = order.Id });
                             }
                         }
                     }
                 }
+
             }
             return HttpNotFound();
         }
@@ -289,21 +328,41 @@ namespace Trader.WEB.Controllers
                     {
                         if (order.BuyerId == User.Identity.GetUserId() && order.CurrentStatus.Value == OrderStatuses.BuyerConfirming)
                         {
-                            order.StatusLogs.Add(new StatusLog()
+                            var mainCup = _userProfileService.GetUserProfileByName("palyerup");
+                            if (mainCup != null)
                             {
-                                OldStatus = order.CurrentStatus,
-                                NewStatus = _orderStatusService.GetOrderStatusByValue(OrderStatuses.PayingToSeller),
-                                TimeStamp = DateTime.Now
-                            });
-                            order.CurrentStatus = _orderStatusService.GetOrderStatusByValue(OrderStatuses.PayingToSeller);
-                            
-                            order.BuyerChecked = false;
-                            order.SellerChecked = false;
-                            
-                            _orderService.SaveOrder();
-                            return View();
-                            
+                                mainCup.Balance -= order.AmmountSellerGet.Value;
+                                order.Seller.Balance += order.AmmountSellerGet.Value;
+                                order.StatusLogs.AddLast(new StatusLog()
+                                {
+                                    OldStatus = order.CurrentStatus,
+                                    NewStatus = _orderStatusService.GetOrderStatusByValue(OrderStatuses.PayingToSeller),
+                                    TimeStamp = DateTime.Now
+                                });
+                                order.CurrentStatus = _orderStatusService.GetOrderStatusByValue(OrderStatuses.PayingToSeller);
 
+                                order.StatusLogs.AddLast(new StatusLog()
+                                {
+                                    OldStatus = order.CurrentStatus,
+                                    NewStatus = _orderStatusService.GetOrderStatusByValue(OrderStatuses.ClosedSuccessfully),
+                                    TimeStamp = DateTime.Now
+                                });
+                                order.CurrentStatus = _orderStatusService.GetOrderStatusByValue(OrderStatuses.ClosedSuccessfully);
+
+                                order.BuyerChecked = false;
+                                order.SellerChecked = false;
+
+                                _orderService.SaveOrder();
+                                if (User.Identity.GetUserId() == order.SellerId)
+                                {
+                                    return RedirectToAction("SellDetails", "Order", new { orderId = order.Id });
+                                }
+                                else if (User.Identity.GetUserId() == order.BuyerId)
+                                {
+                                    return RedirectToAction("BuyDetails", "Order", new { orderId = order.Id });
+                                }
+                                return View();
+                            }                                                      
                         }
                     }
                 }
