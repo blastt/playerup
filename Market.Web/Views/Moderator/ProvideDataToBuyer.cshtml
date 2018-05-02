@@ -44,6 +44,23 @@
                 @Html.EditorFor(m => m.SteamEmail, new { @class = "form-control" })
             </div>
         </div>
+
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Пароль Steam</label>
+            </div>
+            <div class="col-lg-4">
+                @Html.EditorFor(m => m.EmailPassword, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Подтверждение пароля Steam</label>
+            </div>
+            <div class="col-lg-4">
+                @Html.EditorFor(m => m.ConfirmEmailPassword, new { @class = "form-control" })
+            </div>
+        </div>
         <div class="row">
             <div class="col-lg-2">
                 <label>Дополнительная информация Steam</label>

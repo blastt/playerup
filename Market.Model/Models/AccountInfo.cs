@@ -12,6 +12,7 @@ namespace Market.Model.Models
         public string Login { get; set; }
         public string Password { get; set; }
         public string Email { get; set; }
+        public string EmailPassword { get; set; }
         public string AdditionalInformation { get; set; }
 
         public virtual Order Order { get; set; }

@@ -1,6 +1,7 @@
 ﻿using Market.Model.Models;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
@@ -15,6 +16,8 @@ namespace Market.Web.ViewModels
 
         public string CurrentStatusName { get; set; }
         public string OfferHeader { get; set; }
+
+        [DataType(DataType.Currency)]
         public decimal OfferPrice { get; set; }
         public string OfferId { get; set; }
 

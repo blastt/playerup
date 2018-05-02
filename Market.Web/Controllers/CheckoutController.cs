@@ -93,7 +93,7 @@ namespace Trader.WEB.Controllers
                 return RedirectToAction("BuyDetails", "Order", new { id = offer.Order.Id });
 
             }
-            return View();
+            return HttpNotFound();
 
         }
 
@@ -104,12 +104,12 @@ namespace Trader.WEB.Controllers
         }
 
         [HttpPost]
-        public ActionResult Paid(int? orderId)
+        public ActionResult Paid(int? id)
         {
             // Добавить логику оплаты
-            if (orderId != null)
+            if (id != null)
             {
-                Order order = _orderService.GetOrder(orderId.Value);
+                Order order = _orderService.GetOrder(id.Value);
                 if (order != null && order.CurrentStatus.Value == OrderStatuses.BuyerPaying)
                 {
                     var mainCup = _userProfileService.GetUserProfileByName("palyerup");
@@ -129,7 +129,7 @@ namespace Trader.WEB.Controllers
                             }
                             else
                             {
-                                return HttpNotFound("Недостаточно бабла");
+                                return View("NotEnoughMoney");
                             }
                         }
                         else
@@ -143,7 +143,7 @@ namespace Trader.WEB.Controllers
                             }
                             else
                             {
-                                return HttpNotFound("Недостаточно бабла");
+                                return View("NotEnoughMoney");
                             }
                         }
                         order.StatusLogs.AddLast(new StatusLog()
@@ -307,7 +307,7 @@ namespace Trader.WEB.Controllers
                                 order.SellerChecked = false;
                                 order.AccountInfo = accountInfo;
                                 _orderService.SaveOrder();
-                                return RedirectToAction("SellDetails", "Order", new { orderId = order.Id });
+                                return RedirectToAction("SellDetails", "Order", new { id = order.Id });
                             }
                         }
                     }
@@ -355,11 +355,11 @@ namespace Trader.WEB.Controllers
                                 _orderService.SaveOrder();
                                 if (User.Identity.GetUserId() == order.SellerId)
                                 {
-                                    return RedirectToAction("SellDetails", "Order", new { orderId = order.Id });
+                                    return RedirectToAction("SellDetails", "Order", new { id = order.Id });
                                 }
                                 else if (User.Identity.GetUserId() == order.BuyerId)
                                 {
-                                    return RedirectToAction("BuyDetails", "Order", new { orderId = order.Id });
+                                    return RedirectToAction("BuyDetails", "Order", new { id = order.Id });
                                 }
                                 return View();
                             }                                                      

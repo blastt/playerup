@@ -613,6 +613,8 @@
     <Content Include="Views\Offer\Deactivate.cshtml" />
     <Content Include="Views\Offer\Activate.cshtml" />
     <Content Include="Views\Offer\_AccountClosedOfferItem.cshtml" />
+    <Content Include="Views\Offer\Delete.cshtml" />
+    <Content Include="Views\Checkout\NotEnoughMoney.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

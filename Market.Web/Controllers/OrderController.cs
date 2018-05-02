@@ -36,12 +36,11 @@ namespace Market.Web.Controllers
             if (ordersBuy != null)
             {
                 var orderViewModels = Mapper.Map<IEnumerable<Order>, IEnumerable<OrderViewModel>>(ordersBuy);
-
+                ViewData["BuyCount"] = ordersBuy.Count();
+                ViewData["SellCount"] = ordersSell.Count();
                 var model = new OrderListViewModel
                 {
-                    Orders = orderViewModels,
-                    BuyCount = ordersBuy.Count(),
-                    SellCount = ordersSell.Count()
+                    Orders = orderViewModels
 
                 };
 
@@ -60,12 +59,11 @@ namespace Market.Web.Controllers
             if (ordersBuy != null)
             {
                 var orderViewModels = Mapper.Map<IEnumerable<Order>, IEnumerable<OrderViewModel>>(ordersSell);
-
+                ViewData["BuyCount"] = ordersBuy.Count();
+                ViewData["SellCount"] = ordersSell.Count();
                 var model = new OrderListViewModel
                 {
-                    Orders = orderViewModels,
-                    BuyCount = ordersBuy.Count(),
-                    SellCount = ordersSell.Count()
+                    Orders = orderViewModels
 
                 };
 
@@ -76,18 +74,22 @@ namespace Market.Web.Controllers
 
         }
 
-        public ActionResult BuyDetails(int? orderId)
+        public ActionResult BuyDetails(int? Id)
         {
-            if (orderId != null)
+            if (Id != null)
             {
 
-                var order = _orderService.GetOrder(orderId.Value);
+                var order = _orderService.GetOrder(Id.Value);
                 if (order != null)
                 {
                     if (order.BuyerId == User.Identity.GetUserId())
                     {
                         order.BuyerChecked = true;
                         _orderService.SaveOrder();
+                        var ordersBuy = _orderService.GetOrders().Where(m => m.BuyerId == User.Identity.GetUserId());
+                        var ordersSell = _orderService.GetOrders().Where(m => m.SellerId == User.Identity.GetUserId());
+                        ViewData["BuyCount"] = ordersBuy.Count();
+                        ViewData["SellCount"] = ordersSell.Count();
                         DetailsOrderViewModel model = Mapper.Map<Order, DetailsOrderViewModel>(order);
                         
                         var currentStatus = order.CurrentStatus.Value;
@@ -144,12 +146,12 @@ namespace Market.Web.Controllers
 
         }
 
-        public ActionResult Close(int? orderId)
+        public ActionResult Close(int? Id)
         {
             string userId = User.Identity.GetUserId();
-            if (userId != null && orderId != null)
+            if (userId != null && Id != null)
             {
-                var order = _orderService.GetOrder(orderId.Value);
+                var order = _orderService.GetOrder(Id.Value);
                 if (order.CurrentStatus.Value == OrderStatuses.BuyerPaying ||
                     order.CurrentStatus.Value == OrderStatuses.OrderCreating ||
                     order.CurrentStatus.Value == OrderStatuses.MiddlemanFinding ||
@@ -171,6 +173,7 @@ namespace Market.Web.Controllers
                     }
                     if (newOrderStatus != null)
                     {
+                        
                         order.StatusLogs.AddLast(new StatusLog()
                         {
                             OldStatus = order.CurrentStatus,
@@ -190,11 +193,11 @@ namespace Market.Web.Controllers
 
         }
 
-        public ActionResult SellDetails(int? orderId)
+        public ActionResult SellDetails(int? Id)
         {
-            if (orderId != null)
+            if (Id != null)
             {
-                var order = _orderService.GetOrder(orderId.Value);
+                var order = _orderService.GetOrder(Id.Value);
                 if (order != null)
                 {
                     if (order.SellerId == User.Identity.GetUserId())
@@ -202,7 +205,10 @@ namespace Market.Web.Controllers
                         order.SellerChecked = true;
                         _orderService.SaveOrder();
                         DetailsOrderViewModel model = Mapper.Map<Order, DetailsOrderViewModel>(order);
-
+                        var ordersBuy = _orderService.GetOrders().Where(m => m.BuyerId == User.Identity.GetUserId());
+                        var ordersSell = _orderService.GetOrders().Where(m => m.SellerId == User.Identity.GetUserId());
+                        ViewData["BuyCount"] = ordersBuy.Count();
+                        ViewData["SellCount"] = ordersSell.Count();
                         var currentStatus = order.CurrentStatus.Value;
                         if (currentStatus == OrderStatuses.BuyerPaying ||
                             currentStatus == OrderStatuses.OrderCreating ||

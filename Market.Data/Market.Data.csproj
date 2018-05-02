@@ -101,6 +101,10 @@
     <Compile Include="Migrations\201804291319312_SumToSeller.Designer.cs">
       <DependentUpon>201804291319312_SumToSeller.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201805021023057_EmailPAssword.cs" />
+    <Compile Include="Migrations\201805021023057_EmailPAssword.Designer.cs">
+      <DependentUpon>201805021023057_EmailPAssword.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\AccountInfoRepository.cs" />
@@ -147,6 +151,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201804291319312_SumToSeller.resx">
       <DependentUpon>201804291319312_SumToSeller.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805021023057_EmailPAssword.resx">
+      <DependentUpon>201805021023057_EmailPAssword.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

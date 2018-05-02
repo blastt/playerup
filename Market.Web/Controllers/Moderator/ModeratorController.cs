@@ -102,11 +102,11 @@ namespace Market.Web.Controllers.Moderator
 
         // Provide data from moderator to buyer
         [HttpGet]
-        public ActionResult ProvideDataToBuyer(int? orderId)
+        public ActionResult ProvideDataToBuyer(int? id)
         {
-            if (orderId != null)
+            if (id != null)
             {
-                var order = _orderService.GetOrder(orderId.Value);
+                var order = _orderService.GetOrder(id.Value);
                 if (order != null)
                 {
                     var accInfo = order.AccountInfo;

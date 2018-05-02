@@ -11,5 +11,5 @@
     <td>@Html.DisplayFor(m => m.SellerName) </td>
     <td>@Html.DisplayFor(m => m.OfferPrice)</td>
     <td>@Model.CurrentStatus.DuringName</td>
-    <td>@Html.ActionLink("Детали", "BuyDetails", "Order", new { orderId = Model.Id }, new { @class = "btn btn-details" })</td>
+    <td>@Html.ActionLink("Детали", "BuyDetails", "Order", new { id = Model.Id }, new { @class = "btn btn-details" })</td>
 </tr>

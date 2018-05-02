@@ -19,6 +19,11 @@ namespace Market.Web.ViewModels
         [Compare("SteamPassword", ErrorMessage = "Пароль и его подтверждение не совпадают.")]
         public string ConfirmSteamPassword { get; set; }
         public string SteamEmail { get; set; }
+
+        public string EmailPassword { get; set; }
+        [Compare("EmailPassword", ErrorMessage = "Пароль и его подтверждение не совпадают.")]
+        public string ConfirmEmailPassword { get; set; }
+
         public string AdditionalInformation { get; set; }
         [Required]
         public string ModeratorId { get; set; }

@@ -139,14 +139,14 @@
                             <label>Цена</label>
                         </div>
                         <div class="order-details-col col-md-8">
-                            <span>@Model.OfferPrice</span>
+                            <span>@Html.DisplayFor(m => m.OfferPrice)</span>
                         </div>
                     </div>
                     <div class="order-details-row row">
-                        <div class="order-details-col col-md-5">
+                        <div class="order-details-col col-md-12">
                             @if (Model.ShowCloseButton)
                             {
-                                @Html.ActionLink("Закрыть сделку", "Close", "Order", new { orderId = Model.Id }, new { @class = "btn btn-close mr-3" })
+                                @Html.ActionLink("Закрыть сделку", "Close", "Order", new { orderId = Model.Id }, new { @class = "btn btn-close mb-3" })
                             }
 
                             @if (Model.ShowProvideData)
@@ -157,7 +157,7 @@
                                     @Html.HiddenFor(m => m.Id)
                                     @Html.HiddenFor(m => m.BuyerId)
                                     @Html.HiddenFor(m => m.SellerId)
-                                    <input type="submit" value="Предоставить данные" class="btn btn-provide mr-3" />
+                                    <input type="submit" value="Предоставить данные" class="btn btn-provide mb-3" />
                                 }
 
                             }
@@ -168,7 +168,7 @@
                                     @Html.Hidden("receiverId", Model.BuyerId)
                                     @Html.Hidden("OrderId", Model.Id)
 
-                                    <input type="submit" value="Оставить отзыв покупателю" class="btn btn-leavefeedback mr-3" />
+                                    <input type="submit" value="Оставить отзыв покупателю" class="btn btn-leavefeedback mb-3" />
                                 }
                             }
 
@@ -200,7 +200,6 @@
                                 <div class="node-circle"></div>
                                 <div class="node-name">@status.OldStatus.FinishedName</div>
                                 <div class="node-date">@status.TimeStamp</div>
-                                <div class="node-circle-final"></div>
                             </div>
                         }
                         if (status.NewStatus.Value == Market.Model.Models.OrderStatuses.ClosedSuccessfully ||
