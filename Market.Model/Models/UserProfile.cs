@@ -106,11 +106,16 @@ namespace Market.Model.Models
             }
         }
 
+
         public string Discription { get; set; }
         public bool IsOnline { get; set; }
         public DateTime RegistrationDate { get; set; }
 
         public string Name { get; set; }
+
+        public IList<Billing> Billings { get; set; } = new List<Billing>();
+        public IList<BuyerInvoice> BuyerInvoices { get; set; } = new List<BuyerInvoice>();
+        public IList<SellerInvoice> SellerInvoices { get; set; } = new List<SellerInvoice>();
 
         public decimal Balance { get; set; }
         public virtual ApplicationUser ApplicationUser { get; set; }

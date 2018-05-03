@@ -53,6 +53,9 @@ namespace Marketplace.Data
             modelBuilder.Configurations.Add(new OrderStatusConfiguration());
             modelBuilder.Configurations.Add(new DialogConfiguration());
             modelBuilder.Configurations.Add(new StatusLogConfiguration());
+            modelBuilder.Configurations.Add(new BillingConfiguration());
+            modelBuilder.Configurations.Add(new SellerInvoiceConfiguration());
+            modelBuilder.Configurations.Add(new BuyerInvoiceConfiguration());
             base.OnModelCreating(modelBuilder);
         }
         public virtual DbSet<UserProfile> UserProfiles { get; set; }
@@ -67,5 +70,8 @@ namespace Marketplace.Data
         public virtual DbSet<OrderStatus> OrderStatuses { get; set; }
         public virtual DbSet<Dialog> Dialogs { get; set; }
         public virtual DbSet<StatusLog> StatusLogs { get; set; }
+        public virtual DbSet<Billing> Billings { get; set; }
+        public virtual DbSet<BuyerInvoice> BuyerInvoices { get; set; }
+        public virtual DbSet<SellerInvoice> SellerInvoices { get; set; }
     }
 }

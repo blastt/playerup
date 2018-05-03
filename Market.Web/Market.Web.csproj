@@ -615,6 +615,9 @@
     <Content Include="Views\Offer\_AccountClosedOfferItem.cshtml" />
     <Content Include="Views\Offer\Delete.cshtml" />
     <Content Include="Views\Checkout\NotEnoughMoney.cshtml" />
+    <Content Include="Views\Shared\_AdminLayout.cshtml" />
+    <Content Include="Views\Admin\OfferList.cshtml" />
+    <Content Include="Views\Admin\GameList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

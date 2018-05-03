@@ -54,6 +54,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration\AccountInfoConfiguration.cs" />
+    <Compile Include="Configuration\BillingConfiguration.cs" />
+    <Compile Include="Configuration\BuyerInvoiceConfiguration.cs" />
     <Compile Include="Configuration\DialogConfiguration.cs" />
     <Compile Include="Configuration\FeedbackConfiguration.cs" />
     <Compile Include="Configuration\FilterConfiguration.cs" />
@@ -63,6 +65,7 @@
     <Compile Include="Configuration\OfferConfiguration.cs" />
     <Compile Include="Configuration\OrderConfiguration.cs" />
     <Compile Include="Configuration\OrderStatusConfiguration.cs" />
+    <Compile Include="Configuration\SellerInvoiceConfiguration.cs" />
     <Compile Include="Configuration\StatusLogConfiguration.cs" />
     <Compile Include="Configuration\UserProfileConfiguration.cs" />
     <Compile Include="Infrastructure\DBFactory.cs" />
@@ -105,9 +108,15 @@
     <Compile Include="Migrations\201805021023057_EmailPAssword.Designer.cs">
       <DependentUpon>201805021023057_EmailPAssword.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201805031104387_Billings.cs" />
+    <Compile Include="Migrations\201805031104387_Billings.Designer.cs">
+      <DependentUpon>201805031104387_Billings.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\AccountInfoRepository.cs" />
+    <Compile Include="Repositories\BillingRepository.cs" />
+    <Compile Include="Repositories\BuyerInvoiceRepository.cs" />
     <Compile Include="Repositories\DialogRepository.cs" />
     <Compile Include="Repositories\FeedbackRepository.cs" />
     <Compile Include="Repositories\FilterItemRepository.cs" />
@@ -117,6 +126,7 @@
     <Compile Include="Repositories\OfferRepository.cs" />
     <Compile Include="Repositories\OrderRepository.cs" />
     <Compile Include="Repositories\OrderStatusRepository.cs" />
+    <Compile Include="Repositories\SellerInvoiceRepository.cs" />
     <Compile Include="Repositories\StatusLogRepository.cs" />
     <Compile Include="Repositories\UserProfileRepository.cs" />
   </ItemGroup>
@@ -154,6 +164,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201805021023057_EmailPAssword.resx">
       <DependentUpon>201805021023057_EmailPAssword.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805031104387_Billings.resx">
+      <DependentUpon>201805031104387_Billings.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -18,16 +18,25 @@ namespace Trader.WEB.Controllers
     {
         private readonly IUserProfileService _userProfileService;
         private readonly IOrderStatusService _orderStatusService;
+        private readonly IBillingService _billingService;
+        private readonly ISellerInvoiceService _sellerInvoiceService;
+        private readonly IBuyerInvoiceService _buyerInvoiceService;
         private readonly IOrderService _orderService;
         private readonly IOfferService _offerService;
         private readonly IAccountInfoService _accountInfoService;
-        public CheckoutController(IUserProfileService userProfileService, IOrderService orderService, IOfferService offerService, IAccountInfoService accountInfoService, IOrderStatusService orderStatusService)
+        public CheckoutController(IUserProfileService userProfileService, IOrderService orderService, 
+            IOfferService offerService, IAccountInfoService accountInfoService, 
+            IOrderStatusService orderStatusService, IBillingService billingService,
+            ISellerInvoiceService sellerInvoiceService, IBuyerInvoiceService buyerInvoiceService)
         {
             _orderStatusService = orderStatusService;
             _userProfileService = userProfileService;
             _orderService = orderService;
             _offerService = offerService;
             _accountInfoService = accountInfoService;
+            _billingService = billingService;
+            _sellerInvoiceService = sellerInvoiceService;
+            _buyerInvoiceService = buyerInvoiceService;
         }
 
         [HttpGet]
@@ -124,6 +133,13 @@ namespace Trader.WEB.Controllers
                             order.AmmountSellerGet = order.Offer.Price - order.Offer.MiddlemanPrice.Value;
                             if (buyer.Balance >= order.Sum)
                             {
+                                _buyerInvoiceService.CreateBuyerInvoice(new BuyerInvoice
+                                {
+                                    Amount = order.Sum,
+                                    DatePay = DateTime.Now,
+                                    UserId = buyer.Id,
+                                    OrderId = order.Id
+                                });
                                 buyer.Balance -= order.Sum;
                                 mainCup.Balance += order.Sum;
                             }
@@ -138,7 +154,14 @@ namespace Trader.WEB.Controllers
                             order.AmmountSellerGet = order.Offer.Price;
                             if (buyer.Balance >= order.Offer.Order.Sum)
                             {
-                                buyer.Balance -= order.Sum + order.Offer.MiddlemanPrice.Value;
+                                _buyerInvoiceService.CreateBuyerInvoice(new BuyerInvoice
+                                {
+                                    Amount = order.Sum,
+                                    DatePay = DateTime.Now,
+                                    UserId = buyer.Id,
+                                    OrderId = order.Id
+                                });
+                                buyer.Balance -= order.Sum;
                                 mainCup.Balance += order.Sum;
                             }
                             else
@@ -158,7 +181,7 @@ namespace Trader.WEB.Controllers
                         order.SellerChecked = false;
                         _orderService.UpdateOrder(order);
                         _orderService.SaveOrder();
-                        return RedirectToAction("BuyDetails", "Order", new { orderId = order.Id });
+                        return RedirectToAction("BuyDetails", "Order", new { id = order.Id });
                     }
                     
                 }
@@ -332,6 +355,13 @@ namespace Trader.WEB.Controllers
                             if (mainCup != null)
                             {
                                 mainCup.Balance -= order.AmmountSellerGet.Value;
+                                _sellerInvoiceService.CreateSellerInvoice(new SellerInvoice
+                                {
+                                    Amount = order.Sum,
+                                    DatePay = DateTime.Now,
+                                    UserId = order.SellerId,
+                                    OrderId = order.Id
+                                });
                                 order.Seller.Balance += order.AmmountSellerGet.Value;
                                 order.StatusLogs.AddLast(new StatusLog()
                                 {

@@ -17,10 +17,10 @@ namespace Market.Web.Mappings
         }
 
 
-        
+
         public DomainToViewModelMappingProfile()
         {
-            
+
             CreateMap<Offer, OfferViewModel>();
             CreateMap<Order, OrderViewModel>();
             CreateMap<Game, GameViewModel>();
@@ -219,7 +219,7 @@ namespace Market.Web.Mappings
 
             #region UserProfile
 
-            CreateMap<UserProfile, InfoUserProfileViewModel > ()
+            CreateMap<UserProfile, InfoUserProfileViewModel>()
                 .ForMember(o => o.Id, map => map.MapFrom(vm => vm.Id))
                 .ForMember(o => o.Avatar, map => map.MapFrom(vm => vm.Avatar))
                 .ForMember(o => o.IsOnline, map => map.MapFrom(vm => vm.IsOnline))
@@ -241,6 +241,14 @@ namespace Market.Web.Mappings
                 .ForMember(o => o.Name, map => map.MapFrom(vm => vm.Name));
 
 
+            #endregion
+
+            #region Game
+            CreateMap<Game, GameViewModel>()
+                .ForMember(o => o.Id, map => map.MapFrom(vm => vm.Id))
+                .ForMember(o => o.Image, map => map.MapFrom(vm => vm.Image))
+                .ForMember(o => o.Name, map => map.MapFrom(vm => vm.Name))
+                .ForMember(o => o.Value, map => map.MapFrom(vm => vm.Value));
             #endregion
         }
     }
