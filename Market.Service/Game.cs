@@ -14,6 +14,7 @@ namespace Market.Service
         IEnumerable<Game> GetGames();
         Game GetGame(int id);
         Game GetGameByValue(string name);
+        void Delete(Game game);
         void CreateGame(Game message);
         void SaveGame();
     }
@@ -48,6 +49,11 @@ namespace Market.Service
         public void CreateGame(Game game)
         {
             gamesRepository.Add(game);
+        }
+
+        public void Delete(Game game)
+        {
+            gamesRepository.Delete(game);
         }
 
         public void SaveGame()

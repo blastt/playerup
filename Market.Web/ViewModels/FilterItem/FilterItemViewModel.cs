@@ -7,8 +7,14 @@ namespace Market.Web.ViewModels
 {
     public class FilterItemViewModel
     {
-        public string Image { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public string Value { get; set; }
+        public string FilterName { get; set; }
+        public string GameName { get; set; }
+        public int Rank { get; set; }
+
+        public byte[] ImageData { get; set; }
+        public string ImageMimeType { get; set; }
     }
 }

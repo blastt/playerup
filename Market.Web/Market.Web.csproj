@@ -618,6 +618,11 @@
     <Content Include="Views\Shared\_AdminLayout.cshtml" />
     <Content Include="Views\Admin\OfferList.cshtml" />
     <Content Include="Views\Admin\GameList.cshtml" />
+    <Content Include="Views\Admin\CreateGame.cshtml" />
+    <Content Include="Views\Admin\FilterList.cshtml" />
+    <Content Include="Views\Admin\FilterItemList.cshtml" />
+    <Content Include="Views\Admin\EditFilterItem.cshtml" />
+    <Content Include="Views\Admin\EditGame.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

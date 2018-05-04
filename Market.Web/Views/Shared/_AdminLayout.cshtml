@@ -9,11 +9,41 @@
     @Scripts.Render("~/bundles/modernizr")
 </head>
 <body>
-    @if (TempData["message"] != null)
-    {
-        <div class="alert alert-success">@TempData["message"]</div>
-    }
-    <div>
+
+    <div class="container">
+        <div class="navbar navbar-expand-lg fixed-top navbar-dark bg-primary">
+            <div class="container">
+                <a href="@Url.Action("Buy","Offer")" class="navbar-brand">
+                    <img width="140" src="~/Content/Images/logo.svg" />
+                </a>
+                <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse left-bar" id="navbarResponsive">
+                    <ul class="navbar-nav" id="left-bar">
+                        <li class="nav-item">
+                            @Html.ActionLink("Предложения", "OfferList", "Admin", null, new { @class = "nav-link" })
+                        </li>
+                        <li class="nav-item">
+                            @Html.ActionLink("Игры", "GameList", "Admin", null, new { @class = "nav-link" })
+                        </li>
+                        <li class="nav-item">
+                            @Html.ActionLink("Фильтры", "FilterList", "Admin", null, new { @class = "nav-link" })
+                        </li>
+                        <li class="nav-item">
+                            @Html.ActionLink("Элементы фильтров", "FilterItemList", "Admin", null, new { @class = "nav-link" })
+                        </li>
+                    </ul>
+
+                </div>
+
+            </div>
+
+        </div>
+        @if (TempData["message"] != null)
+        {
+            <div class="alert alert-success">@TempData["message"]</div>
+        }
         @RenderBody()
     </div>
     @Scripts.Render("~/bundles/bootstrap")

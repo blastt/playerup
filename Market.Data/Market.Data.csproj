@@ -112,6 +112,22 @@
     <Compile Include="Migrations\201805031104387_Billings.Designer.cs">
       <DependentUpon>201805031104387_Billings.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201805031444341_Images.cs" />
+    <Compile Include="Migrations\201805031444341_Images.Designer.cs">
+      <DependentUpon>201805031444341_Images.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201805031450010_Images1.cs" />
+    <Compile Include="Migrations\201805031450010_Images1.Designer.cs">
+      <DependentUpon>201805031450010_Images1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201805031625267_ImagesFilterItems.cs" />
+    <Compile Include="Migrations\201805031625267_ImagesFilterItems.Designer.cs">
+      <DependentUpon>201805031625267_ImagesFilterItems.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201805032008519_ImagesFilterItems2.cs" />
+    <Compile Include="Migrations\201805032008519_ImagesFilterItems2.Designer.cs">
+      <DependentUpon>201805032008519_ImagesFilterItems2.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\AccountInfoRepository.cs" />
@@ -167,6 +183,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201805031104387_Billings.resx">
       <DependentUpon>201805031104387_Billings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805031444341_Images.resx">
+      <DependentUpon>201805031444341_Images.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805031450010_Images1.resx">
+      <DependentUpon>201805031450010_Images1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805031625267_ImagesFilterItems.resx">
+      <DependentUpon>201805031625267_ImagesFilterItems.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805032008519_ImagesFilterItems2.resx">
+      <DependentUpon>201805032008519_ImagesFilterItems2.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

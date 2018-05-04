@@ -8,9 +8,9 @@
         <div class="card-body">
             <div class="card-title" style="text-overflow: ellipsis">
                 <span class="font-size-18">
-                    @Html.ActionLink(@Model.Header, "Details", new { id = Model.Id }, new { @class="text-300" })
+                    @Html.ActionLink(@Model.Header, "Details", new { id = Model.Id }, new { @class = "text-300" })
                 </span>
-</div>
+            </div>
             <div class="row">
                 <div class="col-sm-4">
                     <div class="item-rating">
@@ -37,18 +37,18 @@
 
                         @foreach (var filter in Model.FilterFilterItem)
                         {
-                            var url = "../../Content/Images/" + Model.Game.Value + "/Ranks/" + filter.Value.Image;
                             <div class="col-md-6" style="margin:0 auto;">
                                 <div class="mb-3">
                                     <span class="text-700">@filter.Key.Text</span>
                                 </div>
-                                @if (filter.Value.Image == null)
+                                @{ var path = Url.Action("GetImage", "FilterItem", new { id = filter.Value.Id }); }
+                                @if (path == null)
                                 {
                                     <span>@filter.Value.Name</span>
                                 }
                                 else
                                 {
-                                    <img src="@url" title="@filter.Value.Name" style="width:100px" alt="@filter.Value.Name" />
+                                    <img src="@path" title="@filter.Value.Name" style="width:100px" alt="@filter.Value.Name" />
                                 }
 
                             </div>

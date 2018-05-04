@@ -17,17 +17,17 @@
     </tr>
     @foreach (var game in Model)
     {
-        var path = "../../Content/Images/" + game.Value + "/Icons/" + game.Image;
         <tr>
             <td>
                 @Html.DisplayFor(m => game.Name)
             </td>
             <td>
-                <img src="@path" width="40" />
+                <img src="@Url.Action("GetImage", "Game", new { id = game.Id })" width="40" />
             </td>
             <td>
-                
-                @Html.ActionLink("Удалить", "DeleteOffer", new { id = game.Id}) 
+
+                @Html.ActionLink("Удалить", "DeleteGame", new { id = game.Id }) |
+                @Html.ActionLink("Редактировать", "EditGame", new { id = game.Id })
             </td>
         </tr>
     }

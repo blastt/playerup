@@ -1,0 +1,56 @@
+﻿@model IEnumerable<Market.Web.ViewModels.FilterItemViewModel>
+
+@{
+    ViewBag.Title = "OfferList";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<table class="table table-striped table-bordered table-light">
+    <tr>
+        <th>
+            Название
+        </th>
+        <th>
+            Название фильтра
+        </th>
+        <th>
+            Название игры
+        </th>
+        <th>
+            номер
+        </th>
+        <th>
+            Лого
+        </th>
+        
+        <th></th>
+    </tr>
+    @foreach (var filterItem in Model)
+    {
+    <tr>
+        <td>
+            @Html.DisplayFor(m => filterItem.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(m => filterItem.FilterName)
+        </td>
+        <td>
+            @Html.DisplayFor(m => filterItem.GameName)
+        </td>
+        <td>
+            @Html.DisplayFor(m => filterItem.Rank)
+        </td>
+        <td>
+            <img src="@Url.Action("GetImage", "FilterItem", new { id = filterItem.Id })" width="80" />
+        </td>
+        <td>
+
+            @Html.ActionLink("Удалить", "DeleteFilterItem", new { id = filterItem.Id })|
+            @Html.ActionLink("Редактировать", "EditFilterItem", new { id = filterItem.Id })
+        </td>
+    </tr>
+    }
+</table>
+
+@Html.ActionLink("Добавить фильтр", "CreateGame", null, null)
+

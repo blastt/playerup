@@ -43,32 +43,6 @@ namespace Market.Web.Controllers.Admin
             return View(model);
         }
 
-        public ActionResult GameList()
-        {
-            IEnumerable<GameViewModel> model = Mapper.Map<IEnumerable<Game>, IEnumerable<GameViewModel>>(_gameService.GetGames());
-
-            return View(model);
-        }
-
-        public ActionResult CreateGame()
-        {            
-            return View();
-        }
-
-        public ActionResult FilterList()
-        {
-            IEnumerable<FilterViewModel> model = Mapper.Map<IEnumerable<Model.Models.Filter>, IEnumerable<FilterViewModel>>(_filterService.GetFilters());
-
-            return View(model);
-        }
-
-        public ActionResult FilterItemList()
-        {
-            IEnumerable<FilterItemViewModel> model = Mapper.Map<IEnumerable<FilterItem>, IEnumerable<FilterItemViewModel>>(_filterItemService.GetFilterItems());
-
-            return View(model);
-        }
-
         public ActionResult DeleteOffer(int id)
         {
             Offer offer = _offerService.GetOffer(id);
@@ -79,6 +53,201 @@ namespace Market.Web.Controllers.Admin
                 _offerService.SaveOffer();
             }
             return RedirectToAction("OfferList");
+        }
+
+        public ActionResult GameList()
+        {
+            IEnumerable<GameViewModel> model = Mapper.Map<IEnumerable<Game>, IEnumerable<GameViewModel>>(_gameService.GetGames());
+
+            return View(model);
+        }
+
+        [HttpGet]
+        public ActionResult CreateGame()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult CreateGame(GameViewModel model, HttpPostedFileBase image = null)
+        {
+            if (ModelState.IsValid)
+            {
+                var game = Mapper.Map<GameViewModel, Game>(model);
+                if (image != null)
+                {
+                    game.ImageMimeType = image.ContentType;
+                    game.ImageData = new byte[image.ContentLength];
+                    image.InputStream.Read(game.ImageData, 0, image.ContentLength);
+                }
+                _gameService.CreateGame(game);
+
+                _gameService.SaveGame();
+                return RedirectToAction("GameList");
+            }
+            return HttpNotFound();
+        }
+
+        [HttpGet]
+        public ActionResult EditGame(int? id)
+        {
+            if (id != null)
+            {
+                var game = _gameService.GetGame(id.Value);
+                if (game != null)
+                {
+                    var model = Mapper.Map<Game, GameViewModel>(game);
+                    return View(model);
+                }
+            }
+            return HttpNotFound();
+        }
+
+        [HttpPost]
+        public ActionResult EditGame(GameViewModel model, HttpPostedFileBase image = null)
+        {
+            if (ModelState.IsValid)
+            {
+                var game = _gameService.GetGame(model.Id);
+                if (game != null)
+                {
+                    game.Name = model.Name;
+                    game.Value = model.Value;
+                    game.Rank = model.Rank;
+                    game.ImageData = model.ImageData;
+                    if (image != null)
+                    {
+                        game.ImageMimeType = image.ContentType;
+                        game.ImageData = new byte[image.ContentLength];
+                        image.InputStream.Read(game.ImageData, 0, image.ContentLength);
+                    }
+                    _gameService.SaveGame();
+                    return RedirectToAction("GameList");
+                }
+            }
+            return HttpNotFound();
+        }
+
+        public ActionResult DeleteGame(int id)
+        {
+            Game game = _gameService.GetGame(id);
+            if (game != null)
+            {
+                _gameService.Delete(game);
+                TempData["message"] = string.Format("Игра удалена");
+                _offerService.SaveOffer();
+            }
+            return RedirectToAction("GameList");
+        }
+
+        public ActionResult FilterList()
+        {
+            IEnumerable<FilterViewModel> model = Mapper.Map<IEnumerable<Model.Models.Filter>, IEnumerable<FilterViewModel>>(_filterService.GetFilters());
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult CreateFilter(FilterViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var filter = Mapper.Map<FilterViewModel, Model.Models.Filter>(model);
+                _filterService.CreateFilter(filter);
+                _filterService.SaveFilter();
+                return RedirectToAction("FilterList");
+            }
+            return HttpNotFound();
+        }
+
+        public ActionResult DeleteFilter(int id)
+        {
+            var filter = _filterService.GetFilter(id);
+            if (filter != null)
+            {
+                _filterService.Delete(filter);
+                TempData["message"] = string.Format("Игра удалена");
+                _offerService.SaveOffer();
+            }
+            return RedirectToAction("GameList");
+        }
+
+        public ActionResult FilterItemList()
+        {
+            IEnumerable<FilterItemViewModel> model = Mapper.Map<IEnumerable<FilterItem>, IEnumerable<FilterItemViewModel>>(_filterItemService.GetFilterItems());
+            model = model.OrderBy(m => m.Rank).OrderBy(m => m.FilterName).OrderBy(m => m.GameName);
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult CreateFilterItem(FilterItemViewModel model, HttpPostedFileBase image = null)
+        {
+            if (ModelState.IsValid)
+            {
+                var filterItem = Mapper.Map<FilterItemViewModel, Model.Models.FilterItem>(model);
+                if (image != null)
+                {
+                    filterItem.ImageMimeType = image.ContentType;
+                    filterItem.ImageData = new byte[image.ContentLength];
+                    image.InputStream.Read(filterItem.ImageData, 0, image.ContentLength);
+                }
+                _filterItemService.CreateFilterItem(filterItem);
+                _filterItemService.SaveFilterItem();
+                return RedirectToAction("FilterItemList");
+            }
+            return HttpNotFound();
+        }
+
+        [HttpGet]
+        public ActionResult EditFilterItem(int? id)
+        {
+            if (id != null)
+            {
+                var filterItem = _filterItemService.GetFilterItem(id.Value);
+                if (filterItem != null)
+                {
+                    var model = Mapper.Map<FilterItem, FilterItemViewModel>(filterItem);
+                    return View(model);
+                }                                        
+            }
+            return HttpNotFound();
+        }
+
+        [HttpPost]
+        public ActionResult EditFilterItem(FilterItemViewModel model, HttpPostedFileBase image = null)
+        {
+            if (ModelState.IsValid)
+            {
+                var filterItem = _filterItemService.GetFilterItem(model.Id);
+                if (filterItem != null)
+                {
+                    filterItem.Name = model.Name;
+                    filterItem.Value = model.Value;
+                    filterItem.Rank = model.Rank;
+                    filterItem.ImageData = model.ImageData;
+                    if (image != null)
+                    {
+                        filterItem.ImageMimeType = image.ContentType;
+                        filterItem.ImageData = new byte[image.ContentLength];
+                        image.InputStream.Read(filterItem.ImageData, 0, image.ContentLength);
+                    }
+                    _filterItemService.SaveFilterItem();
+                    return RedirectToAction("FilterItemList");
+                }
+            }
+            return HttpNotFound();
+        }
+
+        public ActionResult DeleteFilterItem(int id)
+        {
+            var filter = _filterService.GetFilter(id);
+            if (filter != null)
+            {
+                _filterService.Delete(filter);
+                TempData["message"] = string.Format("Игра удалена");
+                _offerService.SaveOffer();
+            }
+            return RedirectToAction("GameList");
         }
 
 

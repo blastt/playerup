@@ -138,18 +138,25 @@ namespace Market.Web.Mappings
             #region FilterItem
 
             CreateMap<FilterItem, FilterItemViewModel>()
+                .ForMember(o => o.Id, map => map.MapFrom(vm => vm.Id))
                .ForMember(o => o.Name, map => map.MapFrom(vm => vm.Name))
+               .ForMember(o => o.Rank, map => map.MapFrom(vm => vm.Rank))
                .ForMember(o => o.Value, map => map.MapFrom(vm => vm.Value))
-               .ForMember(o => o.Image, map => map.MapFrom(vm => vm.Image));
+               .ForMember(o => o.ImageData, map => map.MapFrom(vm => vm.ImageData))
+               .ForMember(o => o.ImageMimeType, map => map.MapFrom(vm => vm.ImageMimeType))
+               .ForPath(o => o.FilterName, map => map.MapFrom(vm => vm.Filter.Text))
+               .ForPath(o => o.GameName, map => map.MapFrom(vm => vm.Filter.Game.Name));
 
             #endregion
 
             #region Filter
 
             CreateMap<Filter, FilterViewModel>()
+                .ForMember(o => o.Id, map => map.MapFrom(vm => vm.Id))
                .ForMember(o => o.Name, map => map.MapFrom(vm => vm.Text))
                .ForMember(o => o.Value, map => map.MapFrom(vm => vm.Value))
-               .ForPath(o => o.GameValue, map => map.MapFrom(vm => vm.Game.Value));
+               .ForPath(o => o.GameValue, map => map.MapFrom(vm => vm.Game.Value))
+               .ForPath(o => o.GameName, map => map.MapFrom(vm => vm.Game.Name));
 
             #endregion
 
@@ -246,7 +253,8 @@ namespace Market.Web.Mappings
             #region Game
             CreateMap<Game, GameViewModel>()
                 .ForMember(o => o.Id, map => map.MapFrom(vm => vm.Id))
-                .ForMember(o => o.Image, map => map.MapFrom(vm => vm.Image))
+                .ForMember(o => o.ImageData, map => map.MapFrom(vm => vm.ImageData))
+                .ForMember(o => o.ImageMimeType, map => map.MapFrom(vm => vm.ImageMimeType))
                 .ForMember(o => o.Name, map => map.MapFrom(vm => vm.Name))
                 .ForMember(o => o.Value, map => map.MapFrom(vm => vm.Value));
             #endregion

@@ -14,6 +14,7 @@ namespace Market.Service
     {
         IEnumerable<Filter> GetFilters();
         Filter GetFilter(int id);
+        void Delete(Filter filter);
         void CreateFilter(Filter message);
         void SaveFilter();
     }
@@ -43,7 +44,10 @@ namespace Market.Service
             var filter = filtersRepository.GetById(id);
             return filter;
         }
-
+        public void Delete(Filter filter)
+        {
+            filtersRepository.Delete(filter);
+        }
 
         public void CreateFilter(Filter filter)
         {

@@ -134,7 +134,7 @@ namespace Market.Web.Controllers.Admin
             }
             
             var s = new JavaScriptSerializer();
-            
+            s.MaxJsonLength = Int32.MaxValue;
             var jsonSerializerSettings = new JsonSerializerSettings();
 
            
@@ -142,6 +142,23 @@ namespace Market.Web.Controllers.Admin
             //check if any of the UserName matches the UserName specified in the Parameter using the ANY extension method.  
 
             return str;
+        }
+
+        public FileContentResult GetImage(int? id)
+        {
+            if (id != null)
+            {
+                var filterItem = _filterItemService.GetFilterItem(id.Value);
+                if (filterItem != null)
+                {
+                    if (filterItem.ImageData == null || filterItem.ImageMimeType == null)
+                    {
+                        return null;
+                    }
+                    return File(filterItem.ImageData, filterItem.ImageMimeType);
+                }
+            }
+            return null;
         }
     }
 }
