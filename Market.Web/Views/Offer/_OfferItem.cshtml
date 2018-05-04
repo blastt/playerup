@@ -14,7 +14,7 @@
             <div class="row">
                 <div class="col-sm-4">
                     <div class="item-rating">
-                        <img class="img-circle mr-2" align="left" src="@Url.Action("Photo", "Profile" , new { UserId = Model.UserId })" alt="Alternate Text" style="width:50px; height: 50px" />
+                        <img class="img-circle mr-2" align="left" src="@Model.User.ImagePath" alt="Alternate Text" style="width:50px; height: 50px" />
                         @Html.ActionLink(Model.UserName, "Info", "Profile", new { userName = Model.UserName }, null)
 
                         <br />
@@ -41,14 +41,13 @@
                                 <div class="mb-3">
                                     <span class="text-700">@filter.Key.Text</span>
                                 </div>
-                                @{ var path = Url.Action("GetImage", "FilterItem", new { id = filter.Value.Id }); }
-                                @if (path == null)
+                                @if (filter.Value.ImagePath == null)
                                 {
                                     <span>@filter.Value.Name</span>
                                 }
                                 else
                                 {
-                                    <img src="@path" title="@filter.Value.Name" style="width:100px" alt="@filter.Value.Name" />
+                                    <img src="@filter.Value.ImagePath" title="@filter.Value.Name" style="width:100px" alt="@filter.Value.Name" />
                                 }
 
                             </div>

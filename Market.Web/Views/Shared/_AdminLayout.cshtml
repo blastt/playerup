@@ -45,7 +45,9 @@
             <div class="alert alert-success">@TempData["message"]</div>
         }
         @RenderBody()
+
     </div>
     @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
 </body>
 </html>

@@ -142,8 +142,7 @@ namespace Market.Web.Mappings
                .ForMember(o => o.Name, map => map.MapFrom(vm => vm.Name))
                .ForMember(o => o.Rank, map => map.MapFrom(vm => vm.Rank))
                .ForMember(o => o.Value, map => map.MapFrom(vm => vm.Value))
-               .ForMember(o => o.ImageData, map => map.MapFrom(vm => vm.ImageData))
-               .ForMember(o => o.ImageMimeType, map => map.MapFrom(vm => vm.ImageMimeType))
+               .ForMember(o => o.ImagePath, map => map.MapFrom(vm => vm.ImagePath))
                .ForPath(o => o.FilterName, map => map.MapFrom(vm => vm.Filter.Text))
                .ForPath(o => o.GameName, map => map.MapFrom(vm => vm.Filter.Game.Name));
 
@@ -228,7 +227,7 @@ namespace Market.Web.Mappings
 
             CreateMap<UserProfile, InfoUserProfileViewModel>()
                 .ForMember(o => o.Id, map => map.MapFrom(vm => vm.Id))
-                .ForMember(o => o.Avatar, map => map.MapFrom(vm => vm.Avatar))
+                .ForMember(o => o.ImagePath, map => map.MapFrom(vm => vm.ImagePath))
                 .ForMember(o => o.IsOnline, map => map.MapFrom(vm => vm.IsOnline))
                 .ForMember(o => o.Name, map => map.MapFrom(vm => vm.Name))
                 .ForMember(o => o.AllFeedbackCount, map => map.MapFrom(vm => vm.AllFeedbackCount))
@@ -253,8 +252,7 @@ namespace Market.Web.Mappings
             #region Game
             CreateMap<Game, GameViewModel>()
                 .ForMember(o => o.Id, map => map.MapFrom(vm => vm.Id))
-                .ForMember(o => o.ImageData, map => map.MapFrom(vm => vm.ImageData))
-                .ForMember(o => o.ImageMimeType, map => map.MapFrom(vm => vm.ImageMimeType))
+                .ForMember(o => o.ImagePath, map => map.MapFrom(vm => vm.ImagePath))
                 .ForMember(o => o.Name, map => map.MapFrom(vm => vm.Name))
                 .ForMember(o => o.Value, map => map.MapFrom(vm => vm.Value));
             #endregion

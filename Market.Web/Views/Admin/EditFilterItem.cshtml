@@ -24,21 +24,41 @@
     <div class="form-group">
         <div style="position:relative;">
             <label>Картинка</label>
+            <img id="blah" src="@Model.ImagePath" alt="your image" />
             <a class='btn' href='javascript:;'>
-                Выберите файл...
-                <input type="file" name="Image" size="40"
-                       style="position:absolute;z-index:2;top:0;
-                                left:0;filter: alpha(opacity=0); opacity:0;
-                                background-color:transparent;color:transparent;"
-                       onchange='$("#upload-file-info").html($(this).val());'>
+                <input type="file" name="Image" size="40" class="form-control-file" onchange='readURL(this)'>
             </a>
-            <span class='label label-info' id="upload-file-info"></span>
-        </div>
 
-        <div class="form-control-static">Нет картинки</div>
+        </div>
 
     </div>
     <div class="panel-footer">
         <input type="submit" value="Сохранить" class="btn btn-primary" />
     </div>
+}
+
+@section scripts
+{
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script>
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#blah').attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+        function DrowImage() {
+
+
+            $('#upload-file-info').text($(this).val());
+
+
+
+        }
+    </script>
 }

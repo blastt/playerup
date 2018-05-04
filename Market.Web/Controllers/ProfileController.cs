@@ -150,7 +150,7 @@ namespace Trader.WEB.Controllers
         //        //if (client.Feedbacks.Contains(new Feedback { WhoLeftName = currentUserName }, new NameEqualityComparer()))
         //        //    return Content("Вы уже осталяли комментарий этому пользователю");
         //    }
-            
+
         //    return View(fb);
         //}
 
@@ -199,43 +199,51 @@ namespace Trader.WEB.Controllers
         //    return "";
         //}
 
-        public FileContentResult Photo(string userId)
+        public string Photo(string userId)
         {
             // get EF Database
             UserProfile profile = _userProfileService.GetUserProfileById(userId);
             // find the user. I am skipping validations and other checks.
-            if(profile != null)
+            if (profile != null)
             {
-                
-                    
-                return File(profile.Avatar, "image/jpeg");
-                                                             
+
+
+                return profile.ImagePath;
+
             }
             return null;
         }
 
         [HttpGet]
+        [Authorize]
         public ActionResult Upload()
         {
             return View();
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        
-        public ActionResult Upload(HttpPostedFileBase profile)
+        [Authorize]
+        public ActionResult Upload(HttpPostedFileBase image)
         {
             var user = _userProfileService.GetUserProfileById(User.Identity.GetUserId());
+            if (user != null)
+            {
+                if (image != null && (image.ContentType == "image/jpeg" || image.ContentType == "image/png"))
+                {
+                    string extName = System.IO.Path.GetExtension(image.FileName);
+                    string fileName = String.Format(@"{0}{1}", System.Guid.NewGuid(), extName);
 
-            // convert image stream to byte array
-            byte[] image = new byte[profile.ContentLength];
-            profile.InputStream.Read(image, 0, Convert.ToInt32(profile.ContentLength));
-
-            user.Avatar = image;
-
-            // save changes to database
-            _userProfileService.SaveUserProfile();
-
-            return RedirectToAction("List", "Offer");
+                    // сохраняем файл в папку Files в проекте
+                    string fullPath = Server.MapPath("~/Content/Images/FilterItems/" + fileName);
+                    string urlPath = Url.Content("~/Content/Images/FilterItems/" + fileName);
+                    image.SaveAs(fullPath);
+                    user.ImagePath = urlPath;
+                    return RedirectToAction("Buy", "Offer");
+                }
+                _userProfileService.SaveUserProfile();
+            }
+            return HttpNotFound();
+            
         }
 
 

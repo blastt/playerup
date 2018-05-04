@@ -348,11 +348,11 @@ namespace Market.Web.Controllers
                     return HttpNotFound("User exists!");
                 }
                 var user = new ApplicationUser { UserName = model.UserName, Email = model.Email };
-                byte[] imageData = System.IO.File.ReadAllBytes(Server.MapPath("~/Content/Images/noavatar.png"));
+                string urlPath = Url.Content("~/Content/Images/Avatars/Default.png");
                 UserProfile profile = new UserProfile
                 {
-                    Id = user.Id,                                       
-                    Avatar = imageData,
+                    Id = user.Id,
+                    ImagePath = urlPath,
                     Name = user.UserName,
                     RegistrationDate = DateTime.Now,
                     ApplicationUser = user

@@ -103,8 +103,8 @@ function drowMessageInDialog(userName, companionId,companionName,count, lastMess
     var tdDate = tr.find('#dialog-date').attr('data-id', dialogId);
     var compImg = tr.find('#dialog-block-img').attr('data-id', dialogId);
     var compName = tr.find('#dialog-companion-name').attr('data-id', dialogId);
-
-    compImg.attr('src', '/profile/photo?UserId=' + companionId);
+    //Html.Action("Photo", "Profile", new { UserId'+ companionId +' = message.SenderId })
+    compImg.attr('src', 'Html.Action("Photo", "Profile", new { UserId =' + companionId +'})');
     compName.text(companionName);
     tdText.text(lastMessage);
     tdDate.text(newDate);

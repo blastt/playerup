@@ -13,8 +13,7 @@ namespace Market.Model.Models
         public string Value { get; set; }
         public int Rank { get; set; } // порядковый номер среди рангов
 
-        public byte[] ImageData { get; set; }
-        public string ImageMimeType { get; set; }
+        public string ImagePath { get; set; }
 
         public virtual Filter Filter { get; set; }
         public virtual ICollection<Offer> Offers { get; set; }

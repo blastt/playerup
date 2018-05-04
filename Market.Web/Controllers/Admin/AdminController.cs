@@ -74,11 +74,16 @@ namespace Market.Web.Controllers.Admin
             if (ModelState.IsValid)
             {
                 var game = Mapper.Map<GameViewModel, Game>(model);
-                if (image != null)
+                if (image != null && (image.ContentType == "image/jpeg" || image.ContentType == "image/png"))
                 {
-                    game.ImageMimeType = image.ContentType;
-                    game.ImageData = new byte[image.ContentLength];
-                    image.InputStream.Read(game.ImageData, 0, image.ContentLength);
+                    string extName = System.IO.Path.GetExtension(image.FileName);
+                    string fileName = String.Format(@"{0}{1}", System.Guid.NewGuid(), extName);
+
+                    // сохраняем файл в папку Files в проекте
+                    string fullPath = Server.MapPath("~/Content/Images/FilterItems/" + fileName);
+                    string urlPath = Url.Content("~/Content/Images/FilterItems/" + fileName);
+                    image.SaveAs(fullPath);
+                    game.ImagePath = urlPath;
                 }
                 _gameService.CreateGame(game);
 
@@ -114,12 +119,16 @@ namespace Market.Web.Controllers.Admin
                     game.Name = model.Name;
                     game.Value = model.Value;
                     game.Rank = model.Rank;
-                    game.ImageData = model.ImageData;
-                    if (image != null)
+                    if (image != null && (image.ContentType == "image/jpeg" || image.ContentType == "image/png"))
                     {
-                        game.ImageMimeType = image.ContentType;
-                        game.ImageData = new byte[image.ContentLength];
-                        image.InputStream.Read(game.ImageData, 0, image.ContentLength);
+                        string extName = System.IO.Path.GetExtension(image.FileName);
+                        string fileName = String.Format(@"{0}{1}", System.Guid.NewGuid(), extName);
+
+                        // сохраняем файл в папку Files в проекте
+                        string fullPath = Server.MapPath("~/Content/Images/FilterItems/" + fileName);
+                        string urlPath = Url.Content("~/Content/Images/FilterItems/" + fileName);
+                        image.SaveAs(fullPath);
+                        game.ImagePath = urlPath;
                     }
                     _gameService.SaveGame();
                     return RedirectToAction("GameList");
@@ -185,11 +194,16 @@ namespace Market.Web.Controllers.Admin
             if (ModelState.IsValid)
             {
                 var filterItem = Mapper.Map<FilterItemViewModel, Model.Models.FilterItem>(model);
-                if (image != null)
+                if (image != null && (image.ContentType == "image/jpeg" || image.ContentType == "image/png"))
                 {
-                    filterItem.ImageMimeType = image.ContentType;
-                    filterItem.ImageData = new byte[image.ContentLength];
-                    image.InputStream.Read(filterItem.ImageData, 0, image.ContentLength);
+                    string extName = System.IO.Path.GetExtension(image.FileName);
+                    string fileName = String.Format(@"{0}{1}", System.Guid.NewGuid(), extName);
+
+                    // сохраняем файл в папку Files в проекте
+                    string fullPath = Server.MapPath("~/Content/Images/FilterItems/" + fileName);
+                    string urlPath = Url.Content("~/Content/Images/FilterItems/" + fileName);
+                    image.SaveAs(fullPath);
+                    filterItem.ImagePath = urlPath;
                 }
                 _filterItemService.CreateFilterItem(filterItem);
                 _filterItemService.SaveFilterItem();
@@ -219,17 +233,22 @@ namespace Market.Web.Controllers.Admin
             if (ModelState.IsValid)
             {
                 var filterItem = _filterItemService.GetFilterItem(model.Id);
+
                 if (filterItem != null)
                 {
                     filterItem.Name = model.Name;
                     filterItem.Value = model.Value;
                     filterItem.Rank = model.Rank;
-                    filterItem.ImageData = model.ImageData;
-                    if (image != null)
+                    if (image != null && (image.ContentType == "image/jpeg" || image.ContentType == "image/png"))
                     {
-                        filterItem.ImageMimeType = image.ContentType;
-                        filterItem.ImageData = new byte[image.ContentLength];
-                        image.InputStream.Read(filterItem.ImageData, 0, image.ContentLength);
+                        string extName = System.IO.Path.GetExtension(image.FileName);
+                        string fileName = String.Format(@"{0}{1}", System.Guid.NewGuid(), extName);
+
+                        // сохраняем файл в папку Files в проекте
+                        string fullPath = Server.MapPath("~/Content/Images/FilterItems/" + fileName);
+                        string urlPath = Url.Content("~/Content/Images/FilterItems/" + fileName);
+                        image.SaveAs(fullPath);
+                        filterItem.ImagePath = urlPath;
                     }
                     _filterItemService.SaveFilterItem();
                     return RedirectToAction("FilterItemList");

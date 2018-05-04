@@ -17,7 +17,7 @@ function CreateFilters(ranks) {
         select.append(defaultOption);
         for (var item in ranks[rank].FilterItems) {
 
-            var url = "../../Content/Images/" + ranks[rank].GameValue + "/Ranks/" + ranks[rank].FilterItems[item].Image;
+            var url = ranks[rank].FilterItems[item].ImagePath;
             var option = $('<option data-url="' + url + '"></option>').val(ranks[rank].FilterItems[item].Value).text(ranks[rank].FilterItems[item].Name);
 
             select.append(option);

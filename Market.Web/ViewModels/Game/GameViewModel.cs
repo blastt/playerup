@@ -13,8 +13,7 @@ namespace Market.Web.ViewModels
 
         public int Rank { get; set; }
 
-        public byte[] ImageData { get; set; }
-        public string ImageMimeType { get; set; }
+        public string ImagePath { get; set; }
 
         // override object.Equals
         public override bool Equals(object obj)

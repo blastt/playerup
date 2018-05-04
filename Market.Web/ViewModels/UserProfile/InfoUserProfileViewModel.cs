@@ -9,7 +9,7 @@ namespace Market.Web.ViewModels
     public class InfoUserProfileViewModel
     {
         public string Id { get; set; }
-        public string Avatar { get; set; }
+        public string ImagePath { get; set; }
         public string Name { get; set; }
 
         

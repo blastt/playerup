@@ -41,7 +41,7 @@
             @Html.DisplayFor(m => filterItem.Rank)
         </td>
         <td>
-            <img src="@Url.Action("GetImage", "FilterItem", new { id = filterItem.Id })" width="80" />
+            <img src="@filterItem.ImagePath" width="80" />
         </td>
         <td>
 

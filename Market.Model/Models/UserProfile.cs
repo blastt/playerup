@@ -13,7 +13,7 @@ namespace Market.Model.Models
     public class UserProfile
     {
         public string Id { get; set; }
-        public byte[] Avatar { get; set; }
+        public string ImagePath { get; set; }
 
 
         public int PositiveFeedbackCount

@@ -22,7 +22,7 @@
                 @Html.DisplayFor(m => game.Name)
             </td>
             <td>
-                <img src="@Url.Action("GetImage", "Game", new { id = game.Id })" width="40" />
+                <img src="@game.ImagePath" width="40" />
             </td>
             <td>
 

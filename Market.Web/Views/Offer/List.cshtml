@@ -13,10 +13,7 @@
             @foreach (var g in Model.Games)
             {
                 <div class="game-filter-item" data-game="@g.Value" data-url="@Url.Action("List", "Offer", new { game = g.Value })">
-                    <div onclick="ChangeGame('@g.Value')"><img src="@Url.Action("GetImage", "Game", new { id = g.Id })" style="width:40px" alt="Alternate Text" title="@g.Name" /></div>
-
-
-
+                    <div onclick="ChangeGame('@g.Value')"><img src="@g.ImagePath" style="width:40px" alt="Alternate Text" title="@g.Name" /></div>
                 </div>
 
             }

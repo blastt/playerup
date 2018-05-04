@@ -141,8 +141,7 @@ namespace Market.Web.Mappings
             CreateMap<GameViewModel, Game>()
                .ForMember(o => o.Name, map => map.MapFrom(vm => vm.Name))
               .ForMember(o => o.Value, map => map.MapFrom(vm => vm.Value))
-              .ForMember(o => o.ImageData, map => map.MapFrom(vm => vm.ImageData))
-              .ForMember(o => o.ImageMimeType, map => map.MapFrom(vm => vm.ImageMimeType));
+              .ForMember(o => o.ImagePath, map => map.MapFrom(vm => vm.ImagePath));
 
             #endregion
 

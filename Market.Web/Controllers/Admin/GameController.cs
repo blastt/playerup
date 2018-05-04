@@ -52,22 +52,5 @@ namespace Market.Web.Controllers
             
             
         }
-
-        public FileContentResult GetImage(int? id)
-        {
-            if (id != null)
-            {
-                var game = _gameService.GetGame(id.Value);
-                if (game != null)
-                {
-                    if (game.ImageData == null || game.ImageMimeType == null)
-                    {
-                        return null;
-                    }
-                    return File(game.ImageData, game.ImageMimeType);
-                }                                                   
-            }
-            return null;
-        }
     }
 }
