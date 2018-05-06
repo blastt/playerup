@@ -6,7 +6,7 @@ using System.Web;
 
 namespace Market.Web.ViewModels
 {
-    public class UserProfileViewModel
+    public class EditUserProfileViewModel
     {
         public string Id { get; set; }
         public string Name { get; set; }
@@ -30,12 +30,5 @@ namespace Market.Web.ViewModels
         public string ImagePath { get; set; }
 
         public bool IsBanned { get; set; }
-
-        public int Rating { get; set; }
-        public double PositiveFeedbackProcent { get; set; }
-        public double NegativeFeedbackProcent { get; set; }
-
-        public int Positive { get; set; }
-        public int Negative { get; set; }
     }
 }

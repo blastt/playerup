@@ -149,11 +149,12 @@ namespace Market.Web.Mappings
 
             CreateMap<CreateFilterViewModel, Filter>()
                 .ForMember(o => o.Text, map => map.MapFrom(vm => vm.Name))
-               .ForMember(o => o.Value, map => map.MapFrom(vm => vm.Value));
+               .ForMember(o => o.Value, map => map.MapFrom(vm => vm.Value))
+               .ForAllOtherMembers(opt => opt.Ignore());
 
             #endregion
 
-            #region Game            
+            #region FilterItem           
 
             CreateMap<CreateFilterItemViewModel, FilterItem>()
                 .ForMember(o => o.Name, map => map.MapFrom(vm => vm.Name))

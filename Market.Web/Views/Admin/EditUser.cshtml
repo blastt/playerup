@@ -1,29 +1,41 @@
-﻿@model Market.Web.ViewModels.EditFilterItemViewModel
+﻿@model Market.Web.ViewModels.EditUserProfileViewModel
 
 @{
     ViewBag.Title = "EditGame";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-@using (Html.BeginForm("EditFilterItem", "Admin",
+@using (Html.BeginForm("EditUser", "Admin",
         FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.HiddenFor(m => m.Id)
     <div class="form-group">
-        <label class="control-label">Полное название фильтры</label>
+        <label class="control-label">Ник</label>
         @Html.EditorFor(m => m.Name, new { @class = "form-control" })
     </div>
     <div class="form-group">
-        <label class="control-label">Значение (сокращенное название)</label>
-        @Html.EditorFor(m => m.Value, new { @class = "form-control" })
+        <label class="control-label">Почта</label>
+        @Html.EditorFor(m => m.Email, new { @class = "form-control" })
     </div>
     <div class="form-group">
-        <label class="control-label">Порядковый номер</label>
-        @Html.EditorFor(m => m.Rank, new { @class = "form-control" })
+        <label class="control-label">Почта подтверждена</label>
+        @Html.EditorFor(m => m.EmailConfirmed, new { @class = "form-control" })
     </div>
     <div class="form-group">
-        <label class="control-label">Фильтр</label>
-        @Html.DropDownListFor(m => m.FilterValue, Model.Filters)
+        <label class="control-label">Номер телефона</label>
+        @Html.EditorFor(m => m.PhoneNumber, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <label class="control-label">Номер телефона не подтверджен</label>
+        @Html.EditorFor(m => m.PhoneNumberConfirmed, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <label class="control-label">Дата регистрации</label>
+        @Html.EditorFor(m => m.RegistrationDate, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <label class="control-label">Баланс</label>
+        @Html.EditorFor(m => m.Balance, new { @class = "form-control" })
     </div>
     <div class="form-group">
         <div style="position:relative;">

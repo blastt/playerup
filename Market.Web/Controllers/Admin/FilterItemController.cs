@@ -27,55 +27,7 @@ namespace Market.Web.Controllers.Admin
             _filterItemService = filterItemService;
         }
 
-        public ActionResult Create()
-        {
-            CreateFilterItemViewModel model = new CreateFilterItemViewModel();
-            IList<SelectListItem> gameList = new List<SelectListItem>();
-            foreach (var game in _gameService.GetGames())
-            {
-                gameList.Add(new SelectListItem
-                {
-                    Value = game.Value,
-                    Text = game.Name
-                });
-            }
-            model.Games = gameList;
-            return View(model);
-        }
-
-        [HttpPost]
-        public ActionResult Create(CreateFilterItemViewModel model)
-        {
-            var game = _gameService.GetGameByValue(model.Game.Value);
-            if (game != null)
-            {
-                model.Game = game;
-            }
-            
-            var filter = game.Filters.FirstOrDefault(m => m.Value == model.Filter.Value);
-            if(filter != null)
-            {
-                model.Filter = filter;
-            }
-            var filterItem = Mapper.Map<CreateFilterItemViewModel, FilterItem>(model);
-
-            if (game != null && filter != null && filterItem != null)
-            {
-                var existingFilterItem = _filterItemService.GetFilterItems().Where(m => m.Value == model.Value).FirstOrDefault();
-                if(existingFilterItem != null)
-                {
-                    filter.FilterItems.Add(existingFilterItem);
-                }
-                else
-                {
-                    filter.FilterItems.Add(filterItem);
-                    _filterItemService.CreateFilterItem(filterItem);
-                }                
-                _filterService.SaveFilter();
-                return RedirectToAction("Details","FilterItem");
-            }
-            return HttpNotFound();
-        }
+        
 
 
         public ActionResult Details()

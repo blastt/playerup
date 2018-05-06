@@ -9,16 +9,15 @@ namespace Market.Web.ViewModels
 {
     public class CreateFilterItemViewModel
     {
+        public int Id { get; set; }
         public string Name { get; set; }
         public string Value { get; set; }
-        
-        public bool CreateForExistsItem { get; set; }
+        public string FilterValue { get; set; }
+        public string GameName { get; set; }
+        public int Rank { get; set; }
 
-        public Game Game { get; set; }
-        public Model.Models.Filter Filter { get; set; }
+        public string ImagePath { get; set; }
 
-        public IList<SelectListItem> Filters { get; set; }
-
-        public IList<SelectListItem> Games { get; set; }
+        public IList<SelectListItem> Filters { get; set; } = new List<SelectListItem>();
     }
 }

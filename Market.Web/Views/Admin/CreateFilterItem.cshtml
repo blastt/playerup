@@ -1,25 +1,27 @@
-﻿@model Market.Web.ViewModels.EditGameViewModel
+﻿@model Market.Web.ViewModels.CreateFilterItemViewModel
 
 @{
-    ViewBag.Title = "EditGame";
+    ViewBag.Title = "CreateFilterItem";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-@using (Html.BeginForm("EditGame", "Admin",
+@using (Html.BeginForm("CreateFilterItem", "Admin",
         FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
-    @Html.HiddenFor(m => m.Id)
     <div class="form-group">
-        <label class="control-label">Полное название игры</label>
-        @Html.EditorFor(m => m.Name, new { @class = "form-control" })
+        <label class="control-label">Полное название элемента фильтра</label>
+        @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
     </div>
     <div class="form-group">
         <label class="control-label">Значение (сокращенное название)</label>
-        @Html.EditorFor(m => m.Value, new { @class = "form-control" })
+        @Html.TextBoxFor(m => m.Value, new { @class = "form-control" })
     </div>
     <div class="form-group">
-        <label class="control-label">Порядковый номер</label>
-        @Html.EditorFor(m => m.Rank, new { @class = "form-control" })
+        <label class="control-label">Фильтр</label>
+        @Html.DropDownListFor(m => m.FilterValue, Model.Filters)
+    </div>
+    <div class="panel-footer">
+        <input type="submit" value="Сохранить" class="btn btn-primary" />
     </div>
     <div class="form-group">
         <div style="position:relative;">
@@ -38,7 +40,6 @@
         <div class="form-control-static">Нет картинки</div>
 
     </div>
-    <div class="panel-footer">
-        <input type="submit" value="Сохранить" class="btn btn-primary" />
-    </div>
 }
+
+

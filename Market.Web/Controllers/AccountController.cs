@@ -717,7 +717,7 @@ namespace Market.Web.Controllers
                 }
                 AddErrors(result);
             }
-
+            
             ViewBag.ReturnUrl = returnUrl;
             return View(model);
         }
@@ -728,6 +728,7 @@ namespace Market.Web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult LogOff()
         {
+            
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
             return RedirectToAction("Index", "Home");
         }

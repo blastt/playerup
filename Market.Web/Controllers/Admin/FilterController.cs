@@ -20,41 +20,7 @@ namespace Market.Web.Controllers
             _gameService = gameService;
             _filterService = filterService;
         }
-        
-        public ActionResult Create()
-        {
-            CreateFilterViewModel model = new CreateFilterViewModel();
-            IList<SelectListItem> list = new List<SelectListItem>();
-            foreach (var game in _gameService.GetGames())
-            {
-                list.Add(new SelectListItem
-                {
-                    Value = game.Value,
-                    Text = game.Name
-                });
-            }
-            model.Games = list;
-            return View(model);
-        }
-
-        [HttpPost]
-        public ActionResult Create(CreateFilterViewModel model)
-        {
-            var game = _gameService.GetGameByValue(model.Game.Value);
-            if(game != null)
-            {
-                model.Game = game;
-            }
-            var filter = Mapper.Map<CreateFilterViewModel, Model.Models.Filter>(model);
-            if (game != null && filter != null)
-            {
-                game.Filters.Add(filter);
-                _filterService.CreateFilter(filter);
-                _gameService.SaveGame();
-                return RedirectToAction("Details", "FilterItem");
-            }
-            return HttpNotFound();
-        }
+                
 
         public ActionResult Delete()
         {

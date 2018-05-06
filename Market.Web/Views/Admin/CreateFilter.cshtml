@@ -1,0 +1,26 @@
+﻿@model Market.Web.ViewModels.CreateFilterViewModel
+
+@{
+    ViewBag.Title = "CreateGame";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@using (Html.BeginForm("CreateFilter", "Admin",
+        FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <div class="form-group">
+        <label class="control-label">Полное название фильтра</label>
+        @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <label class="control-label">Значение (сокращенное название)</label>
+        @Html.TextBoxFor(m => m.Value, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <label class="control-label">Игра</label>
+        @Html.DropDownListFor(m => m.Game, Model.Games)
+    </div>
+    <div class="panel-footer">
+        <input type="submit" value="Сохранить" class="btn btn-primary" />
+    </div>
+}

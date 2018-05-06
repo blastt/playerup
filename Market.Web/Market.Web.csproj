@@ -235,7 +235,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Attributes\Validation\UserName.cs" />
     <Compile Include="Controllers\AccountController.cs" />
-    <Compile Include="Controllers\Admin\AdminController.cs" />
+    <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\Admin\FilterController.cs" />
     <Compile Include="Controllers\Admin\FilterItemController.cs" />
     <Compile Include="Controllers\Admin\GameController.cs" />
@@ -247,6 +247,7 @@
     <Compile Include="Controllers\HelpController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\MessageController.cs" />
+    <Compile Include="Controllers\MiddlemanController.cs" />
     <Compile Include="Controllers\Moderator\ModeratorController.cs" />
     <Compile Include="Controllers\OfferController.cs" />
     <Compile Include="Controllers\OrderController.cs" />
@@ -278,10 +279,13 @@
     <Compile Include="ViewModels\Feedback\NewFeedbackViewModel.cs" />
     <Compile Include="ViewModels\FilterItem\CreateFilterItemViewModel.cs" />
     <Compile Include="ViewModels\FilterItem\DetailsFilterItemViewModel.cs" />
+    <Compile Include="ViewModels\FilterItem\EditFilterItemViewModel.cs" />
     <Compile Include="ViewModels\FilterItem\FilterItemViewModel.cs" />
     <Compile Include="ViewModels\Filter\CreateFilterViewModel.cs" />
+    <Compile Include="ViewModels\Filter\EditFilterViewModel.cs" />
     <Compile Include="ViewModels\Filter\FilterViewModel.cs" />
     <Compile Include="ViewModels\Game\CreateGameViewModel.cs" />
+    <Compile Include="ViewModels\Game\EditGameViewModel.cs" />
     <Compile Include="ViewModels\Game\GameViewModel.cs" />
     <Compile Include="ViewModels\Help\ContactUsViewModel.cs" />
     <Compile Include="ViewModels\Message\DetailsMessageViewModel.cs" />
@@ -301,6 +305,7 @@
     <Compile Include="ViewModels\SearchOffersInfoViewModel.cs" />
     <Compile Include="ViewModels\SearchViewModel.cs" />
     <Compile Include="ViewModels\SearchViewModel2.cs" />
+    <Compile Include="ViewModels\UserProfile\EditUserProfileViewModel.cs" />
     <Compile Include="ViewModels\UserProfile\InfoUserProfileViewModel.cs" />
     <Compile Include="ViewModels\UserProfile\UserProfileViewModel.cs" />
   </ItemGroup>
@@ -516,7 +521,7 @@
     <Content Include="Views\Checkout\ProvideData.cshtml" />
     <Content Include="Views\Moderator\MyOrderList.cshtml" />
     <Content Include="Views\Moderator\OrderList.cshtml" />
-    <Content Include="Views\Moderator\ProvideDataToBuyer.cshtml" />
+    <Content Include="Views\Middleman\ProvideDataToBuyer.cshtml" />
     <Content Include="Views\Order\BuyDetails.cshtml" />
     <Content Include="Views\Feedback\GiveToSeller.cshtml" />
     <Content Include="Views\Shared\_NoResults.cshtml" />
@@ -567,6 +572,14 @@
     <Content Include="Views\Admin\FilterItemList.cshtml" />
     <Content Include="Views\Admin\EditFilterItem.cshtml" />
     <Content Include="Views\Admin\EditGame.cshtml" />
+    <Content Include="Views\Admin\UserList.cshtml" />
+    <Content Include="Views\Admin\EditUser.cshtml" />
+    <Content Include="Views\Admin\CreateFilter.cshtml" />
+    <Content Include="Views\Admin\CreateFilterItem.cshtml" />
+    <Content Include="Views\Admin\EditFilter.cshtml" />
+    <Content Include="Views\Shared\_MiddlemanLayout.cshtml" />
+    <Content Include="Views\Middleman\OrderList.cshtml" />
+    <Content Include="Views\Middleman\MyOrderList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

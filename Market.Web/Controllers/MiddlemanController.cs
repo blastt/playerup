@@ -9,33 +9,24 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace Market.Web.Controllers.Moderator
+namespace Market.Web.Controllers
 {
-    [Authorize(Roles = "Moderator")]
-    public class ModeratorController : Controller
+    public class MiddlemanController : Controller
     {
         private readonly IOrderService _orderService;
         private readonly IAccountInfoService _accountInfoService;
         private readonly IUserProfileService _userProfileService;
         private readonly IOrderStatusService _orderStatusService;
-        public ModeratorController(IOrderService orderService, IAccountInfoService accountInfoService, IUserProfileService userProfileService, IOrderStatusService orderStatusService)
+        public MiddlemanController(IOrderService orderService, IAccountInfoService accountInfoService, IUserProfileService userProfileService, IOrderStatusService orderStatusService)
         {
             _orderService = orderService;
             _orderStatusService = orderStatusService;
             _accountInfoService = accountInfoService;
             _userProfileService = userProfileService;
         }
-
-       
-        // GET: Moderator
-        public ActionResult Panel()
-        {
-            return View();
-        }
-
+        // GET: Middleman
         public ActionResult OrderList()
         {
-           
             var orders = new List<Order>();//.Where(o => o.OrderStatus == Status.OrderCreated);
 
             foreach (var order in _orderService.GetOrders())
@@ -47,30 +38,24 @@ namespace Market.Web.Controllers.Moderator
                 }
             }
             var ordersViewModel = Mapper.Map<IEnumerable<Order>, IEnumerable<OrderViewModel>>(orders);
-            OrderListViewModel model = new OrderListViewModel
-            {
-                Orders = ordersViewModel
-            };
-            return View(model);
+            
+            return View(ordersViewModel);
         }
 
+        // GET: Middleman
         public ActionResult MyOrderList()
         {
             var orders = _orderService.GetOrders().Where(o => o.MiddlemanId == User.Identity.GetUserId());
             var ordersViewModel = Mapper.Map<IEnumerable<Order>, IEnumerable<OrderViewModel>>(orders);
-            OrderListViewModel model = new OrderListViewModel
-            {
-                Orders = ordersViewModel
-            };
-            return View(model);
+
+            return View(ordersViewModel);
         }
 
-        
-        public ActionResult ProcessOrder(int? orderId)
+        public ActionResult ProcessOrder(int? id)
         {
-            if(orderId != null)
+            if (id != null)
             {
-                var order = _orderService.GetOrder(orderId.Value);
+                var order = _orderService.GetOrder(id.Value);
                 if (order.CurrentStatus != null)
                 {
                     if (order != null && order.CurrentStatus.Value == OrderStatuses.MiddlemanFinding)
@@ -83,21 +68,20 @@ namespace Market.Web.Controllers.Moderator
                         });
                         order.CurrentStatus = _orderStatusService.GetOrderStatusByValue(OrderStatuses.SellerProviding);
 
-                        
+
                         order.BuyerChecked = false;
                         order.SellerChecked = false;
-                        order.MiddlemanId= User.Identity.GetUserId();
-                        TempData["message"] = "Вы стали гарантом";
+                        order.MiddlemanId = User.Identity.GetUserId();
                         _orderService.SaveOrder();
                         return RedirectToAction("MyOrderList");
-                        
-                        
+
+
                     }
                 }
-                
-               
+
+
             }
-            
+
             return HttpNotFound("fewfe");
         }
 
@@ -134,7 +118,7 @@ namespace Market.Web.Controllers.Moderator
                     accInfo.Password = model.SteamPassword;
                     accInfo.Email = model.SteamEmail;
                     accInfo.AdditionalInformation = model.AdditionalInformation;
-                    
+
                     var buyerOrder = _orderService.GetOrder(model.SteamLogin, model.ModeratorId, model.SellerId, model.BuyerId);
                     if (buyerOrder != null)
                     {
@@ -150,18 +134,18 @@ namespace Market.Web.Controllers.Moderator
                                 });
                                 buyerOrder.CurrentStatus = _orderStatusService.GetOrderStatusByValue(OrderStatuses.BuyerConfirming);
 
-                            
+
                                 buyerOrder.BuyerChecked = false;
                                 buyerOrder.SellerChecked = false;
 
-                                    
+
                                 _accountInfoService.UpdateAccountInfo(accInfo);
                                 buyerOrder.AccountInfo = accInfo;
                                 _orderService.SaveOrder();
-                                return RedirectToAction("ProvideDataToBuyer", new { orderId = buyerOrder.Id });                                                                        
+                                return RedirectToAction("ProvideDataToBuyer", new { orderId = buyerOrder.Id });
                             }
-                        }                            
-                    }                                                              
+                        }
+                    }
                 }
             }
 

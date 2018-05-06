@@ -22,27 +22,14 @@
                 <div class="collapse navbar-collapse left-bar" id="navbarResponsive">
                     <ul class="navbar-nav" id="left-bar">
                         <li class="nav-item">
-                            @Html.ActionLink("Пользователи", "UserList", "Admin", null, new { @class = "nav-link" })
+                            @Html.ActionLink("Заказы ожидающие гаранта", "OrderList", "Middleman", null, new { @class = "nav-link" })
                         </li>
                         <li class="nav-item">
-                            @Html.ActionLink("Предложения", "OfferList", "Admin", null, new { @class = "nav-link" })
+                            @Html.ActionLink("Мои заказы", "MyOrderList", "Middleman", null, new { @class = "nav-link" })
                         </li>
-                        <li class="nav-item">
-                            @Html.ActionLink("Игры", "GameList", "Admin", null, new { @class = "nav-link" })
-                        </li>
-                        <li class="nav-item">
-                            @Html.ActionLink("Фильтры", "FilterList", "Admin", null, new { @class = "nav-link" })
-                        </li>
-                        <li class="nav-item">
-                            @Html.ActionLink("Элементы фильтров", "FilterItemList", "Admin", null, new { @class = "nav-link" })
-                        </li>
-
                     </ul>
-
                 </div>
-
             </div>
-
         </div>
         @if (TempData["message"] != null)
         {

@@ -13,11 +13,14 @@ namespace Market.Data.Repositories
         public FilterRepository(IDbFactory dbFactory)
             : base(dbFactory) { }
 
-
+        public Filter GetFilterByValue(string value)
+        {
+            return DbContext.Filters.FirstOrDefault(f => f.Value == value);
+        }
     }
 
     public interface IFilterRepository : IRepository<Filter>
     {
-
+        Filter GetFilterByValue(string value);
     }
 }

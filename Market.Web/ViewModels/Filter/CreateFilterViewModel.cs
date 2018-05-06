@@ -9,10 +9,11 @@ namespace Market.Web.ViewModels
 {
     public class CreateFilterViewModel
     {
+        public int Id { get; set; }
         public string Name { get; set; }
         public string Value { get; set; }
-        public Game Game { get; set; }
+        public string Game { get; set; }
 
-        public IList<SelectListItem> Games { get; set; }
+        public IList<SelectListItem> Games { get; set; } = new List<SelectListItem>();
     }
 }

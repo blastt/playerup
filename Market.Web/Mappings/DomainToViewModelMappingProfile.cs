@@ -146,6 +146,15 @@ namespace Market.Web.Mappings
                .ForPath(o => o.FilterName, map => map.MapFrom(vm => vm.Filter.Text))
                .ForPath(o => o.GameName, map => map.MapFrom(vm => vm.Filter.Game.Name));
 
+            CreateMap<FilterItem, EditFilterItemViewModel>()
+                .ForMember(o => o.Id, map => map.MapFrom(vm => vm.Id))
+               .ForMember(o => o.Name, map => map.MapFrom(vm => vm.Name))
+               .ForMember(o => o.Rank, map => map.MapFrom(vm => vm.Rank))
+               .ForMember(o => o.Value, map => map.MapFrom(vm => vm.Value))
+               .ForMember(o => o.ImagePath, map => map.MapFrom(vm => vm.ImagePath))
+               .ForPath(o => o.FilterValue, map => map.MapFrom(vm => vm.Filter.Value))
+               .ForPath(o => o.GameName, map => map.MapFrom(vm => vm.Filter.Game.Name));
+
             #endregion
 
             #region Filter
@@ -156,6 +165,12 @@ namespace Market.Web.Mappings
                .ForMember(o => o.Value, map => map.MapFrom(vm => vm.Value))
                .ForPath(o => o.GameValue, map => map.MapFrom(vm => vm.Game.Value))
                .ForPath(o => o.GameName, map => map.MapFrom(vm => vm.Game.Name));
+
+            CreateMap<Filter, EditFilterViewModel>()
+                .ForMember(o => o.Id, map => map.MapFrom(vm => vm.Id))
+               .ForMember(o => o.Name, map => map.MapFrom(vm => vm.Text))
+               .ForMember(o => o.Value, map => map.MapFrom(vm => vm.Value))
+               .ForPath(o => o.Game, map => map.MapFrom(vm => vm.Game.Value));
 
             #endregion
 
@@ -238,11 +253,32 @@ namespace Market.Web.Mappings
 
             CreateMap<UserProfile, UserProfileViewModel>()
                 .ForMember(o => o.Id, map => map.MapFrom(vm => vm.Id))
+                .ForPath(o => o.PhoneNumber, map => map.MapFrom(vm => vm.ApplicationUser.PhoneNumber))
+                .ForPath(o => o.Email, map => map.MapFrom(vm => vm.ApplicationUser.Email))
+                .ForPath(o => o.RegistrationDate, map => map.MapFrom(vm => vm.RegistrationDate))
+                .ForPath(o => o.ImagePath, map => map.MapFrom(vm => vm.ImagePath))
+                .ForPath(o => o.Balance, map => map.MapFrom(vm => vm.Balance))
+                .ForPath(o => o.EmailConfirmed, map => map.MapFrom(vm => vm.ApplicationUser.EmailConfirmed))
+                .ForPath(o => o.PhoneNumberConfirmed, map => map.MapFrom(vm => vm.ApplicationUser.PhoneNumberConfirmed))
+                .ForPath(o => o.IsBanned, map => map.MapFrom(vm => vm.ApplicationUser.LockoutEndDateUtc != null && vm.ApplicationUser.LockoutEnabled))
                 .ForMember(o => o.Rating, map => map.MapFrom(vm => vm.Rating))
                 .ForMember(o => o.PositiveFeedbackProcent, map => map.MapFrom(vm => vm.PositiveFeedbackProcent))
                 .ForMember(o => o.NegativeFeedbackProcent, map => map.MapFrom(vm => vm.NegativeFeedbackProcent))
                 .ForMember(o => o.Positive, map => map.MapFrom(vm => vm.PositiveFeedbackCount))
                 .ForMember(o => o.Negative, map => map.MapFrom(vm => vm.NegativeFeedbackCount))
+                .ForMember(o => o.Id, map => map.MapFrom(vm => vm.Id))
+                .ForMember(o => o.Name, map => map.MapFrom(vm => vm.Name));
+
+            CreateMap<UserProfile, EditUserProfileViewModel>()
+                .ForMember(o => o.Id, map => map.MapFrom(vm => vm.Id))
+                .ForPath(o => o.PhoneNumber, map => map.MapFrom(vm => vm.ApplicationUser.PhoneNumber))
+                .ForPath(o => o.Email, map => map.MapFrom(vm => vm.ApplicationUser.Email))
+                .ForPath(o => o.RegistrationDate, map => map.MapFrom(vm => vm.RegistrationDate))
+                .ForPath(o => o.ImagePath, map => map.MapFrom(vm => vm.ImagePath))
+                .ForPath(o => o.Balance, map => map.MapFrom(vm => vm.Balance))
+                .ForPath(o => o.EmailConfirmed, map => map.MapFrom(vm => vm.ApplicationUser.EmailConfirmed))
+                .ForPath(o => o.PhoneNumberConfirmed, map => map.MapFrom(vm => vm.ApplicationUser.PhoneNumberConfirmed))
+                .ForPath(o => o.IsBanned, map => map.MapFrom(vm => vm.ApplicationUser.LockoutEndDateUtc != null && vm.ApplicationUser.LockoutEnabled))
                 .ForMember(o => o.Id, map => map.MapFrom(vm => vm.Id))
                 .ForMember(o => o.Name, map => map.MapFrom(vm => vm.Name));
 

@@ -102,7 +102,16 @@
                 <div style="padding: 20px">
                     <a href="@Request.UrlReferrer"><span style="font-weight: 700">&#10218;</span> <span>Назад</span> </a>
                 </div>
-
+                @if (TempData["orderSellStatus"] != null)
+                {
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="alert alert-dismissible alert-success">
+                                <span>Стстус заказа изменился: <span class="text-700">@Model.CurrentStatusName</span></span>
+                            </div>
+                        </div>
+                    </div>
+                }
                 <div class="order-details-head ">
                     <div class="order-details-title">
                         <h4>Информащия о заказе</h4>

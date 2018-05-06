@@ -16,6 +16,7 @@ namespace Market.Service
         Filter GetFilter(int id);
         void Delete(Filter filter);
         void CreateFilter(Filter message);
+        Filter GetFilterByValue(string value);
         void SaveFilter();
     }
 
@@ -38,6 +39,10 @@ namespace Market.Service
             return filters;
         }
 
+        public Filter GetFilterByValue(string value)
+        {
+            return filtersRepository.GetFilterByValue(value);
+        }
 
         public Filter GetFilter(int id)
         {

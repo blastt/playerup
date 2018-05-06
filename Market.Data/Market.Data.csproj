@@ -76,71 +76,6 @@
     <Compile Include="Infrastructure\RepositoryBase.cs" />
     <Compile Include="Infrastructure\UnitOfWork.cs" />
     <Compile Include="MarketEntities.cs" />
-    <Compile Include="Migrations\201804281432327_Name.cs" />
-    <Compile Include="Migrations\201804281432327_Name.Designer.cs">
-      <DependentUpon>201804281432327_Name.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201804281925096_Newnew.cs" />
-    <Compile Include="Migrations\201804281925096_Newnew.Designer.cs">
-      <DependentUpon>201804281925096_Newnew.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201804281935195_NullableComputedFields.cs" />
-    <Compile Include="Migrations\201804281935195_NullableComputedFields.Designer.cs">
-      <DependentUpon>201804281935195_NullableComputedFields.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201804281939188_NullableComputedFields2.cs" />
-    <Compile Include="Migrations\201804281939188_NullableComputedFields2.Designer.cs">
-      <DependentUpon>201804281939188_NullableComputedFields2.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201804282011250_NullableComputedFields3.cs" />
-    <Compile Include="Migrations\201804282011250_NullableComputedFields3.Designer.cs">
-      <DependentUpon>201804282011250_NullableComputedFields3.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201804291032064_Balance.cs" />
-    <Compile Include="Migrations\201804291032064_Balance.Designer.cs">
-      <DependentUpon>201804291032064_Balance.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201804291319312_SumToSeller.cs" />
-    <Compile Include="Migrations\201804291319312_SumToSeller.Designer.cs">
-      <DependentUpon>201804291319312_SumToSeller.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201805021023057_EmailPAssword.cs" />
-    <Compile Include="Migrations\201805021023057_EmailPAssword.Designer.cs">
-      <DependentUpon>201805021023057_EmailPAssword.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201805031104387_Billings.cs" />
-    <Compile Include="Migrations\201805031104387_Billings.Designer.cs">
-      <DependentUpon>201805031104387_Billings.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201805031444341_Images.cs" />
-    <Compile Include="Migrations\201805031444341_Images.Designer.cs">
-      <DependentUpon>201805031444341_Images.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201805031450010_Images1.cs" />
-    <Compile Include="Migrations\201805031450010_Images1.Designer.cs">
-      <DependentUpon>201805031450010_Images1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201805031625267_ImagesFilterItems.cs" />
-    <Compile Include="Migrations\201805031625267_ImagesFilterItems.Designer.cs">
-      <DependentUpon>201805031625267_ImagesFilterItems.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201805032008519_ImagesFilterItems2.cs" />
-    <Compile Include="Migrations\201805032008519_ImagesFilterItems2.Designer.cs">
-      <DependentUpon>201805032008519_ImagesFilterItems2.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201805040751085_АшдеуЗфер.cs" />
-    <Compile Include="Migrations\201805040751085_АшдеуЗфер.Designer.cs">
-      <DependentUpon>201805040751085_АшдеуЗфер.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201805040912374_FilterItemImg.cs" />
-    <Compile Include="Migrations\201805040912374_FilterItemImg.Designer.cs">
-      <DependentUpon>201805040912374_FilterItemImg.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201805041136382_UserImg.cs" />
-    <Compile Include="Migrations\201805041136382_UserImg.Designer.cs">
-      <DependentUpon>201805041136382_UserImg.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\AccountInfoRepository.cs" />
     <Compile Include="Repositories\BillingRepository.cs" />
@@ -167,56 +102,6 @@
       <Project>{41af22fa-5ee7-419f-a2c2-36c1c3c0e0a1}</Project>
       <Name>Market.Model</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\201804281432327_Name.resx">
-      <DependentUpon>201804281432327_Name.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201804281925096_Newnew.resx">
-      <DependentUpon>201804281925096_Newnew.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201804281935195_NullableComputedFields.resx">
-      <DependentUpon>201804281935195_NullableComputedFields.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201804281939188_NullableComputedFields2.resx">
-      <DependentUpon>201804281939188_NullableComputedFields2.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201804282011250_NullableComputedFields3.resx">
-      <DependentUpon>201804282011250_NullableComputedFields3.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201804291032064_Balance.resx">
-      <DependentUpon>201804291032064_Balance.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201804291319312_SumToSeller.resx">
-      <DependentUpon>201804291319312_SumToSeller.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201805021023057_EmailPAssword.resx">
-      <DependentUpon>201805021023057_EmailPAssword.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201805031104387_Billings.resx">
-      <DependentUpon>201805031104387_Billings.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201805031444341_Images.resx">
-      <DependentUpon>201805031444341_Images.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201805031450010_Images1.resx">
-      <DependentUpon>201805031450010_Images1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201805031625267_ImagesFilterItems.resx">
-      <DependentUpon>201805031625267_ImagesFilterItems.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201805032008519_ImagesFilterItems2.resx">
-      <DependentUpon>201805032008519_ImagesFilterItems2.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201805040751085_АшдеуЗфер.resx">
-      <DependentUpon>201805040751085_АшдеуЗфер.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201805040912374_FilterItemImg.resx">
-      <DependentUpon>201805040912374_FilterItemImg.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201805041136382_UserImg.resx">
-      <DependentUpon>201805041136382_UserImg.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

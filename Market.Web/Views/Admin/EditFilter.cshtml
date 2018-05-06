@@ -1,0 +1,28 @@
+﻿@model Market.Web.ViewModels.EditFilterViewModel
+
+@{
+    ViewBag.Title = "EditFilter";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@using (Html.BeginForm("EditFilter", "Admin",
+        FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.HiddenFor(m => m.Id)
+    <div class="form-group">
+        <label class="control-label">Полное название фильтра</label>
+        @Html.EditorFor(m => m.Name, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <label class="control-label">Значение (сокращенное название)</label>
+        @Html.EditorFor(m => m.Value, new { @class = "form-control" })
+    </div>
+    
+    <div class="form-group">
+        <label class="control-label">Игра</label>
+        @Html.DropDownListFor(m => m.Game, Model.Games)
+    </div>
+    <div class="panel-footer">
+        <input type="submit" value="Сохранить" class="btn btn-primary" />
+    </div>
+}

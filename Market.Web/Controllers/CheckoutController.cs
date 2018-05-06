@@ -51,11 +51,18 @@ namespace Trader.WEB.Controllers
                     {
                         OfferHeader = offer.Header,
                         OfferId = offer.Id,
-                        OrderSum = offer.Price,
                         Game = offer.Game.Name,
                         Quantity = 1,
                         SellerId = offer.UserProfile.Id
                     };
+                    if (!offer.SellerPaysMiddleman)
+                    {
+                        model.OrderSum = offer.Price + offer.MiddlemanPrice.Value;
+                    }
+                    else
+                    {
+                        model.OrderSum = offer.Price;
+                    }
                     return View(model);
                 }
             }
@@ -99,6 +106,7 @@ namespace Trader.WEB.Controllers
                         MessageBody = "Get"
                     });
                 }
+                TempData["orderBuyStatus"] = "Заказ создан!";
                 return RedirectToAction("BuyDetails", "Order", new { id = offer.Order.Id });
 
             }
@@ -181,6 +189,7 @@ namespace Trader.WEB.Controllers
                         order.SellerChecked = false;
                         _orderService.UpdateOrder(order);
                         _orderService.SaveOrder();
+                        TempData["orderBuyStatus"] = "Оплата прошла успешно";
                         return RedirectToAction("BuyDetails", "Order", new { id = order.Id });
                     }
                     
@@ -302,7 +311,7 @@ namespace Trader.WEB.Controllers
                 {
                     foreach (var role in moderator.ApplicationUser.Roles)
                     {
-                        if (role.RoleId == "1" && role.UserId == moderator.Id)
+                        if (role.RoleId == "2" && role.UserId == moderator.Id)
                         {
                             moderIsInrole = true;
                         }
@@ -330,6 +339,7 @@ namespace Trader.WEB.Controllers
                                 order.SellerChecked = false;
                                 order.AccountInfo = accountInfo;
                                 _orderService.SaveOrder();
+                                TempData["orderSellStatus"] = "Ваши данные были отправлены на проверку гаранту";
                                 return RedirectToAction("SellDetails", "Order", new { id = order.Id });
                             }
                         }
@@ -340,11 +350,11 @@ namespace Trader.WEB.Controllers
             return HttpNotFound();
         }
 
-        public ActionResult ConfirmOrder(int? orderId)
+        public ActionResult ConfirmOrder(int? id)
         {
-            if (orderId != null)
+            if (id != null)
             {
-                var order = _orderService.GetOrder(orderId.Value);
+                var order = _orderService.GetOrder(id.Value);
                 if (order != null)
                 {
                     if (order.CurrentStatus != null)
@@ -383,15 +393,9 @@ namespace Trader.WEB.Controllers
                                 order.SellerChecked = false;
 
                                 _orderService.SaveOrder();
-                                if (User.Identity.GetUserId() == order.SellerId)
-                                {
-                                    return RedirectToAction("SellDetails", "Order", new { id = order.Id });
-                                }
-                                else if (User.Identity.GetUserId() == order.BuyerId)
-                                {
-                                    return RedirectToAction("BuyDetails", "Order", new { id = order.Id });
-                                }
-                                return View();
+                                TempData["orderBuyStatus"] = "Спасибо за подтверждение сделки! Сделка успешно закрыта.";
+                                return RedirectToAction("BuyDetails", "Order", new { id = order.Id });
+                                
                             }                                                      
                         }
                     }
