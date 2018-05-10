@@ -17,16 +17,22 @@ namespace Market.Service
         Order GetOrder(string accountLogin, string moderatorId, string sellerId, string buyerId);
         void UpdateOrder(Order order);
         void CreateOrder(Order order);
+        bool CloseOrderByBuyer(Order order);
+        bool CloseOrderBySeller(Order order);
+        bool CloseOrderByMiddleman(Order order);
+        bool CloseOrderAutomatically(Order order);
         void SaveOrder();
     }
 
     public class OrderService : IOrderService
     {
         private readonly IOrderRepository ordersRepository;
+        private readonly IOrderStatusRepository orderStatusRepository;
         private readonly IUnitOfWork unitOfWork;
 
-        public OrderService(IOrderRepository ordersRepository, IUnitOfWork unitOfWork)
+        public OrderService(IOrderRepository ordersRepository, IOrderStatusRepository orderStatusRepository, IUnitOfWork unitOfWork)
         {
+            this.orderStatusRepository = orderStatusRepository;
             this.ordersRepository = ordersRepository;
             this.unitOfWork = unitOfWork;
         }
@@ -66,6 +72,129 @@ namespace Market.Service
         {
             unitOfWork.Commit();
         }
+
+
+        public bool CloseOrderByBuyer(Order order)
+        {
+            if (order.CurrentStatus.Value == OrderStatuses.BuyerPaying ||
+                    order.CurrentStatus.Value == OrderStatuses.OrderCreating ||
+                    order.CurrentStatus.Value == OrderStatuses.MiddlemanFinding ||
+                    order.CurrentStatus.Value == OrderStatuses.SellerProviding ||
+                    order.CurrentStatus.Value == OrderStatuses.MidddlemanChecking)
+            {
+                OrderStatus newOrderStatus = null;
+
+                newOrderStatus = orderStatusRepository.GetOrderStatusByValue(OrderStatuses.BuyerClosed);
+
+                if (newOrderStatus != null)
+                {
+
+                    order.StatusLogs.AddLast(new StatusLog()
+                    {
+                        OldStatus = order.CurrentStatus,
+                        NewStatus = newOrderStatus,
+                        TimeStamp = DateTime.Now
+                    });
+                    order.CurrentStatus = newOrderStatus;
+                    SaveOrder();
+                    return true;
+                }
+
+            }
+            return false;
+        }
+
+        public bool CloseOrderBySeller(Order order)
+        {
+            if (order.CurrentStatus.Value == OrderStatuses.BuyerPaying ||
+                    order.CurrentStatus.Value == OrderStatuses.OrderCreating ||
+                    order.CurrentStatus.Value == OrderStatuses.MiddlemanFinding ||
+                    order.CurrentStatus.Value == OrderStatuses.SellerProviding ||
+                    order.CurrentStatus.Value == OrderStatuses.MidddlemanChecking)
+            {
+                OrderStatus newOrderStatus = null;
+
+                newOrderStatus = orderStatusRepository.GetOrderStatusByValue(OrderStatuses.SellerClosed);
+
+                if (newOrderStatus != null)
+                {
+
+                    order.StatusLogs.AddLast(new StatusLog()
+                    {
+                        OldStatus = order.CurrentStatus,
+                        NewStatus = newOrderStatus,
+                        TimeStamp = DateTime.Now
+                    });
+                    order.CurrentStatus = newOrderStatus;
+                    SaveOrder();
+                    return true;
+                }
+
+            }
+            return false;
+        }
+
+       
+        public bool CloseOrderByMiddleman(Order order)
+        {
+            if (order.CurrentStatus.Value == OrderStatuses.BuyerPaying ||
+                    order.CurrentStatus.Value == OrderStatuses.OrderCreating ||
+                    order.CurrentStatus.Value == OrderStatuses.MiddlemanFinding ||
+                    order.CurrentStatus.Value == OrderStatuses.SellerProviding ||
+                    order.CurrentStatus.Value == OrderStatuses.MidddlemanChecking)
+            {
+                OrderStatus newOrderStatus = null;
+
+                newOrderStatus = orderStatusRepository.GetOrderStatusByValue(OrderStatuses.MiddlemanClosed);
+
+                if (newOrderStatus != null)
+                {
+
+                    order.StatusLogs.AddLast(new StatusLog()
+                    {
+                        OldStatus = order.CurrentStatus,
+                        NewStatus = newOrderStatus,
+                        TimeStamp = DateTime.Now
+                    });
+                    order.CurrentStatus = newOrderStatus;
+                    SaveOrder();
+                    return true;
+                }
+
+            }
+            return false;
+        }
+
+        public bool CloseOrderAutomatically(Order order)
+        {
+            if (order.CurrentStatus.Value == OrderStatuses.BuyerPaying ||
+                    order.CurrentStatus.Value == OrderStatuses.OrderCreating ||
+                    order.CurrentStatus.Value == OrderStatuses.MiddlemanFinding ||
+                    order.CurrentStatus.Value == OrderStatuses.SellerProviding ||
+                    order.CurrentStatus.Value == OrderStatuses.MidddlemanChecking)
+            {
+                OrderStatus newOrderStatus = null;
+
+                newOrderStatus = orderStatusRepository.GetOrderStatusByValue(OrderStatuses.ClosedAutomatically);
+
+                if (newOrderStatus != null)
+                {
+
+                    order.StatusLogs.AddLast(new StatusLog()
+                    {
+                        OldStatus = order.CurrentStatus,
+                        NewStatus = newOrderStatus,
+                        TimeStamp = DateTime.Now
+                    });
+                    order.CurrentStatus = newOrderStatus;
+                    SaveOrder();
+                    return true;
+                }
+
+            }
+            return false;
+        }
+
 
         #endregion
 

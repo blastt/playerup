@@ -1,8 +1,10 @@
 ﻿using Autofac;
 using Autofac.Integration.Mvc;
+using Hangfire;
 using Market.Data.Infrastructure;
 using Market.Data.Repositories;
 using Market.Service;
+using Market.Web.Hangfire;
 using Market.Web.Mappings;
 using Marketplace.Data.Infrastructure;
 using Microsoft.AspNet.Identity;
@@ -29,7 +31,7 @@ namespace Market.Web.App_Start
             var builder = new ContainerBuilder();
             builder.RegisterControllers(Assembly.GetExecutingAssembly());
             builder.RegisterType<EmailService>().As<IIdentityMessageService>().InstancePerRequest();
-            builder.RegisterType<UnitOfWork>().As<IUnitOfWork>().InstancePerRequest();
+            builder.RegisterType<UnitOfWork>().As<IUnitOfWork>(). InstancePerRequest();
             builder.RegisterType<DbFactory>().As<IDbFactory>().InstancePerRequest();
             builder.RegisterType<CultureInfo>().As<IFormatProvider>().InstancePerRequest().WithParameter("name","en-US");
             
@@ -91,8 +93,10 @@ namespace Market.Web.App_Start
 
             #endregion
 
-
+            //builder.RegisterType<MyJob>().AsSelf();
+            //builder.RegisterType<OrderService>().As<IOrderService>();
             IContainer container = builder.Build();
+            //GlobalConfiguration.Configuration.UseActivator(new MarketJobActivator(container));
             DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
         }
     }

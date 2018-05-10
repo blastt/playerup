@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using Hangfire;
 using Market.Model.Models;
 using Market.Service;
+using Market.Web.Hangfire;
 using Market.Web.ViewModels;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
@@ -107,6 +109,11 @@ namespace Trader.WEB.Controllers
                     });
                 }
                 TempData["orderBuyStatus"] = "Заказ создан!";
+
+                BackgroundJob.Schedule<OrderCloseJob>(
+                j => j.Do(offer.Order),
+                TimeSpan.FromMinutes(1));
+                BackgroundJob.
                 return RedirectToAction("BuyDetails", "Order", new { id = offer.Order.Id });
 
             }
@@ -114,6 +121,10 @@ namespace Trader.WEB.Controllers
 
         }
 
+        public void Test()
+        {
+
+        }
         [HttpGet]
         public ActionResult Paid()
         {

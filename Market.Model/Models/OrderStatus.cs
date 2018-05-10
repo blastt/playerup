@@ -19,7 +19,8 @@ namespace Market.Model.Models
         ClosedSuccessfully,
         BuyerClosed,
         SellerClosed,
-        MiddlemanClosed
+        MiddlemanClosed,
+        ClosedAutomatically
     }
 
     public class OrderStatus

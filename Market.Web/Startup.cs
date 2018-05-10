@@ -1,4 +1,9 @@
-﻿using Market.Model.Models;
+﻿using Autofac;
+using Autofac.Integration.Mvc;
+using Hangfire;
+using Market.Model.Models;
+using Market.Service;
+using Market.Web.Hangfire;
 using Market.Web.ModelBinders;
 using Marketplace.Data;
 using Microsoft.AspNet.Identity;
@@ -7,7 +12,9 @@ using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
 using Owin;
 using System;
+using System.Configuration;
 using System.Globalization;
+using System.Reflection;
 using System.Web.Mvc;
 
 [assembly: OwinStartupAttribute(typeof(Market.Web.Startup))]
@@ -20,6 +27,16 @@ namespace Market.Web
         {
             ConfigureAuth(app);
             
+            GlobalConfiguration.Configuration
+			    .UseSqlServerStorage(@"Data Source=(LocalDb)\MSSQLLocalDB;Initial Catalog=PalyerUpDbOrig;Integrated Security=True");
+
+
+            MyHangfire.ConfigureHangfire(app);
+
+            app.UseHangfireDashboard();
+			app.UseHangfireServer();
+
+           
             //app.UseCookieAuthentication(new CookieAuthenticationOptions
             //{
             //    AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie,
