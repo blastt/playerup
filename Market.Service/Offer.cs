@@ -20,6 +20,7 @@ namespace Market.Service
             string searchString, ref int page, int pageSize,ref int totalItems, ref decimal minGamePrice, ref decimal maxGamePrice, ref decimal priceFrom, ref decimal priceTo);
         void CreateOffer(Offer offer);
         void UpdateOffer(Offer offer);
+        bool DeactivateOffer(Offer offer, string currentUserId);
         void SaveOffer();
     }
 
@@ -42,6 +43,16 @@ namespace Market.Service
             return offers;
         }
 
+        public bool DeactivateOffer(Offer offer, string currentUserId)
+        {
+            if (offer != null && offer.UserProfileId == currentUserId && offer.State == OfferState.active)
+            {
+                offer.State = OfferState.inactive;
+                offer.DateDeleted = DateTime.Now;
+                return true;
+            }
+            return false;
+        }
 
         public Offer GetOffer(int id)
         {

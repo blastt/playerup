@@ -20,7 +20,8 @@ namespace Market.Service
         bool CloseOrderByBuyer(Order order);
         bool CloseOrderBySeller(Order order);
         bool CloseOrderByMiddleman(Order order);
-        bool CloseOrderAutomatically(Order order);
+        bool CloseOrderAutomatically(int orderId);
+        bool ConfirmOrder(int orderId, string currentUserId);
         void SaveOrder();
     }
 
@@ -29,12 +30,16 @@ namespace Market.Service
         private readonly IOrderRepository ordersRepository;
         private readonly IOrderStatusRepository orderStatusRepository;
         private readonly IUnitOfWork unitOfWork;
+        private readonly IUserProfileRepository userProfileRepository;
+        private readonly ISellerInvoiceRepository sellerInvoicerepository;
 
-        public OrderService(IOrderRepository ordersRepository, IOrderStatusRepository orderStatusRepository, IUnitOfWork unitOfWork)
+        public OrderService(IOrderRepository ordersRepository, ISellerInvoiceRepository sellerInvoicerepository, IOrderStatusRepository orderStatusRepository, IUserProfileRepository userProfileRepository, IUnitOfWork unitOfWork)
         {
             this.orderStatusRepository = orderStatusRepository;
             this.ordersRepository = ordersRepository;
             this.unitOfWork = unitOfWork;
+            this.userProfileRepository = userProfileRepository;
+            this.sellerInvoicerepository = sellerInvoicerepository;
         }
 
         #region IOrderService Members
@@ -96,7 +101,7 @@ namespace Market.Service
                         TimeStamp = DateTime.Now
                     });
                     order.CurrentStatus = newOrderStatus;
-                    SaveOrder();
+      
                     return true;
                 }
 
@@ -126,7 +131,7 @@ namespace Market.Service
                         TimeStamp = DateTime.Now
                     });
                     order.CurrentStatus = newOrderStatus;
-                    SaveOrder();
+            
                     return true;
                 }
 
@@ -157,7 +162,7 @@ namespace Market.Service
                         TimeStamp = DateTime.Now
                     });
                     order.CurrentStatus = newOrderStatus;
-                    SaveOrder();
+              
                     return true;
                 }
 
@@ -165,8 +170,9 @@ namespace Market.Service
             return false;
         }
 
-        public bool CloseOrderAutomatically(Order order)
+        public bool CloseOrderAutomatically(int orderId)
         {
+            var order = GetOrder(orderId);
             if (order.CurrentStatus.Value == OrderStatuses.BuyerPaying ||
                     order.CurrentStatus.Value == OrderStatuses.OrderCreating ||
                     order.CurrentStatus.Value == OrderStatuses.MiddlemanFinding ||
@@ -187,14 +193,64 @@ namespace Market.Service
                         TimeStamp = DateTime.Now
                     });
                     order.CurrentStatus = newOrderStatus;
-                    SaveOrder();
+                 
                     return true;
                 }
 
             }
             return false;
         }
+       
 
+        public bool ConfirmOrder(int orderId, string currentUserId)
+        {
+            var order = GetOrder(orderId);
+            if (order != null)
+            {
+                if (order.CurrentStatus != null)
+                {
+                    if (order.BuyerId == currentUserId && order.CurrentStatus.Value == OrderStatuses.BuyerConfirming)
+                    {
+                        var mainCup = userProfileRepository.GetUserByName("palyerup");
+                        if (mainCup != null)
+                        {
+                            mainCup.Balance -= order.AmmountSellerGet.Value;
+                            sellerInvoicerepository.Add(new SellerInvoice
+                            {
+                                Amount = order.Sum,
+                                DatePay = DateTime.Now,
+                                UserId = order.SellerId,
+                                OrderId = order.Id
+                            });
+                            order.Seller.Balance += order.AmmountSellerGet.Value;
+                            order.StatusLogs.AddLast(new StatusLog()
+                            {
+                                OldStatus = order.CurrentStatus,
+                                NewStatus = orderStatusRepository.GetOrderStatusByValue(OrderStatuses.PayingToSeller),
+                                TimeStamp = DateTime.Now
+                            });
+                            order.CurrentStatus = orderStatusRepository.GetOrderStatusByValue(OrderStatuses.PayingToSeller);
+
+                            order.StatusLogs.AddLast(new StatusLog()
+                            {
+                                OldStatus = order.CurrentStatus,
+                                NewStatus = orderStatusRepository.GetOrderStatusByValue(OrderStatuses.ClosedSuccessfully),
+                                TimeStamp = DateTime.Now
+                            });
+                            order.CurrentStatus = orderStatusRepository.GetOrderStatusByValue(OrderStatuses.ClosedSuccessfully);
+
+                            order.BuyerChecked = false;
+                            order.SellerChecked = false;
+                            
+                            //TempData["orderBuyStatus"] = "Спасибо за подтверждение сделки! Сделка успешно закрыта.";
+                            //return RedirectToAction("BuyDetails", "Order", new { id = order.Id });
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
+        }
 
         #endregion
 

@@ -32,7 +32,8 @@ namespace Market.Model.Models
         public bool BuyerChecked { get; set; }
         public bool SellerChecked { get; set; }
 
-        
+        public string JobId { get; set; } // id задачи
+
         public decimal Sum { get; set; } // сумма заказа
         
 

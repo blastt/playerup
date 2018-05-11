@@ -16,10 +16,11 @@ using Microsoft.AspNet.Identity;
 using System.Reflection;
 using Marketplace.Data.Infrastructure;
 using System.Web.Mvc;
+using Market.Model.Models;
 
 namespace Market.Web.Hangfire
 {
-    public class MyHangfire
+    public class MarketHangfire
     {
         public static void ConfigureHangfire(IAppBuilder app)
         {
@@ -42,12 +43,29 @@ namespace Market.Web.Hangfire
 
         }
 
-        public static void InitializeJobs()
+        public static string SetOrderCloseJob(Order order, TimeSpan timeSpan)
         {
-            //BackgroundJob.Schedule<OrderCloseJob>(
-            //    j => j.Do(),
-            //    TimeSpan.FromMinutes(1));
-            //RecurringJob.AddOrUpdate<MyJob>(j => j.Execute(), "* * * * *");
+            return BackgroundJob.Schedule<OrderCloseJob>(
+                j => j.Do(order),
+                timeSpan);
+        }
+        public static string SetConfirmOrderJob(int orderId, TimeSpan timeSpan)
+        {
+            return BackgroundJob.Schedule<ConfirmOrderJob>(
+                j => j.Do(orderId),
+                timeSpan);
+        }
+        public static string SetLeaveFeedbackJob(int orderId, TimeSpan timeSpan)
+        {
+            return BackgroundJob.Schedule<LeaveFeedbackJob>(
+                j => j.Do(orderId),
+                timeSpan);
+        }
+        public static string SetDeactivateOfferJob(int offerId, TimeSpan timeSpan)
+        {
+            return BackgroundJob.Schedule<DeactivateOfferJob>(
+                j => j.Do(offerId),
+                timeSpan);
         }
     }
 }

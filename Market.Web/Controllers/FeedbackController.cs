@@ -149,9 +149,6 @@ namespace Market.Web.Controllers
                         order.Buyer.FeedbacksMy.Add(feedback);
                         order.Seller.FeedbacksToOthers.Add(feedback);
                         _feedbackService.CreateFeedback(feedback);
-                        _orderService.UpdateOrder(order);
-                        _userProfileService.UpdateUserProfile(order.Seller);
-                        _userProfileService.UpdateUserProfile(order.Buyer);
                         _feedbackService.SaveFeedback();
                         return View(model);
                     }

@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using Hangfire;
 using Market.Model.Models;
 using Market.Service;
+using Market.Web.Hangfire;
 using Market.Web.ViewModels;
 using Microsoft.AspNet.Identity;
 using Newtonsoft.Json;
@@ -407,6 +409,7 @@ namespace Market.Web.Controllers
             offer.Game = game;
             offer.UserProfile = _userProfileService.GetUserProfileById(User.Identity.GetUserId());
             offer.DateDeleted = offer.DateCreated.AddDays(offerDays);
+            offer.JobId = MarketHangfire.SetDeactivateOfferJob(offer.Id, TimeSpan.FromMinutes(50));
             _offerService.CreateOffer(offer);
             _offerService.SaveOffer();
 
@@ -458,13 +461,13 @@ namespace Market.Web.Controllers
             if (id != null)
             {
                 var offer = _offerService.GetOffer(id.Value);
-                if (offer != null && offer.UserProfileId == User.Identity.GetUserId() && offer.State == OfferState.active)
+
+                if (offer.JobId != null)
                 {
-                    offer.State = OfferState.inactive;
-                    offer.DateDeleted = DateTime.Now;
-                    _offerService.SaveOffer();
-                    return View();
-                }
+                    BackgroundJob.Delete(offer.JobId);
+                }                
+                _offerService.DeactivateOffer(offer, User.Identity.GetUserId());
+                _offerService.SaveOffer();
             }
             return HttpNotFound();
         }
@@ -479,6 +482,7 @@ namespace Market.Web.Controllers
                     offer.State = OfferState.active;
                     offer.DateCreated = DateTime.Now;
                     offer.DateDeleted = offer.DateCreated.AddDays(offerDays);
+                    offer.JobId = MarketHangfire.SetDeactivateOfferJob(offer.Id, TimeSpan.FromMinutes(50));
                     _offerService.SaveOffer();
                     return View();
                 }

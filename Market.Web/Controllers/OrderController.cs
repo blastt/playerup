@@ -158,39 +158,24 @@ namespace Market.Web.Controllers
                     order.CurrentStatus.Value == OrderStatuses.SellerProviding ||
                     order.CurrentStatus.Value == OrderStatuses.MidddlemanChecking)
                 {
-                    OrderStatus newOrderStatus = null;
                     if (userId == order.BuyerId)
                     {
-                        newOrderStatus = _orderStatusService.GetOrderStatusByValue(OrderStatuses.BuyerClosed);                                                                    
+                        _orderService.CloseOrderByBuyer(order);                                                                   
                     }
                     else if (userId == order.SellerId)
                     {
-                        newOrderStatus = _orderStatusService.GetOrderStatusByValue(OrderStatuses.SellerClosed);
+                        _orderService.CloseOrderBySeller(order);
                     }
                     else if (userId == order.MiddlemanId)
                     {
-                        newOrderStatus = _orderStatusService.GetOrderStatusByValue(OrderStatuses.MiddlemanClosed);
+                        _orderService.CloseOrderByMiddleman(order);
                     }
-                    if (newOrderStatus != null)
-                    {
-                        
-                        order.StatusLogs.AddLast(new StatusLog()
-                        {
-                            OldStatus = order.CurrentStatus,
-                            NewStatus = newOrderStatus,
-                            TimeStamp = DateTime.Now
-                        });                     
-                        order.CurrentStatus = newOrderStatus;
-                        _orderService.SaveOrder();
-                        return View();
-                        
-                    }
-                    
+                   
+                    _orderService.SaveOrder();
+                    return View();                                                               
                 }
-
             }
             return HttpNotFound();
-
         }
 
         public ActionResult SellDetails(int? Id)

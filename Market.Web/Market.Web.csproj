@@ -262,10 +262,14 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Hangfire\DeactivateOfferJob.cs" />
     <Compile Include="Hangfire\Hangfire.cs" />
+    <Compile Include="Hangfire\IJob.cs" />
     <Compile Include="Hangfire\JobActivator.cs" />
-    <Compile Include="Hangfire\MyJob.cs" />
+    <Compile Include="Hangfire\LeaveFeedbackJob.cs" />
+    <Compile Include="Hangfire\OrderCloseJob.cs" />
     <Compile Include="Hangfire\OrderCloserConfiguration.cs" />
+    <Compile Include="Hangfire\ConfirmOrderJob.cs" />
     <Compile Include="Helpers\DateHelpers.cs" />
     <Compile Include="Helpers\OrderStatusHelpers.cs" />
     <Compile Include="Helpers\PagingHelpers.cs" />

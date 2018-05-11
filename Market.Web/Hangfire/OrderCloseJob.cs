@@ -20,7 +20,7 @@ namespace Market.Web.Hangfire
 
         public void Do(Order order)
         {           
-            orderService.CloseOrderAutomatically(order);
+            orderService.CloseOrderAutomatically(order.Id);
             orderService.SaveOrder();
                                
         }        

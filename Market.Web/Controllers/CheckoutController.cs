@@ -26,8 +26,8 @@ namespace Trader.WEB.Controllers
         private readonly IOrderService _orderService;
         private readonly IOfferService _offerService;
         private readonly IAccountInfoService _accountInfoService;
-        public CheckoutController(IUserProfileService userProfileService, IOrderService orderService, 
-            IOfferService offerService, IAccountInfoService accountInfoService, 
+        public CheckoutController(IUserProfileService userProfileService, IOrderService orderService,
+            IOfferService offerService, IAccountInfoService accountInfoService,
             IOrderStatusService orderStatusService, IBillingService billingService,
             ISellerInvoiceService sellerInvoiceService, IBuyerInvoiceService buyerInvoiceService)
         {
@@ -46,7 +46,7 @@ namespace Trader.WEB.Controllers
         {
             if (offerId != null)
             {
-                var offer = _offerService.GetOffer(offerId.Value);                
+                var offer = _offerService.GetOffer(offerId.Value);
                 if (offer != null && offer.Order == null && offer.State == OfferState.active && offer.UserProfileId != User.Identity.GetUserId())
                 {
                     CheckoutViewModel model = new CheckoutViewModel()
@@ -95,8 +95,8 @@ namespace Trader.WEB.Controllers
                 });
                 offer.Order.CurrentStatus = _orderStatusService.GetOrderStatusByValue(OrderStatuses.BuyerPaying);
 
-                _offerService.UpdateOffer(offer);
-                _offerService.SaveOffer();
+                //_offerService.UpdateOffer(offer);
+                
 
                 var userProfiles = _userProfileService.GetUserProfiles()
                     .Where(u => u.ApplicationUser.Roles.Contains(new IdentityUserRole() { RoleId = "1", UserId = u.Id }));
@@ -110,10 +110,16 @@ namespace Trader.WEB.Controllers
                 }
                 TempData["orderBuyStatus"] = "Заказ создан!";
 
-                BackgroundJob.Schedule<OrderCloseJob>(
-                j => j.Do(offer.Order),
-                TimeSpan.FromMinutes(1));
-                BackgroundJob.
+                if (offer.JobId != null)
+                {
+                    BackgroundJob.Delete(offer.JobId);
+                }
+                _offerService.SaveOffer();
+
+                offer.Order.JobId = MarketHangfire.SetOrderCloseJob(offer.Order, TimeSpan.FromMinutes(5));
+
+                
+
                 return RedirectToAction("BuyDetails", "Order", new { id = offer.Order.Id });
 
             }
@@ -198,12 +204,21 @@ namespace Trader.WEB.Controllers
 
                         order.BuyerChecked = false;
                         order.SellerChecked = false;
-                        _orderService.UpdateOrder(order);
+
+                        if (order.JobId != null)
+                        {
+                            BackgroundJob.Delete(order.JobId);
+                        }
+
                         _orderService.SaveOrder();
+
+                        order.JobId = MarketHangfire.SetOrderCloseJob(order, TimeSpan.FromMinutes(5));
+                        //_orderService.UpdateOrder(order);
+                        
                         TempData["orderBuyStatus"] = "Оплата прошла успешно";
                         return RedirectToAction("BuyDetails", "Order", new { id = order.Id });
                     }
-                    
+
                 }
             }
             return View();
@@ -349,6 +364,11 @@ namespace Trader.WEB.Controllers
                                 order.BuyerChecked = false;
                                 order.SellerChecked = false;
                                 order.AccountInfo = accountInfo;
+                                if (order.JobId != null)
+                                {
+                                    BackgroundJob.Delete(order.JobId);
+                                }
+                                //order.JobId = MarketHangfire.SetOrderCloseJob(order.Id, TimeSpan.FromMinutes(5));
                                 _orderService.SaveOrder();
                                 TempData["orderSellStatus"] = "Ваши данные были отправлены на проверку гаранту";
                                 return RedirectToAction("SellDetails", "Order", new { id = order.Id });
@@ -365,53 +385,14 @@ namespace Trader.WEB.Controllers
         {
             if (id != null)
             {
+                bool result = _orderService.ConfirmOrder(id.Value, User.Identity.GetUserId());
                 var order = _orderService.GetOrder(id.Value);
-                if (order != null)
+                if (result && order != null)
                 {
-                    if (order.CurrentStatus != null)
-                    {
-                        if (order.BuyerId == User.Identity.GetUserId() && order.CurrentStatus.Value == OrderStatuses.BuyerConfirming)
-                        {
-                            var mainCup = _userProfileService.GetUserProfileByName("palyerup");
-                            if (mainCup != null)
-                            {
-                                mainCup.Balance -= order.AmmountSellerGet.Value;
-                                _sellerInvoiceService.CreateSellerInvoice(new SellerInvoice
-                                {
-                                    Amount = order.Sum,
-                                    DatePay = DateTime.Now,
-                                    UserId = order.SellerId,
-                                    OrderId = order.Id
-                                });
-                                order.Seller.Balance += order.AmmountSellerGet.Value;
-                                order.StatusLogs.AddLast(new StatusLog()
-                                {
-                                    OldStatus = order.CurrentStatus,
-                                    NewStatus = _orderStatusService.GetOrderStatusByValue(OrderStatuses.PayingToSeller),
-                                    TimeStamp = DateTime.Now
-                                });
-                                order.CurrentStatus = _orderStatusService.GetOrderStatusByValue(OrderStatuses.PayingToSeller);
-
-                                order.StatusLogs.AddLast(new StatusLog()
-                                {
-                                    OldStatus = order.CurrentStatus,
-                                    NewStatus = _orderStatusService.GetOrderStatusByValue(OrderStatuses.ClosedSuccessfully),
-                                    TimeStamp = DateTime.Now
-                                });
-                                order.CurrentStatus = _orderStatusService.GetOrderStatusByValue(OrderStatuses.ClosedSuccessfully);
-
-                                order.BuyerChecked = false;
-                                order.SellerChecked = false;
-
-                                _orderService.SaveOrder();
-                                TempData["orderBuyStatus"] = "Спасибо за подтверждение сделки! Сделка успешно закрыта.";
-                                return RedirectToAction("BuyDetails", "Order", new { id = order.Id });
-                                
-                            }                                                      
-                        }
-                    }
+                    BackgroundJob.Delete(order.JobId);
+                    TempData["orderBuyStatus"] = "Спасибо за подтверждение сделки! Сделка успешно закрыта.";
+                    return RedirectToAction("BuyDetails", "Order", new { id });
                 }
-
             }
             return HttpNotFound();
         }

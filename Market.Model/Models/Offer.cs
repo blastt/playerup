@@ -23,6 +23,8 @@ namespace Market.Model.Models
         public string Discription { get; set; }
         public string AccountLogin { get; set; }
 
+        public string JobId { get; set; } // id задачи
+
         public OfferState State { get; set; }
 
         public decimal Price { get; set; }
