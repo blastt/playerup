@@ -24,6 +24,8 @@ namespace Market.Web.Hangfire
     {
         public static void ConfigureHangfire(IAppBuilder app)
         {
+            
+
             var builder = new ContainerBuilder();
             builder.RegisterControllers(Assembly.GetExecutingAssembly());
             //builder.RegisterType<EmailService>().As<IIdentityMessageService>();
@@ -33,20 +35,29 @@ namespace Market.Web.Hangfire
             builder.RegisterAssemblyTypes(typeof(OrderRepository).Assembly)
                 .Where(t => t.Name.EndsWith("Repository"))
                 .AsImplementedInterfaces().InstancePerLifetimeScope();
+            builder.RegisterAssemblyTypes(typeof(FeedbackRepository).Assembly)
+               .Where(t => t.Name.EndsWith("Repository"))
+               .AsImplementedInterfaces().InstancePerLifetimeScope();
             builder.RegisterAssemblyTypes(typeof(OrderService).Assembly)
                .Where(t => t.Name.EndsWith("Service"))
                .AsImplementedInterfaces().InstancePerLifetimeScope();
+            builder.RegisterAssemblyTypes(typeof(FeedbackService).Assembly)
+               .Where(t => t.Name.EndsWith("Service"))
+               .AsImplementedInterfaces().InstancePerLifetimeScope();
             builder.RegisterType<OrderCloseJob>().AsSelf().InstancePerLifetimeScope();
+            builder.RegisterType<ConfirmOrderJob>().AsSelf().InstancePerLifetimeScope();
+            builder.RegisterType<LeaveFeedbackJob>().AsSelf().InstancePerLifetimeScope();
+            builder.RegisterType<DeactivateOfferJob>().AsSelf().InstancePerLifetimeScope();
             //builder.RegisterType<OrderService>().As<IOrderService>();
             IContainer container = builder.Build();
             GlobalConfiguration.Configuration.UseActivator(new MarketJobActivator(container));
 
         }
 
-        public static string SetOrderCloseJob(Order order, TimeSpan timeSpan)
+        public static string SetOrderCloseJob(int orderId, TimeSpan timeSpan)
         {
             return BackgroundJob.Schedule<OrderCloseJob>(
-                j => j.Do(order),
+                j => j.Do(orderId),
                 timeSpan);
         }
         public static string SetConfirmOrderJob(int orderId, TimeSpan timeSpan)
@@ -55,10 +66,10 @@ namespace Market.Web.Hangfire
                 j => j.Do(orderId),
                 timeSpan);
         }
-        public static string SetLeaveFeedbackJob(int orderId, TimeSpan timeSpan)
+        public static string SetLeaveFeedbackJob(string sellerId, string buyerId, int orderId, TimeSpan timeSpan)
         {
             return BackgroundJob.Schedule<LeaveFeedbackJob>(
-                j => j.Do(orderId),
+                j => j.Do(sellerId, buyerId, orderId),
                 timeSpan);
         }
         public static string SetDeactivateOfferJob(int offerId, TimeSpan timeSpan)

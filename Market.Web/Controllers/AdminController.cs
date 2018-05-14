@@ -14,6 +14,7 @@ using System.Web.Mvc;
 
 namespace Market.Web.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {
         // GET: Admin

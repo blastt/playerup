@@ -160,15 +160,15 @@ namespace Market.Web.Controllers
                 {
                     if (userId == order.BuyerId)
                     {
-                        _orderService.CloseOrderByBuyer(order);                                                                   
+                        _orderService.CloseOrderByBuyer(order.Id);                                                                   
                     }
                     else if (userId == order.SellerId)
                     {
-                        _orderService.CloseOrderBySeller(order);
+                        _orderService.CloseOrderBySeller(order.Id);
                     }
                     else if (userId == order.MiddlemanId)
                     {
-                        _orderService.CloseOrderByMiddleman(order);
+                        _orderService.CloseOrderByMiddleman(order.Id);
                     }
                    
                     _orderService.SaveOrder();

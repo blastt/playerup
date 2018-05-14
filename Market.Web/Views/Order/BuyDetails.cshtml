@@ -128,7 +128,7 @@
                                 @if (Model.ShowCloseButton)
                                 {
                                   
-                                        @Html.ActionLink("Закрыть сделку", "Close", "Order", new { orderId = Model.Id }, new { @class = "btn btn-close mb-3" })
+                                        @Html.ActionLink("Закрыть сделку", "Close", "Order", new { id = Model.Id }, new { @class = "btn btn-close mb-3" })
                             
 
                                 }
@@ -164,8 +164,9 @@
                     @foreach (var status in Model.StatusLogs)
                     {
                         if (status.NewStatus.Value != Market.Model.Models.OrderStatuses.MiddlemanClosed &&
-                            status.NewStatus.Value != Market.Model.Models.OrderStatuses.SellerClosed &&
-                            status.NewStatus.Value != Market.Model.Models.OrderStatuses.BuyerClosed)
+                           status.NewStatus.Value != Market.Model.Models.OrderStatuses.SellerClosed &&
+                           status.NewStatus.Value != Market.Model.Models.OrderStatuses.BuyerClosed &&
+                       status.NewStatus.Value != Market.Model.Models.OrderStatuses.ClosedAutomatically)
                         {
                             <div class="order-details-node">
                                 <div class="node-circle"></div>
@@ -176,7 +177,8 @@
                         if (status.NewStatus.Value == Market.Model.Models.OrderStatuses.ClosedSuccessfully ||
                             status.NewStatus.Value == Market.Model.Models.OrderStatuses.MiddlemanClosed ||
                             status.NewStatus.Value == Market.Model.Models.OrderStatuses.SellerClosed ||
-                            status.NewStatus.Value == Market.Model.Models.OrderStatuses.BuyerClosed)
+                            status.NewStatus.Value == Market.Model.Models.OrderStatuses.BuyerClosed ||
+                            status.NewStatus.Value == Market.Model.Models.OrderStatuses.ClosedAutomatically)
                         {
                             <div class="order-details-node">
                                 <div class="node-circle"></div>

@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using Hangfire;
 using Market.Model.Models;
 using Market.Service;
+using Market.Web.Hangfire;
 using Market.Web.ViewModels;
 using Microsoft.AspNet.Identity;
 using System;
@@ -11,6 +13,7 @@ using System.Web.Mvc;
 
 namespace Market.Web.Controllers
 {
+    [Authorize(Roles = "Middleman")]
     public class MiddlemanController : Controller
     {
         private readonly IOrderService _orderService;
@@ -72,6 +75,16 @@ namespace Market.Web.Controllers
                         order.BuyerChecked = false;
                         order.SellerChecked = false;
                         order.MiddlemanId = User.Identity.GetUserId();
+                        
+                        if (order.JobId != null)
+                        {
+                            BackgroundJob.Delete(order.JobId);
+                        }
+
+                        _orderService.SaveOrder();
+
+                        order.JobId = MarketHangfire.SetOrderCloseJob(order.Id, TimeSpan.FromDays(1));
+
                         _orderService.SaveOrder();
                         return RedirectToAction("MyOrderList");
 
@@ -141,7 +154,18 @@ namespace Market.Web.Controllers
 
                                 _accountInfoService.UpdateAccountInfo(accInfo);
                                 buyerOrder.AccountInfo = accInfo;
+                                
+
+                                if (buyerOrder.JobId != null)
+                                {
+                                    BackgroundJob.Delete(buyerOrder.JobId);
+                                }
                                 _orderService.SaveOrder();
+
+                                buyerOrder.JobId = MarketHangfire.SetConfirmOrderJob(buyerOrder.Id, TimeSpan.FromDays(2));
+
+                                _orderService.SaveOrder();
+
                                 return RedirectToAction("ProvideDataToBuyer", new { orderId = buyerOrder.Id });
                             }
                         }

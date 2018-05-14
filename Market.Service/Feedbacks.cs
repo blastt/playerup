@@ -14,6 +14,7 @@ namespace Market.Service
         IEnumerable<Feedback> GetFeedbacks();
         int PositiveFeedbackCount(UserProfile user);
         int NegativeFeedbackCount(UserProfile user);
+        void LeaveAutomaticFeedback(string sellerId, string buyerId, int orderId);
         double PositiveFeedbackProcent(int positiveFeedbacks, int negativeFeedbacks);
         double NegativeFeedbackProcent(int positiveFeedbacks, int negativeFeedbacks);
         Feedback GetFeedback(int id);
@@ -25,10 +26,14 @@ namespace Market.Service
     public class FeedbackService : IFeedbackService
     {
         private readonly IFeedbackRepository feedbacksRepository;
+        private readonly IUserProfileRepository userProfileRepository;
+        private readonly IOrderRepository orderRepository;
         private readonly IUnitOfWork unitOfWork;
 
-        public FeedbackService(IFeedbackRepository feedbacksRepository, IUnitOfWork unitOfWork)
+        public FeedbackService(IFeedbackRepository feedbacksRepository, IUserProfileRepository userProfileRepository, IOrderRepository orderRepository, IUnitOfWork unitOfWork)
         {
+            this.userProfileRepository = userProfileRepository;
+            this.orderRepository = orderRepository;
             this.feedbacksRepository = feedbacksRepository;
             this.unitOfWork = unitOfWork;
         }
@@ -39,6 +44,48 @@ namespace Market.Service
         {
             var feedback = feedbacksRepository.GetAll();
             return feedback;
+        }
+
+        public void LeaveAutomaticFeedback(string sellerId, string buyerId, int orderId)
+        {
+            var seller = userProfileRepository.GetUserById(sellerId);
+            var buyer = userProfileRepository.GetUserById(buyerId);
+            var order = orderRepository.GetById(orderId);
+            if (seller != null && buyer != null && order != null)
+            {
+                if (order.BuyerId == buyerId && order.SellerId == sellerId) // добавить условие на статус заказа
+                {
+                    var feedbackToSeller = new Feedback()
+                    {
+                        Grade = Emotions.Good,
+                        Comment = "Автоматический отзыв",
+                        DateLeft = DateTime.Now,
+                        Order = order,
+                        UserFrom = buyer,
+                        UserTo = seller
+                    };
+                    var feedbackToBuyer = new Feedback()
+                    {
+                        Grade = Emotions.Good,
+                        Comment = "Автоматический отзыв",
+                        DateLeft = DateTime.Now,
+                        Order = order,
+                        UserFrom = seller,
+                        UserTo = buyer
+                    };
+                    if (!order.SellerFeedbacked)
+                    {
+                        seller.FeedbacksToOthers.Add(feedbackToBuyer);
+                        order.SellerFeedbacked = true;
+                        
+                    }
+                    if (!order.BuyerFeedbacked)
+                    {
+                        buyer.FeedbacksToOthers.Add(feedbackToSeller);
+                        order.BuyerFeedbacked = true;
+                    }
+                }
+            }
         }
 
         public int PositiveFeedbackCount(UserProfile user)

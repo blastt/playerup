@@ -116,9 +116,9 @@ namespace Trader.WEB.Controllers
                 }
                 _offerService.SaveOffer();
 
-                offer.Order.JobId = MarketHangfire.SetOrderCloseJob(offer.Order, TimeSpan.FromMinutes(5));
+                offer.Order.JobId = MarketHangfire.SetOrderCloseJob(offer.Order.Id, TimeSpan.FromDays(1));
 
-                
+                _orderService.SaveOrder();
 
                 return RedirectToAction("BuyDetails", "Order", new { id = offer.Order.Id });
 
@@ -211,10 +211,10 @@ namespace Trader.WEB.Controllers
                         }
 
                         _orderService.SaveOrder();
-
-                        order.JobId = MarketHangfire.SetOrderCloseJob(order, TimeSpan.FromMinutes(5));
-                        //_orderService.UpdateOrder(order);
                         
+                        order.JobId = MarketHangfire.SetOrderCloseJob(order.Id, TimeSpan.FromDays(1));
+                        //_orderService.UpdateOrder(order);
+                        _orderService.SaveOrder();
                         TempData["orderBuyStatus"] = "Оплата прошла успешно";
                         return RedirectToAction("BuyDetails", "Order", new { id = order.Id });
                     }
@@ -244,7 +244,7 @@ namespace Trader.WEB.Controllers
                     order.CurrentStatus = _orderStatusService.GetOrderStatusByValue(OrderStatuses.ClosedSuccessfully);
                     order.BuyerChecked = false;
                     order.SellerChecked = false;
-                    _orderService.UpdateOrder(order);
+                    //_orderService.UpdateOrder(order);
                     _orderService.SaveOrder();
                 }
             }
@@ -390,6 +390,12 @@ namespace Trader.WEB.Controllers
                 if (result && order != null)
                 {
                     BackgroundJob.Delete(order.JobId);
+
+                    _orderService.SaveOrder();
+
+                    order.JobId = MarketHangfire.SetLeaveFeedbackJob(order.SellerId, order.BuyerId, order.Id, TimeSpan.FromDays(15));
+
+                    _orderService.SaveOrder();
                     TempData["orderBuyStatus"] = "Спасибо за подтверждение сделки! Сделка успешно закрыта.";
                     return RedirectToAction("BuyDetails", "Order", new { id });
                 }

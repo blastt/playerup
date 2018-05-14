@@ -267,6 +267,7 @@
     <Compile Include="Hangfire\IJob.cs" />
     <Compile Include="Hangfire\JobActivator.cs" />
     <Compile Include="Hangfire\LeaveFeedbackJob.cs" />
+    <Compile Include="Hangfire\MyAuthorizationFilter.cs" />
     <Compile Include="Hangfire\OrderCloseJob.cs" />
     <Compile Include="Hangfire\OrderCloserConfiguration.cs" />
     <Compile Include="Hangfire\ConfirmOrderJob.cs" />

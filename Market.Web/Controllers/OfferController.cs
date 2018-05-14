@@ -409,8 +409,12 @@ namespace Market.Web.Controllers
             offer.Game = game;
             offer.UserProfile = _userProfileService.GetUserProfileById(User.Identity.GetUserId());
             offer.DateDeleted = offer.DateCreated.AddDays(offerDays);
-            offer.JobId = MarketHangfire.SetDeactivateOfferJob(offer.Id, TimeSpan.FromMinutes(50));
+            
             _offerService.CreateOffer(offer);
+            _offerService.SaveOffer();
+            
+            offer.JobId = MarketHangfire.SetDeactivateOfferJob(offer.Id, TimeSpan.FromMinutes(50));
+
             _offerService.SaveOffer();
 
             return RedirectToAction("Buy");
@@ -482,6 +486,8 @@ namespace Market.Web.Controllers
                     offer.State = OfferState.active;
                     offer.DateCreated = DateTime.Now;
                     offer.DateDeleted = offer.DateCreated.AddDays(offerDays);
+                    _offerService.SaveOffer();
+
                     offer.JobId = MarketHangfire.SetDeactivateOfferJob(offer.Id, TimeSpan.FromMinutes(50));
                     _offerService.SaveOffer();
                     return View();

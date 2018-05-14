@@ -18,9 +18,9 @@ namespace Market.Web.Hangfire
             this.orderService = orderService;
         }
 
-        public void Do(Order order)
+        public void Do(int orderId)
         {           
-            orderService.CloseOrderAutomatically(order.Id);
+            orderService.CloseOrderAutomatically(orderId);
             orderService.SaveOrder();
                                
         }        

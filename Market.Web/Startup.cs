@@ -27,16 +27,19 @@ namespace Market.Web
         public void Configuration(IAppBuilder app)
         {
             ConfigureAuth(app);
-            
-            
+
+            MarketHangfire.ConfigureHangfire(app);
             GlobalConfiguration.Configuration
 			    .UseSqlServerStorage(@"Data Source=(LocalDb)\MSSQLLocalDB;Initial Catalog=PalyerUpDbOrig;Integrated Security=True");
 
             JobHelper.SetSerializerSettings(new Newtonsoft.Json.JsonSerializerSettings() { ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore });
-            
 
-            app.UseHangfireDashboard();
-			app.UseHangfireServer();
+
+            app.UseHangfireDashboard("/hangfire", new DashboardOptions
+            {
+                Authorization = new[] { new MyAuthorizationFilter() }
+            });
+            app.UseHangfireServer();
 
            
             //app.UseCookieAuthentication(new CookieAuthenticationOptions

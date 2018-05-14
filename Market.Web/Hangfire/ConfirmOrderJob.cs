@@ -20,7 +20,11 @@ namespace Market.Web.Hangfire
             var order = orderService.GetOrder(orderId);
             if (order != null)
             {
-                orderService.ConfirmOrder(orderId, order.BuyerId);
+                var result = orderService.ConfirmOrder(orderId, order.BuyerId);
+                if (result)
+                {
+                    order.JobId = MarketHangfire.SetLeaveFeedbackJob(order.SellerId, order.BuyerId, order.Id, TimeSpan.FromDays(15));
+                }
                 orderService.SaveOrder();
             }
         }
