@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Hangfire;
 using Market.Model.Models;
 using Market.Service;
 using Market.Web.ViewModels;
@@ -16,14 +17,16 @@ namespace Market.Web.Controllers
         private readonly IUserProfileService _userProfileService;
         private readonly IOrderStatusService _orderStatusService;
         private readonly IOfferService _offerService;
+        private readonly ITransactionService _transactionService;
         private readonly IOrderService _orderService;
         private readonly IGameService _gameService;
         public int pageSize = 5;
-        public OrderController(IOfferService offerService, IOrderStatusService orderStatusService, IGameService gameService, IOrderService orderService, IUserProfileService userProfileService)
+        public OrderController(IOfferService offerService, IOrderStatusService orderStatusService, ITransactionService transactionService, IGameService gameService, IOrderService orderService, IUserProfileService userProfileService)
         {
             _orderStatusService = orderStatusService;
             _offerService = offerService;
             _gameService = gameService;
+            _transactionService = transactionService;
             _orderService = orderService;
             _userProfileService = userProfileService;
         }
@@ -91,12 +94,12 @@ namespace Market.Web.Controllers
                         ViewData["BuyCount"] = ordersBuy.Count();
                         ViewData["SellCount"] = ordersSell.Count();
                         DetailsOrderViewModel model = Mapper.Map<Order, DetailsOrderViewModel>(order);
-                        
+
                         var currentStatus = order.CurrentStatus.Value;
-                        if (currentStatus == OrderStatuses.BuyerPaying || 
-                            currentStatus == OrderStatuses.OrderCreating || 
-                            currentStatus == OrderStatuses.MiddlemanFinding|| 
-                            currentStatus == OrderStatuses.SellerProviding || 
+                        if (currentStatus == OrderStatuses.BuyerPaying ||
+                            currentStatus == OrderStatuses.OrderCreating ||
+                            currentStatus == OrderStatuses.MiddlemanFinding ||
+                            currentStatus == OrderStatuses.SellerProviding ||
                             currentStatus == OrderStatuses.MidddlemanChecking)
                         {
                             model.ShowCloseButton = true;
@@ -115,8 +118,8 @@ namespace Market.Web.Controllers
                         {
                             model.ShowFeedbackToBuyer = true;
                         }
-                        if (currentStatus == OrderStatuses.BuyerConfirming || 
-                            currentStatus == OrderStatuses.ClosedSuccessfully || 
+                        if (currentStatus == OrderStatuses.BuyerConfirming ||
+                            currentStatus == OrderStatuses.ClosedSuccessfully ||
                             currentStatus == OrderStatuses.PayingToSeller)
                         {
                             model.ShowAccountInfo = true;
@@ -152,28 +155,45 @@ namespace Market.Web.Controllers
             if (userId != null && Id != null)
             {
                 var order = _orderService.GetOrder(Id.Value);
-                if (order.CurrentStatus.Value == OrderStatuses.BuyerPaying ||
-                    order.CurrentStatus.Value == OrderStatuses.OrderCreating ||
-                    order.CurrentStatus.Value == OrderStatuses.MiddlemanFinding ||
-                    order.CurrentStatus.Value == OrderStatuses.SellerProviding ||
-                    order.CurrentStatus.Value == OrderStatuses.MidddlemanChecking)
+
+                bool closeResult = false;
+                if (userId == order.BuyerId)
                 {
-                    if (userId == order.BuyerId)
+                    closeResult = _orderService.CloseOrderByBuyer(order.Id);
+                    if (closeResult)
                     {
-                        _orderService.CloseOrderByBuyer(order.Id);                                                                   
+                        BackgroundJob.Delete(order.JobId);
+                        TempData["orderBuyStatus"] = "Сделка закрыта.";
+                        _orderService.SaveOrder();
+                        return RedirectToAction("BuyDetails", new { id = order.Id });
                     }
-                    else if (userId == order.SellerId)
-                    {
-                        _orderService.CloseOrderBySeller(order.Id);
-                    }
-                    else if (userId == order.MiddlemanId)
-                    {
-                        _orderService.CloseOrderByMiddleman(order.Id);
-                    }
-                   
-                    _orderService.SaveOrder();
-                    return View();                                                               
                 }
+                else if (userId == order.SellerId)
+                {
+                    closeResult = _orderService.CloseOrderBySeller(order.Id);
+                    if (closeResult)
+                    {
+                        BackgroundJob.Delete(order.JobId);
+                        TempData["orderSellStatus"] = "Сделка закрыта.";
+                        _orderService.SaveOrder();
+                        return RedirectToAction("SellDetails", new { id = order.Id });
+                    }
+                }
+                else if (userId == order.MiddlemanId)
+                {
+                    
+                    closeResult = _orderService.CloseOrderByMiddleman(order.Id);
+                    if (closeResult)
+                    {
+                        BackgroundJob.Delete(order.JobId);
+                        _orderService.SaveOrder();
+                    }
+                }
+                
+                return View();
+                
+
+
             }
             return HttpNotFound();
         }
@@ -234,7 +254,7 @@ namespace Market.Web.Controllers
                             model.ShowProvideData = true;
                         }
                         model.CurrentStatusName = order.CurrentStatus.DuringName;
-                        
+
                         model.StatusLogs = order.StatusLogs;
                         model.ModeratorId = order.MiddlemanId;
                         return View(model);

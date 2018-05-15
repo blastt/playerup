@@ -80,6 +80,8 @@ namespace Market.Model.Models
         public virtual OrderStatus CurrentStatus { get; set; }
         public virtual LinkedList<StatusLog> StatusLogs { get; set; } = new LinkedList<StatusLog>();
 
+        public virtual IList<Transaction> Transactions { get; set; } = new List<Transaction>();
+
         public virtual string MiddlemanId { get; set; }
         public virtual UserProfile Middleman { get; set; }
         public virtual string BuyerId { get; set; }

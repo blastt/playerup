@@ -65,8 +65,8 @@ function SearchOffers() {
         beforeSend: function () {
             
             
-            $('#loader').show();
-            $('#loader').animate({ opacity: '0.7' }, 400);
+            //$('#loader').show();
+            //$('#loader').animate({ opacity: '0.7' }, 400);
 
 
         },
@@ -88,9 +88,9 @@ function SearchOffers() {
 
             urlPath = Router.action('Offer', 'Buy', routes);
             window.history.pushState({ "html": response.html, "pageTitle": response.pageTitle }, "", urlPath);
-            $('#loader').animate({ opacity: '0.0' }, 400, "", function () {
-                $('#loader').hide();
-            });
+            //$('#loader').animate({ opacity: '0.0' }, 400, "", function () {
+            //    $('#loader').hide();
+            //});
 
 
             

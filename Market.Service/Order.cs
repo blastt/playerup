@@ -40,16 +40,16 @@ namespace Market.Service
         private readonly IOrderStatusRepository orderStatusRepository;
         private readonly IUnitOfWork unitOfWork;
         private readonly IUserProfileRepository userProfileRepository;
-        private readonly ISellerInvoiceRepository sellerInvoicerepository;
+        private readonly ITransactionRepository transactionRepository;
 
-        public OrderService(IOrderRepository ordersRepository, IFeedbackRepository feedbacksRepository, ISellerInvoiceRepository sellerInvoicerepository, IOrderStatusRepository orderStatusRepository, IUserProfileRepository userProfileRepository, IUnitOfWork unitOfWork)
+        public OrderService(IOrderRepository ordersRepository, IFeedbackRepository feedbacksRepository, ITransactionRepository transactionRepository, IOrderStatusRepository orderStatusRepository, IUserProfileRepository userProfileRepository, IUnitOfWork unitOfWork)
         {
             this.feedbacksRepository = feedbacksRepository;
             this.orderStatusRepository = orderStatusRepository;
             this.ordersRepository = ordersRepository;
             this.unitOfWork = unitOfWork;
             this.userProfileRepository = userProfileRepository;
-            this.sellerInvoicerepository = sellerInvoicerepository;
+            this.transactionRepository = transactionRepository;
         }
 
         #region IOrderService Members
@@ -134,6 +134,21 @@ namespace Market.Service
 
                     if (newOrderStatus != null)
                     {
+                        var orderTransactions = order.Transactions.ToList();
+
+                        foreach (var transaction in orderTransactions)
+                        {
+                            transaction.Sender.Balance += transaction.Amount;
+                            transaction.Receiver.Balance -= transaction.Amount;
+
+                            order.Transactions.Add(new Transaction
+                            {
+                                Receiver = transaction.Sender,
+                                Sender = transaction.Receiver,
+                                Amount = transaction.Amount,
+                                TransactionDate = DateTime.Now
+                            });
+                        }
 
                         order.StatusLogs.AddLast(new StatusLog()
                         {
@@ -187,16 +202,18 @@ namespace Market.Service
                         var mainCup = userProfileRepository.GetUserByName("palyerup");
                         if (mainCup != null)
                         {
-                            mainCup.Balance -= order.AmmountSellerGet.Value;
-                            sellerInvoicerepository.Add(new SellerInvoice
+                            decimal amount = order.AmmountSellerGet.Value;
+                            transactionRepository.Add(new Transaction
                             {
-                                Amount = order.Sum,
-                                DatePay = DateTime.Now,
-                                UserId = order.SellerId,
-                                OrderId = order.Id
+                                Amount = amount,
+                                Receiver = order.Seller,
+                                Sender = mainCup,
+                                Order = order,
+                                TransactionDate = DateTime.Now
                             });
-                            
-                            order.Seller.Balance += order.AmmountSellerGet.Value;
+
+                            mainCup.Balance -= amount;                                                                                  
+                            order.Seller.Balance += amount;
                             order.StatusLogs.AddLast(new StatusLog()
                             {
                                 OldStatus = order.CurrentStatus,

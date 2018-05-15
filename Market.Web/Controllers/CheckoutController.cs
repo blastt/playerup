@@ -21,15 +21,14 @@ namespace Trader.WEB.Controllers
         private readonly IUserProfileService _userProfileService;
         private readonly IOrderStatusService _orderStatusService;
         private readonly IBillingService _billingService;
-        private readonly ISellerInvoiceService _sellerInvoiceService;
-        private readonly IBuyerInvoiceService _buyerInvoiceService;
+        private readonly ITransactionService _transactionService;
         private readonly IOrderService _orderService;
         private readonly IOfferService _offerService;
         private readonly IAccountInfoService _accountInfoService;
         public CheckoutController(IUserProfileService userProfileService, IOrderService orderService,
             IOfferService offerService, IAccountInfoService accountInfoService,
             IOrderStatusService orderStatusService, IBillingService billingService,
-            ISellerInvoiceService sellerInvoiceService, IBuyerInvoiceService buyerInvoiceService)
+            ITransactionService transactionService)
         {
             _orderStatusService = orderStatusService;
             _userProfileService = userProfileService;
@@ -37,8 +36,7 @@ namespace Trader.WEB.Controllers
             _offerService = offerService;
             _accountInfoService = accountInfoService;
             _billingService = billingService;
-            _sellerInvoiceService = sellerInvoiceService;
-            _buyerInvoiceService = buyerInvoiceService;
+            _transactionService = transactionService;
         }
 
         [HttpGet]
@@ -158,12 +156,13 @@ namespace Trader.WEB.Controllers
                             order.AmmountSellerGet = order.Offer.Price - order.Offer.MiddlemanPrice.Value;
                             if (buyer.Balance >= order.Sum)
                             {
-                                _buyerInvoiceService.CreateBuyerInvoice(new BuyerInvoice
+                                _transactionService.CreateTransaction(new Transaction
                                 {
                                     Amount = order.Sum,
-                                    DatePay = DateTime.Now,
-                                    UserId = buyer.Id,
-                                    OrderId = order.Id
+                                    Order = order,
+                                    Receiver = mainCup,
+                                    Sender = buyer,
+                                    TransactionDate = DateTime.Now
                                 });
                                 buyer.Balance -= order.Sum;
                                 mainCup.Balance += order.Sum;
@@ -179,12 +178,13 @@ namespace Trader.WEB.Controllers
                             order.AmmountSellerGet = order.Offer.Price;
                             if (buyer.Balance >= order.Offer.Order.Sum)
                             {
-                                _buyerInvoiceService.CreateBuyerInvoice(new BuyerInvoice
+                                _transactionService.CreateTransaction(new Transaction
                                 {
                                     Amount = order.Sum,
-                                    DatePay = DateTime.Now,
-                                    UserId = buyer.Id,
-                                    OrderId = order.Id
+                                    Order = order,
+                                    Receiver = mainCup,
+                                    Sender = buyer,
+                                    TransactionDate = DateTime.Now
                                 });
                                 buyer.Balance -= order.Sum;
                                 mainCup.Balance += order.Sum;

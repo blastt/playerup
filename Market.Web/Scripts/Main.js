@@ -1,6 +1,4 @@
-﻿function TopFunction() {
-    
-}
+﻿
 
 function SetDialogsClickable() {
     $(".clickable").each(function () {
@@ -70,6 +68,35 @@ $(document).ready(function () {
             drowMessage(response);
         }
     });
+
+    var currentHref = window.location.href.split('/')[3];
+    $("#left-bar a").each(function () {
+        var elementHref = this.href.split('/')[3];
+
+        if (currentHref == "") {
+            currentHref = "buy";
+        }
+        //alert(currentHref + "ddddddddddd" + elementHref);
+        if (elementHref == currentHref) {
+            $(this.parentNode).addClass("active");
+            return (true);
+        }
+
+    });
+    $("#account-list a").each(function () {
+        //alert(this.href.split('/')[4] + "/////////////" + window.location.href.split('/')[4] );
+        if (this.href.split('/')[4] == window.location.href.split('/')[4]) {
+            $(this.parentNode).addClass("active");
+            return (true);
+        }
+    });
+    $("#account-inner-list a").each(function () {
+        if (this.href == window.location.href) {
+
+            $(this).addClass("active");
+            return (true);
+        }
+    });
 })
 
 function drowMessage(count) {
@@ -125,41 +152,3 @@ function drowMessageInDialog(userName, companionId,companionName,count, lastMess
 
 
 }
-
-$(document).ready(function () {
-    //$(".nav-item a").each(function () {
-
-    //    if (this.href == window.location.href) {
-    //        $(this.parentNode).addClass("current");
-    //    }
-    //});
-    var currentHref = window.location.href.split('/')[3];
-    $("#left-bar a").each(function () {
-        var elementHref = this.href.split('/')[3];
-
-        if (currentHref == "") {
-            currentHref = "buy";
-        }
-        //alert(currentHref + "ddddddddddd" + elementHref);
-        if (elementHref == currentHref) {
-            $(this.parentNode).addClass("active");
-            return (true);
-        }
-        
-    });
-    $("#account-list a").each(function () {
-        //alert(this.href.split('/')[4] + "/////////////" + window.location.href.split('/')[4] );
-        if (this.href.split('/')[4] == window.location.href.split('/')[4]) {
-            $(this.parentNode).addClass("active");
-            return (true);
-        }
-    });
-    $("#account-inner-list a").each(function () {
-        if (this.href == window.location.href) {
-
-            $(this).addClass("active");
-            return (true);
-        }
-    });
-
-});

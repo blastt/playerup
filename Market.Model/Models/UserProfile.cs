@@ -113,9 +113,9 @@ namespace Market.Model.Models
 
         public string Name { get; set; }
 
-        public IList<Billing> Billings { get; set; } = new List<Billing>();
-        public IList<BuyerInvoice> BuyerInvoices { get; set; } = new List<BuyerInvoice>();
-        public IList<SellerInvoice> SellerInvoices { get; set; } = new List<SellerInvoice>();
+        public virtual IList<Billing> Billings { get; set; } = new List<Billing>();
+        public virtual IList<Transaction> TransactionsAsReceiver { get; set; } = new List<Transaction>();
+        public virtual IList<Transaction> TransactionsAsSender { get; set; } = new List<Transaction>();
 
         public decimal Balance { get; set; }
         public virtual ApplicationUser ApplicationUser { get; set; }
