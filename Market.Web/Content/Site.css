@@ -733,14 +733,14 @@ div#users-contain {
     font-weight: 400;
 }
 
-    .btn-activate:hover {
-        border-radius: 50px;
-        background-color: #62b2e2;
-        border: 1px solid #62b2e2;
-        color: #ffffff;
-        padding: 6px 20px;
-        font-weight: 400;
-    }
+.btn-activate:hover {
+    border-radius: 50px;
+    background-color: #62b2e2;
+    border: 1px solid #62b2e2;
+    color: #ffffff;
+    padding: 6px 20px;
+    font-weight: 400;
+}
 
 .btn-pay {
     border-radius: 50px;
@@ -751,13 +751,103 @@ div#users-contain {
     box-shadow: 0 4px 15px 0px rgba(98, 178, 226, 0.70);
 }
 
-    .btn-pay:hover {
+.btn-pay:hover {
+    border-radius: 50px;
+    background-color: #72caff;
+    color: white;
+    padding: 6px 20px;
+    font-weight: 300;
+    box-shadow: 0 4px 15px 0px rgba(98, 178, 226, 0.70);
+}
+
+.btn-order-close {
+    border-radius: 50px;
+    background-color: #ffffff;
+    color: #ff5d5d;
+    border: 1px solid #ff8f8f;
+    padding: 6px 20px;
+    font-weight: 300
+}
+
+    .btn-order-close:hover {
         border-radius: 50px;
-        background-color: #72caff;
+        border: 1px solid #ff8f8f;
+        background-color: #ff8f8f;
         color: white;
         padding: 6px 20px;
-        font-weight: 300;
-        box-shadow: 0 4px 15px 0px rgba(98, 178, 226, 0.70);
+        font-weight: 300
+    }
+
+.btn-order-pay {
+    border-radius: 50px;
+    background-color: #ffffff;
+    color: #62b2e2;
+    border: 1px solid #8ec3e2;
+    padding: 6px 20px;
+    font-weight: 300
+}
+
+    .btn-order-pay:hover {
+        border-radius: 50px;
+        border: 1px solid #8ec3e2;
+        background-color: #62b2e2;
+        color: white;
+        padding: 6px 20px;
+        font-weight: 300
+    }
+
+.btn-order-provide {
+    border-radius: 50px;
+    background-color: #ffffff;
+    color: #62b2e2;
+    border: 1px solid #8ec3e2;
+    padding: 6px 20px;
+    font-weight: 300
+}
+
+    .btn-order-provide:hover {
+        border-radius: 50px;
+        border: 1px solid #8ec3e2;
+        background-color: #62b2e2;
+        color: white;
+        padding: 6px 20px;
+        font-weight: 300
+    }
+
+.btn-order-leavefeedback {
+    border-radius: 50px;
+    background-color: #ffffff;
+    color: #62b2e2;
+    border: 1px solid #8ec3e2;
+    padding: 6px 20px;
+    font-weight: 300
+}
+
+.btn-order-leavefeedback:hover {
+    border-radius: 50px;
+    border: 1px solid #8ec3e2;
+    background-color: #62b2e2;
+    color: white;
+    padding: 6px 20px;
+    font-weight: 300
+}
+
+.btn-order-confirm {
+    border-radius: 50px;
+    background-color: #ffffff;
+    color: #62b2e2;
+    border: 1px solid #8ec3e2;
+    padding: 6px 20px;
+    font-weight: 300
+}
+
+    .btn-order-confirm:hover {
+        border-radius: 50px;
+        border: 1px solid #8ec3e2;
+        background-color: #62b2e2;
+        color: white;
+        padding: 6px 20px;
+        font-weight: 300
     }
 
 

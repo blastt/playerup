@@ -135,8 +135,8 @@ function ResetOffers() {
         data: JSON.stringify({ searchInfo: message }),
         dataType: "html",
         beforeSend: function () {
-            $('#loader').show();
-            $('#loader').animate({ opacity: '0.7' }, 400);
+            //$('#loader').show();
+            //$('#loader').animate({ opacity: '0.7' }, 400);
 
         },
         success: function (response) {
@@ -156,9 +156,9 @@ function ResetOffers() {
             var currentPath = window.location.href.split('/');
             var urlPath = Router.action('Offer', 'Buy', { game: g });
             window.history.pushState({ "html": response.html, "pageTitle": response.pageTitle }, "", urlPath);
-            $('#loader').animate({ opacity: '0.0' }, 400, "", function () {
-                $('#loader').hide();
-            });
+            //$('#loader').animate({ opacity: '0.0' }, 400, "", function () {
+            //    $('#loader').hide();
+            //});
 
             slider();
 

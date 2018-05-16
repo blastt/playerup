@@ -469,6 +469,7 @@ namespace Market.Web.Controllers
                 if (offer.JobId != null)
                 {
                     BackgroundJob.Delete(offer.JobId);
+                    offer.JobId = null;
                 }                
                 _offerService.DeactivateOffer(offer, User.Identity.GetUserId());
                 _offerService.SaveOffer();

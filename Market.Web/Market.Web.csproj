@@ -271,6 +271,7 @@
     <Compile Include="Hangfire\OrderCloseJob.cs" />
     <Compile Include="Hangfire\OrderCloserConfiguration.cs" />
     <Compile Include="Hangfire\ConfirmOrderJob.cs" />
+    <Compile Include="Helpers\ActiveHelpers.cs" />
     <Compile Include="Helpers\DateHelpers.cs" />
     <Compile Include="Helpers\OrderStatusHelpers.cs" />
     <Compile Include="Helpers\PagingHelpers.cs" />

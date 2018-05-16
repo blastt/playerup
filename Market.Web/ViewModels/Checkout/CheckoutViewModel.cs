@@ -12,6 +12,8 @@ namespace Market.Web.ViewModels
         public int Quantity { get; set; }
         public string Game { get; set; }
         public string OfferHeader { get; set; }
+        public bool SellerPaysMiddleman { get; set; }
+        public decimal MiddlemanPrice { get; set; }
 
         [DataType(DataType.Currency)]
         public decimal OrderSum { get; set; }

@@ -99,7 +99,8 @@
             </div>
             @{Html.RenderAction("AccountMenu", "Account"); }
             <div class="account-container bg-white">
-                <div style="padding: 20px">
+                @{Html.RenderPartial("_AccountOrdersMenu", Model); }
+                <div class="back">
                     <a href="@Request.UrlReferrer"><span style="font-weight: 700">&#10218;</span> <span>Назад</span> </a>
                 </div>
                 @if (TempData["orderSellStatus"] != null)
@@ -145,6 +146,14 @@
                     </div>
                     <div class="order-details-row row">
                         <div class="order-details-col col-md-4">
+                            <label>Гарант</label>
+                        </div>
+                        <div class="order-details-col col-md-8">
+                            <span>@Html.ActionLink(Model.ModeratorName ?? "Еще нет", "Info", "Profile", new { userName = Model.ModeratorName }, null)</span>
+                        </div>
+                    </div>
+                    <div class="order-details-row row">
+                        <div class="order-details-col col-md-4">
                             <label>Цена</label>
                         </div>
                         <div class="order-details-col col-md-8">
@@ -155,7 +164,11 @@
                         <div class="order-details-col col-md-12">
                             @if (Model.ShowCloseButton)
                             {
-                                @Html.ActionLink("Закрыть сделку", "Close", "Order", new { id = Model.Id }, new { @class = "btn btn-close mb-3" })
+                                using (Html.BeginForm("Close", "Order", FormMethod.Post, new { @onsubmit = "return confirm('Вы уверены, что хотите закрыть сделку?');" }))
+                                {
+                                    <input type="hidden" name="id" value="@Model.Id" />
+                                    <input type="submit" name="Pay" value="Закрыть сделку" class="btn btn-order-close mt-3" />
+                                }
                             }
 
                             @if (Model.ShowProvideData)
@@ -166,7 +179,7 @@
                                     @Html.HiddenFor(m => m.Id)
                                     @Html.HiddenFor(m => m.BuyerId)
                                     @Html.HiddenFor(m => m.SellerId)
-                                    <input type="submit" value="Предоставить данные" class="btn btn-provide mb-3" />
+                                    <input type="submit" value="Предоставить данные" class="btn btn-order-provide mt-3" />
                                 }
 
                             }
@@ -177,7 +190,7 @@
                                     @Html.Hidden("receiverId", Model.BuyerId)
                                     @Html.Hidden("OrderId", Model.Id)
 
-                                    <input type="submit" value="Оставить отзыв покупателю" class="btn btn-leavefeedback mb-3" />
+                                    <input type="submit" value="Оставить отзыв покупателю" class="btn btn-order-leavefeedback mt-3" />
                                 }
                             }
 
@@ -228,10 +241,10 @@
                     }
                 </div>
                 @*<div class="row">
-                        <div class="col-md-12">
-                            @Html.PageLinks(Model.PagingInfo, x => Url.Action("Inbox", new { page = x, sortOrder = ViewBag.CurrentSort, searchString = ViewBag.SearchString }))
-                        </div>
-                    </div>*@
+            <div class="col-md-12">
+                @Html.PageLinks(Model.PagingInfo, x => Url.Action("Inbox", new { page = x, sortOrder = ViewBag.CurrentSort, searchString = ViewBag.SearchString }))
+            </div>
+        </div>*@
             </div>
         </div>
 

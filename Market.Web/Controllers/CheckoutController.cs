@@ -52,17 +52,12 @@ namespace Trader.WEB.Controllers
                         OfferHeader = offer.Header,
                         OfferId = offer.Id,
                         Game = offer.Game.Name,
+                        SellerPaysMiddleman = offer.SellerPaysMiddleman,
+                        MiddlemanPrice = offer.MiddlemanPrice.Value,
+                        OrderSum = offer.Price,
                         Quantity = 1,
                         SellerId = offer.UserProfile.Id
                     };
-                    if (!offer.SellerPaysMiddleman)
-                    {
-                        model.OrderSum = offer.Price + offer.MiddlemanPrice.Value;
-                    }
-                    else
-                    {
-                        model.OrderSum = offer.Price;
-                    }
                     return View(model);
                 }
             }
@@ -111,6 +106,7 @@ namespace Trader.WEB.Controllers
                 if (offer.JobId != null)
                 {
                     BackgroundJob.Delete(offer.JobId);
+                    offer.JobId = null;
                 }
                 _offerService.SaveOffer();
 
@@ -205,9 +201,10 @@ namespace Trader.WEB.Controllers
                         order.BuyerChecked = false;
                         order.SellerChecked = false;
 
-                        if (order.JobId != null)
+                        if (order != null)
                         {
                             BackgroundJob.Delete(order.JobId);
+                            order.JobId = null;
                         }
 
                         _orderService.SaveOrder();
@@ -367,6 +364,7 @@ namespace Trader.WEB.Controllers
                                 if (order.JobId != null)
                                 {
                                     BackgroundJob.Delete(order.JobId);
+                                    order.JobId = null;
                                 }
                                 //order.JobId = MarketHangfire.SetOrderCloseJob(order.Id, TimeSpan.FromMinutes(5));
                                 _orderService.SaveOrder();
@@ -389,8 +387,12 @@ namespace Trader.WEB.Controllers
                 var order = _orderService.GetOrder(id.Value);
                 if (result && order != null)
                 {
-                    BackgroundJob.Delete(order.JobId);
-
+                    if (order != null)
+                    {
+                        BackgroundJob.Delete(order.JobId);
+                        order.JobId = null;
+                    }
+                    
                     _orderService.SaveOrder();
 
                     order.JobId = MarketHangfire.SetLeaveFeedbackJob(order.SellerId, order.BuyerId, order.Id, TimeSpan.FromDays(15));

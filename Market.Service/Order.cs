@@ -100,7 +100,6 @@ namespace Market.Service
                     order.CurrentStatus.Value == OrderStatuses.MidddlemanChecking)
                 {
                     OrderStatus newOrderStatus = null;
-
                     switch (closer)
                     {
                         case Closer.Buyer:

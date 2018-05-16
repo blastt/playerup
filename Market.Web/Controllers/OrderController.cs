@@ -162,7 +162,11 @@ namespace Market.Web.Controllers
                     closeResult = _orderService.CloseOrderByBuyer(order.Id);
                     if (closeResult)
                     {
-                        BackgroundJob.Delete(order.JobId);
+                        if (order != null)
+                        {
+                            BackgroundJob.Delete(order.JobId);
+                            order.JobId = null;
+                        }
                         TempData["orderBuyStatus"] = "Сделка закрыта.";
                         _orderService.SaveOrder();
                         return RedirectToAction("BuyDetails", new { id = order.Id });
@@ -173,7 +177,11 @@ namespace Market.Web.Controllers
                     closeResult = _orderService.CloseOrderBySeller(order.Id);
                     if (closeResult)
                     {
-                        BackgroundJob.Delete(order.JobId);
+                        if (order != null)
+                        {
+                            BackgroundJob.Delete(order.JobId);
+                            order.JobId = null;
+                        }
                         TempData["orderSellStatus"] = "Сделка закрыта.";
                         _orderService.SaveOrder();
                         return RedirectToAction("SellDetails", new { id = order.Id });
@@ -185,7 +193,11 @@ namespace Market.Web.Controllers
                     closeResult = _orderService.CloseOrderByMiddleman(order.Id);
                     if (closeResult)
                     {
-                        BackgroundJob.Delete(order.JobId);
+                        if (order != null)
+                        {
+                            BackgroundJob.Delete(order.JobId);
+                            order.JobId = null;
+                        }
                         _orderService.SaveOrder();
                     }
                 }

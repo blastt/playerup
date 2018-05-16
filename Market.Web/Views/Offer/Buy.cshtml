@@ -16,7 +16,7 @@
     <div class="buy-content">
         <a id="game-title"></a>
         <div id="list">
-
+            @Html.Action("Reset","Offer")
         </div>
         @{var game = Model.Game == null ? "csgo" : Model.Game; }
         <input type="hidden" name="Game" id="game" value="@Model.Game" />

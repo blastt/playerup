@@ -60,6 +60,14 @@
                     </div>
                     <div class="order-details-row row">
                         <div class="order-details-col col-md-4">
+                            <label>Гарант</label>
+                        </div>
+                        <div class="order-details-col col-md-8">
+                            <span>@Html.ActionLink(Model.ModeratorName ?? "Еще нет", "Info", "Profile", new { userName = Model.ModeratorName }, null)</span>
+                        </div>
+                    </div>
+                    <div class="order-details-row row">
+                        <div class="order-details-col col-md-4">
                             <label>Цена</label>
                         </div>
                         <div class="order-details-col col-md-8">
@@ -68,85 +76,87 @@
                     </div>
                     <div class="order-details-row row">
                         <div class="order-details-col col-md-12">
-                         
 
-                                @if (Model.ShowAccountInfo)
-                                {
-                                   
-                                        <div class="alert alert-dismissible alert-primary">
-                                            <div class="row">
-                                                <div class="col-lg-12">
-                                                    <label>Логин:</label>
-                                                    @Html.DisplayFor(m => m.AccountInfo.Login)
-                                                </div>
-                                                <div class="col-lg-12">
-                                                    <label>Пароль:</label>
-                                                    @Html.DisplayFor(m => m.AccountInfo.Password)
-                                                </div>
-                                                <div class="col-lg-12">
-                                                    <label>Почта:</label>
-                                                    @Html.DisplayFor(m => m.AccountInfo.Email)
-                                                </div>
-                                                <div class="col-lg-12">
-                                                    <label>Пароль для почты:</label>
-                                                    @Html.DisplayFor(m => m.AccountInfo.EmailPassword)
-                                                </div>
-                                                <div class="col-lg-12">
-                                                    <label>Дополнительная информация:</label>
-                                                    @Html.DisplayFor(m => m.AccountInfo.AdditionalInformation)
-                                                </div>
-                                            </div>
+
+                            @if (Model.ShowAccountInfo)
+                            {
+
+                                <div class="alert alert-dismissible alert-primary">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <label>Логин:</label>
+                                            @Html.DisplayFor(m => m.AccountInfo.Login)
                                         </div>
-                                   
+                                        <div class="col-lg-12">
+                                            <label>Пароль:</label>
+                                            @Html.DisplayFor(m => m.AccountInfo.Password)
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <label>Почта:</label>
+                                            @Html.DisplayFor(m => m.AccountInfo.Email)
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <label>Пароль для почты:</label>
+                                            @Html.DisplayFor(m => m.AccountInfo.EmailPassword)
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <label>Дополнительная информация:</label>
+                                            @Html.DisplayFor(m => m.AccountInfo.AdditionalInformation)
+                                        </div>
+                                    </div>
+                                </div>
 
-                                }
-                                @if (Model.ShowConfirm)
+
+                            }
+                            @if (Model.ShowConfirm)
+                            {
+
+                                using (Html.BeginForm("ConfirmOrder", "Checkout", null, FormMethod.Get, null))
                                 {
-                                  
-                                        using (Html.BeginForm("ConfirmOrder", "Checkout", null, FormMethod.Get, null))
-                                        {
-                                        @Html.HiddenFor(m => m.ModeratorId)
-                                        @Html.Hidden("Id", Model.Id)
-                                        <input type="submit" value="Подтвердить получение" class="btn btn-provide mb-3" />
-                                        }
-                                 
-
-
+                                    @Html.HiddenFor(m => m.ModeratorId)
+                                    @Html.Hidden("Id", Model.Id)
+                                    <input type="submit" value="Подтвердить получение" class="btn btn-order-confirm mb-3" />
                                 }
-                                else if (Model.ShowFeedbackToSeller)
+
+
+
+                            }
+                            else if (Model.ShowFeedbackToSeller)
+                            {
+
+                                using (Html.BeginForm("GiveToSeller", "Feedback", null, FormMethod.Get, null))
                                 {
-                              
-                                        using (Html.BeginForm("GiveToSeller", "Feedback", null, FormMethod.Get, null))
-                                        {
-                                        @Html.Hidden("receiverId", Model.SellerId)
-                                        @Html.Hidden("OrderId", Model.Id)
-                                        <input type="submit" value="Оставить отзыв продавцу" class="btn btn-leavefeedback mb-3" />
-                                        }
-                                  
-
+                                    @Html.Hidden("receiverId", Model.SellerId)
+                                    @Html.Hidden("OrderId", Model.Id)
+                                    <input type="submit" value="Оставить отзыв продавцу" class="btn btn-order-leavefeedback mb-3" />
                                 }
-                                @if (Model.ShowCloseButton)
+
+
+                            }
+                            @if (Model.ShowCloseButton)
+                            {
+                                using (Html.BeginForm("Close", "Order", FormMethod.Post, new { @onsubmit = "return confirm('Вы уверены, что хотите закрыть сделку?');" }))
                                 {
-                                  
-                                        @Html.ActionLink("Закрыть сделку", "Close", "Order", new { id = Model.Id }, new { @class = "btn btn-close mb-3" })
-                            
-
+                                    <input type="hidden" name="id" value="@Model.Id" />
+                                    <input type="submit" name="Pay" value="Закрыть сделку" class="btn btn-order-close mt-3" />
                                 }
 
-                                @if (Model.ShowPayButton)
+                            }
+
+                            @if (Model.ShowPayButton)
+                            {
+
+                                using (Html.BeginForm("Paid", "Checkout", FormMethod.Post))
                                 {
-                             
-                                        using (Html.BeginForm("Paid", "Checkout", FormMethod.Post))
-                                        {
 
-                                        <input type="hidden" name="id" value="@Model.Id" />
-                                        <input type="submit" name="Pay" value="Оплатить" class="btn btn-pay mb-3" />
+                                    <input type="hidden" name="id" value="@Model.Id" />
+                                    <input type="submit" name="Pay" value="Оплатить" class="btn btn-order-pay mt-3" />
 
 
-                                        }
-                              
                                 }
-         
+
+                            }
+
                         </div>
                     </div>
 

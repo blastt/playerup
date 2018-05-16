@@ -79,6 +79,7 @@ namespace Market.Web.Controllers
                         if (order.JobId != null)
                         {
                             BackgroundJob.Delete(order.JobId);
+                            order.JobId = null;
                         }
 
                         _orderService.SaveOrder();
@@ -115,7 +116,7 @@ namespace Market.Web.Controllers
                     return View(model);
                 }
             }
-            return View();
+            return HttpNotFound();
         }
 
         // Provide data from moderator to buyer
@@ -159,6 +160,7 @@ namespace Market.Web.Controllers
                                 if (buyerOrder.JobId != null)
                                 {
                                     BackgroundJob.Delete(buyerOrder.JobId);
+                                    buyerOrder.JobId = null;
                                 }
                                 _orderService.SaveOrder();
 

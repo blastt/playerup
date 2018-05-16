@@ -1,4 +1,50 @@
-﻿
+﻿$(document).ready(function () {
+    var currentHref = window.location.href.split('/')[3];
+
+    $("#account-list a").each(function () {
+        //alert(this.href.split('/')[4] + "/////////////" + window.location.href.split('/')[4] );
+        if (this.href.split('/')[4] == window.location.href.split('/')[4]) {
+            $(this.parentNode).addClass("active");
+            return (true);
+        }
+    });
+    $("#account-inner-list a").each(function () {
+        if (this.href == window.location.href) {
+
+            $(this).addClass("active");
+            return (true);
+        }
+    });
+    $.ajax({
+        url: '/Order/GetOrdersCount',
+        type: "POST",
+        contentType: "application/json",
+        data: JSON.stringify(),
+        dataType: "json",
+        success: function (response) {
+            if (response != 0) {
+                var a = $('#orders').find('a');
+                var div = $('<div></div>');
+                div.text(response);
+                div.addClass('orders-count');
+                a.prepend(div);
+            }
+        }
+    });
+
+    $.ajax({
+        url: '/Message/GetMessagessCount',
+        type: "POST",
+        contentType: "application/json",
+        data: JSON.stringify(),
+        dataType: "json",
+        success: function (response) {
+            drowMessage(response);
+        }
+    });
+
+
+})
 
 function SetDialogsClickable() {
     $(".clickable").each(function () {
@@ -40,64 +86,7 @@ function SetDeleteDialogClickable() {
     });
 }
 
-$(document).ready(function () {
-    $.ajax({
-        url: '/Order/GetOrdersCount',
-        type: "POST",
-        contentType: "application/json",
-        data: JSON.stringify(),
-        dataType: "json",
-        success: function (response) {
-            if (response != 0) {
-                var a = $('#orders').find('a');
-                var div = $('<div></div>');
-                div.text(response);
-                div.addClass('orders-count');
-                a.prepend(div);
-            }
-        }
-    });
 
-    $.ajax({
-        url: '/Message/GetMessagessCount',
-        type: "POST",
-        contentType: "application/json",
-        data: JSON.stringify(),
-        dataType: "json",
-        success: function (response) {
-            drowMessage(response);
-        }
-    });
-
-    var currentHref = window.location.href.split('/')[3];
-    $("#left-bar a").each(function () {
-        var elementHref = this.href.split('/')[3];
-
-        if (currentHref == "") {
-            currentHref = "buy";
-        }
-        //alert(currentHref + "ddddddddddd" + elementHref);
-        if (elementHref == currentHref) {
-            $(this.parentNode).addClass("active");
-            return (true);
-        }
-
-    });
-    $("#account-list a").each(function () {
-        //alert(this.href.split('/')[4] + "/////////////" + window.location.href.split('/')[4] );
-        if (this.href.split('/')[4] == window.location.href.split('/')[4]) {
-            $(this.parentNode).addClass("active");
-            return (true);
-        }
-    });
-    $("#account-inner-list a").each(function () {
-        if (this.href == window.location.href) {
-
-            $(this).addClass("active");
-            return (true);
-        }
-    });
-})
 
 function drowMessage(count) {
 
