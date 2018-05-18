@@ -11,6 +11,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
@@ -38,8 +39,17 @@ namespace Market.Web.Controllers
 
         // GET: Offer
         [HttpGet]
-        public ViewResult Buy(SearchOffersInfoViewModel model)
+        public async Task<ViewResult> Buy(SearchOffersInfoViewModel model)
         {
+            var offers = await _offerService.GetOffersAsync(o => o.Game.Value == model.Game && o.State == OfferState.active);
+            if (offers.Count() != 0)
+            {
+                model.PriceFrom = offers.Min(o => o.Price);
+                model.PriceTo = offers.Max(o => o.Price);
+            }
+            
+
+            model.Games = Mapper.Map<IEnumerable<Game>,IEnumerable<GameViewModel>>(_gameService.GetGames());
             return View(model);
         }
 
@@ -93,14 +103,12 @@ namespace Market.Web.Controllers
             };
             return View(model);
         }
-
-        public PartialViewResult List(SearchViewModel searchInfo)
+        private OfferListViewModel SearchOffers(SearchViewModel searchInfo)
         {
-            
+
 
             searchInfo.SearchString = searchInfo.SearchString ?? "";
-            searchInfo.Game = searchInfo.Game ?? "all";
-
+            searchInfo.Game = searchInfo.Game ?? "dota2";
 
             decimal minGamePrice = 0;
             decimal maxGamePrice = 0;
@@ -114,10 +122,10 @@ namespace Market.Web.Controllers
             decimal priceFrom = searchInfo.PriceFrom;
             decimal priceTo = searchInfo.PriceTo;
 
-            
+
             //offer.Header.Replace(" ", "").ToLower().Contains(searchString.Replace(" ", "").ToLower()) || (searchInDescription ? (offer.Discription.Replace(" ", "").ToLower().Contains(searchString.Replace(" ", "").ToLower())) : searchInDescription)
-            IEnumerable<Offer> foundOffers = _offerService.SearchOffers(game, sort,ref isOnline,ref searchInDiscription,
-                searchString, ref page, pageSize,ref totalItems, ref minGamePrice, ref maxGamePrice, ref priceFrom, ref priceTo);
+            IEnumerable<Offer> foundOffers = _offerService.SearchOffers(game, sort, ref isOnline, ref searchInDiscription,
+                searchString, ref page, pageSize, ref totalItems, ref minGamePrice, ref maxGamePrice, ref priceFrom, ref priceTo);
             IList<Offer> offers = new List<Offer>();
             if (searchInfo.JsonFilters.Count != 0)
             {
@@ -136,8 +144,8 @@ namespace Market.Web.Controllers
                                     equals = false;
                                     break;
                                 }
-                                
-                                
+
+
                             }
 
                             equals = true;
@@ -145,12 +153,12 @@ namespace Market.Web.Controllers
                         if (equals)
                         {
                             offers.Add(offer);
-                        }                        
+                        }
                         equals = false;
-                    }                   
+                    }
                 }
             }
-            
+
             IList<SelectListItem> ranks = new List<SelectListItem>
             {
                 new SelectListItem() { Text = "Все ранги", Value = "none", Selected = true }
@@ -205,71 +213,36 @@ namespace Market.Web.Controllers
                 }
             };
 
-            return PartialView("_OfferBlock", offerViewModels);
+
+            return model;
+
+        }
+
+        public PartialViewResult List(SearchViewModel searchInfo)
+        {
+
+
+            var model = SearchOffers(searchInfo);
+
+            return PartialView("_OfferBlock", model);
         }
 
         public PartialViewResult Reset(SearchViewModel searchInfo)
         {
-            decimal minGamePrice = 0;
-            decimal maxGamePrice = 0;
-            int page = 1;
-            string sort = "bestSeller";
-            bool isOnline = false;
-            bool searchInDiscription = false;
-            string searchString = "";
-            string game = searchInfo.Game;
-            int totalItems = 0;
-            decimal priceFrom = 0;
-            decimal priceTo = 0;
-
-            IEnumerable<Offer> offers = _offerService.SearchOffers(game, sort, ref isOnline, ref searchInDiscription,
-                searchString, ref page, pageSize, ref totalItems, ref minGamePrice, ref maxGamePrice, ref priceFrom, ref priceTo);
-
-            var offerViewModels = Mapper.Map<IEnumerable<Offer>, IEnumerable<OfferViewModel>>(offers);
-            var games = _gameService.GetGames();
-            var gameViewModels = Mapper.Map<IEnumerable<Game>, IEnumerable<GameViewModel>>(games);
-
-            var filterDict = new Dictionary<Model.Models.Filter, FilterItem>();
-
-            foreach (var offer in offerViewModels)
+            var game = _gameService.GetGameByValue(searchInfo.Game);
+            if (searchInfo.JsonFilters.Count == 0)
             {
-                if (offer.Filters.Count() == offer.FilterItems.Count())
+                if (game != null)
                 {
-                    for (int i = 0; i < offer.Filters.Count; i++)
+                    foreach (var filter in game.Filters)
                     {
-
-                        filterDict.Add(offer.Filters[i], offer.FilterItems[i]);
+                        searchInfo.JsonFilters.Add(new JsonFilter { Value = "empty", Attribute = filter.Value });
                     }
-                    offer.FilterFilterItem = filterDict;
-                    filterDict = new Dictionary<Model.Models.Filter, FilterItem>();
                 }
             }
 
-            var model = new OfferListViewModel()
-            {
-                Filters = _filterService.GetFilters().Where(m => m.Game.Value == searchInfo.Game),
-                Game = _gameService.GetGameByValue(searchInfo.Game),
-                Games = gameViewModels,
-                Offers = offerViewModels,
-                SearchInfo = new SearchViewModel()
-                {
-                    SearchString = searchString,
-                    IsOnline = isOnline,
-                    SearchInDiscription = searchInDiscription,
-                    MinGamePrice = minGamePrice,
-                    MaxGamePrice = maxGamePrice,
-                    PriceFrom = priceFrom,
-                    PriceTo = priceTo,
-                    Game = game,
-                    Page = 1
-                },
-                PageInfo = new PageInfoViewModel()
-                {
-                    PageNumber = page,
-                    PageSize = pageSize,
-                    TotalItems = totalItems
-                }
-            };
+            var model = SearchOffers(searchInfo);
+            
             return PartialView("List", model);
         }
 
@@ -413,7 +386,7 @@ namespace Market.Web.Controllers
             _offerService.CreateOffer(offer);
             _offerService.SaveOffer();
             
-            offer.JobId = MarketHangfire.SetDeactivateOfferJob(offer.Id, TimeSpan.FromMinutes(50));
+            offer.JobId = MarketHangfire.SetDeactivateOfferJob(offer.Id, TimeSpan.FromDays(30));
 
             _offerService.SaveOffer();
 

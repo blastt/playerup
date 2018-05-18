@@ -53,6 +53,8 @@ namespace Market.Data.Infrastructure
         public virtual void Delete(Expression<Func<T, bool>> where)
         {
             IEnumerable<T> objects = dbSet.Where<T>(where).AsEnumerable();
+            
+            
             foreach (T obj in objects)
                 dbSet.Remove(obj);
         }
@@ -60,7 +62,12 @@ namespace Market.Data.Infrastructure
         public virtual T GetById(int id)
         {
             return dbSet.Find(id);
+            
         }
+
+       
+
+
 
         public virtual IEnumerable<T> GetAll()
         {
@@ -72,9 +79,18 @@ namespace Market.Data.Infrastructure
             return dbSet.Where(where).ToList();
         }
 
+        public async virtual Task<IEnumerable<T>> GetManyAsync(Expression<Func<T, bool>> where)
+        {
+            return await dbSet.Where(where).ToListAsync<T>();
+        }
+
         public T Get(Expression<Func<T, bool>> where)
         {
             return dbSet.Where(where).FirstOrDefault<T>();
+        }
+        public Task<T> GetAsync(Expression<Func<T, bool>> where)
+        {
+            return dbSet.FirstOrDefaultAsync(where);
         }
 
         #endregion

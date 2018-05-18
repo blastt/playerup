@@ -1,12 +1,14 @@
-﻿using Market.Service;
+﻿using Hangfire;
+using Market.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 
 namespace Market.Web.Hangfire
 {
-    public class DeactivateOfferJob : IJob
+    public class DeactivateOfferJob
     {
         private readonly IOfferService offerService;
 
@@ -15,6 +17,7 @@ namespace Market.Web.Hangfire
             this.offerService = offerService;
         }
 
+        [DisableConcurrentExecution(10 * 60)]
         public void Do(int itemId)
         {
             var offer = offerService.GetOffer(itemId);
@@ -22,6 +25,7 @@ namespace Market.Web.Hangfire
             {
                 offerService.DeactivateOffer(offer, offer.UserProfileId);
             }
+            offerService.SaveOffer();
         }
     }
 }

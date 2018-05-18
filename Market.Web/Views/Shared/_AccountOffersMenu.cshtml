@@ -7,7 +7,7 @@
 
 <ul class="account-inner-list" id="account-inner-list">
 
-    <li class="account-inner-menu-item">@Html.ActionLink("Активные (" + Model.ActiveOffersCount + ")", "Active", "Offer", null, new { @class = "account-inner-menu-link" })</li>
-    <li class="account-inner-menu-item">@Html.ActionLink("Неактивные (" + Model.InactiveOffersCount + ")", "InActive", "Offer", null, new { @class = "account-inner-menu-link" })</li>
-    <li class="account-inner-menu-item">@Html.ActionLink("Закрытые (" + Model.CloseOffersCount+ ")", "Closed", "Offer", null, new { @class = "account-inner-menu-link" })</li>
+    <li class="account-inner-menu-item">@Html.ActionLink("Активные (" + Model.ActiveOffersCount + ")", "Active", "Offer", null, new { @class = "account-inner-menu-link " + Html.IsSelected(actions: "Active", controllers: "Offer") })</li>
+    <li class="account-inner-menu-item">@Html.ActionLink("Неактивные (" + Model.InactiveOffersCount + ")", "InActive", "Offer", null, new { @class = "account-inner-menu-link " + Html.IsSelected(actions: "InActive", controllers: "Offer") })</li>
+    <li class="account-inner-menu-item">@Html.ActionLink("Закрытые (" + Model.CloseOffersCount+ ")", "Closed", "Offer", null, new { @class = "account-inner-menu-link " + Html.IsSelected(actions: "Closed", controllers: "Offer") })</li>
 </ul>

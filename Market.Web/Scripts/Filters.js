@@ -13,7 +13,7 @@ function CreateFilters(ranks) {
         div.addClass("form-group");
         select = $("<select class='selsel' id='filterItemValues' name='FilterItemValues'></select>");
         var defaultOption = $('<option>'+ranks[rank].Name+'</option>').val('empty');
-        hidden2 = $('<input type="hidden" class="selselsel" id="filters" name="FilterValues" value="' + ranks[rank].Value + '">');
+        hidden2 = $('<input type="hidden" class="selselsel" id="filters" name="FilterValues">').val(ranks[rank].Value);
         select.append(defaultOption);
         for (var item in ranks[rank].FilterItems) {
 

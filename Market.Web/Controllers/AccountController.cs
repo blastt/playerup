@@ -51,6 +51,7 @@ namespace Market.Web.Controllers
         {
             get
             {
+                
                 return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
             }
             private set
@@ -88,7 +89,7 @@ namespace Market.Web.Controllers
                 
 
                     // change username and email
-
+                    
                     // Persiste the changes
                 // generage email confirmation code
                 string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);

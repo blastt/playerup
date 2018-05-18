@@ -2,6 +2,7 @@
 using Autofac.Integration.Mvc;
 using Hangfire;
 using Hangfire.Common;
+using Hangfire.SqlServer;
 using Market.Model.Models;
 using Market.Service;
 using Market.Web.Hangfire;
@@ -29,10 +30,12 @@ namespace Market.Web
             ConfigureAuth(app);
 
             MarketHangfire.ConfigureHangfire(app);
-            GlobalConfiguration.Configuration
-			    .UseSqlServerStorage(@"Data Source=(LocalDb)\MSSQLLocalDB;Initial Catalog=PalyerUpDbOrig;Integrated Security=True");
 
-            JobHelper.SetSerializerSettings(new Newtonsoft.Json.JsonSerializerSettings() { ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore });
+            GlobalConfiguration.Configuration
+			    .UseSqlServerStorage("MarketEntities");
+            
+
+            //JobHelper.SetSerializerSettings(new Newtonsoft.Json.JsonSerializerSettings() { ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore });
 
 
             app.UseHangfireDashboard("/hangfire", new DashboardOptions
@@ -41,7 +44,7 @@ namespace Market.Web
             });
             app.UseHangfireServer();
 
-           
+
             //app.UseCookieAuthentication(new CookieAuthenticationOptions
             //{
             //    AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie,

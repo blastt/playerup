@@ -7,6 +7,7 @@ using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
@@ -77,18 +78,18 @@ namespace Market.Web.Controllers
 
         }
 
-        public ActionResult BuyDetails(int? Id)
+        public async Task<ActionResult> BuyDetails(int? Id)
         {
             if (Id != null)
             {
 
-                var order = _orderService.GetOrder(Id.Value);
+                var order = await _orderService.GetOrderAsync(Id.Value);
                 if (order != null)
                 {
                     if (order.BuyerId == User.Identity.GetUserId())
                     {
                         order.BuyerChecked = true;
-                        _orderService.SaveOrder();
+                        await _orderService.SaveOrderAsync();
                         var ordersBuy = _orderService.GetOrders().Where(m => m.BuyerId == User.Identity.GetUserId());
                         var ordersSell = _orderService.GetOrders().Where(m => m.SellerId == User.Identity.GetUserId());
                         ViewData["BuyCount"] = ordersBuy.Count();
@@ -183,7 +184,7 @@ namespace Market.Web.Controllers
                             order.JobId = null;
                         }
                         TempData["orderSellStatus"] = "Сделка закрыта.";
-                        _orderService.SaveOrder();
+                        _orderService.SaveOrderAsync();
                         return RedirectToAction("SellDetails", new { id = order.Id });
                     }
                 }

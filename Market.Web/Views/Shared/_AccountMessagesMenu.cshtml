@@ -4,6 +4,6 @@
 }
 
 <ul class="account-inner-list" id="account-inner-list">
-    <li class="account-inner-menu-item">@Html.ActionLink("Все", "Inbox", "Message",null, new { @class = "account-inner-menu-link" })</li>
-    <li class="account-inner-menu-item">@Html.ActionLink("Непрочитанные", "Unread", "Message",null, new { @class = "account-inner-menu-link" })</li>
+    <li class="account-inner-menu-item">@Html.ActionLink("Все", "Inbox", "Message",null, new { @class = "account-inner-menu-link " + Html.IsSelected(actions: "Inbox,Details", controllers: "Message,Dialog") })</li>
+    <li class="account-inner-menu-item">@Html.ActionLink("Непрочитанные", "Unread", "Message",null, new { @class = "account-inner-menu-link " + Html.IsSelected(actions: "Unread,Details", controllers: "Message,Dialog") })</li>
 </ul>

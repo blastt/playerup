@@ -22,6 +22,8 @@ namespace Market.Service
         IEnumerable<Order> GetOrders();
         //IEnumerable<Offer> GetCategoryGadgets(string categoryName, string gadgetName = null);
         Order GetOrder(int id);
+        Task<Order> GetOrderAsync(int id);
+
         Order GetOrder(string accountLogin, string moderatorId, string sellerId, string buyerId);
         void UpdateOrder(Order order);
         void CreateOrder(Order order);
@@ -31,6 +33,7 @@ namespace Market.Service
         bool CloseOrderAutomatically(int orderId);
         bool ConfirmOrder(int orderId, string currentUserId);
         void SaveOrder();
+        Task SaveOrderAsync();
     }
 
     public class OrderService : IOrderService
@@ -70,6 +73,12 @@ namespace Market.Service
             return order;
         }
 
+        public async Task<Order> GetOrderAsync(int id)
+        {
+            var order = await ordersRepository.GetAsync(o => o.Id == id);
+            return order;
+        }
+
         public Order GetOrder(string accountLogin, string middlemanId, string sellerId, string buyerId)
         {            
             Order order = ordersRepository.GetMany(o => o.Offer.AccountLogin == accountLogin && 
@@ -86,6 +95,11 @@ namespace Market.Service
         public void SaveOrder()
         {
             unitOfWork.Commit();
+        }
+
+        public async Task SaveOrderAsync()
+        {
+            await unitOfWork.CommitAsync();
         }
 
         private bool CloseOrder(int orderId, Closer closer)

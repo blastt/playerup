@@ -4,6 +4,7 @@ using Market.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 
 namespace Market.Web.Hangfire
@@ -21,7 +22,7 @@ namespace Market.Web.Hangfire
         public void Do(int orderId)
         {           
             orderService.CloseOrderAutomatically(orderId);
-            orderService.SaveOrder();
+            orderService.SaveOrderAsync();
                                
         }        
     }

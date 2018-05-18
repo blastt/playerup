@@ -26,5 +26,11 @@ namespace Market.Data.Infrastructure
         {
             DbContext.Commit();
         }
+
+        public async Task CommitAsync()
+        {
+            await DbContext.CommitAsync();
+        }
+
     }
 }

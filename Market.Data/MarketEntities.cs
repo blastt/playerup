@@ -24,6 +24,11 @@ namespace Marketplace.Data
             base.SaveChanges();
         }
 
+        public async virtual Task CommitAsync()
+        {
+            await base.SaveChangesAsync();
+        }
+
         public static MarketEntities Create()
         {
             return new MarketEntities();

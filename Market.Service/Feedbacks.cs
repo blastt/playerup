@@ -21,6 +21,7 @@ namespace Market.Service
         
         void CreateFeedback(Feedback feedback);
         void SaveFeedback();
+        Task SaveFeedbackAsync();
     }
 
     public class FeedbackService : IFeedbackService
@@ -131,6 +132,11 @@ namespace Market.Service
         public void SaveFeedback()
         {
             unitOfWork.Commit();
+        }
+
+        public async Task SaveFeedbackAsync()
+        {
+            await unitOfWork.CommitAsync();
         }
 
         #endregion

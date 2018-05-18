@@ -6,6 +6,6 @@
 }
 
 <ul class="account-inner-list" id="account-inner-list">
-    <li class="account-inner-menu-item">@Html.ActionLink("Заказ (покупка) (" + ViewData["BuyCount"] + ")", "OrderBuy", "Order", null, new { @class = "account-inner-menu-link" })</li>
-    <li class="account-inner-menu-item">@Html.ActionLink("Заказ (продажа) (" + ViewData["SellCount"] + ")", "OrderSell", "Order", null, new { @class = "account-inner-menu-link" })</li>
+    <li class="account-inner-menu-item">@Html.ActionLink("Заказ (покупка) (" + ViewData["BuyCount"] + ")", "OrderBuy", "Order", null, new { @class = "account-inner-menu-link "+Html.IsSelected(actions: "OrderBuy,BuyDetails", controllers: "Order") })</li>
+    <li class="account-inner-menu-item">@Html.ActionLink("Заказ (продажа) (" + ViewData["SellCount"] + ")", "OrderSell", "Order", null, new { @class = "account-inner-menu-link "+Html.IsSelected(actions: "OrderSell,SellDetails", controllers: "Order") })</li>
 </ul>

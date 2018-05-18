@@ -23,7 +23,7 @@ namespace Market.Web.ViewModels
         public IList<JsonFilter> JsonFilters { get; set; } = new List<JsonFilter>();
         public string[] FilterValues { get; set; }
         public string[] FilterItemValues { get; set; } = new string [] { };
-        public string Game { get; set; } = "all";
+        public string Game { get; set; } = "dota2";
 
         public decimal MinGamePrice { get; set; }
 

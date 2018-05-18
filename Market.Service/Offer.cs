@@ -4,6 +4,7 @@ using Market.Model.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -15,6 +16,8 @@ namespace Market.Service
         //IEnumerable<Offer> GetCategoryGadgets(string categoryName, string gadgetName = null);
         Offer GetOffer(int id);
         void Delete(Offer offer);
+        Task<Offer> GetOfferAsync(int id);
+        Task<IEnumerable<Offer>> GetOffersAsync(Expression<Func<Offer, bool>> where);
         decimal CalculateMiddlemanPrice(decimal offerPrice);
         IEnumerable<Offer> SearchOffers(string game, string sort, ref bool isOnline, ref bool searchInDiscription,
             string searchString, ref int page, int pageSize,ref int totalItems, ref decimal minGamePrice, ref decimal maxGamePrice, ref decimal priceFrom, ref decimal priceTo);
@@ -22,6 +25,7 @@ namespace Market.Service
         void UpdateOffer(Offer offer);
         bool DeactivateOffer(Offer offer, string currentUserId);
         void SaveOffer();
+        Task SaveOfferAsync();
     }
 
     public class OfferService : IOfferService
@@ -43,6 +47,12 @@ namespace Market.Service
             return offers;
         }
 
+        public async Task<IEnumerable<Offer>> GetOffersAsync(Expression<Func<Offer, bool>> where)
+        {
+            var offers = await offersRepository.GetManyAsync(where);
+            return offers;
+        }
+
         public bool DeactivateOffer(Offer offer, string currentUserId)
         {
             if (offer != null && offer.UserProfileId == currentUserId && offer.State == OfferState.active)
@@ -57,6 +67,12 @@ namespace Market.Service
         public Offer GetOffer(int id)
         {
             var offer = offersRepository.GetById(id);
+            return offer;
+        }
+
+        public async Task<Offer> GetOfferAsync(int id)
+        {
+            var offer = await offersRepository.GetAsync(o => o.Id == id);
             return offer;
         }
 
@@ -78,14 +94,9 @@ namespace Market.Service
         private IEnumerable<Offer> SearchOffersByGame(string game)
         {
             IEnumerable<Offer> offers;
-            if (game == "all")
-            {
-                offers = offersRepository.GetAll();
-            }
-            else
-            {
+            
                 offers = offersRepository.GetAll().Where(m => m.Game.Value == game);
-            }
+            
             return offers;
         }
 
@@ -228,6 +239,11 @@ namespace Market.Service
         public void SaveOffer()
         {
             unitOfWork.Commit();
+        }
+
+        public async Task SaveOfferAsync()
+        {
+            await unitOfWork.CommitAsync();
         }
 
         #endregion

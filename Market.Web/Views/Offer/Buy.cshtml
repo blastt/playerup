@@ -15,17 +15,52 @@
 
     <div class="buy-content">
         <a id="game-title"></a>
-        <div id="list">
-            @Html.Action("Reset","Offer")
-        </div>
         @{var game = Model.Game == null ? "csgo" : Model.Game; }
-        <input type="hidden" name="Game" id="game" value="@Model.Game" />
-        <input type="hidden" name="Page" id="page" value="@Model.Page" />
-        <input type="hidden" name="SearchString" id="searchString" value="@Model.SearchString" />
+        <div class="row">
+            <div class="col-lg-12">
+
+                <div class="game-filter" id="game-filter">
+
+
+                    @*@foreach (var g in Model.Games)
+                    {
+                        <div class="game-filter-item" data-game="@g.Value" data-url="@Url.Action("List", "Offer", new { game = g.Value })">
+                            <div onclick="ChangeGame('@g.Value')"><img src="@g.ImagePath" style="width:40px" alt="Alternate Text" title="@g.Name" /></div>
+                        </div>
+
+                    }*@
+                    @foreach (var g in Model.Games)
+                    {
+                        <a class="game-filter-item @Html.IsSelectedGame(games: g.Value, actions: "buy", controllers: "offer")" href="@Url.Action("Buy", "Offer", new { game = g.Value })">
+                            <div><img src="@g.ImagePath" style="width:40px" alt="@g.Name" title="@g.Name" /></div>
+                        </a>
+
+                    }
+
+                </div>
+
+            </div>
+            <div class="col-lg-12 mb-2">
+                <span class="game-title">Игра &#8594 <span>@game</span> </span>
+                @Html.ActionLink("Продать аккаунт", "Create", null, new { @class = "btn btn-link-sell" })
+            </div>
+        </div>
+        <div class="row">
+            @Html.Partial("_SearchPanel", Model)
+            <div class="col-lg-9">
+                <div id="list">
+                    @*@Html.Action("Reset", "Offer")*@
+                </div>
+            </div>
+            
+        </div>
+            <input type="hidden" name="Game" id="game" value="@Model.Game" />
+            <input type="hidden" name="Page" id="page" value="@Model.Page" />
+            <input type="hidden" name="SearchString" id="searchString" value="@Model.SearchString" />
+        </div>
+
+
     </div>
-
-
-</div>
 
 <script src="@RouteJs.RouteJsHandler.HandlerUrl"></script>
 

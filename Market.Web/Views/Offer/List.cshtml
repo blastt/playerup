@@ -4,36 +4,7 @@
 
 
 
-<div class="row">
-    <div class="col-lg-12">
 
-        <div class="game-filter" id="game-filter">
-
-
-            @*@foreach (var g in Model.Games)
-        {
-            <div class="game-filter-item" data-game="@g.Value" data-url="@Url.Action("List", "Offer", new { game = g.Value })">
-                <div onclick="ChangeGame('@g.Value')"><img src="@g.ImagePath" style="width:40px" alt="Alternate Text" title="@g.Name" /></div>
-            </div>
-
-        }*@
-            @foreach (var g in Model.Games)
-        {
-            <div class="game-filter-item" data-game="@g.Value" data-url="@Url.Action("List", "Offer", new { game = g.Value })">
-                <div onclick="ChangeGame('@g.Value')"><img src="@g.ImagePath" style="width:40px" alt="Alternate Text" title="@g.Name" /></div>
-            </div>
-
-        }
-
-        </div>
-        
-    </div>
-    <div class="col-lg-12 mb-2">
-        @{var game = Model.Game == null ? "Все" : Model.Game.Name;}
-        <span class="game-title">Игра &#8594 <span>@game</span> </span>
-        @Html.ActionLink("Продать аккаунт", "Create", null, new { @class = "btn btn-link-sell" })
-    </div>
-</div>
 <div class="row mt-2" id="lll">
 
 

@@ -1,20 +1,5 @@
 ﻿$(document).ready(function () {
-    var currentHref = window.location.href.split('/')[3];
-
-    $("#account-list a").each(function () {
-        //alert(this.href.split('/')[4] + "/////////////" + window.location.href.split('/')[4] );
-        if (this.href.split('/')[4] == window.location.href.split('/')[4]) {
-            $(this.parentNode).addClass("active");
-            return (true);
-        }
-    });
-    $("#account-inner-list a").each(function () {
-        if (this.href == window.location.href) {
-
-            $(this).addClass("active");
-            return (true);
-        }
-    });
+  
     $.ajax({
         url: '/Order/GetOrdersCount',
         type: "POST",

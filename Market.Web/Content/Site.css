@@ -338,10 +338,10 @@ ul {
     box-shadow: inset 0px -5px 0px 0px #62b2e2;
 }
 
-.game-filter-item:focus, .game-filter-item.all-games:focus {
-    webkit-box-shadow: inset 0px -5px 0px 0px #62b2e2;
-    box-shadow: inset 0px -5px 0px 0px #62b2e2;
+.arrow{
+    background-image:url(Images/arrow.svg)
 }
+
 
 .offer-full-block {
     padding: 15px;

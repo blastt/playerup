@@ -141,21 +141,14 @@ function ResetOffers() {
         },
         success: function (response) {
 
+            $('#searchForm').get(0).reset();
             $('#list').html(response);
             Slider(parseFloat($('#priceFrom').val()), parseFloat($('#priceTo').val()));
             SelectFilterItem(g, true);
-            $(".game-filter-item").each(function (index) {
-
-                if (this.dataset.game === g) {
-
-                    $(this).addClass("active");
-                    return;
-                }
-
-            });
-            var currentPath = window.location.href.split('/');
-            var urlPath = Router.action('Offer', 'Buy', { game: g });
-            window.history.pushState({ "html": response.html, "pageTitle": response.pageTitle }, "", urlPath);
+            
+            //var currentPath = window.location.href.split('/');
+            //var urlPath = Router.action('Offer', 'Buy', { game: g });
+            //window.history.pushState({ "html": response.html, "pageTitle": response.pageTitle }, "", urlPath);
             //$('#loader').animate({ opacity: '0.0' }, 400, "", function () {
             //    $('#loader').hide();
             //});
