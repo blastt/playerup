@@ -26,7 +26,7 @@ namespace Market.Web.Controllers
         private readonly IFilterService _filterService;
         private readonly IFilterItemService _filterItemService;
         private readonly int offerDays = 30;
-        public int pageSize = 4;
+        public int pageSize = 1;
         public int pageSizeInUserInfo = 10;
         public OfferController(IOfferService offerService, IGameService gameService, IFilterService filterService, IFilterItemService filterItemService, IUserProfileService userProfileService)
         {
@@ -191,7 +191,7 @@ namespace Market.Web.Controllers
             {
                 Filters = _filterService.GetFilters().Where(m => m.Game.Value == searchInfo.Game),
                 Game = _gameService.GetGameByValue(searchInfo.Game),
-                Offers = offerViewModels,
+                Offers = offerViewModels.Skip((page - 1) * pageSize).Take(pageSize).ToList(),
                 SearchInfo = new SearchViewModel()
                 {
                     SearchString = searchString,
@@ -207,9 +207,10 @@ namespace Market.Web.Controllers
                 },
                 PageInfo = new PageInfoViewModel()
                 {
+                    
                     PageNumber = page,
                     PageSize = pageSize,
-                    TotalItems = totalItems
+                    TotalItems = offers.Count()
                 }
             };
 
@@ -462,7 +463,7 @@ namespace Market.Web.Controllers
                     offer.DateDeleted = offer.DateCreated.AddDays(offerDays);
                     _offerService.SaveOffer();
 
-                    offer.JobId = MarketHangfire.SetDeactivateOfferJob(offer.Id, TimeSpan.FromMinutes(50));
+                    offer.JobId = MarketHangfire.SetDeactivateOfferJob(offer.Id, TimeSpan.FromDays(30));
                     _offerService.SaveOffer();
                     return View();
                 }

@@ -17,6 +17,7 @@ namespace Market.Web.ViewModels
         public SearchViewModel SearchInfo { get; set; }
         public PageInfoViewModel PageInfo { get; set; }
 
+
         public int ActiveOffersCount { get; set; }
         public int InactiveOffersCount { get; set; }
         public int CloseOffersCount { get; set; }

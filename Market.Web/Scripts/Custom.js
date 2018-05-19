@@ -15,10 +15,15 @@
 
 //------
 $(document).ready(function () {
+    $('#page').val(page);
+    //$('html, body').animate({ scrollTop: 0 }, 0);
     ResetOffers();
 });
 
-
+function SearchButton() {
+    $('#page').val(1);
+    SearchOffers();
+}
 
 function SelectPage(page) {
 
@@ -86,8 +91,8 @@ function SearchOffers() {
                 routes.page = page;
             }
 
-            urlPath = Router.action('Offer', 'Buy', routes);
-            window.history.pushState({ "html": response.html, "pageTitle": response.pageTitle }, "", urlPath);
+            //urlPath = Router.action('Offer', 'Buy', routes);
+            //window.history.pushState({ "html": response.html, "pageTitle": response.pageTitle }, "", urlPath);
             //$('#loader').animate({ opacity: '0.0' }, 400, "", function () {
             //    $('#loader').hide();
             //});

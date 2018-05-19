@@ -111,6 +111,7 @@ namespace Market.Web.Controllers
             {
                 return View("ChangeEmailError");
             }
+           
             var result = await UserManager.ConfirmEmailAsync(userId, code);
             return View(result.Succeeded ? "ConfirmEmail" : "ChangeEmailError");
         }

@@ -211,7 +211,6 @@ namespace Market.Service
             offers = SearchOffersBySearchString(offers, searchString,ref searchInDiscription);
             offers = SearchOffersByOnlineUser(offers,ref isOnline);
             offers = SortOffers(offers, sort);
-            offers = SearchOffersByPage(offers,ref page, pageSize, ref totalItems);
             return offers;
         }
 

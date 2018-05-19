@@ -22,5 +22,7 @@ namespace Market.Web
             //JobHelper.SetSerializerSettings(new Newtonsoft.Json.JsonSerializerSettings() { ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore });
             Bootstrapper.Run();
         }
+
+        
     }
 }
