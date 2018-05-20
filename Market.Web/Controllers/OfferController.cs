@@ -41,6 +41,7 @@ namespace Market.Web.Controllers
         [HttpGet]
         public async Task<ViewResult> Buy(SearchOffersInfoViewModel model)
         {
+            
             var offers = await _offerService.GetOffersAsync(o => o.Game.Value == model.Game && o.State == OfferState.active);
             if (offers.Count() != 0)
             {

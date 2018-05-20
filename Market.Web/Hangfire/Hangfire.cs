@@ -29,6 +29,7 @@ namespace Market.Web.Hangfire
             var builder = new ContainerBuilder();
             builder.RegisterControllers(Assembly.GetExecutingAssembly());
             //builder.RegisterType<EmailService>().As<IIdentityMessageService>();
+            builder.RegisterType<EmailService>().As<IIdentityMessageService>().InstancePerLifetimeScope();
             builder.RegisterType<UnitOfWork>().As<IUnitOfWork>().InstancePerLifetimeScope();
             builder.RegisterType<DbFactory>().As<IDbFactory>().InstancePerLifetimeScope();
             //builder.RegisterType<CultureInfo>().As<IFormatProvider>().WithParameter("name", "en-US").InstancePerLifetimeScope();
@@ -44,6 +45,7 @@ namespace Market.Web.Hangfire
             builder.RegisterAssemblyTypes(typeof(FeedbackService).Assembly)
                .Where(t => t.Name.EndsWith("Service"))
                .AsImplementedInterfaces().InstancePerLifetimeScope();
+
             builder.RegisterType<OrderCloseJob>().AsSelf().InstancePerLifetimeScope();
             builder.RegisterType<ConfirmOrderJob>().AsSelf().InstancePerLifetimeScope();
             builder.RegisterType<LeaveFeedbackJob>().AsSelf().InstancePerLifetimeScope();

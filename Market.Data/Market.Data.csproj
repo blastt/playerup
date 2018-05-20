@@ -79,6 +79,10 @@
     <Compile Include="Migrations\201805141954037_Transactions.Designer.cs">
       <DependentUpon>201805141954037_Transactions.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201805191631343_Name2.cs" />
+    <Compile Include="Migrations\201805191631343_Name2.Designer.cs">
+      <DependentUpon>201805191631343_Name2.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\AccountInfoRepository.cs" />
@@ -109,6 +113,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201805141954037_Transactions.resx">
       <DependentUpon>201805141954037_Transactions.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805191631343_Name2.resx">
+      <DependentUpon>201805191631343_Name2.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

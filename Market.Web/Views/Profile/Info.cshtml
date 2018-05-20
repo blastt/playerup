@@ -158,8 +158,8 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title">Написать сообщение</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span id="close" aria-hidden="true">×</span>
+                <button type="button" id="close" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
                 </button>
             </div>
 
@@ -168,7 +168,7 @@
             <div class="modal-body">
 
                 <div class="form-group">
-                    <img class="img-circle avatar-small" src="@Url.Action("Photo", "Profile" , new { UserId = Model.Id })" style="float:left; margin-right: 20px" alt="Alternate Text" />
+                    <img class="img-circle avatar-small" src="@Model.ImagePath" style="float:left; margin-right: 20px" alt="Alternate Text" />
                     <div>
 
                         @Html.ActionLink(Model.Name, "Info", new { })

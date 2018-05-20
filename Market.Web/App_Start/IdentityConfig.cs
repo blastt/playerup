@@ -34,8 +34,9 @@ namespace Market.Web
         {
             // Create a Web transport for sending email.
             var apiKey = Environment.GetEnvironmentVariable("SENDGRID_KEY");
+            //var apiKey = "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";
             var client = new SendGridClient(apiKey);
-            var from = new EmailAddress("test@example.com", "Example User");
+            var from = new EmailAddress("test234545@gmail.com", "Example User");
             var subject = message.Subject;
             
             var to = new EmailAddress(message.Destination);

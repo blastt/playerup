@@ -16,16 +16,28 @@
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
             <div class="form-group">
                 @Html.LabelFor(model => model.Grade, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EnumDropDownListFor(model => model.Grade, htmlAttributes: new { @class = "form-control" })
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <div class="custom-control custom-radio">
+                            <input type="radio" id="customRadio1" name="customRadio" class="custom-control-input" checked="">
+                            <img src="~/Content/Images/smile-pos-green.png"  class="mr-4" />
+                            <label class="custom-control-label" for="customRadio1">Все прошло удачно</label>
+                        </div>
+                        <div class="custom-control custom-radio">
+                            <input type="radio" id="customRadio2" name="customRadio" class="custom-control-input">
+                            <img src="~/Content/Images/smile-neg-dark.png" class="mr-4" />
+                            <label class="custom-control-label" for="customRadio2">Я не доволен сделкой</label>
+                        </div>
+                    </div>
+                    @*@Html.EnumDropDownListFor(model => model.Grade, htmlAttributes: new { @class = "form-control" })*@
                     @Html.ValidationMessageFor(model => model.Grade, "", new { @class = "text-danger" })
                 </div>
             </div>
 
             <div class="form-group">
                 @Html.LabelFor(model => model.Comment, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.Comment, new { htmlAttributes = new { @class = "form-control" } })
+                <div class="col-md-5">
+                    @Html.TextAreaFor(model => model.Comment,6,0, new { @class = "form-control" } )
                     @Html.ValidationMessageFor(model => model.Comment, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -35,7 +47,7 @@
 
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" value="Оставить отзыв" class="btn btn-default" />
+                    <input type="submit" value="Оставить отзыв" class="btn btn-submit" />
                 </div>
             </div>
         </div>
