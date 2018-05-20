@@ -185,13 +185,12 @@
                             }
                             else if (Model.ShowFeedbackToBuyer)
                             {
-                                using (Html.BeginForm("GiveToBuyer", "Feedback", null, FormMethod.Get, null))
-                                {
-                                    @Html.Hidden("receiverId", Model.BuyerId)
-                                    @Html.Hidden("OrderId", Model.Id)
 
-                                    <input type="submit" value="Оставить отзыв покупателю" class="btn btn-order-leavefeedback mt-3" />
-                                }
+                                <input id="orderId" value="@Model.Id" type="hidden" />
+                                <input id="receiverId" value="@Model.BuyerId" type="hidden" />
+
+                                <input type="submit" id="givefeed" value="Оставить отзыв покупателю" class="btn btn-order-leavefeedback mt-3" />
+
                             }
 
 
@@ -241,13 +240,84 @@
                     }
                 </div>
                 @*<div class="row">
-            <div class="col-md-12">
-                @Html.PageLinks(Model.PagingInfo, x => Url.Action("Inbox", new { page = x, sortOrder = ViewBag.CurrentSort, searchString = ViewBag.SearchString }))
-            </div>
-        </div>*@
+                        <div class="col-md-12">
+                            @Html.PageLinks(Model.PagingInfo, x => Url.Action("Inbox", new { page = x, sortOrder = ViewBag.CurrentSort, searchString = ViewBag.SearchString }))
+                        </div>
+                    </div>*@
             </div>
         </div>
 
     </div>
 </div>
 
+<div id="modal-dialog" class="modal">
+    
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Оставить отзыв покупателю</h4>
+                <button type="button" id="close" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+
+            <input type="hidden" id="receiverId" name="ReceiverId" value="@Model.Id" />
+
+            <div class="modal-body">
+
+                <div class="form-group text-center">
+                    <div class="row mb-4">
+                        <div class="col-sm-12">
+                            <span>Выберите оценку</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <label class="ml-2 mr-2">
+
+                                <input type="radio" id="customRadio1" hidden="hidden" value="@Market.Model.Models.Emotions.Good" name="Grade" class="smile-radio position-absolute" checked="">
+                                <img src="~/Content/Images/feed-smile-pos.png" />
+                            </label>
+
+                            <label class="ml-2 mr-2">
+                                <input type="radio" id="customRadio1" hidden="hidden" value="@Market.Model.Models.Emotions.Bad" name="Grade" class="smile-radio position-absolute">
+                                <img src="~/Content/Images/feed-smile-neg.png" />
+                            </label>
+                        </div>
+                    </div>
+
+
+
+
+                </div>
+
+                <div class="form-group">
+                    <textarea id="comment" class="form-control" rows="5"></textarea>
+                </div>
+
+
+            </div>
+            <div class="modal-footer">
+                <button id="leaveFeedback" type="button" onclick="SendMessage()" class="btn btn-submit">Оставить отзыв</button>
+            </div>
+
+
+
+        </div>
+    </div>
+</div>
+
+<div id="m-dialog" class="modal-send">
+    <div class="modal-dialog" role="document">
+        <div id="m-content-send" class="modal-content-send">
+            <div id="m-body" class="modal-body">
+                <span class="text-white text" style="font-size: 18px">Спасибо за ваш отзыв!</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts
+{
+    <script type="text/javascript" src="~/Scripts/jquery-modal-feedback.js"></script>
+}

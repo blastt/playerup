@@ -419,13 +419,13 @@ namespace Market.Web.Controllers
         public JsonResult New(MessageViewModel model)
         {
             
-            if (model.MessageBody.Trim() == "")
-            {
-                return Json(new { });
-            }
+            
             if (ModelState.IsValid)
             {
-                             
+                if (model.MessageBody.Trim() == "")
+                {
+                    return null;
+                }
                 var toUser = _userProfileService.GetUserProfileById(model.ReceiverId);
                 var fromUser = _userProfileService.GetUserProfileById(User.Identity.GetUserId());
                 if (toUser != null && fromUser!= null && toUser.Id != fromUser.Id)
@@ -475,10 +475,10 @@ namespace Market.Web.Controllers
                     AddMessage(fromUser.Id, toUser.Name, fromUser.Name, message.MessageBody, message.CreatedDate.ToString());
                     return Json(new {  });
                 }
-                return Json("Error");
+                return null;
             }
 
-            return Json("Error");
+            return null;
         }
 
         

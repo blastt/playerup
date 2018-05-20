@@ -1928,3 +1928,13 @@ dl dd a {
 .checkout-details-notice {
     border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
+
+.smile-radio + img { /* (RADIO CHECKED) IMAGE STYLES */
+    cursor: pointer;
+    filter: opacity(0.4);
+    border: 2px solid transparent;
+}
+.smile-radio:checked + img { /* (RADIO CHECKED) IMAGE STYLES */
+    filter: sepia(100%);
+    
+}

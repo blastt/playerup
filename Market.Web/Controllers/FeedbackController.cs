@@ -111,10 +111,10 @@ namespace Market.Web.Controllers
                     ReceiverId = receiverId,
                     OrderId = orderId.Value
                 };
-                return View(model);                
+                return View(model);
             }
 
-            return HttpNotFound();           
+            return HttpNotFound();
 
             //ViewBag.UserProfileId = new SelectList(db.UserProfiles, "Id", "Discription");            
         }
@@ -123,11 +123,15 @@ namespace Market.Web.Controllers
         // Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
         // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult GiveToBuyer(GiveFeedbackViewModel model)
+        public JsonResult GiveFeedback(GiveFeedbackViewModel model)
         {
+
             if (model.ReceiverId != null && ModelState.IsValid && Enum.IsDefined(typeof(Emotions), model.Grade))
             {
+                if (model.Comment.Trim() == "")
+                {
+                    return null;
+                }
                 if (model.OrderId != null)
                 {
                     Order order = _orderService.GetOrder(model.OrderId.Value);
@@ -145,17 +149,38 @@ namespace Market.Web.Controllers
                         {
                             order.Buyer.NegativeFeedbackCount++;
                         }
+
                         order.Feedbacks.Add(feedback);
                         order.Buyer.FeedbacksMy.Add(feedback);
                         order.Seller.FeedbacksToOthers.Add(feedback);
                         _feedbackService.CreateFeedback(feedback);
                         _feedbackService.SaveFeedback();
-                        return View(model);
+                        return Json(new { });
+                    }
+                    else if (order != null && order.Seller.Id == model.ReceiverId && order.BuyerId == User.Identity.GetUserId() && !order.BuyerFeedbacked)
+                    {
+                        order.BuyerFeedbacked = true;
+                        var feedback = Mapper.Map<GiveFeedbackViewModel, Feedback>(model);
+
+                        if (feedback.Grade == Emotions.Good)
+                        {
+                            order.Seller.PositiveFeedbackCount++;
+                        }
+                        else if (feedback.Grade == Emotions.Bad)
+                        {
+                            order.Seller.NegativeFeedbackCount++;
+                        }
+                        order.Feedbacks.Add(feedback);
+                        order.Seller.FeedbacksMy.Add(feedback);
+                        order.Buyer.FeedbacksToOthers.Add(feedback);
+                        _feedbackService.CreateFeedback(feedback);
+                        _feedbackService.SaveFeedback();
+                        return Json(new { });
+
                     }
                 }
-            }           
-
-            return HttpNotFound();
+            }
+            return null;
         }
 
         // GET: Feedback/Create
@@ -199,7 +224,7 @@ namespace Market.Web.Controllers
                         {
                             order.Seller.PositiveFeedbackCount++;
                         }
-                        else if(feedback.Grade == Emotions.Bad)
+                        else if (feedback.Grade == Emotions.Bad)
                         {
                             order.Seller.NegativeFeedbackCount++;
                         }
@@ -207,14 +232,14 @@ namespace Market.Web.Controllers
                         order.Seller.FeedbacksMy.Add(feedback);
                         order.Buyer.FeedbacksToOthers.Add(feedback);
                         _feedbackService.CreateFeedback(feedback);
-                        
+
                         _orderService.UpdateOrder(order);
                         _userProfileService.UpdateUserProfile(order.Seller);
                         _userProfileService.UpdateUserProfile(order.Buyer);
                         _feedbackService.SaveFeedback();
                         return View(model);
                     }
-                }                
+                }
             }
             return HttpNotFound();
         }

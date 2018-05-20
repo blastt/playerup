@@ -340,6 +340,8 @@
     <Content Include="Content\Images\cashout.svg" />
     <Content Include="Content\Images\error.png" />
     <Content Include="Content\Images\facebook.svg" />
+    <Content Include="Content\Images\feed-smile-neg.png" />
+    <Content Include="Content\Images\feed-smile-pos.png" />
     <Content Include="Content\Images\logo.svg" />
     <Content Include="Content\Images\logo1.png" />
     <Content Include="Content\Images\mail.svg" />
@@ -408,6 +410,7 @@
     <Content Include="Scripts\jquery-3.3.1.slim.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery-messages.js" />
+    <Content Include="Scripts\jquery-modal-feedback.js" />
     <Content Include="Scripts\jquery-modal.js" />
     <Content Include="Scripts\jquery-modal-send.js" />
     <Content Include="Scripts\jquery-ui.js" />

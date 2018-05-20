@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
@@ -9,6 +10,8 @@ namespace Market.Web.ViewModels
     {
         public int Id { get; set; }
         public string Subject { get; set; }
+
+        [Required]
         public string MessageBody { get; set; } = "";
         public bool FromViewed { get; set; }
         public bool ToViewed { get; set; }

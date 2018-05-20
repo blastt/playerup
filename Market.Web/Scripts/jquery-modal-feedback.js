@@ -3,36 +3,44 @@
 var modal = document.getElementById('modal-dialog');
 var modal2 = $('#m-dialog');
 
-var sendBtn = document.getElementById("contact");
+var giveBtn = document.getElementById("givefeed");
 
-sendBtn.onclick = function () {
+// Get the <span> element that closes the modal
+
+
+// When the user clicks on the button, open the modal 
+giveBtn.onclick = function () {
     modal.style.display = "block";
 }
+
+// Get the button that opens the modal
+var btn = document.getElementById("leaveFeedback");
+
 // Get the <span> element that closes the modal
 var span = document.getElementById("close");
 
-var btn = document.getElementById("sendMessage");
-
-var messageInput = $('#messageBody');
+var messageInput = $('#comment');
 btn.onclick = function () {
+
     if (messageInput.val().trim() !== '') {
-        SendMessage();
+        alert("");
+        GiveFeedback();
     }
 
 }
 
 
 // When the user clicks on the button, open the modal 
-function SendMessage() {
+function GiveFeedback() {
 
     var message = {
-        "OfferHeader": $('#offerHeader').val(),
-        "MessageBody": $('#messageBody').val(),
+        "Grade": $('input[name=Grade]:checked').val(),
+        "Comment": $('#comment').val(),
+        "OrderId": $('#orderId').val(),
         "ReceiverId": $('#receiverId').val(),
-        "Subject": $('#subject').val(),
     };
     $.ajax({
-        url: "/Message/New",
+        url: "/Feedback/GiveFeedback",
         type: "POST",
         contentType: "application/json",
         data: JSON.stringify({ model: message }),
@@ -42,11 +50,11 @@ function SendMessage() {
             modal2.css("display", "block");
             modal2.css("opacity", "1.0");
             modal2.animate({ opacity: '0.0' }, 5000, "", function () {
-                modal2.css("display","none");
+                modal2.css("display", "none");
             });
         },
         error: function () {
-            alert("Вы не ввели сообщение");
+            alert("Вы не ввели текст");
         }
     });
     modal.style.display = "none";
