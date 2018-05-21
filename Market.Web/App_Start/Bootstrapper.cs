@@ -5,9 +5,11 @@ using Market.Data.Infrastructure;
 using Market.Data.Repositories;
 using Market.Service;
 using Market.Web.Hangfire;
+using Market.Web.Hubs;
 using Market.Web.Mappings;
 using Marketplace.Data.Infrastructure;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.SignalR;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -31,10 +33,9 @@ namespace Market.Web.App_Start
             var builder = new ContainerBuilder();
             builder.RegisterControllers(Assembly.GetExecutingAssembly());
             builder.RegisterType<EmailService>().As<IIdentityMessageService>().InstancePerRequest();
-            builder.RegisterType<UnitOfWork>().As<IUnitOfWork>(). InstancePerRequest();
+            builder.RegisterType<UnitOfWork>().As<IUnitOfWork>().InstancePerRequest();
             builder.RegisterType<DbFactory>().As<IDbFactory>().InstancePerRequest();
             builder.RegisterType<CultureInfo>().As<IFormatProvider>().InstancePerRequest().WithParameter("name","en-US");
-            
             #region Repositories
 
             builder.RegisterAssemblyTypes(typeof(OfferRepository).Assembly)

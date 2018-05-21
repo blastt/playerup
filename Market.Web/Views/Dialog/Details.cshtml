@@ -40,7 +40,7 @@
                                 <div class="message-block">
                                     <div class="row">
                                         <div class="col-lg-1">
-                                            <img id="message-block-img" class="img-circle avatar-small" src="@Html.Action("Photo", "Profile", new { UserId = message.SenderId })" alt="Alternate Text" />
+                                            <img id="message-block-img" class="img-circle avatar-48" src="@message.SenderImage" alt="Alternate Text" />
 
                                         </div>
                                         <div class="col-lg-11">
@@ -107,7 +107,7 @@
 <div class="message-block" id="message-block-element" style="display:none">
     <div class="row">
         <div class="col-lg-1">
-            <img id="message-block-img" class="img-circle avatar-small" src="source" alt="Alternate Text" />
+            <img id="message-block-img" class="img-circle avatar-48" src="source" alt="Alternate Text" />
 
         </div>
         <div class="col-lg-11">

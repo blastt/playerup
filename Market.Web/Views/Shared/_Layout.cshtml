@@ -139,12 +139,12 @@
                 SetDeleteDialogClickable();
             };
 
-            messageHub.client.addMessage = function (senderId, receiverName, senderName, messageBody, date) {
+            messageHub.client.addMessage = function (receiverName, senderName, messageBody, date, senderImage) {
 
                 var messagesContainer = $('#messages-col');
                 var messageBlock = $('#message-block-element').last().clone();
 
-                messageBlock.find('#message-block-img').attr('src', '/profile/photo?UserId=' + senderId);
+                messageBlock.find('#message-block-img').attr('src', senderImage);
                 messageBlock.find('#sender-name').text(senderName);
                 messageBlock.find('#created-date').text(date);
                 messageBlock.find('#message-body').text(messageBody);

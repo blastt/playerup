@@ -90,7 +90,7 @@ namespace Trader.WEB.Controllers
             var model = Mapper.Map<UserProfile, InfoUserProfileViewModel>(profile);
             model.CurrentUserId = User.Identity.GetUserId();
             model.InfoUserId = profile.Id;
-            model.OffersViewModel.Offers = Mapper.Map<IEnumerable<Offer>, IEnumerable<OfferViewModel>>(profile.Offers);
+            model.OffersViewModel.Offers = Mapper.Map<IEnumerable<Offer>, IEnumerable<OfferViewModel>>(profile.Offers.Where(o => o.State == OfferState.active));
             model.FeedbacksViewModel.Feedbacks = Mapper.Map<IEnumerable<Feedback>, IEnumerable<FeedbackViewModel>>(profile.FeedbacksMy);
             
             var games = _gameService.GetGames();

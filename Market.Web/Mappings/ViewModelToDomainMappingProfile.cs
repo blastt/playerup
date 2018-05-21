@@ -88,12 +88,14 @@ namespace Market.Web.Mappings
                .ForMember(o => o.ToViewed, map => map.MapFrom(vm => vm.ToViewed))
                 .ForMember(o => o.FromViewed, map => map.MapFrom(vm => vm.FromViewed))
                .ForMember(o => o.MessageBody, map => map.MapFrom(vm => vm.MessageBody))
+               
                .ForMember(o => o.ReceiverDeleted, map => map.MapFrom(vm => vm.ReceiverDeleted))
                .ForMember(o => o.SenderDeleted, map => map.MapFrom(vm => vm.SenderDeleted))
                .ForMember(o => o.ReceiverId, map => map.MapFrom(vm => vm.ReceiverId))
                .ForMember(o => o.SenderId, map => map.MapFrom(vm => vm.SenderId))
                .ReverseMap()
-               .ForPath(o => o.ReceiverName, map => map.MapFrom(vm => vm.Receiver.Name))              
+               .ForPath(o => o.ReceiverName, map => map.MapFrom(vm => vm.Receiver.Name))
+               .ForPath(o => o.SenderImage, map => map.MapFrom(vm => vm.Sender.ImagePath))
                .ForPath(o => o.SenderName, map => map.MapFrom(vm => vm.Sender.Name))
                .ReverseMap()
                .ForMember(o => o.CreatedDate, map => map.MapFrom(vm => vm.CreatedDate));

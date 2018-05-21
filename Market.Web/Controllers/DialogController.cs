@@ -29,6 +29,7 @@ namespace Market.Web.Controllers
         {
             string currentUserId = User.Identity.GetUserId();
             string dialogWithUserId = null;
+            string dialogWithUserImage = null;
             if (dialogId != null)
             {
                 Dialog dialog = _dialogService.GetDialog(dialogId.Value);
@@ -38,10 +39,12 @@ namespace Market.Web.Controllers
                     if (dialog.CompanionId == currentUserId)
                     {
                         dialogWithUserId = dialog.CreatorId;
+                        dialogWithUserImage = dialog.Creator.ImagePath;
                     }
                     else if (dialog.CreatorId == currentUserId)
                     {
                         dialogWithUserId = dialog.CompanionId;
+                        dialogWithUserImage = dialog.Companion.ImagePath;
                     }                                                             
                     
                     if (dialogWithUserId == null)
@@ -55,6 +58,7 @@ namespace Market.Web.Controllers
                     _messageService.SaveMessage();
                     var model = Mapper.Map<Dialog, DialogViewModel>(dialog);
                     model.otherUserId = dialogWithUserId;
+                    model.otherUserImage = dialogWithUserImage;
                     
                     return View(model);
                 }

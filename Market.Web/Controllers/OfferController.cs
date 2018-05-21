@@ -251,7 +251,7 @@ namespace Market.Web.Controllers
         public PartialViewResult OfferListInfo(SearchOffersInfoViewModel searchInfo)
         {
             searchInfo.SearchString = searchInfo.SearchString ?? "";
-            var offers = _offerService.GetOffers().Where(m => m.UserProfileId == searchInfo.UserId);
+            var offers = _offerService.GetOffers().Where(m => m.UserProfileId == searchInfo.UserId && m.State == OfferState.active);
 
             var modelOffers = Mapper.Map<IEnumerable<Offer>, IEnumerable<OfferViewModel>>(offers);
             IList<GameViewModel> gameList = new List<GameViewModel>();

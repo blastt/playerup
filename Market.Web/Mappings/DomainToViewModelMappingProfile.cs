@@ -43,6 +43,7 @@ namespace Market.Web.Mappings
 
             CreateMap<Dialog, DialogViewModel>()
                .ForMember(o => o.Id, map => map.MapFrom(vm => vm.Id))
+
                .ForMember(o => o.Messages, map => map.MapFrom(vm => vm.Messages))
                .ForMember(o => o.Companion, map => map.MapFrom(vm => vm.Companion))
                .ForMember(o => o.Creator, map => map.MapFrom(vm => vm.Creator))
@@ -192,6 +193,7 @@ namespace Market.Web.Mappings
             CreateMap<MessageViewModel, Message>()
                 .ForMember(o => o.Id, map => map.MapFrom(vm => vm.Id))
                 .ForMember(o => o.ToViewed, map => map.MapFrom(vm => vm.ToViewed))
+                .ForPath(o => o.Sender.ImagePath, map => map.MapFrom(vm => vm.SenderImage))
                 .ForMember(o => o.FromViewed, map => map.MapFrom(vm => vm.FromViewed))
                 .ForMember(o => o.MessageBody, map => map.MapFrom(vm => vm.MessageBody))
                 .ForMember(o => o.ReceiverDeleted, map => map.MapFrom(vm => vm.ReceiverDeleted))

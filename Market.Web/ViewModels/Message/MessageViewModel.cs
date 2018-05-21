@@ -17,6 +17,8 @@ namespace Market.Web.ViewModels
         public bool ToViewed { get; set; }
         //public string SenderId { get; set; }
         //public string ReceiverId { get; set; }
+
+        public string SenderImage { get; set; }
         public string SenderName { get; set; }
         public string SenderId { get; set; }
         public string ReceiverName { get; set; }

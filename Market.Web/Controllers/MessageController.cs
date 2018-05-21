@@ -10,17 +10,20 @@ using Market.Web.ViewModels;
 using AutoMapper;
 using Market.Web.Hubs;
 using System.Runtime.Remoting.Contexts;
+using Microsoft.AspNet.SignalR;
 
 namespace Market.Web.Controllers
 {
     public class MessageController : Controller
     {
+        private readonly IHubContext _hubContext;
         private readonly IUserProfileService _userProfileService;
         private readonly IMessageService _messageService;
         private readonly IOfferService _offerService;
         private readonly IDialogService _dialogService;
         public MessageController(IMessageService messageService, IOfferService offerService, IUserProfileService userProfileService, IDialogService dialogService)
         {
+            _hubContext = GlobalHost.ConnectionManager.GetHubContext<MessageHub>();
             _messageService = messageService;
             _offerService = offerService;
             _userProfileService = userProfileService;
@@ -224,6 +227,7 @@ namespace Market.Web.Controllers
                 {
                     d.otherUserId = otherUser.Id;
                     d.otherUserName = otherUser.Name;
+                    d.otherUserImage = otherUser.ImagePath;
                     d.CountOfNewMessages = d.Messages.Where(m => !m.ToViewed && m.SenderId != currentUser.Id).Count();
                 }
             }
@@ -294,6 +298,7 @@ namespace Market.Web.Controllers
                 {
                     d.otherUserId = otherUser.Id;
                     d.otherUserName = otherUser.Name;
+                    d.otherUserImage = otherUser.ImagePath;
                     d.CountOfNewMessages = d.Messages.Where(m => !m.ToViewed && m.SenderId != currentUser.Id).Count();
                 }
                 if (d.CountOfNewMessages != 0)
@@ -426,6 +431,8 @@ namespace Market.Web.Controllers
                 {
                     return null;
                 }
+
+
                 var toUser = _userProfileService.GetUserProfileById(model.ReceiverId);
                 var fromUser = _userProfileService.GetUserProfileById(User.Identity.GetUserId());
                 if (toUser != null && fromUser!= null && toUser.Id != fromUser.Id)
@@ -448,7 +455,11 @@ namespace Market.Web.Controllers
                         _dialogService.CreateDialog(privateDialog);
                         privateDialog.Messages.Add(message);
                         _messageService.SaveMessage();
-                        AddDialog(toUser.Name, fromUser.Name, toUser.Id, toUser.Name, privateDialog.Id);
+
+                        _hubContext.Clients.User(fromUser.Name).addDialog(toUser.Id, toUser.Name, privateDialog.Id);// hub
+                        _hubContext.Clients.User(toUser.Name).addDialog(fromUser.Id, fromUser.Name, privateDialog.Id);// hub
+
+                        //AddDialog(toUser.Name, fromUser.Name, toUser.Id, toUser.Name, privateDialog.Id); 
                     }
                     else
                     {
@@ -460,19 +471,23 @@ namespace Market.Web.Controllers
 
                     //d.CountOfNewMessages = d.Messages.Where(m => !m.ToViewed && m.SenderId != currentUser.Id).Count();
                     newDialogsCount = _dialogService.UnreadDialogsForUserCount(toUser.Id);
-                    UpdateMessage(newDialogsCount, toUser.Name);
+
+                    _hubContext.Clients.User(toUser.Name).updateMessage(newDialogsCount);// hub
                     foreach (var d in _dialogService.GetUserDialogs(toUser.Id))
                     {
                         int messageInDialogCount = 0;
                         messageInDialogCount = _dialogService.UnreadMessagesInDialogCount(d);
                         var lastMessage = d.Messages.LastOrDefault();
                         if (lastMessage != null)
-                        {                           
-                            UpdateMessageInDialog(messageInDialogCount, lastMessage.MessageBody, lastMessage.CreatedDate.ToShortDateString(), d.Id, toUser.Name, fromUser.Id, fromUser.Name);                                                       
+                        {
+
+                            _hubContext.Clients.User(toUser.Name).updateMessageInDialog(toUser.Name, fromUser.Id, fromUser.Name, messageInDialogCount, lastMessage.MessageBody, lastMessage.CreatedDate.ToShortDateString(), d.Id);
                         }
                         
                     }                    
-                    AddMessage(fromUser.Id, toUser.Name, fromUser.Name, message.MessageBody, message.CreatedDate.ToString());
+
+
+                    AddMessage(fromUser.Id, toUser.Name, fromUser.Name, message.MessageBody, message.CreatedDate.ToString(), fromUser.ImagePath); // hub
                     return Json(new {  });
                 }
                 return null;
@@ -485,35 +500,28 @@ namespace Market.Web.Controllers
 
         private void UpdateMessage(int messagesCounter, string userId)
         {
-            // Получаем контекст хаба
-            var context =
-                Microsoft.AspNet.SignalR.GlobalHost.ConnectionManager.GetHubContext<MessageHub>();
             // отправляем сообщение
-            context.Clients.User(userId).updateMessage(messagesCounter);
+            _hubContext.Clients.User(userId).updateMessage(messagesCounter);
             
             //context.Clients. User(User.Identity.GetUserId()).updateMessage(messagesCounter);
         }
 
         private void UpdateMessageInDialog(int messagesCounter, string lastMessage, string date, int dialogId , string userName, string companionId, string companionName)
         {
-            // Получаем контекст хаба
-            var context =
-                Microsoft.AspNet.SignalR.GlobalHost.ConnectionManager.GetHubContext<MessageHub>();
-            // отправляем сообщение
-            context.Clients.User(userName).updateMessageInDialog(userName, companionId, companionName, messagesCounter,lastMessage,date, dialogId);
+
+            _hubContext.Clients.User(userName).updateMessageInDialog(userName, companionId, companionName, messagesCounter,lastMessage,date, dialogId);
 
             //context.Clients. User(User.Identity.GetUserId()).updateMessage(messagesCounter);
         }
 
-        private void AddMessage(string senderId,string receiverName, string senderName, string messageBody, string date)
+        private void AddMessage(string senderId,string receiverName, string senderName, string messageBody, string date, string senderImage)
         {
             // Получаем контекст хаба
-            var context =
-                Microsoft.AspNet.SignalR.GlobalHost.ConnectionManager.GetHubContext<MessageHub>();
+
             // отправляем сообщение
             //context.Clients.All.addMessage(senderId, receiverId, senderName, messageBody, date);
-            context.Clients.User(senderName).addMessage(senderId, receiverName, senderName, messageBody, date);
-            context.Clients.User(receiverName).addMessage(senderId, receiverName, senderName, messageBody, date);
+            _hubContext.Clients.User(senderName).addMessage(receiverName, senderName, messageBody, date, senderImage);
+            _hubContext.Clients.User(receiverName).addMessage(receiverName, senderName, messageBody, date, senderImage);
             //context.Clients. User(User.Identity.GetUserId()).updateMessage(messagesCounter);
         }
 
@@ -521,12 +529,10 @@ namespace Market.Web.Controllers
             string companionName, int dialogId)
         {
             // Получаем контекст хаба
-            var context =
-                Microsoft.AspNet.SignalR.GlobalHost.ConnectionManager.GetHubContext<MessageHub>();
             // отправляем сообщение
             //context.Clients.All.addMessage(senderId, receiverId, senderName, messageBody, date);
-            context.Clients.User(senderName).addDialog(companionId, companionName, dialogId);
-            context.Clients.User(receiverName).addDialog(companionId, companionName, dialogId);
+            _hubContext.Clients.User(senderName).addDialog(companionId, companionName, dialogId);
+            _hubContext.Clients.User(receiverName).addDialog(companionId, companionName, dialogId);
             //context.Clients. User(User.Identity.GetUserId()).updateMessage(messagesCounter);
         }
 

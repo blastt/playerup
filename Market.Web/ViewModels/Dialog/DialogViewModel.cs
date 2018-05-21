@@ -15,6 +15,7 @@ namespace Market.Web.ViewModels
 
         public string otherUserId { get; set; }
         public string otherUserName { get; set; }
+        public string otherUserImage { get; set; }
 
         public int CountOfNewMessages { get; set; }
 
