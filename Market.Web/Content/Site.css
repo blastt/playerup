@@ -17,7 +17,8 @@ th {
 }
 
 .content {
-    margin-top: 40px
+    margin-top: 40px;
+    
 }
 
 /* styles for validation helpers */
@@ -91,16 +92,16 @@ textarea {
     }
 
 .select-selected {
-    /*background-color: #fff;*/
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-    /*border-radius: 10px*/
+    background-color: #fff;
+    border: 1px solid #ebebeb;
+    border-radius: 30px;
 }
     /*style the arrow inside the select element:*/
     .select-selected:after {
         position: absolute;
         content: "";
-        top: 22px;
-        right: 10px;
+        top: 24px;
+        right: 18px;
         width: 0;
         height: 0;
         border: 6px solid transparent;
@@ -113,8 +114,8 @@ textarea {
     }
 /*style the items (options), including the selected item:*/
 .select-items div, .select-selected {
-    padding: 8px 12px;
-    line-height: 40px;
+    padding: 8px 25px;
+    line-height: 35px;
     cursor: pointer;
     user-select: none;
 }
@@ -999,7 +1000,8 @@ div#users-contain {
     background-color: #62b2e2;
     color: white;
     padding: 10px 50px;
-    font-weight: 400
+    font-weight: 400;
+    box-shadow: 0 4px 15px 0px rgba(98, 178, 226, 0.70);
 }
 
 
@@ -1139,7 +1141,7 @@ div#users-contain {
 }
 
 .btn-default {
-    background-color: #e1e1e1;
+    background-color: #ffffff;
     border-color: #e1e1e1;
     color: #333;
     margin-right: 7px
@@ -1256,6 +1258,12 @@ div#users-contain {
 
 .offer-price {
     width: 20%
+}
+
+.price{
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 20px
 }
 
 .offer-link {
@@ -1482,9 +1490,6 @@ i {
     line-height: 100%;
 }
 
-.user-info-content {
-    margin-top: 60px
-}
 
 .buy-content {
     /*margin-top: 120px*/
@@ -1579,8 +1584,8 @@ dl dd a {
 }
 
 .message-count-block-pos {
-    top: 6px;
-    left: 40px;
+    top: 10px;
+    left: 50px;
     border: 1px solid #fff;
 }
 
@@ -1946,4 +1951,14 @@ dl dd a {
 .smile-radio:checked + img { /* (RADIO CHECKED) IMAGE STYLES */
     filter: sepia(100%);
     
+}
+
+.badge-online{
+    color: white;
+    background-color: #62b2e2
+}
+
+.badge-offline {
+    color: white;
+    background-color: rgba(98, 178, 226, 0.50)
 }

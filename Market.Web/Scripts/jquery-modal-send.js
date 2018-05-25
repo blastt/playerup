@@ -39,14 +39,20 @@ function SendMessage() {
         dataType: "Json",
 
         success: function (result) {
-            modal2.css("display", "block");
-            modal2.css("opacity", "1.0");
-            modal2.animate({ opacity: '0.0' }, 5000, "", function () {
-                modal2.css("display","none");
-            });
+            
+            if (result.success) {
+                modal2.css("display", "block");
+                modal2.css("opacity", "1.0");
+                modal2.animate({ opacity: '0.0' }, 5000, "", function () {
+                    modal2.css("display", "none");
+                });
+            }
+            else {
+                alert(result.responseText);
+            }
         },
-        error: function () {
-            alert("Вы не ввели сообщение");
+        error: function (response) {
+            alert("Для отправки сообщений нужно зарегистрироваться");
         }
     });
     modal.style.display = "none";

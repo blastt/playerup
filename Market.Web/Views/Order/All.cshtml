@@ -3,46 +3,46 @@
     ViewBag.Title = "All";
 
 }
-<div class="container">
-    <div class="row">
-        <div class="col-lg-12">
 
-                <div class="page-info">
-                    <h2>Заказы</h2>
-                    <p class="lead">Здесь отображается информация по заказам</p>
-                </div>
+<div class="row">
+    <div class="col-lg-12">
 
-            
-            
-            @{Html.RenderAction("AccountMenu", "Account"); }
-            <div class="account-container">
-                @{Html.RenderPartial("_AccountOrdersMenu"); }
-                <div class="">
-
-                </div>
-                <table class="table table-hover">
-                    <tr>
-                        <th>Игра</th>
-                        <th>Предложение</th>
-                        <th>Логин Steam</th>
-                        <th>Пользователь</th>
-                        <th>Статус заказа</th>
-                    </tr>
-                    @foreach (var order in Model.Orders)
-                    {
-                        <tr>
-                            <td>@order.Offer.Game</td>
-                            <td>@order.Offer.Header</td>
-                            <td>@order.Offer.SteamLogin</td>
-                            <td>@order.Offer.UserProfile.ApplicationUser.UserName</td>
-                            <td>@order.OrderStatus</td>
-                        </tr>
-                    }
-
-                </table>
-            </div>
+        <div class="page-info">
+            <h2>Заказы</h2>
+            <p class="lead">Здесь отображается информация по заказам</p>
         </div>
 
+
+
+        @{Html.RenderAction("AccountMenu", "Account"); }
+        <div class="account-container">
+            @{Html.RenderPartial("_AccountOrdersMenu"); }
+            <div class="">
+
+            </div>
+            <table class="table table-hover">
+                <tr>
+                    <th>Игра</th>
+                    <th>Предложение</th>
+                    <th>Логин Steam</th>
+                    <th>Пользователь</th>
+                    <th>Статус заказа</th>
+                </tr>
+                @foreach (var order in Model.Orders)
+                {
+                    <tr>
+                        <td>@order.Offer.Game</td>
+                        <td>@order.Offer.Header</td>
+                        <td>@order.Offer.SteamLogin</td>
+                        <td>@order.Offer.UserProfile.ApplicationUser.UserName</td>
+                        <td>@order.OrderStatus</td>
+                    </tr>
+                }
+
+            </table>
+        </div>
     </div>
+
 </div>
+
 

@@ -273,6 +273,7 @@
     <Compile Include="Hangfire\ConfirmOrderJob.cs" />
     <Compile Include="Helpers\ActiveHelpers.cs" />
     <Compile Include="Helpers\DateHelpers.cs" />
+    <Compile Include="Helpers\OnlineHelpers.cs" />
     <Compile Include="Helpers\OrderStatusHelpers.cs" />
     <Compile Include="Helpers\PagingHelpers.cs" />
     <Compile Include="Hubs\MessageHub.cs" />
@@ -308,6 +309,7 @@
     <Compile Include="ViewModels\Message\MessageListViewModel.cs" />
     <Compile Include="ViewModels\Message\MessageViewModel.cs" />
     <Compile Include="ViewModels\Message\NewMessageViewModel.cs" />
+    <Compile Include="ViewModels\Middleman\OrderTransactionDetails.cs" />
     <Compile Include="ViewModels\Offer\CreateOfferViewModel.cs" />
     <Compile Include="ViewModels\Offer\DetailsOfferViewModel.cs" />
     <Compile Include="ViewModels\Offer\EditOfferViewModel.cs" />
@@ -352,6 +354,7 @@
     <Content Include="Content\Images\message.png" />
     <Content Include="Content\Images\noavatar.png" />
     <Content Include="Content\Images\notice.png" />
+    <Content Include="Content\Images\payments.png" />
     <Content Include="Content\Images\smile-neg-dark.png" />
     <Content Include="Content\Images\smile-neg-gray.png" />
     <Content Include="Content\Images\smile-pos-dark.png" />
@@ -482,23 +485,16 @@
     <Content Include="Scripts\popper-utils.js.map" />
     <Content Include="Views\Offer\Create.cshtml" />
     <Content Include="Views\Offer\_SearchContainer.cshtml" />
-    <Content Include="Views\Message\Create.cshtml" />
-    <Content Include="Views\Message\Delete.cshtml" />
-    <Content Include="Views\Message\Details.cshtml" />
-    <Content Include="Views\Message\Edit.cshtml" />
     <Content Include="Views\Message\Inbox.cshtml" />
-    <Content Include="Views\Message\Index.cshtml" />
     <Content Include="Views\Message\Info.cshtml" />
     <Content Include="Views\Message\New.cshtml" />
     <Content Include="Views\Message\Unread.cshtml" />
-    <Content Include="Views\Message\Story.cshtml" />
     <Content Include="Views\Nav\Menu.cshtml" />
     <Content Include="Views\Order\OrderBuy.cshtml" />
     <Content Include="Views\Order\All.cshtml" />
     <Content Include="Views\Order\OrderSell.cshtml" />
     <Content Include="Views\Profile\Feedbacks.cshtml" />
     <Content Include="Views\Profile\Info.cshtml" />
-    <Content Include="Views\Profile\Offers.cshtml" />
     <Content Include="Views\Profile\Upload.cshtml" />
     <Content Include="Views\Game\Create.cshtml" />
     <Content Include="Views\Filter\Create.cshtml" />
@@ -528,10 +524,8 @@
     <Content Include="Views\Feedback\Details.cshtml" />
     <Content Include="Views\Feedback\Edit.cshtml" />
     <Content Include="Views\Feedback\GiveToBuyer.cshtml" />
-    <Content Include="Views\Feedback\Index.cshtml" />
     <Content Include="Views\Feedback\Negative.cshtml" />
     <Content Include="Views\Feedback\Positive.cshtml" />
-    <Content Include="Views\Feedback\Show.cshtml" />
     <Content Include="Views\Shared\_FeedbackList.cshtml" />
     <Content Include="Views\Offer\Buy.cshtml" />
     <Content Include="Views\Shared\_OfferListInfo.cshtml" />
@@ -600,6 +594,7 @@
     <Content Include="Views\Shared\_MiddlemanLayout.cshtml" />
     <Content Include="Views\Middleman\OrderList.cshtml" />
     <Content Include="Views\Middleman\MyOrderList.cshtml" />
+    <Content Include="Views\Middleman\OrderTransactionDetails.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

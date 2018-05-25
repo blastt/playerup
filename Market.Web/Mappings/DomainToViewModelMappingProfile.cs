@@ -190,31 +190,29 @@ namespace Market.Web.Mappings
 
             #region Message
 
-            CreateMap<MessageViewModel, Message>()
+            CreateMap<Message, MessageViewModel>()
                 .ForMember(o => o.Id, map => map.MapFrom(vm => vm.Id))
                 .ForMember(o => o.ToViewed, map => map.MapFrom(vm => vm.ToViewed))
-                .ForPath(o => o.Sender.ImagePath, map => map.MapFrom(vm => vm.SenderImage))
+                .ForPath(o => o.SenderImage, map => map.MapFrom(vm => vm.Sender.ImagePath))
                 .ForMember(o => o.FromViewed, map => map.MapFrom(vm => vm.FromViewed))
                 .ForMember(o => o.MessageBody, map => map.MapFrom(vm => vm.MessageBody))
                 .ForMember(o => o.ReceiverDeleted, map => map.MapFrom(vm => vm.ReceiverDeleted))
                 .ForMember(o => o.SenderDeleted, map => map.MapFrom(vm => vm.SenderDeleted))
                 .ForMember(o => o.SenderId, map => map.MapFrom(vm => vm.SenderId))
                 .ForMember(o => o.ReceiverId, map => map.MapFrom(vm => vm.ReceiverId))
-                .ReverseMap()
+           
                 .ForPath(o => o.SenderName, map => map.MapFrom(vm => vm.Sender.Name))
                 .ForPath(o => o.ReceiverName, map => map.MapFrom(vm => vm.Receiver.Name))
                 .ReverseMap()
                 .ForMember(o => o.CreatedDate, map => map.MapFrom(vm => vm.CreatedDate));
 
-            CreateMap<NewMessageViewModel, Message>()
+            CreateMap<Message, NewMessageViewModel > ()
                 .ForMember(o => o.MessageBody, map => map.MapFrom(vm => vm.MessageBody));
 
-            CreateMap<DetailsMessageViewModel, Message>()
-               .ForMember(o => o.MessageBody, map => map.MapFrom(vm => vm.MessageBody))
-               .ReverseMap()
+            CreateMap<Message, DetailsMessageViewModel>()
+               .ForMember(o => o.MessageBody, map => map.MapFrom(vm => vm.MessageBody))              
                .ForPath(o => o.SenderName, map => map.MapFrom(vm => vm.Sender.Name))
                .ForPath(o => o.ReceiverName, map => map.MapFrom(vm => vm.Receiver.Name))
-               .ReverseMap()
                .ForMember(o => o.CreatedDate, map => map.MapFrom(vm => vm.CreatedDate));
 
             #endregion
@@ -293,6 +291,15 @@ namespace Market.Web.Mappings
                 .ForMember(o => o.ImagePath, map => map.MapFrom(vm => vm.ImagePath))
                 .ForMember(o => o.Name, map => map.MapFrom(vm => vm.Name))
                 .ForMember(o => o.Value, map => map.MapFrom(vm => vm.Value));
+            #endregion
+
+            #region Transaction
+            CreateMap<Transaction, OrderTransactionDetails>()
+            .ForMember(o => o.Id, map => map.MapFrom(vm => vm.Id))
+            .ForMember(o => o.Amount, map => map.MapFrom(vm => vm.Amount))
+            .ForPath(o => o.SenderName, map => map.MapFrom(vm => vm.Sender.Name))
+            .ForPath(o => o.ReceiverName, map => map.MapFrom(vm => vm.Receiver.Name))
+            .ForMember(o => o.TransactionDate, map => map.MapFrom(vm => vm.TransactionDate));
             #endregion
         }
     }

@@ -19,6 +19,11 @@ namespace Market.Web.ViewModels
         public int Views { get; set; }
         public DateTime? DateCreated { get; set; } = DateTime.Now;
 
+        public bool SellerPaysMiddleman { get; set; }
+
+        [DataType(DataType.Currency)]
+        public decimal MiddlemanPrice { get; set; }
+
         public string UserName { get; set; }
         public string UserId { get; set; }
         public int Rating { get; set; }

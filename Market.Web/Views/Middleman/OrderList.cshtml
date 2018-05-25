@@ -46,6 +46,7 @@
         </td>
         <td>
             @Html.ActionLink("Стать гарантом", "ProcessOrder", new { id = order.Id })
+            @Html.ActionLink("Транзакции", "OrderTransactionDetails", new { id = order.Id })
         </td>
     </tr>
     }

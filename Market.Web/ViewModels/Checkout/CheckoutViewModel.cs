@@ -13,6 +13,7 @@ namespace Market.Web.ViewModels
         public string Game { get; set; }
         public string OfferHeader { get; set; }
         public bool SellerPaysMiddleman { get; set; }
+        [DataType(DataType.Currency)]
         public decimal MiddlemanPrice { get; set; }
 
         [DataType(DataType.Currency)]

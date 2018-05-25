@@ -27,6 +27,36 @@ namespace Market.Web.Controllers
             _accountInfoService = accountInfoService;
             _userProfileService = userProfileService;
         }
+        public ActionResult OrderTransactionDetails(int? id)
+        {
+            if (id != null)
+            {
+                var order = _orderService.GetOrder(id.Value);
+                IList<OrderTransactionDetails> model = new List<OrderTransactionDetails>();
+                if (order != null)
+                {
+                    foreach (var transaction in order.Transactions)
+                    {
+                        var transModel = Mapper.Map<Transaction, OrderTransactionDetails>(transaction);
+                        //TODO
+                        if (transaction.Receiver.Name == "palyerup")
+                        {
+                            transModel.ReceiverName = "PLAYER UP";
+                        }
+                        if (transaction.Sender.Name == "palyerup")
+                        {
+                            transModel.SenderName = "PLAYER UP";
+                        }
+                        transModel.OrderHeader = order.Offer.Header;
+                        transModel.OrderId = order.Id;
+                        model.Add(transModel);
+                    }                    
+                }
+                return View(model.AsEnumerable());
+            }
+            return HttpNotFound();                      
+        }
+
         // GET: Middleman
         public ActionResult OrderList()
         {

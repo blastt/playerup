@@ -146,15 +146,6 @@ namespace Market.Service
             return offers;
         }
 
-        private IEnumerable<Offer> SearchOffersByOnlineUser(IEnumerable<Offer> offers,ref  bool isOnline)
-        {
-            if (isOnline)
-            {
-                offers = offers.Where(o => o.UserProfile.IsOnline);
-            }
-            return offers;
-        }
-
         private IEnumerable<Offer> SearchOffersByPage(IEnumerable<Offer> offers,ref int page, int pageSize, ref int totalItems)
 
         {
@@ -209,7 +200,6 @@ namespace Market.Service
             offers = offers.Where(o => o.State == OfferState.active);
             offers = SearchOffersByPrice(offers,ref priceFrom,ref priceTo,ref minGamePrice, ref maxGamePrice);
             offers = SearchOffersBySearchString(offers, searchString,ref searchInDiscription);
-            offers = SearchOffersByOnlineUser(offers,ref isOnline);
             offers = SortOffers(offers, sort);
             return offers;
         }

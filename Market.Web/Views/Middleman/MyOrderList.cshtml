@@ -55,6 +55,7 @@
                 @Html.DisplayFor(m => order.DateCreated)
             </td>
             <td>
+
                 @if (order.CurrentStatus.Value == Market.Model.Models.OrderStatuses.MidddlemanChecking)
                 {
                     @Html.ActionLink("Проверить данные", "ProvideDataToBuyer", "Middleman", new { id = order.Id }, null)
@@ -67,7 +68,7 @@
                 {
                     @Html.ActionLink("Закрыть", "Close", "Order", new { id = order.Id }, null)
                 }
-
+                @Html.ActionLink("Транзакции", "OrderTransactionDetails", new { id = order.Id })
             </td>
         </tr>
     }

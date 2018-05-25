@@ -106,7 +106,7 @@ namespace Market.Web.Controllers
         }
         private OfferListViewModel SearchOffers(SearchViewModel searchInfo)
         {
-
+            //Thread.Sleep(500);
 
             searchInfo.SearchString = searchInfo.SearchString ?? "";
             searchInfo.Game = searchInfo.Game ?? "dota2";
@@ -127,6 +127,15 @@ namespace Market.Web.Controllers
             //offer.Header.Replace(" ", "").ToLower().Contains(searchString.Replace(" ", "").ToLower()) || (searchInDescription ? (offer.Discription.Replace(" ", "").ToLower().Contains(searchString.Replace(" ", "").ToLower())) : searchInDescription)
             IEnumerable<Offer> foundOffers = _offerService.SearchOffers(game, sort, ref isOnline, ref searchInDiscription,
                 searchString, ref page, pageSize, ref totalItems, ref minGamePrice, ref maxGamePrice, ref priceFrom, ref priceTo);
+            if (searchInfo.IsOnline)
+            {
+                var loggedOnUsers = HttpRuntime.Cache["LoggedInUsers"] as Dictionary<string, DateTime>;
+                if (loggedOnUsers != null)
+                {
+                    foundOffers = foundOffers.Where(o => loggedOnUsers.Any(u => u.Key == o.UserProfile.Name));
+                }
+            }
+            
             IList<Offer> offers = new List<Offer>();
             if (searchInfo.JsonFilters.Count != 0)
             {
@@ -158,6 +167,10 @@ namespace Market.Web.Controllers
                         equals = false;
                     }
                 }
+            }
+            else
+            {
+                offers = foundOffers.ToList();
             }
 
             IList<SelectListItem> ranks = new List<SelectListItem>
@@ -345,40 +358,44 @@ namespace Market.Web.Controllers
             var modelFilters = model.FilterValues;
             var gameFilterItems = _filterItemService.GetFilterItems().Where(f => f.Filter.Game == game).ToList();
             var modelFilterItems = model.FilterItemValues;
-            if (game != null && modelFilters.Count() == gameFilters.Count())
+            if (modelFilters != null && gameFilters.Count() != 0)
             {
-                for (int i = 0; i < gameFilters.Count; i++)
+                if (game != null && modelFilters.Count() == gameFilters.Count())
                 {
-                    if (gameFilters[i].Value != modelFilters[i])
+                    for (int i = 0; i < gameFilters.Count; i++)
                     {
-                        return View("CreateOfferFiltersError");
+                        if (gameFilters[i].Value != modelFilters[i])
+                        {
+                            return View("CreateOfferFiltersError");
+                        }
+
+                        bool isContainsFilterItems = false;
+                        foreach (var fItem in gameFilters[i].FilterItems)
+                        {
+                            if (fItem.Value == modelFilterItems[i])
+                            {
+                                offer.FilterItems.Add(fItem);
+                                offer.Filters.Add(gameFilters[i]);
+                                isContainsFilterItems = true;
+                            }
+                        }
+                        if (!isContainsFilterItems)
+                        {
+                            return View("_CreateOfferFilterError");
+                        }
+                        isContainsFilterItems = false;
+
                     }
 
-                    bool isContainsFilterItems = false;
-                    foreach (var fItem in gameFilters[i].FilterItems)
-                    {
-                        if (fItem.Value == modelFilterItems[i])
-                        {
-                            offer.FilterItems.Add(fItem);
-                            offer.Filters.Add(gameFilters[i]);
-                            isContainsFilterItems = true;
-                        }
-                    }
-                    if (!isContainsFilterItems)
-                    {
-                        return View("_CreateOfferFilterError");
-                    }
-                    isContainsFilterItems = false;
+
 
                 }
-
-
-
+                else
+                {
+                    return View("_CreateOfferFilterError");
+                }
             }
-            else
-            {
-                return View("_CreateOfferFilterError");
-            }
+            
 
 
             offer.Game = game;
@@ -400,6 +417,8 @@ namespace Market.Web.Controllers
             if (id != null)
             {
                 Offer offer = _offerService.GetOffer(id.Value);
+                offer.Views++;
+                _offerService.SaveOffer();
                 var model = Mapper.Map<Offer, DetailsOfferViewModel>(offer);
 
                 return View(model);

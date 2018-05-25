@@ -13,123 +13,123 @@
     };
 }
 
-<div class="container">
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="page-info">
-                <h2>Сообщения</h2>
-                <p class="lead">Здесь отображается информация по входящим и исходящим сообщениям</p>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="page-info">
+            <h2>Сообщения</h2>
+            <p class="lead">Здесь отображается информация по входящим и исходящим сообщениям</p>
+        </div>
+        @{Html.RenderAction("AccountMenu", "Account"); }
+        <div class="account-container">
+            @{Html.RenderPartial("_AccountMessagesMenu", Model); }
+
+            <div class="form-inline form-offer-filter">
+                <h3 class="mb-0 text-gray text-300">
+                    Все сообщения:
+                </h3>
             </div>
-            @{Html.RenderAction("AccountMenu", "Account"); }
-            <div class="account-container">
-                @{Html.RenderPartial("_AccountMessagesMenu", Model); }
-
-                <div class="form-inline form-offer-filter">
-                    <h3 class="mb-0 text-gray text-300">
-                        Все сообщения:
-                    </h3>
-                </div>
-                @*@using (Html.BeginForm("Inbox", "Message", null, FormMethod.Get, new { @class = "form-inline form-message-filter" }))
-                        {
-
-
-                                <div class="form-message-filter-item">
-                                    @Html.TextBox("SearchString", ViewBag.CurrentFilter as string, new { @class = "form-control", placeholder = "Поиск..." })
-                                </div>
-
-                                <div class="form-message-filter-item">
-                                    @Html.TextBox("SenderName", ViewBag.SenderName as string, new { @class = "form-control", placeholder = "От кого:" })
-                                </div>
-
-
-
-
-
-
-
-                    var filterList = new List<SelectListItem>() {
-                                    new SelectListItem()
-                                    {
-                                        Text = "Все",
-                                        Value = "all",
-                                        Selected = true
-                                    },
-                                    new SelectListItem()
-                                    {
-                                        Text = "Прочитанные",
-                                        Value = "read"
-                                    },
-                                    new SelectListItem()
-                                    {
-                                        Text = "Непрочитанные",
-                                        Value = "unread"
-                                    }
-                                };
-                                <div class="form-message-filter-item">
-                                    @Html.DropDownList("CurrentFilter", filterList, new { @class = "form-control" })
-                                </div>
-
-
-                                <input type="submit" value="Поиск" class="btn btn-info" />*@
-
-
-
-
-                @*}*@
-
-                <table class="table table-white" id="dialogs-table">
-                    <tr>
-
-                        <th>@Html.ActionLink("Отправитель", "Inbox", "Message", new { sortOrder = ViewData["NameSortParm"], currentFilter = ViewData["SearchString"] }, null)</th>
-                        <th>Сообщение</th>
-                        <th class="date-table">@Html.ActionLink("Дата", "Inbox", "Message", new { sortOrder = ViewData["DateSortParm"], currentFilter = ViewData["SearchString"] }, null)</th>
-                        @*<th></th>*@
-                    </tr>
-                    @foreach (var dialog in Model.Dialogs)
+            @*@using (Html.BeginForm("Inbox", "Message", null, FormMethod.Get, new { @class = "form-inline form-message-filter" }))
                     {
 
-                        var clsBold = "";
-                        if (dialog.CountOfNewMessages != 0)
-                        {
-                            clsBold = "warning-row";
-                        }
 
-                        <tr id="message-row-@dialog.Id" class="@clsBold">
+                            <div class="form-message-filter-item">
+                                @Html.TextBox("SearchString", ViewBag.CurrentFilter as string, new { @class = "form-control", placeholder = "Поиск..." })
+                            </div>
 
-                            <td class="clickable sender-table  position-relative" id="dialog-name" data-id="@dialog.Id">
-                                @if (dialog.CountOfNewMessages != 0)
+                            <div class="form-message-filter-item">
+                                @Html.TextBox("SenderName", ViewBag.SenderName as string, new { @class = "form-control", placeholder = "От кого:" })
+                            </div>
+
+
+
+
+
+
+
+                var filterList = new List<SelectListItem>() {
+                                new SelectListItem()
                                 {
-                                    <div class="messagess-count message-count-block-pos" id="dialog-block-counter">
-                                        @dialog.CountOfNewMessages
-                                    </div>
+                                    Text = "Все",
+                                    Value = "all",
+                                    Selected = true
+                                },
+                                new SelectListItem()
+                                {
+                                    Text = "Прочитанные",
+                                    Value = "read"
+                                },
+                                new SelectListItem()
+                                {
+                                    Text = "Непрочитанные",
+                                    Value = "unread"
                                 }
+                            };
+                            <div class="form-message-filter-item">
+                                @Html.DropDownList("CurrentFilter", filterList, new { @class = "form-control" })
+                            </div>
 
-                                <img class="img-circle avatar-48 mr-2" src="@dialog.otherUserImage" alt="Alternate Text" />
 
-                                @dialog.otherUserName
-                            </td>
+                            <input type="submit" value="Поиск" class="btn btn-info" />*@
 
-                            <td class="clickable" id="dialog-text" data-id="@dialog.Id" style=" max-width: 100px;overflow: hidden;text-overflow: ellipsis; white-space: nowrap; "><span id="message-text" class="wqe" style="">@dialog.Messages.LastOrDefault().MessageBody</span></td>
-                            @*<td>@messageGroup.</td>*@
-                            <td class="clickable date-table" id="dialog-date" data-id="@dialog.Id" title="@dialog.Messages.LastOrDefault().CreatedDate.ToShortTimeString()">@dialog.Messages.LastOrDefault().CreatedDate.ToShortDateString()</td>
 
-                            @*<td class="remove-table"><a data-id="@dialog.Id" id="linkdelete" class="remove-link"><img src="~/Content/Images/trash.png" class="remove-icon" /></a></td>*@
-                            @*<td style="color:red">@Html.ActionLink("X", "DeleteStory", new { lastMessageId = messageGroup.FirstOrDefault().Id}, null)</td>*@
-                        </tr>
 
+
+            @*}*@
+
+            <table class="table table-white" id="dialogs-table">
+                <tr>
+
+                    <th>@Html.ActionLink("Отправитель", "Inbox", "Message", new { sortOrder = ViewData["NameSortParm"], currentFilter = ViewData["SearchString"] }, null)</th>
+                    <th>Сообщение</th>
+                    <th class="date-table">@Html.ActionLink("Дата", "Inbox", "Message", new { sortOrder = ViewData["DateSortParm"], currentFilter = ViewData["SearchString"] }, null)</th>
+                    @*<th></th>*@
+                </tr>
+                @foreach (var dialog in Model.Dialogs)
+                {
+
+                    var clsBold = "";
+                    if (dialog.CountOfNewMessages != 0)
+                    {
+                        clsBold = "warning-row";
                     }
-                </table>
 
-                @*<div class="row">
-                        <div class="col-md-12">
-                            @Html.PageLinks(Model.PagingInfo, x => Url.Action("Inbox", new { page = x, sortOrder = ViewBag.CurrentSort, searchString = ViewBag.SearchString }))
-                        </div>
-                    </div>*@
-            </div>
+                    <tr id="message-row-@dialog.Id" class="@clsBold">
+
+                        <td class="clickable sender-table  position-relative" id="dialog-name" data-id="@dialog.Id">
+                            @if (dialog.CountOfNewMessages != 0)
+                            {
+                                <div class="messagess-count message-count-block-pos" id="dialog-block-counter">
+                                    @dialog.CountOfNewMessages
+                                </div>
+                            }
+
+                            <img class="img-circle avatar-48 mr-2" src="@dialog.otherUserImage" alt="Alternate Text" />
+
+                            @dialog.otherUserName
+                        </td>
+
+                        <td class="clickable" id="dialog-text" data-id="@dialog.Id" style=" max-width: 100px;overflow: hidden;text-overflow: ellipsis; white-space: nowrap; "><span id="message-text" class="wqe" style="">@dialog.Messages.LastOrDefault().MessageBody</span></td>
+                        @*<td>@messageGroup.</td>*@
+                        <td class="clickable date-table" id="dialog-date" data-id="@dialog.Id" title="@dialog.Messages.LastOrDefault().CreatedDate.ToShortTimeString()">@dialog.Messages.LastOrDefault().CreatedDate.ToShortDateString()</td>
+
+                        @*<td class="remove-table"><a data-id="@dialog.Id" id="linkdelete" class="remove-link"><img src="~/Content/Images/trash.png" class="remove-icon" /></a></td>*@
+                        @*<td style="color:red">@Html.ActionLink("X", "DeleteStory", new { lastMessageId = messageGroup.FirstOrDefault().Id}, null)</td>*@
+                    </tr>
+
+                }
+            </table>
+
+            @*<div class="row">
+                    <div class="col-md-12">
+                        @Html.PageLinks(Model.PagingInfo, x => Url.Action("Inbox", new { page = x, sortOrder = ViewBag.CurrentSort, searchString = ViewBag.SearchString }))
+                    </div>
+                </div>*@
         </div>
-
     </div>
+
 </div>
+
 <table style="display:none">
     <tr id="dialog-block" style="display:none">
 

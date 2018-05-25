@@ -8,21 +8,21 @@
 <div class="row">
     <div class="col-md-8">
         <section id="loginForm">
+            
             @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
             {
+
                 @Html.AntiForgeryToken()
-                <h4>Используйте локальную учетную запись для входа.</h4>
-                <hr />
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                 <div class="form-group">
-                    @Html.LabelFor(m => m.UserNameOrEmail, new { @class = "col-md-2 control-label" })
+                    @Html.LabelFor(m => m.UserNameOrEmail, new { @class = "col-md-10 control-label" })
                     <div class="col-md-10">
                         @Html.TextBoxFor(m => m.UserNameOrEmail, new { @class = "form-control" })
                         
                     </div>
                 </div>
                 <div class="form-group">
-                    @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
+                    @Html.LabelFor(m => m.Password, new { @class = "col-md-10 control-label" })
                     <div class="col-md-10">
                         @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
                         @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })

@@ -421,6 +421,7 @@ namespace Market.Web.Controllers
         // Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
         // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [System.Web.Mvc.Authorize]
         public JsonResult New(MessageViewModel model)
         {
             
@@ -429,7 +430,7 @@ namespace Market.Web.Controllers
             {
                 if (model.MessageBody.Trim() == "")
                 {
-                    return null;
+                    return Json(new { success = false, responseText = "Вы не ввели сообщение" }, JsonRequestBehavior.AllowGet);
                 }
 
 
@@ -488,12 +489,12 @@ namespace Market.Web.Controllers
 
 
                     AddMessage(fromUser.Id, toUser.Name, fromUser.Name, message.MessageBody, message.CreatedDate.ToString(), fromUser.ImagePath); // hub
-                    return Json(new {  });
+                    return Json(new { success = true });
                 }
-                return null;
+                return Json(new { success = false, responseText = "Ошибка при отправке сообщения. Повторите попытку" }, JsonRequestBehavior.AllowGet);
             }
 
-            return null;
+            return Json(new { success = false, responseText = "Ошибка при отправке сообщения. Повторите попытку" }, JsonRequestBehavior.AllowGet);
         }
 
         
@@ -536,16 +537,20 @@ namespace Market.Web.Controllers
             //context.Clients. User(User.Identity.GetUserId()).updateMessage(messagesCounter);
         }
 
-        public JsonResult GetMessagessCount()
+        public string GetMessagessCount()
         {
             string currentUserId = User.Identity.GetUserId();
+            string result = null;
             int dialogsCount = _dialogService.UnreadDialogsForUserCount(currentUserId);
-            
+            if (dialogsCount != 0)
+            {
+                result = dialogsCount.ToString();
+            }
 
-            return Json(dialogsCount);
+            return result;
         }
 
+        
 
-  
     }
 }

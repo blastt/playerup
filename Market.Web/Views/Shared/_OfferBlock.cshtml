@@ -1,6 +1,7 @@
 ﻿@model Market.Web.ViewModels.OfferListViewModel
 
 <div class="bs-component">
+    
     @if (Model.Offers.Count() != 0)
     {
 
@@ -32,7 +33,7 @@
                 @Html.PagedListPager(Model.PageInfo, "SelectPage")
             </div>
         </div>
-        
+
 
     }
 

@@ -16,6 +16,7 @@ using System.Web.Mvc;
 
 namespace Trader.WEB.Controllers
 {
+    [Authorize]
     public class CheckoutController : Controller
     {
         private readonly IUserProfileService _userProfileService;
@@ -58,8 +59,17 @@ namespace Trader.WEB.Controllers
                         Quantity = 1,
                         SellerId = offer.UserProfile.Id
                     };
+                    if (offer.SellerPaysMiddleman)
+                    {
+                        model.OrderSum = offer.Price;
+                    }
+                    else
+                    {
+                        model.OrderSum = offer.Price + offer.MiddlemanPrice.Value;
+                    }
                     return View(model);
                 }
+                
             }
             return HttpNotFound();
         }

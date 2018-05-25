@@ -228,7 +228,7 @@ namespace Trader.WEB.Controllers
             var user = _userProfileService.GetUserProfileById(User.Identity.GetUserId());
             if (user != null)
             {
-                if (image != null && (image.ContentType == "image/jpeg" || image.ContentType == "image/png"))
+                if (image != null && image.ContentLength <= 1000000 && (image.ContentType == "image/jpeg" || image.ContentType == "image/png"))
                 {
                     string extName = System.IO.Path.GetExtension(image.FileName);
                     string fileName = String.Format(@"{0}{1}", System.Guid.NewGuid(), extName);

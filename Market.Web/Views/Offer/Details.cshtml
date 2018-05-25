@@ -8,7 +8,6 @@
 }
 
 <link rel="stylesheet" href="/resources/demos/style.css">
-<div class="container">
     <div class="main-block">
         <div class="row">
             <div class="col-md-3">
@@ -77,17 +76,21 @@
                     <div class="col-sm-12">
 
                         <div class="row offer-details-rank">
-                            @foreach (var filter in Model.Filters)
+                            @foreach (var filter in Model.FilterItems)
                             {
-                                <div class="col-md-6">
-                                    <span>@filter.Text</span>
-                                </div>
-                            }
-                            @foreach (var item in Model.FilterItems)
-                            {
-                                <div class="col-md-6">
+                                <div class="col-md-6" style="margin:0 auto;">
+                                    <div class="mb-3">
+                                        <span class="text-700">@filter.Filter.Text</span>
+                                    </div>
+                                    @if (filter.ImagePath == null)
+                                    {
+                                        <span>@filter.Name</span>
+                                    }
+                                    else
+                                    {
+                                        <img src="@filter.ImagePath" title="@filter.Name" style="width:100px" alt="@filter.Name" />
+                                    }
 
-                                    <img src="@item.ImagePath" style="width:100px" alt="Alternate Text" />
                                 </div>
                             }
                         </div>
@@ -98,17 +101,36 @@
             <div class="col-md-4">
                 <div class="card offer-buying-block" style="height: 300px">
                     <div style="text-align:center">
-                        <h3>@Html.DisplayFor(m => m.Price)</h3>
+                        <p class="price">@Html.DisplayFor(m => m.Price)</p>
                     </div>
-                    <div style="text-align:center">
-                        @Html.ActionLink("Купить", "Checkoutme", "Checkout", new { offerId = Model.Id }, null);
-                        @using (Html.BeginForm("Pay", "Checkout"))
+                    <div class="text-center mb-4">
+                        @*@Html.ActionLink("Купить", "Checkoutme", "Checkout", new { offerId = Model.Id }, null);*@
+                        @using (Html.BeginForm("Checkoutme", "Checkout", FormMethod.Get))
                         {
-                            @Html.HiddenFor(m => m.Id)
+                            <input type="hidden" name="offerId" value="@Model.Id" />
+
                             <input type="submit" name="buy" value="Купить" class=" btn btn-buy-big font-size-18" />
                         }
 
                     </div>
+
+                    <div class="text-center text-700">
+
+                        @if (Model.SellerPaysMiddleman)
+                        {
+                            <span>
+                                Гарант за счет
+                                покупетеля: @Html.DisplayFor(m => m.MiddlemanPrice)
+                            </span>
+                        }
+                        else
+                        {
+                            <span>
+                                Гарант за ваш счет: @Html.DisplayFor(m => m.MiddlemanPrice)
+                            </span>
+                        }
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -141,7 +163,6 @@
 
     </div>
 
-</div>
 
 
 
@@ -149,36 +170,30 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title">Написать сообщение</h3>
-                <button type="button"  id="close" class="close" data-dismiss="modal" aria-label="Close">
+                <h4 class="modal-title">Написать сообщение</h4>
+                <button type="button" id="close" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
 
-            <input type="hidden" id="receiverId" name="ReceiverId" value="@Model.UserProfile.Id" />
+            <input type="hidden" id="receiverId" name="ReceiverId" value="@Model.UserId" />
 
             <div class="modal-body">
 
                 <div class="form-group">
-                    <img class="img-circle avatar-small" src="@Model.UserProfile.ImagePath" style="float:left; margin-right: 20px" alt="Alternate Text" />
+                    <img class="img-circle avatar-48" src="@Model.UserProfile.ImagePath" style="float:left; margin-right: 20px" alt="Alternate Text" />
                     <div>
 
-                        @Html.ActionLink(Model.UserProfile.Name, "Info", new { })
+                        @Html.ActionLink(Model.UserName, "Info", new { })
 
                         <p>
-                            @if (Model.UserProfile.IsOnline)
-                            {
-                                <span class="badge badge-pill badge-light">Online</span>
-                            }
-                            else
-                            {
-                                <span class="badge badge-pill badge-dark">Offline</span>
-                            }
+                            @Html.GetUserStatus(Model.UserName, new { @class = "badge badge-pill badge-online" }, new { @class = "badge badge-pill badge-offline" })
                         </p>
 
 
                     </div>
                 </div>
+
                 <div class="form-group">
                     <textarea id="messageBody" class="form-control" rows="5"></textarea>
                 </div>
@@ -186,7 +201,7 @@
 
             </div>
             <div class="modal-footer">
-                <button id="sendMessage" type="button" onclick="SendMessage()" class="btn btn-info">Отправить</button>
+                <button id="sendMessage" type="button" onclick="SendMessage()" class="btn btn-submit">Отправить</button>
             </div>
 
 

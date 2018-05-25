@@ -1,0 +1,55 @@
+﻿@model IEnumerable<Market.Web.ViewModels.OrderTransactionDetails>
+
+@{
+    ViewBag.Title = "OrderTransactionDetails";
+    Layout = "~/Views/Shared/_MiddlemanLayout.cshtml";
+}
+
+<table class="table table-striped table-bordered table-light">
+    <tr>
+        <th>
+            Order Id
+        </th>
+        <th>
+            Отправитель
+        </th>
+        <th>
+            Сумма отправки
+        </th>
+        <th>
+            Получатель
+        </th>
+        <th>
+            Сумма получения
+        </th>
+        <th>
+            Дата
+        </th>
+    </tr>
+    @foreach (var transaction in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(m => transaction.OrderId)
+            </td>
+            <td>
+                @Html.DisplayFor(m => transaction.SenderName)
+            </td>
+            <td>
+                - @Html.DisplayFor(m => transaction.Amount)
+            </td>
+            <td>
+                @Html.DisplayFor(m => transaction.ReceiverName)
+            </td>
+            <td>
+                + @Html.DisplayFor(m => transaction.Amount)
+            </td>
+            <td>
+                @Html.DisplayFor(m => transaction.TransactionDate)
+            </td>
+        </tr>
+    }
+</table>
+
+
+

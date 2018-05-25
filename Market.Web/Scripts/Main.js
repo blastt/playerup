@@ -9,9 +9,16 @@
         success: function (response) {
             if (response != 0) {
                 var a = $('#orders').find('a');
-                var div = $('<div></div>');
+                var div = $('.orders-count');
+                if (!div.length) {
+                    div = $('<div></div>').attr('id', 'top-counter');
+                    div.addClass('orders-count');
+                    div.text(count);
+                    a.prepend(div);
+                }
+                div.text(count);
                 div.text(response);
-                div.addClass('orders-count');
+                
                 a.prepend(div);
             }
         }

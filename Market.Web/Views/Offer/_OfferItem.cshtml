@@ -1,5 +1,6 @@
 ﻿@model Market.Web.ViewModels.OfferViewModel
 
+
 <div class="col-lg-12">
     <div class="card mb-3">
 
@@ -21,14 +22,10 @@
                         Рейтинг <span class="text-700">@Model.Rating</span>
                         <br />
                         <div class="status">
-                            @if (Model.User.IsOnline)
-                            {
-                                <span class="badge badge-pill badge-info">Online</span>
-                            }
-                            else
-                            {
-                                <span class="badge badge-pill badge-light">Offline</span>
-                            }
+                            
+                            @Html.GetUserStatus(Model.UserName, new { @class= "badge badge-pill badge-online" }, new { @class = "badge badge-pill badge-offline" })
+                            
+                                
                         </div>
                     </div>
                 </div>

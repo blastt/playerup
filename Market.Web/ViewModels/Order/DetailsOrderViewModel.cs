@@ -21,6 +21,8 @@ namespace Market.Web.ViewModels
         public decimal OfferPrice { get; set; }
         public string OfferId { get; set; }
 
+        [DataType(DataType.Currency)]
+        public decimal MiddlemanPrice { get; set; }
         public bool ShowPayButton { get; set; }
         public bool ShowCloseButton { get; set; }
         public bool ShowFeedbackToBuyer { get; set; }

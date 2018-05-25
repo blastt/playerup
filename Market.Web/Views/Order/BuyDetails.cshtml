@@ -4,212 +4,213 @@
     ViewBag.Title = "Details";
 }
 
-<div class="container">
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="page-info">
-                <h2>Заказы</h2>
-                <p class="lead">Здесь отображается информация по заказам</p>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="page-info">
+            <h2>Заказы</h2>
+            <p class="lead">Здесь отображается информация по заказам</p>
+        </div>
+        @{Html.RenderAction("AccountMenu", "Account"); }
+        <div class="account-container bg-white">
+            @{Html.RenderPartial("_AccountOrdersMenu", Model); }
+            <div class="back">
+                <a href="@Request.UrlReferrer"><span style="font-weight: 700">&#10218;</span> <span>Назад</span> </a>
             </div>
-            @{Html.RenderAction("AccountMenu", "Account"); }
-            <div class="account-container bg-white">
-                @{Html.RenderPartial("_AccountOrdersMenu", Model); }
-                <div class="back">
-                    <a href="@Request.UrlReferrer"><span style="font-weight: 700">&#10218;</span> <span>Назад</span> </a>
+            @if (TempData["orderBuyStatus"] != null)
+            {
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="alert alert-dismissible alert-success">
+                            <span>Стстус заказа изменился: <span class="text-700">@Model.CurrentStatusName</span></span>
+                        </div>
+                    </div>
                 </div>
-                @if (TempData["orderBuyStatus"] != null)
-                {
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="alert alert-dismissible alert-success">
-                                <span>Стстус заказа изменился: <span class="text-700">@Model.CurrentStatusName</span></span>
-                            </div>
-                        </div>
-                    </div>
-                }
-                <div class="order-details-head ">
-                    <div class="order-details-title">
-                        <h4>Информащия о заказе</h4>
-                    </div>
-
-
+            }
+            <div class="order-details-head ">
+                <div class="order-details-title">
+                    <h4>Информащия о заказе</h4>
                 </div>
-                <div class="order-details-body">
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="alert alert-dismissible alert-warning">
-                                <span>Текущий статус заказа: <span class="text-700">@Model.CurrentStatusName</span></span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="order-details-row row">
-                        <div class="order-details-col col-md-4">
-                            <label>Предложение (Оффер)</label>
-                        </div>
-                        <div class="order-details-col col-md-8">
-                            <span>@Html.ActionLink(Model.OfferHeader, "Details", "Offer", new { id = Model.OfferId }, null)</span>
-                        </div>
-                    </div>
-                    <div class="order-details-row row">
-                        <div class="order-details-col col-md-4">
-                            <label>Продавец</label>
-                        </div>
-                        <div class="order-details-col col-md-8">
-                            <span>@Html.ActionLink(Model.SellerName, "Info", "Profile", new { userName = Model.SellerName }, null)</span>
-                        </div>
-                    </div>
-                    <div class="order-details-row row">
-                        <div class="order-details-col col-md-4">
-                            <label>Гарант</label>
-                        </div>
-                        <div class="order-details-col col-md-8">
-                            <span>@Html.ActionLink(Model.ModeratorName ?? "Еще нет", "Info", "Profile", new { userName = Model.ModeratorName }, null)</span>
-                        </div>
-                    </div>
-                    <div class="order-details-row row">
-                        <div class="order-details-col col-md-4">
-                            <label>Цена</label>
-                        </div>
-                        <div class="order-details-col col-md-8">
-                            <span>@Html.DisplayFor(m => m.OfferPrice)</span>
-                        </div>
-                    </div>
-                    <div class="order-details-row row">
-                        <div class="order-details-col col-md-12">
 
 
-                            @if (Model.ShowAccountInfo)
-                            {
+            </div>
+            <div class="order-details-body">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="alert alert-dismissible alert-warning">
+                            <span>Текущий статус заказа: <span class="text-700">@Model.CurrentStatusName</span></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="order-details-row row">
+                    <div class="order-details-col col-md-4">
+                        <label>Предложение (Оффер)</label>
+                    </div>
+                    <div class="order-details-col col-md-8">
+                        <span>@Html.ActionLink(Model.OfferHeader, "Details", "Offer", new { id = Model.OfferId }, null)</span>
+                    </div>
+                </div>
+                <div class="order-details-row row">
+                    <div class="order-details-col col-md-4">
+                        <label>Продавец</label>
+                    </div>
+                    <div class="order-details-col col-md-8">
+                        <span>@Html.ActionLink(Model.SellerName, "Info", "Profile", new { userName = Model.SellerName }, null)</span>
+                    </div>
+                </div>
+                <div class="order-details-row row">
+                    <div class="order-details-col col-md-4">
+                        <label>Гарант</label>
+                    </div>
+                    <div class="order-details-col col-md-8">
+                        <span>@Html.ActionLink(Model.ModeratorName ?? "Еще нет", "Info", "Profile", new { userName = Model.ModeratorName }, null)</span>
+                    </div>
+                </div>
+                <div class="order-details-row row">
+                    <div class="order-details-col col-md-4">
+                        <label>Цена</label>
+                    </div>
+                    <div class="order-details-col col-md-8">
 
-                                <div class="alert alert-dismissible alert-primary">
-                                    <div class="row">
-                                        <div class="col-lg-12">
-                                            <label>Логин:</label>
-                                            @Html.DisplayFor(m => m.AccountInfo.Login)
-                                        </div>
-                                        <div class="col-lg-12">
-                                            <label>Пароль:</label>
-                                            @Html.DisplayFor(m => m.AccountInfo.Password)
-                                        </div>
-                                        <div class="col-lg-12">
-                                            <label>Почта:</label>
-                                            @Html.DisplayFor(m => m.AccountInfo.Email)
-                                        </div>
-                                        <div class="col-lg-12">
-                                            <label>Пароль для почты:</label>
-                                            @Html.DisplayFor(m => m.AccountInfo.EmailPassword)
-                                        </div>
-                                        <div class="col-lg-12">
-                                            <label>Дополнительная информация:</label>
-                                            @Html.DisplayFor(m => m.AccountInfo.AdditionalInformation)
-                                        </div>
+                        <span>@Html.DisplayFor(m => m.OfferPrice) + @Html.DisplayFor(m => m.MiddlemanPrice) (гарант)</span>
+                    </div>
+                </div>
+                <div class="order-details-row row">
+                    <div class="order-details-col col-md-12">
+
+
+                        @if (Model.ShowAccountInfo)
+                        {
+
+                            <div class="alert alert-dismissible alert-primary">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <label>Логин:</label>
+                                        @Html.DisplayFor(m => m.AccountInfo.Login)
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <label>Пароль:</label>
+                                        @Html.DisplayFor(m => m.AccountInfo.Password)
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <label>Почта:</label>
+                                        @Html.DisplayFor(m => m.AccountInfo.Email)
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <label>Пароль для почты:</label>
+                                        @Html.DisplayFor(m => m.AccountInfo.EmailPassword)
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <label>Дополнительная информация:</label>
+                                        @Html.DisplayFor(m => m.AccountInfo.AdditionalInformation)
                                     </div>
                                 </div>
-
-
-                            }
-                            @if (Model.ShowConfirm)
-                            {
-
-                                using (Html.BeginForm("ConfirmOrder", "Checkout", null, FormMethod.Get, null))
-                                {
-                                    @Html.HiddenFor(m => m.ModeratorId)
-                                    @Html.Hidden("Id", Model.Id)
-                                    <input type="submit" value="Подтвердить получение" class="btn btn-order-confirm mb-3" />
-                                }
-
-
-
-                            }
-                            else if (Model.ShowFeedbackToSeller)
-                            {
-
-                                <input id="orderId" value="@Model.Id" type="hidden" />
-                                <input id="senderId" value="@Model.SellerId" type="hidden" />
-                                <input id="givefeed" value="Оставить отзыв продавцу" class="btn btn-order-leavefeedback mb-3" />
-
-
-
-                            }
-                            @if (Model.ShowCloseButton)
-                            {
-                                using (Html.BeginForm("Close", "Order", FormMethod.Post, new { @onsubmit = "return confirm('Вы уверены, что хотите закрыть сделку?');" }))
-                                {
-                                    <input type="hidden" name="id" value="@Model.Id" />
-                                    <input type="submit" name="Pay" value="Закрыть сделку" class="btn btn-order-close mt-3" />
-                                }
-
-                            }
-
-                            @if (Model.ShowPayButton)
-                            {
-
-                                using (Html.BeginForm("Paid", "Checkout", FormMethod.Post))
-                                {
-
-                                    <input type="hidden" name="id" value="@Model.Id" />
-                                    <input type="submit" name="Pay" value="Оплатить" class="btn btn-order-pay mt-3" />
-
-
-                                }
-
-                            }
-
-                        </div>
-                    </div>
-
-                </div>
-                <div class="order-details-log-head">
-                    <div class="order-details-title">
-                        <h4>
-                            Журнал событий
-                        </h4>
-                    </div>
-
-
-                </div>
-                <div class="order-details-log-body">
-                    @foreach (var status in Model.StatusLogs)
-                    {
-                        if (status.NewStatus.Value != Market.Model.Models.OrderStatuses.MiddlemanClosed &&
-                           status.NewStatus.Value != Market.Model.Models.OrderStatuses.SellerClosed &&
-                           status.NewStatus.Value != Market.Model.Models.OrderStatuses.BuyerClosed &&
-                       status.NewStatus.Value != Market.Model.Models.OrderStatuses.ClosedAutomatically)
-                        {
-                            <div class="order-details-node">
-                                <div class="node-circle"></div>
-                                <div class="node-name">@status.OldStatus.FinishedName</div>
-                                <div class="node-date">@status.TimeStamp</div>
                             </div>
+
+
                         }
-                        if (status.NewStatus.Value == Market.Model.Models.OrderStatuses.ClosedSuccessfully ||
-                            status.NewStatus.Value == Market.Model.Models.OrderStatuses.MiddlemanClosed ||
-                            status.NewStatus.Value == Market.Model.Models.OrderStatuses.SellerClosed ||
-                            status.NewStatus.Value == Market.Model.Models.OrderStatuses.BuyerClosed ||
-                            status.NewStatus.Value == Market.Model.Models.OrderStatuses.ClosedAutomatically)
+                        @if (Model.ShowConfirm)
                         {
-                            <div class="order-details-node">
-                                <div class="node-circle"></div>
-                                <div class="node-name">@status.NewStatus.FinishedName</div>
-                                <div class="node-date">@status.TimeStamp</div>
-                                <div class="node-circle-final"></div>
-                            </div>
+
+                            using (Html.BeginForm("ConfirmOrder", "Checkout", null, FormMethod.Get, null))
+                            {
+                                @Html.HiddenFor(m => m.ModeratorId)
+                                @Html.Hidden("Id", Model.Id)
+                                <input type="submit" value="Подтвердить получение" class="btn btn-order-confirm mb-3" />
+                            }
+
+
+
                         }
-                    }
+                        else if (Model.ShowFeedbackToSeller)
+                        {
+
+                            <input id="orderId" value="@Model.Id" type="hidden" />
+                            <input id="senderId" value="@Model.SellerId" type="hidden" />
+                            <input id="givefeed" value="Оставить отзыв продавцу" class="btn btn-order-leavefeedback mb-3" />
+
+
+
+                        }
+                        @if (Model.ShowCloseButton)
+                        {
+                            using (Html.BeginForm("Close", "Order", FormMethod.Post, new { @onsubmit = "return confirm('Вы уверены, что хотите закрыть сделку?');" }))
+                            {
+                                <input type="hidden" name="id" value="@Model.Id" />
+                                <input type="submit" name="Close" value="Закрыть сделку" class="btn btn-order-close mt-3" />
+                            }
+
+                        }
+
+                        @if (Model.ShowPayButton)
+                        {
+
+                            using (Html.BeginForm("Paid", "Checkout", FormMethod.Post, new { @onsubmit = "return confirm('Вы уверены, что хотите оплатить сделку?');" }))
+                            {
+
+                                <input type="hidden" name="id" value="@Model.Id" />
+                                <input type="submit" name="Pay" value="Оплатить" class="btn btn-order-pay mt-3" />
+
+
+                            }
+
+                        }
+
+                    </div>
                 </div>
-                @*<div class="row">
-                        <div class="col-md-12">
-                            @Html.PageLinks(Model.PagingInfo, x => Url.Action("Inbox", new { page = x, sortOrder = ViewBag.CurrentSort, searchString = ViewBag.SearchString }))
-                        </div>
-                    </div>*@
+
             </div>
-        </div>
+            <div class="order-details-log-head">
+                <div class="order-details-title">
+                    <h4>
+                        Журнал событий
+                    </h4>
+                </div>
 
+
+            </div>
+            <div class="order-details-log-body">
+                @foreach (var status in Model.StatusLogs)
+                {
+                    if (status.NewStatus.Value != Market.Model.Models.OrderStatuses.MiddlemanClosed &&
+                       status.NewStatus.Value != Market.Model.Models.OrderStatuses.SellerClosed &&
+                       status.NewStatus.Value != Market.Model.Models.OrderStatuses.BuyerClosed &&
+                   status.NewStatus.Value != Market.Model.Models.OrderStatuses.ClosedAutomatically)
+                    {
+                        <div class="order-details-node">
+                            <div class="node-circle"></div>
+                            <div class="node-name">@status.OldStatus.FinishedName</div>
+                            <div class="node-date">@status.TimeStamp</div>
+                        </div>
+                    }
+                    if (status.NewStatus.Value == Market.Model.Models.OrderStatuses.ClosedSuccessfully ||
+                        status.NewStatus.Value == Market.Model.Models.OrderStatuses.MiddlemanClosed ||
+                        status.NewStatus.Value == Market.Model.Models.OrderStatuses.SellerClosed ||
+                        status.NewStatus.Value == Market.Model.Models.OrderStatuses.BuyerClosed ||
+                        status.NewStatus.Value == Market.Model.Models.OrderStatuses.ClosedAutomatically)
+                    {
+                        <div class="order-details-node">
+                            <div class="node-circle"></div>
+                            <div class="node-name">@status.NewStatus.FinishedName</div>
+                            <div class="node-date">@status.TimeStamp</div>
+                            <div class="node-circle-final"></div>
+                        </div>
+                    }
+                }
+            </div>
+            @*<div class="row">
+                    <div class="col-md-12">
+                        @Html.PageLinks(Model.PagingInfo, x => Url.Action("Inbox", new { page = x, sortOrder = ViewBag.CurrentSort, searchString = ViewBag.SearchString }))
+                    </div>
+                </div>*@
+        </div>
     </div>
+
 </div>
 
+
 <div id="modal-dialog" class="modal">
-    
+
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -232,7 +233,7 @@
                     <div class="row">
                         <div class="col-sm-12">
                             <label class="ml-2 mr-2">
-                                
+
                                 <input type="radio" id="customRadio1" hidden="hidden" value="@Market.Model.Models.Emotions.Good" name="Grade" class="smile-radio position-absolute" checked="">
                                 <img src="~/Content/Images/feed-smile-pos.png" />
                             </label>

@@ -70,7 +70,7 @@ function SearchOffers() {
         beforeSend: function () {
             
             
-            //$('#loader').show();
+           // $('#loader').show();
             //$('#loader').animate({ opacity: '0.7' }, 400);
 
 
@@ -94,7 +94,7 @@ function SearchOffers() {
             //urlPath = Router.action('Offer', 'Buy', routes);
             //window.history.pushState({ "html": response.html, "pageTitle": response.pageTitle }, "", urlPath);
             //$('#loader').animate({ opacity: '0.0' }, 400, "", function () {
-            //    $('#loader').hide();
+                //$('#loader').hide();
             //});
 
 
@@ -140,12 +140,14 @@ function ResetOffers() {
         data: JSON.stringify({ searchInfo: message }),
         dataType: "html",
         beforeSend: function () {
-            //$('#loader').show();
-            //$('#loader').animate({ opacity: '0.7' }, 400);
+            $('#list').empty();
+            //$('#find').show();
+            //$('#find').animate({ opacity: '0.7' }, 400);
 
         },
         success: function (response) {
 
+            //$('#find').hide()
             $('#searchForm').get(0).reset();
             $('#list').html(response);
             Slider(parseFloat($('#priceFrom').val()), parseFloat($('#priceTo').val()));
@@ -154,8 +156,8 @@ function ResetOffers() {
             //var currentPath = window.location.href.split('/');
             //var urlPath = Router.action('Offer', 'Buy', { game: g });
             //window.history.pushState({ "html": response.html, "pageTitle": response.pageTitle }, "", urlPath);
-            //$('#loader').animate({ opacity: '0.0' }, 400, "", function () {
-            //    $('#loader').hide();
+            //$('#find').animate({ opacity: '0.0' }, 400, "", function () {
+                
             //});
 
             slider();

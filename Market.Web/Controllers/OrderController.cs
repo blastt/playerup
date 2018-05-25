@@ -47,6 +47,7 @@ namespace Market.Web.Controllers
                     Orders = orderViewModels
 
                 };
+                
 
                 return View(model);
             }
@@ -135,6 +136,7 @@ namespace Market.Web.Controllers
                         {
                             model.ShowProvideData = true;
                         }
+                        
                         model.CurrentStatusName = order.CurrentStatus.DuringName;
                         model.StatusLogs = order.StatusLogs;
                         model.ModeratorId = order.MiddlemanId;
@@ -281,18 +283,24 @@ namespace Market.Web.Controllers
 
         }
 
-        public JsonResult GetOrdersCount()
+        public string GetOrdersCount()
         {
             string currentUserId = User.Identity.GetUserId();
             int ordersCount = 0;
+            string result = null;
             var ordersBuyer = _orderService.GetOrders().Where(o => o.BuyerId == currentUserId && !o.BuyerChecked);
             var ordersSeller = _orderService.GetOrders().Where(o => o.SellerId == currentUserId && !o.SellerChecked);
             if (ordersBuyer != null && ordersSeller != null)
             {
                 ordersCount = ordersBuyer.Count() + ordersSeller.Count();
             }
-
-            return Json(ordersCount);
+            if (ordersCount != 0)
+            {
+                result = ordersCount.ToString();
+            }
+            
+            
+            return result;
         }
     }
 }

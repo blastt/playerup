@@ -12,6 +12,7 @@ using Market.Web.Models;
 using Market.Model.Models;
 using Market.Service;
 using static Market.Web.Controllers.ManageController;
+using System.Collections.Generic;
 
 namespace Market.Web.Controllers
 {
@@ -28,11 +29,11 @@ namespace Market.Web.Controllers
             _userProfileService = userProfileService;
         }
 
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
+        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
         {
             UserManager = userManager;
             SignInManager = signInManager;
-            
+
         }
 
         public ApplicationSignInManager SignInManager
@@ -41,9 +42,9 @@ namespace Market.Web.Controllers
             {
                 return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
             }
-            private set 
-            { 
-                _signInManager = value; 
+            private set
+            {
+                _signInManager = value;
             }
         }
 
@@ -51,7 +52,7 @@ namespace Market.Web.Controllers
         {
             get
             {
-                
+
                 return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
             }
             private set
@@ -84,13 +85,13 @@ namespace Market.Web.Controllers
             if (User != null)
             {
                 var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
-                
-                // get user object from the storage
-                
 
-                    // change username and email
-                    
-                    // Persiste the changes
+                // get user object from the storage
+
+
+                // change username and email
+
+                // Persiste the changes
                 // generage email confirmation code
                 string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                 var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
@@ -111,7 +112,7 @@ namespace Market.Web.Controllers
             {
                 return View("ChangeEmailError");
             }
-           
+
             var result = await UserManager.ConfirmEmailAsync(userId, code);
             return View(result.Succeeded ? "ConfirmEmail" : "ChangeEmailError");
         }
@@ -128,7 +129,7 @@ namespace Market.Web.Controllers
                 if (result)
                 {
                     // change username and email
-                    
+
                     // Persiste the changes
 
                     bool emailExists = false;
@@ -148,16 +149,16 @@ namespace Market.Web.Controllers
                     user.Email = model.NewEmail;
                     user.EmailConfirmed = false;
                     await UserManager.UpdateAsync(user);
-                        // generage email confirmation code
+                    // generage email confirmation code
 
-                        string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                        var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                    string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                    var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
 
-                        await UserManager.SendEmailAsync(user.Id, "Подтверждение почты", "Вы предоставили новый email-адрес для вашей" +
-                            " учётной записи Для смены адреса вам необходимо его активировать, щелкнув <a href=\"" + callbackUrl + "\">здесь</a>");
+                    await UserManager.SendEmailAsync(user.Id, "Подтверждение почты", "Вы предоставили новый email-адрес для вашей" +
+                        " учётной записи Для смены адреса вам необходимо его активировать, щелкнув <a href=\"" + callbackUrl + "\">здесь</a>");
 
-                        return View("UpdateEmailRequest");
-                    
+                    return View("UpdateEmailRequest");
+
                 }
                 return View("ChangeEmailError");
             }
@@ -171,7 +172,7 @@ namespace Market.Web.Controllers
         {
             return View();
         }
-        
+
 
         [Authorize]
         public async Task<ActionResult> ChangeEmail(string userId, string code)
@@ -262,27 +263,63 @@ namespace Market.Web.Controllers
             // Сбои при входе не приводят к блокированию учетной записи
             // Чтобы ошибки при вводе пароля инициировали блокирование учетной записи, замените на shouldLockout: true
             var userName = model.UserNameOrEmail;
-            
+
             var user = _userProfileService.GetUserProfiles().FirstOrDefault(m => model.UserNameOrEmail == m.ApplicationUser.Email);
             if (user != null)
             {
                 userName = user.Name;
+
+                if (await UserManager.IsEmailConfirmedAsync(user.Id))
+                {
+                    var result = await SignInManager.PasswordSignInAsync(userName, model.Password, model.RememberMe, shouldLockout: false);
+                    switch (result)
+                    {
+                        case SignInStatus.Success:
+                            // online users
+                            if (HttpRuntime.Cache["LoggedInUsers"] != null)
+                            {
+                                //get the list of logged in users from the cache
+                                var loggedInUsers = (Dictionary<string, DateTime>)
+                                HttpRuntime.Cache["LoggedInUsers"];
+
+                                if (!loggedInUsers.ContainsKey(userName))
+                                {
+                                    //add this user to the list
+
+                                    loggedInUsers.Add(userName, DateTime.Now);
+                                    //add the list back into the cache
+                                    HttpRuntime.Cache["LoggedInUsers"] = loggedInUsers;
+                                }
+                            }
+
+                            //the list does not exist so create it
+                            else
+                            {
+                                //create a new list
+                                var loggedInUsers = new Dictionary<string, DateTime>();
+                                //add this user to the list
+                                loggedInUsers.Add(userName, DateTime.Now);
+                                //add the list into the cache
+                                HttpRuntime.Cache["LoggedInUsers"] = loggedInUsers;
+                            }
+                            return RedirectToLocal(returnUrl);
+                        case SignInStatus.LockedOut:
+                            return View("Lockout");
+                        case SignInStatus.RequiresVerification:
+                            return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
+                        case SignInStatus.Failure:
+                        default:
+                            ModelState.AddModelError("", "Неудачная попытка входа.");
+                            return View(model);
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Не подтвержден email.");
+                }
             }
             
-            var result = await SignInManager.PasswordSignInAsync(userName, model.Password, model.RememberMe, shouldLockout: false);
-            switch (result)
-            {
-                case SignInStatus.Success:
-                    return RedirectToLocal(returnUrl);
-                case SignInStatus.LockedOut:
-                    return View("Lockout");
-                case SignInStatus.RequiresVerification:
-                    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
-                case SignInStatus.Failure:
-                default:
-                    ModelState.AddModelError("", "Неудачная попытка входа.");
-                    return View(model);
-            }
+            return View(model);
         }
 
         //
@@ -314,7 +351,7 @@ namespace Market.Web.Controllers
             // Если пользователь введет неправильные коды за указанное время, его учетная запись 
             // будет заблокирована на заданный период. 
             // Параметры блокирования учетных записей можно настроить в IdentityConfig
-            var result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent:  model.RememberMe, rememberBrowser: model.RememberBrowser);
+            var result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent: model.RememberMe, rememberBrowser: model.RememberBrowser);
             switch (result)
             {
                 case SignInStatus.Success:
@@ -345,7 +382,7 @@ namespace Market.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                if(_userProfileService.GetUserProfileByName(model.UserName) != null)
+                if (_userProfileService.GetUserProfileByName(model.UserName) != null)
                 {
                     return HttpNotFound("User exists!");
                 }
@@ -363,14 +400,14 @@ namespace Market.Web.Controllers
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
+                    //await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
 
                     // Дополнительные сведения о включении подтверждения учетной записи и сброса пароля см. на странице https://go.microsoft.com/fwlink/?LinkID=320771.
                     // Отправка сообщения электронной почты с этой ссылкой
                     string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                     var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     await UserManager.SendEmailAsync(user.Id, "Подтверждение учетной записи", "Подтвердите вашу учетную запись, щелкнув <a href=\"" + callbackUrl + "\">здесь</a>");
-                    
+
 
 
                     return RedirectToAction("Index", "Home");
@@ -392,7 +429,7 @@ namespace Market.Web.Controllers
                 IsConfirmed = isConfirmed,
                 Email = email
             };
-            return PartialView("_ConfirmEmail",model);
+            return PartialView("_ConfirmEmail", model);
         }
 
         public PartialViewResult ConfirmPhoneNumberPartial()
@@ -403,14 +440,14 @@ namespace Market.Web.Controllers
             ConfirmPhoneNumberViewModel model = new ConfirmPhoneNumberViewModel()
             {
                 IsConfirmed = isConfirmed,
-                 PhoneNumber = phoneNumber
+                PhoneNumber = phoneNumber
             };
             return PartialView("_ConfirmPhoneNumber", model);
         }
 
         //
         // GET: /Account/ConfirmEmail
-        
+
 
         public ActionResult AddPhoneNumber()
         {
@@ -465,16 +502,16 @@ namespace Market.Web.Controllers
             {
                 return View(model);
             }
-            
-            
+
+
             var result = await UserManager.ChangePhoneNumberAsync(User.Identity.GetUserId(), model.PhoneNumber, model.Code);
             if (result.Succeeded)
             {
-                var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
-                if (user != null)
-                {
-                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-                }
+                //var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+                //if (user != null)
+                //{
+                //    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                //}
 
                 return View("UpdatePhoneNumberSuccess");
                 //return RedirectToAction("Settings", new { Message = ManageMessageId.AddPhoneSuccess });
@@ -493,7 +530,7 @@ namespace Market.Web.Controllers
                 return View(model);
             }
             bool numberExists = false;
-            
+
             foreach (var user in UserManager.Users)
             {
                 if (user.Id == currentUserId)
@@ -523,7 +560,7 @@ namespace Market.Web.Controllers
             return RedirectToAction("VerifyPhoneNumber", new { PhoneNumber = model.PhoneNumber });
         }
 
-     
+
         //
         // GET: /Account/ForgotPassword
         [AllowAnonymous]
@@ -719,7 +756,7 @@ namespace Market.Web.Controllers
                 }
                 AddErrors(result);
             }
-            
+
             ViewBag.ReturnUrl = returnUrl;
             return View(model);
         }
@@ -730,7 +767,7 @@ namespace Market.Web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult LogOff()
         {
-            
+
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
             return RedirectToAction("Index", "Home");
         }

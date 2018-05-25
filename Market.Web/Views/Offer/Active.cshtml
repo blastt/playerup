@@ -3,39 +3,38 @@
     ViewBag.Title = "All";
 
 }
-<div class="container">
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="page-info">
-                <h2>Предложения</h2>
-                <p class="lead">Здесь отображается информация по предложениям</p>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="page-info">
+            <h2>Предложения</h2>
+            <p class="lead">Здесь отображается информация по предложениям</p>
+        </div>
+        @{Html.RenderAction("AccountMenu", "Account"); }
+        <div class="account-container">
+            @{Html.RenderPartial("_AccountOffersMenu", Model); }
+            <div class="form-inline form-offer-filter">
+                <h3 class="mb-0 text-gray text-300">
+                    Активные предложения:
+                </h3>
             </div>
-            @{Html.RenderAction("AccountMenu", "Account"); }
-            <div class="account-container">
-                @{Html.RenderPartial("_AccountOffersMenu", Model); }
-                <div class="form-inline form-offer-filter">
-                    <h3 class="mb-0 text-gray text-300">
-                        Активные предложения:
-                    </h3>
-                </div>
-                <table class="table table-white text-center">
-                    <tr>
-                        <th class="account-offer-game">Игра</th>
-                        <th class="account-offer-header">Заголовок</th>
-                        <th class="account-offer-date">Дата</th>
-                        <th class="account-offer-price">Цена</th>
+            <table class="table table-white text-center">
+                <tr>
+                    <th class="account-offer-game">Игра</th>
+                    <th class="account-offer-header">Заголовок</th>
+                    <th class="account-offer-date">Дата</th>
+                    <th class="account-offer-price">Цена</th>
 
-                    </tr>
-                    @foreach (var offer in Model.Offers)
-                    {
-                        @Html.Partial("_AccountOfferItem", offer)                    
-                    }
+                </tr>
+                @foreach (var offer in Model.Offers)
+                {
+                    @Html.Partial("_AccountOfferItem", offer)
+                }
 
-                </table>
-            </div>
-
+            </table>
         </div>
 
     </div>
+
 </div>
 

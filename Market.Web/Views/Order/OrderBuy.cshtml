@@ -3,62 +3,62 @@
     ViewBag.Title = "All";
 
 }
-<div class="container">
-    <div class="row">
-        <div class="col-lg-12">
 
-            <div class="page-info">
-                <h2>Заказы</h2>
-                <p class="lead">Здесь отображается информация по заказам</p>
-            </div>
+<div class="row">
+    <div class="col-lg-12">
 
-
-
-            @{Html.RenderAction("AccountMenu", "Account"); }
-            <div class="account-container">
-                @{Html.RenderPartial("_AccountOrdersMenu", Model); }
-                <div class="form-inline form-offer-filter">
-                    <h3 class="mb-0 text-gray text-300">
-                        Заказы, где вы покупатель:
-                    </h3>
-                </div>
-                <table class="table table-white">
-                    <tr>
-                        <th>Предложение</th>
-                        <th>Продавец</th>
-                        <th>Цена</th>
-                        <th>Статус заказа</th>
-                        <th></th>
-                    </tr>
-                    @foreach (var order in Model.Orders)
-                    {
-                        @*var clsBold = "";
-                            if (!order.BuyerChecked)
-                            {
-                                clsBold = "font-weight-bold warning-row";
-                            }
-
-                            <tr id="message-row-@order.Id" class="@clsBold">
-                                <td class="clickable  set-viewed-td" data-id="@order.Id">
-                                    @if (!order.BuyerChecked)
-                                    {
-                                        <div class="set-viewed-icon"></div>
-
-                                    }
-                                </td>
-                                <td>@order.OfferHeader</td>
-                                <td>@order.SellerName</td>
-                                <td>@order.OfferPrice</td>
-                                <td>@order.CurrentStatus.DuringName</td>
-                                <td>@Html.ActionLink("Детали", "BuyDetails", "Order", new { orderId = order.Id }, null)</td>
-                            </tr>*@
-                        @Html.Partial("_AccountOrderBuyItem", order)
-                    }
-
-                </table>
-            </div>
+        <div class="page-info">
+            <h2>Заказы</h2>
+            <p class="lead">Здесь отображается информация по заказам</p>
         </div>
 
+
+
+        @{Html.RenderAction("AccountMenu", "Account"); }
+        <div class="account-container">
+            @{Html.RenderPartial("_AccountOrdersMenu", Model); }
+            <div class="form-inline form-offer-filter">
+                <h3 class="mb-0 text-gray text-300">
+                    Заказы, где вы покупатель:
+                </h3>
+            </div>
+            <table class="table table-white">
+                <tr>
+                    <th>Предложение</th>
+                    <th>Продавец</th>
+                    <th>Цена</th>
+                    <th>Статус заказа</th>
+                    <th></th>
+                </tr>
+                @foreach (var order in Model.Orders)
+                {
+                    @*var clsBold = "";
+                        if (!order.BuyerChecked)
+                        {
+                            clsBold = "font-weight-bold warning-row";
+                        }
+
+                        <tr id="message-row-@order.Id" class="@clsBold">
+                            <td class="clickable  set-viewed-td" data-id="@order.Id">
+                                @if (!order.BuyerChecked)
+                                {
+                                    <div class="set-viewed-icon"></div>
+
+                                }
+                            </td>
+                            <td>@order.OfferHeader</td>
+                            <td>@order.SellerName</td>
+                            <td>@order.OfferPrice</td>
+                            <td>@order.CurrentStatus.DuringName</td>
+                            <td>@Html.ActionLink("Детали", "BuyDetails", "Order", new { orderId = order.Id }, null)</td>
+                        </tr>*@
+                    @Html.Partial("_AccountOrderBuyItem", order)
+                }
+
+            </table>
+        </div>
     </div>
+
 </div>
+
 

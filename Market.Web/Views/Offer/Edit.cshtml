@@ -5,7 +5,7 @@
 }
 
 
-<div class="container">
+<div class="row">
     <div class="col-lg-12" style="align-items: center; display: flex; justify-content: center">
         <div class="col-lg-8 " style="margin-top:30px">
             @using (Html.BeginForm("Edit", "Offer", FormMethod.Post, new { id = "editForm" }))
@@ -36,7 +36,7 @@
                 <div class="form-group">
                     @Html.LabelFor(m => m.Header, new { @class = "control-label" })
 
-                    <input class="form-control" type="text" name="header" value="@Model.Header" />
+                    @Html.TextBoxFor(m => m.Header, new {@class = "form-control" })
 
                     @Html.ValidationMessageFor(m => m.Header)
 
@@ -44,7 +44,7 @@
 
                 <div class="form-group">
                     @Html.LabelFor(m => m.Discription, new { @class = "control-label" })
-                    @Html.TextArea("discription", Model.Discription, 10, 0, new { @class = "form-control", style = "resize: none" })
+                    @Html.TextAreaFor(m => m.Discription, 10, 0, new { @class = "form-control", style = "resize: none" })
 
                     @Html.ValidationMessageFor(m => m.Discription)
 
@@ -60,7 +60,7 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text">$</span>
                             </div>
-                            <input class="form-control" autocomplete="off" id="ListingPrice" type="text" name="price" value="@Math.Round(Model.Price,0)" onchange="CalculatePrice()" />
+                            @Html.TextBoxFor(m => m.Price, "", new { @class = "form-control", onchange = "CalculatePrice()", id = "ListingPrice", autocomplete = "off" })
                             @Html.ValidationMessageFor(m => m.Price)
                         </div>
 
@@ -121,8 +121,9 @@
 {
     @*Ненавязивый JavaScript для выполнения запроса на сервер без полного обновления страницы*@
     @*<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>*@
+    @Scripts.Render("~/bundles/jqueryval")
     <script src="~/Scripts/Filters.js"></script>
-        <script src="~/Scripts/CreateOffer.js">
+    <script src="~/Scripts/CreateOffer.js">
 
 
     </script>

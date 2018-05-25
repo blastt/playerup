@@ -2,7 +2,6 @@
 
 
 
-<div class="container">
     <div class="row">
         <div class="col-lg-8">
             <div class="card p-4">
@@ -61,10 +60,7 @@
                     <p class="text-300 font-size-16 mb-3">Стоимость заказа:</p>
                     <div class="form-group">
                         <div style="font-size:28px; width: 100%">@Html.DisplayFor(m => m.OrderSum)</div>
-                        @if (!Model.SellerPaysMiddleman)
-                        {
-                            <div style="font-size:14px; width: 100%">+ @Html.DisplayFor(m => m.MiddlemanPrice) (стоимость гаранта)</div>
-                        }
+                        
 
                     </div>
 
@@ -77,5 +73,5 @@
 
         </div>
     </div>
-</div>
+
 
