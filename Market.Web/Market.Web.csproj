@@ -595,6 +595,7 @@
     <Content Include="Views\Middleman\OrderList.cshtml" />
     <Content Include="Views\Middleman\MyOrderList.cshtml" />
     <Content Include="Views\Middleman\OrderTransactionDetails.cshtml" />
+    <Content Include="Views\Account\_AuthMenu.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

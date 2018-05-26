@@ -18,7 +18,6 @@ th {
 
 .content {
     margin-top: 40px;
-    
 }
 
 /* styles for validation helpers */
@@ -349,8 +348,8 @@ ul {
     box-shadow: inset 0px -5px 0px 0px #62b2e2;
 }
 
-.arrow{
-    background-image:url(Images/arrow.svg)
+.arrow {
+    background-image: url(Images/arrow.svg)
 }
 
 
@@ -744,14 +743,14 @@ div#users-contain {
     font-weight: 400;
 }
 
-.btn-activate:hover {
-    border-radius: 50px;
-    background-color: #62b2e2;
-    border: 1px solid #62b2e2;
-    color: #ffffff;
-    padding: 6px 20px;
-    font-weight: 400;
-}
+    .btn-activate:hover {
+        border-radius: 50px;
+        background-color: #62b2e2;
+        border: 1px solid #62b2e2;
+        color: #ffffff;
+        padding: 6px 20px;
+        font-weight: 400;
+    }
 
 .btn-pay {
     border-radius: 50px;
@@ -762,14 +761,14 @@ div#users-contain {
     box-shadow: 0 4px 15px 0px rgba(98, 178, 226, 0.70);
 }
 
-.btn-pay:hover {
-    border-radius: 50px;
-    background-color: #72caff;
-    color: white;
-    padding: 6px 20px;
-    font-weight: 300;
-    box-shadow: 0 4px 15px 0px rgba(98, 178, 226, 0.70);
-}
+    .btn-pay:hover {
+        border-radius: 50px;
+        background-color: #72caff;
+        color: white;
+        padding: 6px 20px;
+        font-weight: 300;
+        box-shadow: 0 4px 15px 0px rgba(98, 178, 226, 0.70);
+    }
 
 .btn-order-close {
     border-radius: 50px;
@@ -834,14 +833,14 @@ div#users-contain {
     font-weight: 300
 }
 
-.btn-order-leavefeedback:hover {
-    border-radius: 50px;
-    border: 1px solid #8ec3e2;
-    background-color: #62b2e2;
-    color: white;
-    padding: 6px 20px;
-    font-weight: 300
-}
+    .btn-order-leavefeedback:hover {
+        border-radius: 50px;
+        border: 1px solid #8ec3e2;
+        background-color: #62b2e2;
+        color: white;
+        padding: 6px 20px;
+        font-weight: 300
+    }
 
 .btn-order-confirm {
     border-radius: 50px;
@@ -861,6 +860,23 @@ div#users-contain {
         font-weight: 300
     }
 
+.btn-login-form {
+    width: 100%;
+    border-radius: 4px;
+    background-color: #62b2e2;
+    color: white;
+    padding: 6px 20px;
+    font-weight: 300;
+}
+
+    .btn-login-form:hover {
+        width: 100%;
+        border-radius: 4px;
+        background-color: rgba(98, 178, 226, 0.80);
+        color: white;
+        padding: 6px 20px;
+        font-weight: 300;
+    }
 
 .btn-signin {
     border-radius: 50px;
@@ -870,13 +886,13 @@ div#users-contain {
     font-weight: 300;
 }
 
-.btn-signin:hover {
-    border-radius: 50px;
-    background-color: #72caff;
-    color: white;
-    padding: 6px 20px;
-    font-weight: 300
-}
+    .btn-signin:hover {
+        border-radius: 50px;
+        background-color: #72caff;
+        color: white;
+        padding: 6px 20px;
+        font-weight: 300
+    }
 
 .btn-signup {
     border-radius: 50px;
@@ -932,7 +948,7 @@ div#users-contain {
     border-radius: 50px;
     background-color: #62b2e2;
     color: white;
-    padding: 6px 20px;
+    padding: 6px 40px;
     font-weight: 300;
     box-shadow: 0 4px 15px 0px rgba(98, 178, 226, 0.70);
 }
@@ -941,7 +957,7 @@ div#users-contain {
         border-radius: 50px;
         background-color: rgba(98, 178, 226, 0.75);
         color: white;
-        padding: 6px 20px;
+        padding: 6px 40px;
         font-weight: 300
     }
 
@@ -1260,7 +1276,7 @@ div#users-contain {
     width: 20%
 }
 
-.price{
+.price {
     font-size: 24px;
     font-weight: 700;
     margin-bottom: 20px
@@ -1687,9 +1703,7 @@ dl dd a {
 }
 
 .node-name {
-    padding-left:30px;
-
-
+    padding-left: 30px;
     font-weight: 700
 }
 
@@ -1837,7 +1851,7 @@ dl dd a {
         font-weight: 500;
     }
 
-.font-size-12{
+.font-size-12 {
     font-size: 12px
 }
 
@@ -1864,6 +1878,7 @@ dl dd a {
 .account-offer-header {
     width: 30%;
 }
+
 .account-offer-header-inactive {
     width: 20%;
 }
@@ -1948,12 +1963,12 @@ dl dd a {
     filter: opacity(0.4);
     border: 2px solid transparent;
 }
+
 .smile-radio:checked + img { /* (RADIO CHECKED) IMAGE STYLES */
     filter: sepia(100%);
-    
 }
 
-.badge-online{
+.badge-online {
     color: white;
     background-color: #62b2e2
 }
@@ -1961,4 +1976,74 @@ dl dd a {
 .badge-offline {
     color: white;
     background-color: rgba(98, 178, 226, 0.50)
+}
+
+.ul-auth {
+    padding-left: 0px;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    display: flex;
+}
+
+ul.ul-auth li {
+    width: 50%;
+    display: inline;
+    background-color: #eeeeee;
+    position: relative;
+}
+
+    /*ul.ul-auth li.active {
+        border-top: 6px solid #5bc2ff;
+        background-color: #fff
+    }*/
+
+    ul.ul-auth li a {
+        padding: 10px 20px;
+        font-size: 18px;
+        font-weight: 700;
+        color: #9e9e9e;
+        display: block;
+        text-decoration: none
+    }
+
+        ul.ul-auth li a::before {
+            height: 5px;
+            display: block;
+            border-radius: 4px 0 0;
+            background: rgba(98, 178, 226, 0.5);
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: 0;
+            right: 0;
+        }
+
+        ul.ul-auth li a.active::before {
+            background: #62b2e2;
+        }
+
+        ul.ul-auth li a.active {
+            color: #70848f;
+            background-color: #fff
+        }
+        ul.ul-auth li:last-child a::before {
+            border-radius: 0 4px 0 0;
+        }
+
+.auth-box {
+    box-shadow: 0px 0px 50px rgba(0,0,0,0.2);
+    background-color: #fff;
+    border-radius: 10px
+}
+
+.auth-body {
+    
+    padding: 20px 40px
 }

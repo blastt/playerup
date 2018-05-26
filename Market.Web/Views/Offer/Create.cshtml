@@ -16,7 +16,7 @@
 
                 <div class="form-group">
 
-                    @Html.LabelFor(m => m.Games, new { @class = "control-label" })
+                    @Html.LabelFor(m => m.Games, new { @class = "col-form-label  col-form-label-md" })
                     @Html.DropDownListFor(m => m.Game, Model.Games, new { @class = "form-control", id = "game", onchange = "SelectFilterItem(value, false);" })
 
                 </div>
@@ -25,7 +25,7 @@
                 </div>
 
                 <div class="form-group">
-                    @Html.LabelFor(m => m.SteamLogin, new { @class = "control-label" })
+                    @Html.LabelFor(m => m.SteamLogin, new { @class = "col-form-label  col-form-label-md" })
 
                     @Html.TextBoxFor(m => m.SteamLogin, "", new { @class = "form-control", @for = "textBox" })
 
@@ -34,7 +34,7 @@
                 </div>
 
                 <div class="form-group">
-                    @Html.LabelFor(m => m.Header, new { @class = "control-label" })
+                    @Html.LabelFor(m => m.Header, new { @class = "col-form-label  col-form-label-md" })
 
                     @Html.TextBoxFor(m => m.Header, "", new { @class = "form-control", @for = "textBox" })
 
@@ -43,7 +43,7 @@
                 </div>
 
                 <div class="form-group">
-                    @Html.LabelFor(m => m.Discription, new { @class = "control-label" })
+                    @Html.LabelFor(m => m.Discription, new { @class = "col-form-label  col-form-label-md" })
 
                     @Html.TextArea("Discription", "", 10, 0, new { @class = "form-control", style = "resize: none" })
 
@@ -54,7 +54,7 @@
                 <div class="form-group">
 
                     <div class="col-md-5" style="padding: 0px; margin-right: 40px">
-                        @Html.LabelFor(m => m.Price, new { @class = "control-label" })
+                        @Html.LabelFor(m => m.Price, new { @class = "col-form-label  col-form-label-md" })
                         <div class="input-group">
 
 
@@ -70,7 +70,7 @@
                 </div>
                 <div class="form-group">
                     <div class="col-md-5" style="padding: 0px">
-                        @Html.Label("Стоимость безопасной сделки", new { @class = "control-label" })
+                        @Html.Label("Стоимость безопасной сделки", new { @class = "col-form-label  col-form-label-md" })
                         <div class="input-group">
 
 
@@ -83,7 +83,7 @@
                 </div>
                 <div class="form-group">
                     <div class="col-md-5" style="padding: 0px">
-                        @Html.Label("Вы получите", new { @class = "control-label" })
+                        @Html.Label("Вы получите", new { @class = "col-form-label  col-form-label-md" })
                         <div class="input-group">
 
 
@@ -100,7 +100,7 @@
 
                         @Html.CheckBox("SellerPaysMiddleman", true, new { @class = "custom-control-input", @id = "sellerPay", @checked = "checked" })
 
-                        <label class="custom-control-label" for="sellerPay">Оплатить безопасную сделку вместо покупателя</label>
+                        <label class="col-form-label  col-form-label-md" for="sellerPay">Оплатить безопасную сделку вместо покупателя</label>
                     </div>
                 </div>
                 <div class="confirm-buton">
