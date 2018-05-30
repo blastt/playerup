@@ -30,6 +30,12 @@ namespace Market.Web.Controllers
             return View();
         }
 
+        [HttpGet]
+        public ActionResult PublicOffer()
+        {
+            return View();
+        }
+
         [HttpPost]
         public async Task<ActionResult> ContactUs(ContactUsViewModel model)
         {
@@ -42,7 +48,7 @@ namespace Market.Web.Controllers
                     Subject = model.MessageSubject
                 };
                 await _identityMessageService.SendAsync(message);
-                return View();
+                return View("MessageSendSuccess");
             }
             return HttpNotFound();
         }

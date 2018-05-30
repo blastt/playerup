@@ -1,119 +1,124 @@
 ﻿@using System.Globalization
 @model Market.Web.ViewModels.CreateOfferViewModel
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = "Создать предложение";
 }
 
 
 <div class="row">
 
     <div class="col-lg-12" style="align-items: center; display: flex; justify-content: center">
-        <div class="col-lg-8 " style="margin-top:30px">
-            @using (Html.BeginForm("Create", "Offer", FormMethod.Post, new { id = "createForm" }))
-            {
-                @*@Html.HiddenFor(m => m.ClientProfileId)*@
+        <div class="col-lg-8">
+            <div class="create-offer-form">
+                <h3 class="text-center text-gray text-700 mb-4">Разместить объявление</h3>
+                @using (Html.BeginForm("Create", "Offer", FormMethod.Post, new { id = "createForm" }))
+                {
+                    @*@Html.HiddenFor(m => m.ClientProfileId)*@
 
 
-                <div class="form-group">
-
-                    @Html.LabelFor(m => m.Games, new { @class = "col-form-label  col-form-label-md" })
-                    @Html.DropDownListFor(m => m.Game, Model.Games, new { @class = "form-control", id = "game", onchange = "SelectFilterItem(value, false);" })
-
-                </div>
-                <div id="filter-item">
-
-                </div>
-
-                <div class="form-group">
-                    @Html.LabelFor(m => m.SteamLogin, new { @class = "col-form-label  col-form-label-md" })
-
-                    @Html.TextBoxFor(m => m.SteamLogin, "", new { @class = "form-control", @for = "textBox" })
-
-                    @Html.ValidationMessageFor(m => m.SteamLogin)
-
-                </div>
-
-                <div class="form-group">
-                    @Html.LabelFor(m => m.Header, new { @class = "col-form-label  col-form-label-md" })
-
-                    @Html.TextBoxFor(m => m.Header, "", new { @class = "form-control", @for = "textBox" })
-
-                    @Html.ValidationMessageFor(m => m.Header)
-
-                </div>
-
-                <div class="form-group">
-                    @Html.LabelFor(m => m.Discription, new { @class = "col-form-label  col-form-label-md" })
-
-                    @Html.TextArea("Discription", "", 10, 0, new { @class = "form-control", style = "resize: none" })
-
-                    @Html.ValidationMessageFor(m => m.Discription)
-
-                </div>
-
-                <div class="form-group">
-
-                    <div class="col-md-5" style="padding: 0px; margin-right: 40px">
-                        @Html.LabelFor(m => m.Price, new { @class = "col-form-label  col-form-label-md" })
-                        <div class="input-group">
-
-
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">₽</span>
-                            </div>
-
-                            @Html.TextBoxFor(m => m.Price, "", new { @class = "form-control", onchange = "CalculatePrice()", id = "ListingPrice", autocomplete = "off" })
-                            @Html.ValidationMessageFor(m => m.Price)
-                        </div>
-
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-md-5" style="padding: 0px">
-                        @Html.Label("Стоимость безопасной сделки", new { @class = "col-form-label  col-form-label-md" })
-                        <div class="input-group">
-
-
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">$</span>
-                            </div>
-                            @Html.TextBox("GuaranteePrice", "", new { @class = "form-control", id = "guaranteePrice", @readonly = "" })
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-md-5" style="padding: 0px">
-                        @Html.Label("Вы получите", new { @class = "col-form-label  col-form-label-md" })
-                        <div class="input-group">
-
-
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">$</span>
-                            </div>
-                            @Html.TextBox("EstPayout", "", new { @class = "form-control", id = "EstimatedPayout", @readonly = "" })
-                        </div>
-
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="custom-control custom-checkbox mr-sm-2">
-
-                        @Html.CheckBox("SellerPaysMiddleman", true, new { @class = "custom-control-input", @id = "sellerPay", @checked = "checked" })
-
-                        <label class="col-form-label  col-form-label-md" for="sellerPay">Оплатить безопасную сделку вместо покупателя</label>
-                    </div>
-                </div>
-                <div class="confirm-buton">
                     <div class="form-group">
-                        <input class="btn btn-submit" type="submit" name="create" value="Разместить" />
-                    </div>
-                </div>
 
-            }
+                        @Html.LabelFor(m => m.Games, new { @class = "col-form-label  col-form-label-md" })
+                        @Html.DropDownListFor(m => m.Game, Model.Games, new { @class = "custom-select", id = "game", onchange = "SelectFilterItem(value, false);" })
+
+                    </div>
+                    <div id="filter-item">
+
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.SteamLogin, new { @class = "col-form-label  col-form-label-md" })
+
+                        @Html.TextBoxFor(m => m.SteamLogin, "", new { @class = "form-control", @for = "textBox" })
+
+                        @Html.ValidationMessageFor(m => m.SteamLogin)
+
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.Header, new { @class = "col-form-label  col-form-label-md" })
+
+                        @Html.TextBoxFor(m => m.Header, "", new { @class = "form-control", @for = "textBox" })
+
+                        @Html.ValidationMessageFor(m => m.Header)
+
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.Discription, new { @class = "col-form-label  col-form-label-md" })
+
+                        @Html.TextArea("Discription", "", 10, 0, new { @class = "form-control", style = "resize: none" })
+
+                        @Html.ValidationMessageFor(m => m.Discription)
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <div class="col-md-5" style="padding: 0px; margin-right: 40px">
+                            @Html.LabelFor(m => m.Price, new { @class = "col-form-label  col-form-label-md" })
+                            <div class="input-group">
+
+
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">₽</span>
+                                </div>
+
+                                @Html.TextBoxFor(m => m.Price, "", new { @class = "form-control", onchange = "CalculatePrice()", id = "ListingPrice", autocomplete = "off" })
+                                @Html.ValidationMessageFor(m => m.Price)
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-5" style="padding: 0px">
+                            @Html.Label("Стоимость безопасной сделки", new { @class = "col-form-label  col-form-label-md" })
+                            <div class="input-group">
+
+
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">₽</span>
+                                </div>
+                                @Html.TextBox("GuaranteePrice", "", new { @class = "form-control", id = "guaranteePrice", @readonly = "" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-5" style="padding: 0px">
+                            @Html.Label("Вы получите", new { @class = "col-form-label  col-form-label-md" })
+                            <div class="input-group">
+
+
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">₽</span>
+                                </div>
+                                @Html.TextBox("EstPayout", "", new { @class = "form-control", id = "EstimatedPayout", @readonly = "" })
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="custom-control custom-checkbox">
+
+                            @Html.CheckBoxFor(m => m.SellerPaysMiddleman, new { @class = "custom-control-input", @id = "sellerPay", @checked = "checked" })
+                            <label class="custom-control-label" for="sellerPay">Оплатить безопасную сделку вместо покупателя</label>
+                            @*<label class="col-form-label  col-form-label-md" for="sellerPay">Оплатить безопасную сделку вместо покупателя</label>*@
+                        </div>
+                    </div>
+                    <div class="confirm-buton">
+                        <div class="form-group text-right">
+                            <input class="btn btn-submit" type="submit" name="create" value="Разместить" />
+                        </div>
+                    </div>
+
+                }
+            </div>
         </div>
     </div>
 
+
 </div>
+
 
 
 

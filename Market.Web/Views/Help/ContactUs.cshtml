@@ -1,7 +1,7 @@
 ﻿@model Market.Web.ViewModels.ContactUsViewModel
 
 @{
-    ViewBag.Title = "ContactUs";
+    ViewBag.Title = "Свяжитесь с нами";
 }
 
 
@@ -11,31 +11,29 @@
 <div class="row">
     <div class="col-lg-12" style="align-items: center; display: flex; justify-content: center">
         <div class="col-lg-8">
-            <h2>Напишите сообщение нам в поддержку</h2>
-            @using (Html.BeginForm("ContactUs", "Help"))
-            {
-                <div class="form-group">
-                    <label class="control-label">
-                        Почта
-                    </label>
-                    @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
-                </div>
-                <div class="form-group">
-                    <label class="control-label">
-                        Тема сообщения
-                    </label>
-                    @Html.TextBoxFor(m => m.MessageSubject, new { @class = "form-control" })
-                </div>
-                <div class="form-group">
-                    <label class="control-label">
-                        Сообщение
-                    </label>
-                    @Html.TextArea("MessageBody", "", 10, 0, new { @class = "form-control", style = "resize: none" })
-                </div>
-                <div class="form-group">
-                    <input type="submit" name="sendMessage" value="Отправить" class="btn btn-submit" />
-                </div>
-            }
+            <div class="contactus-form">
+
+
+                <h3 class="text-center text-gray text-700 mb-4">Напишите сообщение нам в поддержку</h3>
+                @using (Html.BeginForm("ContactUs", "Help"))
+                {
+                    <div class="form-group">
+
+                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "Почта" })
+                    </div>
+                    <div class="form-group">
+
+                        @Html.TextBoxFor(m => m.MessageSubject, new { @class = "form-control", placeholder = "Тема сообщения" })
+                    </div>
+                    <div class="form-group">
+
+                        @Html.TextArea("MessageBody", "", 10, 0, new { @class = "form-control", style = "resize: none", placeholder = "Сообщение" })
+                    </div>
+                    <div class="form-group text-right">
+                        <input type="submit" name="sendMessage" value="Отправить" class="btn btn-submit" />
+                    </div>
+                }
+            </div>
         </div>
     </div>
 </div>

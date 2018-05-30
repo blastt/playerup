@@ -94,8 +94,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 p {
-  margin-top: 0;
-  margin-bottom: 0px;
+    margin-top: 0;
+    margin-bottom: 1rem;
 }
 
 abbr[title],
@@ -1994,30 +1994,30 @@ pre code {
   box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
 
-.form-control::-webkit-input-placeholder {
-  color: #6c757d;
-  opacity: 1;
-}
+    .form-control::-webkit-input-placeholder {
+        color: #c8c8c8;
+        opacity: 1;
+    }
 
-.form-control::-moz-placeholder {
-  color: #6c757d;
-  opacity: 1;
-}
+    .form-control::-moz-placeholder {
+        color: #c8c8c8;
+        opacity: 1;
+    }
 
-.form-control:-ms-input-placeholder {
-  color: #6c757d;
-  opacity: 1;
-}
+    .form-control:-ms-input-placeholder {
+        color: #c8c8c8;
+        opacity: 1;
+    }
 
-.form-control::-ms-input-placeholder {
-  color: #6c757d;
-  opacity: 1;
-}
+    .form-control::-ms-input-placeholder {
+        color: #c8c8c8;
+        opacity: 1;
+    }
 
-.form-control::placeholder {
-  color: #6c757d;
-  opacity: 1;
-}
+    .form-control::placeholder {
+        color: #c8c8c8;
+        opacity: 1;
+    }
 
 .form-control:disabled, .form-control[readonly] {
   background-color: #e9ecef;
@@ -3736,20 +3736,20 @@ tbody.collapse.show {
 }
 
 .custom-select {
-  display: inline-block;
-  width: 100%;
-  height: calc(2.25rem + 2px);
-  padding: 0.375rem 1.75rem 0.375rem 0.75rem;
-  line-height: 1.5;
-  color: #495057;
-  vertical-align: middle;
-  background: #fff url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3E%3Cpath fill='%23343a40' d='M2 0L0 2h4zm0 5L0 3h4z'/%3E%3C/svg%3E") no-repeat right 0.75rem center;
-  background-size: 8px 10px;
-  border: 1px solid #ced4da;
-  border-radius: 0.25rem;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
+    display: inline-block;
+    width: 100%;
+    height: calc(2.25rem + 2px);
+    padding: 0.375rem 1.75rem 0.375rem 1rem;
+    line-height: 1.5;
+    color: #495057;
+    vertical-align: middle;
+    background: #fff url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3E%3Cpath fill='%23343a40' d='M2 0L0 2h4zm0 5L0 3h4z'/%3E%3C/svg%3E") no-repeat right 0.75rem center;
+    background-size: 8px 10px;
+    border: 1px solid #ebebeb;
+    border-radius: 18px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
 }
 
 .custom-select:focus {
@@ -4456,7 +4456,7 @@ tbody.collapse.show {
     background-color: #fff;
     background-clip: border-box;
     border-radius: 10px;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.10);
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.05);
 }
 
 .card > hr {

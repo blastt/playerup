@@ -1,15 +1,7 @@
 ﻿@model Market.Web.ViewModels.SearchOffersInfoViewModel
 @{
-    ViewBag.Title = "Buy";
+    ViewBag.Title = "Купить аккаунт " + Model.Game;
 }
-@*<div class="test">
-        <div class="loader" id="loader">
-            <div class="loader-wheel"></div>
-
-
-
-        </div>
-    </div>*@
 
 <div class="row">
     <div class="col-lg-12">
@@ -22,15 +14,6 @@
     <div class="col-lg-12">
 
         <div class="game-filter" id="game-filter">
-
-
-            @*@foreach (var g in Model.Games)
-                {
-                    <div class="game-filter-item" data-game="@g.Value" data-url="@Url.Action("List", "Offer", new { game = g.Value })">
-                        <div onclick="ChangeGame('@g.Value')"><img src="@g.ImagePath" style="width:40px" alt="Alternate Text" title="@g.Name" /></div>
-                    </div>
-
-                }*@
             @foreach (var g in Model.Games)
             {
                 <a class="game-filter-item @Html.IsSelectedGame(games: g.Value, actions: "buy", controllers: "offer")" href="@Url.Action("Buy", "Offer", new { game = g.Value })">
@@ -50,23 +33,7 @@
 <div class="row">
     @Html.Partial("_SearchPanel", Model)
     <div class="col-lg-9">
-
         <div id="list">
-
-            @*<div id="find">
-                    <div class="row">
-                        <div class="mt-5 col-md-12 text-center">
-                            <span>Идет поиск...</span>
-                        </div>
-                    </div>
-                </div>*@
-            @*<div class="finder" id="find" style="display:none">*@
-
-
-
-
-
-            @*@Html.Action("Reset", "Offer")*@
         </div>
     </div>
 
@@ -75,22 +42,11 @@
 <input type="hidden" name="Page" id="page" value="@Model.Page" />
 <input type="hidden" name="SearchString" id="searchString" value="@Model.SearchString" />
 
-
-
 <script src="@RouteJs.RouteJsHandler.HandlerUrl"></script>
-
 
 @section scripts
 {
-
-
-
-    @*<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>*@
     <script type="text/javascript" src="~/Scripts/Filters.js"></script>
     <script type="text/javascript" src="~/Scripts/jquery-ui.js"></script>
     <script type="text/javascript" src="~/Scripts/Custom.js"></script>
-
-
-
-
 }

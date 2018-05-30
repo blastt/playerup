@@ -1,6 +1,6 @@
 ﻿
 @{
-    ViewBag.Title = "Settings";
+    ViewBag.Title = "Настройки";
 }
 <div class="container">
     <div class="row">
@@ -11,7 +11,7 @@
             </div>
             @{Html.RenderAction("AccountMenu", "Account"); }
             <div class="account-container bg-white">
-                
+
                 <div class="row">
                     <div class="col-md-6">
 
@@ -24,12 +24,12 @@
                             @Html.Partial("UpdatePassword")
                             @Html.Partial("UpdatePhoneNumber")
                         </div>
-                        
+
 
                     </div>
                 </div>
-               
-                
+
+
             </div>
         </div>
     </div>
@@ -37,6 +37,8 @@
 
 
 
-
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
 
 

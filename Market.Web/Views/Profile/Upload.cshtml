@@ -1,23 +1,79 @@
-﻿
+﻿@model string
+
 @{
-    ViewBag.Title = "Upload";
+    ViewBag.Title = "Загрузить аватар";
 }
+<div class="row">
+    <div class="col-lg-5 auth-box" style="float: none; margin: 0 auto">
+        <div class="auth-body text-center">
+            <h3 class="text-gray text-700 mb-4">Загрузить аватар</h3>
+            @using (Html.BeginForm("Upload", "Profile", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                @Html.AntiForgeryToken()
+                <fieldset>
 
-<h2>Upload</h2>
+                    <div class="form-group">
+                        <div style="position:relative;">
+                            <ul class="ul-avatars">
+                                <li><img id="blah" src="@Model" alt="your image" class="avatar-148" />
+                                <br />
+                                <span class="font-size-12">148px</span>
+                                </li>
+                                <li>
+                                    <img id="blah" src="@Model" alt="your image" class="avatar-48" />
+                                    <br />
+                                    <span class="font-size-12">48px</span>
+                                </li>
 
-@using (Html.BeginForm("Upload", "Profile", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                                <li>
+                                    <img id="blah" src="@Model" alt="your image" class="avatar-32" />
+                                    <br />
+                                    <span class="font-size-12">32px</span>
+                                </li>
+                            </ul>
+                                                       
+                            <a href='javascript:;' >
+                                <input type="file" name="Image"  class="btn btn-details mt-3" onchange='readURL(this)'>
+                            </a>
+
+                        </div>
+
+                    </div>
+                    <div class="panel-footer">
+                        <input type="submit" value="Сохранить" class="btn btn-submit" />
+                    </div>
+                </fieldset>
+            }
+        </div>
+    </div>
+
+</div>
+
+@section scripts
 {
-    @Html.AntiForgeryToken()
-    <fieldset>
-        <legend>Photo</legend>
-        <div class="editor-label">
-            <label for="profile">FileName:</label>
-        </div>
-        <div class="editor-field">
-            <input name="Profile" id="profile" type="file" accept=".png,.jpg,.jpeg" />
-        </div>
-        <p>
-            <input type="submit" value="Create" />
-        </p>
-    </fieldset>
+    @*<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>*@
+    <script>
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('*[id*=blah]:visible').each(function () {
+                    
+                        $(this).attr('src', e.target.result);
+                    }) 
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+        function DrowImage() {
+
+
+            $('#upload-file-info').text($(this).val());
+
+
+
+        }
+    </script>
 }

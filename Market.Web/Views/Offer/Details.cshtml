@@ -4,14 +4,14 @@
 @model Market.Web.ViewModels.DetailsOfferViewModel
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "Информация о предложении";
 }
 
 <link rel="stylesheet" href="/resources/demos/style.css">
     <div class="main-block">
         <div class="row">
             <div class="col-md-3">
-                <div class="card details-user-block">
+                <div class="card details-user-block mb-3">
                     <img class="img-circle img-center" src="@Model.UserProfile.ImagePath" alt="Alternate Text" style="width:80px; height:80px" />
 
                     <div class="details-user-name-contact">
@@ -57,7 +57,7 @@
                 </div>
             </div>
             <div class="col-md-5">
-                <div class="card details-offer-block">
+                <div class="card details-offer-block  mb-3">
                     <ul>
                         <li class="li-details">
                             <label class="label-details">Игра</label>
@@ -80,7 +80,7 @@
                             {
                                 <div class="col-md-6" style="margin:0 auto;">
                                     <div class="mb-3">
-                                        <span class="text-700">@filter.Filter.Text</span>
+                                        <span>@filter.Filter.Text</span>
                                     </div>
                                     @if (filter.ImagePath == null)
                                     {
@@ -99,7 +99,7 @@
             </div>
 
             <div class="col-md-4">
-                <div class="card offer-buying-block" style="height: 300px">
+                <div class="card offer-buying-block mb-3" style="height: 300px">
                     <div style="text-align:center">
                         <p class="price">@Html.DisplayFor(m => m.Price)</p>
                     </div>
@@ -137,9 +137,9 @@
 
 
         <div class="row">
-            <div class="col-md-12 offer-description">
+            <div class="col-md-12">
 
-                <div class="card" style="height: 300px">
+                <div class="card" style="min-height: 300px">
                     <div class="block-label">@Model.Header</div>
                     <div class="block-body">
                         <span>@Model.Discription</span>

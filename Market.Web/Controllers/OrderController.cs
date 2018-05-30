@@ -142,7 +142,7 @@ namespace Market.Web.Controllers
                         model.ModeratorId = order.MiddlemanId;
                         return View(model);
                     }
-
+                    return RedirectToAction("OrderBuy");
                 }
 
 
@@ -274,7 +274,7 @@ namespace Market.Web.Controllers
                         model.ModeratorId = order.MiddlemanId;
                         return View(model);
                     }
-
+                    return RedirectToAction("OrderBuy");
                 }
 
             }

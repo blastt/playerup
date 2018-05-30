@@ -29,6 +29,9 @@
             Бан
         </th>
         <th>
+            Причина бана
+        </th>
+        <th>
             Баланс
         </th>
         <th>
@@ -61,6 +64,9 @@
             @Html.DisplayFor(m => user.IsBanned)
         </td>
         <td>
+            @Html.DisplayFor(m => user.LockoutReason)
+        </td>
+        <td>
             @Html.DisplayFor(m => user.Balance)
         </td>
         <td>
@@ -71,6 +77,7 @@
             @Html.ActionLink("Редактировать", "EditUser", new { id = user.Id })
             @Html.ActionLink("Заблокировать", "LockoutUserAsync", new { id = user.Id })
             @Html.ActionLink("Разблокировать", "UnlockUserAccount", new { id = user.Id })
+            @Html.ActionLink("Диалоги", "Inbox", new { id = user.Id })
         </td>
     </tr>
     }

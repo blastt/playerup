@@ -15,6 +15,7 @@ namespace Market.Web.ViewModels
         public string Email { get; set; }
 
         public bool EmailConfirmed { get; set; }
+        public string LockoutReason { get; set; }
 
         [DataType(DataType.PhoneNumber)]
         public string PhoneNumber { get; set; }

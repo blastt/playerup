@@ -1,16 +1,8 @@
 ﻿@model Market.Web.ViewModels.DialogListViewModel
 @using Microsoft.AspNet.Identity
 @{
-    ViewBag.Title = "Inbox";
+    ViewBag.Title = "непрочитанные сообщения";
 
-}
-
-@{
-    ViewBag.Title = "List";
-    var options = new AjaxOptions()
-    {
-
-    };
 }
 
 <div class="row">
@@ -29,54 +21,7 @@
                     Непрочитанные сообщения:
                 </h3>
             </div>
-            @*@using (Html.BeginForm("Inbox", "Message", null, FormMethod.Get, new { @class = "form-inline form-message-filter" }))
-                        {
-
-
-                            <div class="form-message-filter-item">
-                                @Html.TextBox("SearchString", ViewBag.CurrentFilter as string, new { @class = "form-control", placeholder = "Поиск..." })
-                            </div>
-
-                            <div class="form-message-filter-item">
-                                @Html.TextBox("SenderName", ViewBag.SenderName as string, new { @class = "form-control", placeholder = "От кого:" })
-                            </div>
-
-
-
-
-
-
-
-                    var filterList = new List<SelectListItem>() {
-                                            new SelectListItem()
-                                            {
-                                                Text = "Все",
-                                                Value = "all",
-                                                Selected = true
-                                            },
-                                            new SelectListItem()
-                                            {
-                                                Text = "Прочитанные",
-                                                Value = "read"
-                                            },
-                                            new SelectListItem()
-                                            {
-                                                Text = "Непрочитанные",
-                                                Value = "unread"
-                                            }
-                                        };
-                        <div class="form-message-filter-item">
-                            @Html.DropDownList("CurrentFilter", filterList, new { @class = "form-control" })
-                        </div>
-
-
-                        <input type="submit" value="Поиск" class="btn btn-info" />
-
-
-
-
-                }*@
-
+            
             <table class="table table-white" id="dialogs-table">
                 <tr>
 
@@ -110,21 +55,13 @@
                         </td>
 
                         <td class="clickable" id="dialog-text" data-id="@dialog.Id" style=" max-width: 100px;overflow: hidden;text-overflow: ellipsis; white-space: nowrap; "><span id="message-text" class="wqe" style="">@dialog.Messages.LastOrDefault().MessageBody</span></td>
-                        @*<td>@messageGroup.</td>*@
+
                         <td class="clickable date-table" id="dialog-date" data-id="@dialog.Id" title="@dialog.Messages.LastOrDefault().CreatedDate.ToShortTimeString()">@dialog.Messages.LastOrDefault().CreatedDate.ToShortDateString()</td>
 
-                        @*<td class="remove-table"><a data-id="@dialog.Id" id="linkdelete" class="remove-link"><img src="~/Content/Images/trash.png" class="remove-icon" /></a></td>*@
-                        @*<td style="color:red">@Html.ActionLink("X", "DeleteStory", new { lastMessageId = messageGroup.FirstOrDefault().Id}, null)</td>*@
                     </tr>
 
                 }
             </table>
-
-            @*<div class="row">
-                    <div class="col-md-12">
-                        @Html.PageLinks(Model.PagingInfo, x => Url.Action("Inbox", new { page = x, sortOrder = ViewBag.CurrentSort, searchString = ViewBag.SearchString }))
-                    </div>
-                </div>*@
         </div>
     </div>
 
@@ -158,7 +95,6 @@
 @section scripts
 {
     <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
-    <script type="text/javascript" src="~/Scripts/Main.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
             SetDialogsClickable();

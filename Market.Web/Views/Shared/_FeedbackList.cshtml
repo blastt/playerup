@@ -57,7 +57,7 @@
                         }
 
                         <span class="feed-item-date">@Html.Date(feedback.DateLeft.Value)</span>
-                        <span class="feed-item-leftby">Оставлен пользователем: @Html.ActionLink(feedback.SenderName, "Info", "Profile", new { prof = feedback.SenderName }, null)</span>
+                        <span class="feed-item-leftby">Оставлен пользователем: @Html.ActionLink(feedback.SenderName, "Info", "Profile", new { userName = feedback.SenderName }, null)</span>
                     </div>
                 </div>
 

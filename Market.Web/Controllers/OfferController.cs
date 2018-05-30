@@ -26,7 +26,7 @@ namespace Market.Web.Controllers
         private readonly IFilterService _filterService;
         private readonly IFilterItemService _filterItemService;
         private readonly int offerDays = 30;
-        public int pageSize = 1;
+        public int pageSize = 8;
         public int pageSizeInUserInfo = 10;
         public OfferController(IOfferService offerService, IGameService gameService, IFilterService filterService, IFilterItemService filterItemService, IUserProfileService userProfileService)
         {
@@ -311,6 +311,8 @@ namespace Market.Web.Controllers
             SelectList selectList = new SelectList(_gameService.GetGames());
 
             IList<SelectListItem> games = new List<SelectListItem>();
+            model.SellerPaysMiddleman = true;
+            //games.Add(new SelectListItem { Value = "", Text = "Выберите игру", Selected = true, Disabled = tr });
             foreach (var game in _gameService.GetGames())
             {
                 games.Add(new SelectListItem { Value = game.Value, Text = game.Name });
@@ -405,7 +407,7 @@ namespace Market.Web.Controllers
             _offerService.CreateOffer(offer);
             _offerService.SaveOffer();
             
-            offer.JobId = MarketHangfire.SetDeactivateOfferJob(offer.Id, TimeSpan.FromDays(30));
+            offer.JobId = MarketHangfire.SetDeactivateOfferJob(offer.Id, Url.Action("Activate", "Offer", new { id = offer.Id }, protocol: Request.Url.Scheme), TimeSpan.FromDays(30));
 
             _offerService.SaveOffer();
 
@@ -483,7 +485,7 @@ namespace Market.Web.Controllers
                     offer.DateDeleted = offer.DateCreated.AddDays(offerDays);
                     _offerService.SaveOffer();
 
-                    offer.JobId = MarketHangfire.SetDeactivateOfferJob(offer.Id, TimeSpan.FromDays(30));
+                    offer.JobId = MarketHangfire.SetDeactivateOfferJob(offer.Id, Url.Action("Activate", "Offer", new { id = offer.Id }, protocol: Request.Url.Scheme), TimeSpan.FromDays(30));
                     _offerService.SaveOffer();
                     return View();
                 }

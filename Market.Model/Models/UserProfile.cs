@@ -109,6 +109,7 @@ namespace Market.Model.Models
 
         public string Discription { get; set; }
         public bool IsOnline { get; set; }
+        public string LockoutReason { get; set; }
         public DateTime RegistrationDate { get; set; }
 
         public string Name { get; set; }

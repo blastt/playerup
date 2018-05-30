@@ -50,6 +50,7 @@ namespace Market.Web.Hangfire
             builder.RegisterType<ConfirmOrderJob>().AsSelf().InstancePerLifetimeScope();
             builder.RegisterType<LeaveFeedbackJob>().AsSelf().InstancePerLifetimeScope();
             builder.RegisterType<DeactivateOfferJob>().AsSelf().InstancePerLifetimeScope();
+            builder.RegisterType<SendEmailChangeStatus>().AsSelf().InstancePerLifetimeScope();
             //builder.RegisterType<OrderService>().As<IOrderService>();
             IContainer container = builder.Build();
             GlobalConfiguration.Configuration.UseActivator(new MarketJobActivator(container));
@@ -74,11 +75,17 @@ namespace Market.Web.Hangfire
                 j => j.Do(sellerId, buyerId, orderId),
                 timeSpan);
         }
-        public static string SetDeactivateOfferJob(int offerId, TimeSpan timeSpan)
+        public static string SetDeactivateOfferJob(int offerId,string callbackUrl, TimeSpan timeSpan)
         {
             return BackgroundJob.Schedule<DeactivateOfferJob>(
-                j => j.Do(offerId),
+                j => j.Do(offerId, callbackUrl),
                 timeSpan);
+        }
+
+        public static string SetSendEmailChangeStatus(int orderId, string userEmail , string currentStatus, string callbackUrl)
+        {
+            return BackgroundJob.Enqueue<SendEmailChangeStatus>(
+                j => j.Do(orderId, userEmail, currentStatus, callbackUrl));
         }
     }
 }

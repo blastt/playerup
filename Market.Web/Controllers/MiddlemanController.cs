@@ -116,6 +116,11 @@ namespace Market.Web.Controllers
 
                         order.JobId = MarketHangfire.SetOrderCloseJob(order.Id, TimeSpan.FromDays(1));
 
+
+                        MarketHangfire.SetSendEmailChangeStatus(order.Id, order.Seller.ApplicationUser.Email, order.CurrentStatus.DuringName, Url.Action("SellDetails", "Order", new { id = order.Id }, protocol: Request.Url.Scheme));
+
+                        MarketHangfire.SetSendEmailChangeStatus(order.Id, order.Buyer.ApplicationUser.Email, order.CurrentStatus.DuringName, Url.Action("BuyDetails", "Order", new { id = order.Id }, protocol: Request.Url.Scheme));
+
                         _orderService.SaveOrder();
                         return RedirectToAction("MyOrderList");
 
@@ -195,6 +200,11 @@ namespace Market.Web.Controllers
                                 _orderService.SaveOrder();
 
                                 buyerOrder.JobId = MarketHangfire.SetConfirmOrderJob(buyerOrder.Id, TimeSpan.FromDays(2));
+
+
+                                MarketHangfire.SetSendEmailChangeStatus(buyerOrder.Id, buyerOrder.Seller.ApplicationUser.Email, buyerOrder.CurrentStatus.DuringName, Url.Action("SellDetails", "Order", new { id = buyerOrder.Id }, protocol: Request.Url.Scheme));
+
+                                MarketHangfire.SetSendEmailChangeStatus(buyerOrder.Id, buyerOrder.Buyer.ApplicationUser.Email, buyerOrder.CurrentStatus.DuringName, Url.Action("BuyDetails", "Order", new { id = buyerOrder.Id }, protocol: Request.Url.Scheme));
 
                                 _orderService.SaveOrder();
 

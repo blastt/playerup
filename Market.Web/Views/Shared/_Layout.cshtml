@@ -5,12 +5,13 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="utf-8" />
+    <link rel="icon" href="~/Content/Images/____________1_Fso_icon.ico" />
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&amp;subset=cyrillic" rel="stylesheet">
     <link rel="stylesheet" href="~/Content/range-slider.css">
     <link rel="stylesheet" href="~/Content/jquery-ui.css">
-    
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title – приложение ASP.NET</title>
+    <title>@ViewBag.Title | @Request.Url.Host</title>
     @Styles.Render("~/Content/css")
 
     @Scripts.Render("~/bundles/modernizr")
@@ -94,6 +95,7 @@
                             <li>@Html.ActionLink("Продать", "Create", "Offer")</li>
                             <li>@Html.ActionLink("Связаться", "Contactus", "Help")</li>
                             <li>@Html.ActionLink("FAQ", "Faq", "Help")</li>
+                            <li>@Html.ActionLink("Оферта", "PublicOffer", "Help")</li>
                         </ul>
                     </div>
                     <div class="col-md-4 text-right">

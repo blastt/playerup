@@ -27,40 +27,40 @@ namespace Market.Web.Models
 
     public class SetPasswordViewModel
     {
-        [Required]
-        [StringLength(100, ErrorMessage = "Значение {0} должно содержать символов не менее: {2}.", MinimumLength = 6)]
+        [Required(ErrorMessage = "Введите новый пароль")]
+        [StringLength(100, ErrorMessage = "Пароль должен быть не менее {2} и не более {1} символов", MinimumLength = 6)]
         [DataType(DataType.Password)]
         [Display(Name = "Новый пароль")]
         public string NewPassword { get; set; }
 
         [DataType(DataType.Password)]
         [Display(Name = "Подтверждение нового пароля")]
-        [Compare("NewPassword", ErrorMessage = "Новый пароль и его подтверждение не совпадают.")]
+        [Compare("NewPassword", ErrorMessage = "Новый пароль и его подтверждение не совпадают")]
         public string ConfirmPassword { get; set; }
     }
 
     public class ChangePasswordViewModel
     {
-        [Required]
+        [Required(ErrorMessage = "Введите текущий пароль")]
         [DataType(DataType.Password)]
         [Display(Name = "Текущий пароль")]
         public string OldPassword { get; set; }
 
-        [Required]
-        [StringLength(100, ErrorMessage = "Значение {0} должно содержать символов не менее: {2}.", MinimumLength = 6)]
+        [Required(ErrorMessage = "Введите новый пароль")]
+        [StringLength(100, ErrorMessage = "Пароль должен быть не менее {2} и не более {1} символов", MinimumLength = 6)]
         [DataType(DataType.Password)]
         [Display(Name = "Новый пароль")]
         public string NewPassword { get; set; }
 
         [DataType(DataType.Password)]
         [Display(Name = "Подтверждение нового пароля")]
-        [Compare("NewPassword", ErrorMessage = "Новый пароль и его подтверждение не совпадают.")]
+        [Compare("NewPassword", ErrorMessage = "Новый пароль и его подтверждение не совпадают")]
         public string ConfirmPassword { get; set; }
     }
 
     public class AddPhoneNumberViewModel
     {
-        [Required]
+        [Required(ErrorMessage = "Введите номер телефона")]
         [Phone]
         [Display(Name = "Номер телефона")]
         public string Number { get; set; }
@@ -68,11 +68,11 @@ namespace Market.Web.Models
 
     public class VerifyPhoneNumberViewModel
     {
-        [Required]
+        [Required(ErrorMessage = "Введите код подтверждения")]
         [Display(Name = "Код")]
         public string Code { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Введите номер телефона")]
         [Phone]
         [Display(Name = "Номер телефона")]
         public string PhoneNumber { get; set; }

@@ -11,6 +11,7 @@ namespace Market.Web.Helpers
     {
         public static string IsSelected(this HtmlHelper html, string controllers = "", string actions = "", string cssClass = "active")
         {
+            
             ViewContext viewContext = html.ViewContext;
             bool isChildAction = viewContext.Controller.ControllerContext.IsChildAction;
 

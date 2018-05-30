@@ -12,19 +12,19 @@ namespace Market.Web.ViewModels
     public class CreateOfferViewModel
     {
         [Display(Name = "Заголовок")]
-        [StringLength(maximumLength: 50, MinimumLength = 2)]
+        [StringLength(maximumLength: 50, MinimumLength = 2, ErrorMessage = "Заголовок должен быть не менее {2} и не более {1} символов")]
         [Required(ErrorMessage = "Введите заголовок")]
         public string Header { get; set; }
 
         [Display(Name = "Описание")]
         [DataType(DataType.MultilineText)]
         [Required(ErrorMessage = "Введите описание")]
-        [StringLength(maximumLength: 500, MinimumLength = 1)]
+        [StringLength(maximumLength: 500, MinimumLength = 1, ErrorMessage = "Заголовок должен быть не менее {2} и не более {1} символов")]
         public string Discription { get; set; }
 
-        [Required]
-        [Display(Name = "Логин steam")]
-        [Remote("IsSteamLoginExists", "Offer", ErrorMessage = "Этот логин уже использовался")]
+        [Required(ErrorMessage = "Введите логин игрового аккаунта")]
+        [Display(Name = "Логин игрового аккаунта")]
+        //[Remote("IsSteamLoginExists", "Offer", ErrorMessage = "Этот логин уже использовался")]
         public string SteamLogin { get; set; }
 
 

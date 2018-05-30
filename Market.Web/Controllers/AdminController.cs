@@ -27,16 +27,18 @@ namespace Market.Web.Controllers
         private readonly IGameService _gameService;
         private readonly IFilterService _filterService;
         private readonly IFilterItemService _filterItemService;
+        private readonly IDialogService _dialogService;
         private readonly int offerDays = 30;
         public int pageSize = 4;
         public int pageSizeInUserInfo = 10;
-        public AdminController(IOfferService offerService, IGameService gameService, IFilterService filterService, IFilterItemService filterItemService, IUserProfileService userProfileService)
+        public AdminController(IOfferService offerService, IGameService gameService, IFilterService filterService, IDialogService dialogService, IFilterItemService filterItemService, IUserProfileService userProfileService)
         {
             _offerService = offerService;
             _gameService = gameService;
             _filterService = filterService;
             _filterItemService = filterItemService;
             _userProfileService = userProfileService;
+            _dialogService = dialogService;
         }
 
         public ApplicationUserManager UserManager
@@ -373,6 +375,148 @@ namespace Market.Web.Controllers
             return RedirectToAction("GameList");
         }
 
+        public ActionResult Inbox(string sortOrder, string currentFilter, string searchString, string senderName, string id, int? page)
+        {
+            ViewData["CurrentSort"] = sortOrder;
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
+            //ViewBag.FilterParam = String.IsNullOrEmpty(filter) ? "all" : "";
+            ViewData["SenderName"] = senderName;
+            ViewData["SearchString"] = searchString;
+            ViewData["CurrentFilter"] = currentFilter;
+            var currentUser = _userProfileService.GetUserProfileById(id);
+            var dialogs = _dialogService.GetUserDialogs(currentUser.Id);
+
+            //var messages = _db.Messages.Find(m => m.ReceiverId == User.Identity.GetUserId());
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                //dialogs = dialogs.Where(s => s.MessageBody.Contains(searchString) && s.ReceiverId == User.Identity.GetUserId());
+            }
+            if (!String.IsNullOrEmpty(senderName))
+            {
+                //var userProfile = _userProfileService.GetUserProfiles().Where(m => m.ApplicationUser.UserName == senderName).FirstOrDefault();
+                //if (userProfile != null)
+                //{
+                //    messages = messages.Where(s => s.SenderId == userProfile.Id && s.ReceiverId == User.Identity.GetUserId());
+                //}
+                //else
+                //{
+                //    messages = Array.Empty<Message>();
+                //}
+
+            }
+
+            switch (currentFilter)
+            {
+                case "read":
+                    IList<Dialog> readDialogs = new List<Dialog>();
+                    foreach (var dialog in dialogs)
+                    {
+                        if (dialog.Messages.Any(m => m.ToViewed))
+                        {
+                            readDialogs.Add(dialog);
+                        }
+
+                    }
+                    dialogs = readDialogs;
+                    break;
+                case "unread":
+                    IList<Dialog> unreadDialogs = new List<Dialog>();
+                    foreach (var dialog in dialogs)
+                    {
+                        if (dialog.Messages.Any(m => !m.ToViewed))
+                        {
+                            unreadDialogs.Add(dialog);
+                        }
+
+                    }
+                    dialogs = unreadDialogs;
+                    break;
+
+                default:
+                    break;
+            }
+            //switch (sortOrder)
+            //{
+            //    case "name_desc":
+            //        //messages = messages.OrderByDescending(s => s.SenderName);
+            //        break;
+            //    case "Date":
+            //        messages = messages.OrderBy(s => s.CreatedDate);
+            //        break;
+            //    case "date_desc":
+            //        messages = messages.OrderByDescending(s => s.CreatedDate);
+            //        break;
+
+            //    default:  // Name ascending 
+            //        messages = messages.OrderByDescending(s => s.CreatedDate);
+            //        break;
+            //}
+
+            DialogListViewModel model = new DialogListViewModel()
+            {
+                Dialogs = Mapper.Map<IEnumerable<Dialog>, IEnumerable<DialogViewModel>>(dialogs)
+
+
+            };
+
+            foreach (var d in model.Dialogs)
+            {
+                var otherUserId = _dialogService.GetOtherUserInDialog(d.Id, id);
+                var otherUser = _userProfileService.GetUserProfileById(otherUserId);
+                if (otherUser != null)
+                {
+                    d.otherUserId = otherUser.Id;
+                    d.otherUserName = otherUser.Name;
+                    d.otherUserImage = otherUser.ImagePath;
+                    d.CountOfNewMessages = d.Messages.Where(m => !m.ToViewed && m.SenderId != currentUser.Id).Count();
+                }
+            }
+            return View(model);
+        }
+
+        public ActionResult Details(int? dialogId)
+        {
+            string currentUserId = User.Identity.GetUserId();
+            string dialogWithUserId = null;
+            string dialogWithUserImage = null;
+            if (dialogId != null)
+            {
+                Dialog dialog = _dialogService.GetDialog(dialogId.Value);
+                if (dialog != null && (_dialogService.GetUserDialogs(currentUserId).Count() != 0))
+                {
+
+                    if (dialog.CompanionId == currentUserId)
+                    {
+                        dialogWithUserId = dialog.CreatorId;
+                        dialogWithUserImage = dialog.Creator.ImagePath;
+                    }
+                    else if (dialog.CreatorId == currentUserId)
+                    {
+                        dialogWithUserId = dialog.CompanionId;
+                        dialogWithUserImage = dialog.Companion.ImagePath;
+                    }
+
+                    if (dialogWithUserId == null)
+                    {
+                        return HttpNotFound();
+                    }
+                    foreach (var message in dialog.Messages.Where(m => m.SenderId != currentUserId))
+                    {
+                        message.ToViewed = true;
+                    }
+                    _dialogService.SaveDialog();
+                    var model = Mapper.Map<Dialog, DialogViewModel>(dialog);
+                    model.otherUserId = dialogWithUserId;
+                    model.otherUserImage = dialogWithUserImage;
+
+                    return View(model);
+                }
+            }
+            return HttpNotFound();
+        }
+
         public ActionResult UserList()
         {
             IEnumerable<UserProfileViewModel> model = Mapper.Map<IEnumerable<UserProfile>, IEnumerable<UserProfileViewModel>>(_userProfileService.GetUserProfiles());
@@ -430,16 +574,35 @@ namespace Market.Web.Controllers
             return HttpNotFound();
         }
 
-        public async System.Threading.Tasks.Task<ActionResult> LockoutUserAsync(string id)
+        public ActionResult LockoutUserAsync(string id)
         {
-            var result = await UserManager.SetLockoutEnabledAsync(id, true);
+            if (id != null)
+            {
+                LockoutUserViewModel model = new LockoutUserViewModel()
+                {
+                    UserId = id
+                };
+                return View(model);
+            }
+            return HttpNotFound();
+        }
+
+        [HttpPost]
+        public async System.Threading.Tasks.Task<ActionResult> LockoutUserAsync(LockoutUserViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return HttpNotFound();
+            }
+            var result = await UserManager.SetLockoutEnabledAsync(model.UserId, true);
             TempData["message"] = string.Format("Ошибка");
             if (result.Succeeded)
             {
                 
-                var lockoutResult = await UserManager.SetLockoutEndDateAsync(id, DateTimeOffset.MaxValue);
-                var user = UserManager.FindById(id);
-                var updateStampResult = await UserManager.UpdateSecurityStampAsync(id);
+                var lockoutResult = await UserManager.SetLockoutEndDateAsync(model.UserId, DateTimeOffset.MaxValue);
+                var user = UserManager.FindById(model.UserId);
+                user.UserProfile.LockoutReason = model.LockoutReason;
+                var updateStampResult = await UserManager.UpdateSecurityStampAsync(model.UserId);
                 
                 if (result.Succeeded && updateStampResult.Succeeded)
                 {
@@ -453,13 +616,21 @@ namespace Market.Web.Controllers
         public virtual async System.Threading.Tasks.Task<ActionResult> UnlockUserAccount(string id)
         {
             var result = UserManager.SetLockoutEnabledAsync(id, false);
-            TempData["message"] = string.Format("Ошибка");
-            if (result.Result.Succeeded)
+            var user =_userProfileService.GetUserProfileById(id);
+            if (user != null)
             {
-                await UserManager.ResetAccessFailedCountAsync(id);
-                TempData["message"] = string.Format("Пользователь Разблокирован");
+                TempData["message"] = string.Format("Ошибка");
+                if (result.Result.Succeeded)
+                {
+                    user.LockoutReason = null;
+                    _userProfileService.SaveUserProfile();
+                    await UserManager.ResetAccessFailedCountAsync(id);
+                    TempData["message"] = string.Format("Пользователь Разблокирован");
+                }
+                return RedirectToAction("UserList");
             }
-            return RedirectToAction("UserList");
+
+            return HttpNotFound();
         }
     }
 }

@@ -27,16 +27,18 @@ namespace Market.Web
     {
         public Task SendAsync(IdentityMessage message)
         {
+            
             return ConfigSendGridasync(message);
         }
 
         private async Task ConfigSendGridasync(IdentityMessage message)
         {
+            
             // Create a Web transport for sending email.
             var apiKey = Environment.GetEnvironmentVariable("SENDGRID_KEY");
             //var apiKey = "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";
             var client = new SendGridClient(apiKey);
-            var from = new EmailAddress("test234545@gmail.com", "Example User");
+            var from = new EmailAddress("support@playerup.ru", "PlayerUp");
             var subject = message.Subject;
             
             var to = new EmailAddress(message.Destination);
@@ -60,7 +62,9 @@ namespace Market.Web
             var msg = await MessageResource.CreateAsync(
                 to: new PhoneNumber(message.Destination),
                 from: new PhoneNumber("+15172101708"),
-                body: message.Body);
+                body: message.Body
+                );
+            
         }
     }
 

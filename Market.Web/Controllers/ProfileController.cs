@@ -218,6 +218,14 @@ namespace Trader.WEB.Controllers
         [Authorize]
         public ActionResult Upload()
         {
+            var userProfile = _userProfileService.GetUserProfileById(User.Identity.GetUserId());
+            if (userProfile != null)
+            {
+                if (userProfile.ImagePath != null)
+                {
+                    return View((object)userProfile.ImagePath);
+                }
+            }
             return View();
         }
         [HttpPost]
@@ -238,9 +246,10 @@ namespace Trader.WEB.Controllers
                     string urlPath = Url.Content("~/Content/Images/FilterItems/" + fileName);
                     image.SaveAs(fullPath);
                     user.ImagePath = urlPath;
+                    _userProfileService.SaveUserProfile();
                     return RedirectToAction("Buy", "Offer");
                 }
-                _userProfileService.SaveUserProfile();
+                
             }
             return HttpNotFound();
             

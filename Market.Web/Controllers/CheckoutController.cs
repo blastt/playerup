@@ -3,6 +3,7 @@ using Hangfire;
 using Market.Model.Models;
 using Market.Service;
 using Market.Web.Hangfire;
+using Market.Web.Helpers;
 using Market.Web.ViewModels;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
@@ -26,10 +27,11 @@ namespace Trader.WEB.Controllers
         private readonly IOrderService _orderService;
         private readonly IOfferService _offerService;
         private readonly IAccountInfoService _accountInfoService;
+        private readonly IIdentityMessageService _identityMessageService;
         public CheckoutController(IUserProfileService userProfileService, IOrderService orderService,
             IOfferService offerService, IAccountInfoService accountInfoService,
             IOrderStatusService orderStatusService, IBillingService billingService,
-            ITransactionService transactionService)
+            ITransactionService transactionService, IIdentityMessageService identityMessageService)
         {
             _orderStatusService = orderStatusService;
             _userProfileService = userProfileService;
@@ -38,14 +40,15 @@ namespace Trader.WEB.Controllers
             _accountInfoService = accountInfoService;
             _billingService = billingService;
             _transactionService = transactionService;
+            _identityMessageService = identityMessageService;
         }
 
         [HttpGet]
-        public ActionResult Checkoutme(int? offerId)
+        public ActionResult Checkoutme(int? id)
         {
-            if (offerId != null)
+            if (id != null)
             {
-                var offer = _offerService.GetOffer(offerId.Value);
+                var offer = _offerService.GetOffer(id.Value);
                 if (offer != null && offer.Order == null && offer.State == OfferState.active && offer.UserProfileId != User.Identity.GetUserId())
                 {
                     CheckoutViewModel model = new CheckoutViewModel()
@@ -119,6 +122,10 @@ namespace Trader.WEB.Controllers
                     offer.JobId = null;
                 }
                 _offerService.SaveOffer();
+
+                MarketHangfire.SetSendEmailChangeStatus(offer.Order.Id, offer.Order.Seller.ApplicationUser.Email, offer.Order.CurrentStatus.DuringName, Url.Action("SellDetails", "Order", new { id = offer.Order.Id }, protocol: Request.Url.Scheme));
+
+                MarketHangfire.SetSendEmailChangeStatus(offer.Order.Id, offer.Order.Buyer.ApplicationUser.Email, offer.Order.CurrentStatus.DuringName, Url.Action("BuyDetails", "Order", new { id = offer.Order.Id }, protocol: Request.Url.Scheme));
 
                 offer.Order.JobId = MarketHangfire.SetOrderCloseJob(offer.Order.Id, TimeSpan.FromDays(1));
 
@@ -218,7 +225,10 @@ namespace Trader.WEB.Controllers
                         }
 
                         _orderService.SaveOrder();
-                        
+
+                        MarketHangfire.SetSendEmailChangeStatus(order.Id, order.Seller.ApplicationUser.Email, order.CurrentStatus.DuringName, Url.Action("SellDetails", "Order", new { id = order.Id }, protocol: Request.Url.Scheme));
+
+                        MarketHangfire.SetSendEmailChangeStatus(order.Id, order.Buyer.ApplicationUser.Email, order.CurrentStatus.DuringName, Url.Action("BuyDetails", "Order", new { id = order.Id }, protocol: Request.Url.Scheme));
                         order.JobId = MarketHangfire.SetOrderCloseJob(order.Id, TimeSpan.FromDays(1));
                         //_orderService.UpdateOrder(order);
                         _orderService.SaveOrder();
@@ -378,6 +388,11 @@ namespace Trader.WEB.Controllers
                                 }
                                 //order.JobId = MarketHangfire.SetOrderCloseJob(order.Id, TimeSpan.FromMinutes(5));
                                 _orderService.SaveOrder();
+
+
+                                MarketHangfire.SetSendEmailChangeStatus(order.Id, order.Seller.ApplicationUser.Email, order.CurrentStatus.DuringName, Url.Action("SellDetails", "Order", new { id = order.Id }, protocol: Request.Url.Scheme));
+
+                                MarketHangfire.SetSendEmailChangeStatus(order.Id, order.Buyer.ApplicationUser.Email, order.CurrentStatus.DuringName, Url.Action("BuyDetails", "Order", new { id = order.Id }, protocol: Request.Url.Scheme));
                                 TempData["orderSellStatus"] = "Ваши данные были отправлены на проверку гаранту";
                                 return RedirectToAction("SellDetails", "Order", new { id = order.Id });
                             }
@@ -397,7 +412,7 @@ namespace Trader.WEB.Controllers
                 var order = _orderService.GetOrder(id.Value);
                 if (result && order != null)
                 {
-                    if (order != null)
+                    if (order.JobId != null)
                     {
                         BackgroundJob.Delete(order.JobId);
                         order.JobId = null;
@@ -407,7 +422,14 @@ namespace Trader.WEB.Controllers
 
                     order.JobId = MarketHangfire.SetLeaveFeedbackJob(order.SellerId, order.BuyerId, order.Id, TimeSpan.FromDays(15));
 
+
+                    MarketHangfire.SetSendEmailChangeStatus(order.Id, order.Seller.ApplicationUser.Email, order.CurrentStatus.DuringName, Url.Action("SellDetails", "Order", new { id = order.Id }, protocol: Request.Url.Scheme));
+
+                    MarketHangfire.SetSendEmailChangeStatus(order.Id, order.Buyer.ApplicationUser.Email, order.CurrentStatus.DuringName, Url.Action("BuyDetails", "Order", new { id = order.Id }, protocol: Request.Url.Scheme));
+
                     _orderService.SaveOrder();
+
+
                     TempData["orderBuyStatus"] = "Спасибо за подтверждение сделки! Сделка успешно закрыта.";
                     return RedirectToAction("BuyDetails", "Order", new { id });
                 }

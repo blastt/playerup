@@ -4,14 +4,14 @@
 @model Market.Web.ViewModels.InfoUserProfileViewModel
 
 @{
-    ViewBag.Title = "Profile";
+    ViewBag.Title = Model.Name;
 }
 
 <div class="row">
 
 
     <div class="col-md-4">
-        <div class="card info-user-block" style="text-align:center">
+        <div class="card info-user-block mb-3" style="text-align:center">
             <img class="img-circle img-center avatar-148" src="@Model.ImagePath" alt="Alternate Text" />
 
 
