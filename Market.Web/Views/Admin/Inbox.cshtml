@@ -44,11 +44,7 @@
             </td>
 
             <td style=" max-width: 100px;overflow: hidden;text-overflow: ellipsis; white-space: nowrap; "><span id="message-text" class="wqe" style="">@dialog.Messages.LastOrDefault().MessageBody</span></td>
-            @*<td>@messageGroup.</td>*@
             <td title="@dialog.Messages.LastOrDefault().CreatedDate.ToShortTimeString()">@dialog.Messages.LastOrDefault().CreatedDate.ToShortDateString()</td>
-
-            @*<td class="remove-table"><a data-id="@dialog.Id" id="linkdelete" class="remove-link"><img src="~/Content/Images/trash.png" class="remove-icon" /></a></td>*@
-            @*<td style="color:red">@Html.ActionLink("X", "DeleteStory", new { lastMessageId = messageGroup.FirstOrDefault().Id}, null)</td>*@
             <td>
                 @Html.ActionLink("Детали", "Details", new { dialogId = dialog.Id })
             </td>

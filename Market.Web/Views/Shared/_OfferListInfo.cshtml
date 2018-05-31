@@ -4,7 +4,6 @@
 <div class="info-teble-content">
     <div class="offer-filter">
         <div class="row mb-3">
-
             <div class="col-sm-4">
                 @Html.TextBox("SearchString", Model.SearchInfo.SearchString, new { @class = "form-control", id = "searchString", placeholder = "Поиск..." })
             </div>
@@ -17,7 +16,6 @@
                     }
 
                 </select>
-
             </div>
             <div class="col-sm-4">
                 <input type="button" name="name" value="Поиск" class="btn btn-search" onclick="SearchOffersInfo()" />
@@ -28,8 +26,6 @@
                 Найдено: @Model.PageInfo.TotalItems
             </div>
         </div>
-
-
     </div>
 
     <div class="table-offers text-center">
@@ -49,9 +45,7 @@
         </div>
         @foreach (var offer in Model.Offers)
         {
-            @Html.Partial("_OfferInfoItem", offer)
-            
-
+            @Html.Partial("_OfferInfoItem", offer)          
         }
     </div>
     <input type="hidden" id="page" value="1" />

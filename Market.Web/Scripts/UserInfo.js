@@ -1,4 +1,5 @@
 ﻿$(document).ready(function () {
+
     SearchOffersInfo();
 });
 function SelectPageOffersInfo(page) {

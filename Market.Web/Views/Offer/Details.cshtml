@@ -104,7 +104,6 @@
                         <p class="price">@Html.DisplayFor(m => m.Price)</p>
                     </div>
                     <div class="text-center mb-4">
-                        @*@Html.ActionLink("Купить", "Checkoutme", "Checkout", new { offerId = Model.Id }, null);*@
                         @using (Html.BeginForm("Checkoutme", "Checkout", FormMethod.Get))
                         {
                             <input type="hidden" name="offerId" value="@Model.Id" />
@@ -115,7 +114,6 @@
                     </div>
 
                     <div class="text-center text-700">
-
                         @if (Model.SellerPaysMiddleman)
                         {
                             <span>
@@ -135,31 +133,20 @@
             </div>
         </div>
 
-
         <div class="row">
             <div class="col-md-12">
-
                 <div class="card" style="min-height: 300px">
                     <div class="block-label">@Model.Header</div>
                     <div class="block-body">
                         <span>@Model.Discription</span>
                     </div>
-
-
-
                 </div>
-
-
-
-
             </div>
         </div>
     </div>
 
     <div class="row" id="feedback-list">
-        @*@Html.Partial("_FeedbackList",Model.UserProfile.Feedbacks)*@
-        @*@Html.Partial("_FeedbackList", Model.Feedbacks)*@
-        @*@Html.Action("FeedbackList", "Feedback", new { page = 1, userId = Model.UserProfile.Id })*@
+
 
     </div>
 
@@ -183,14 +170,10 @@
                 <div class="form-group">
                     <img class="img-circle avatar-48" src="@Model.UserProfile.ImagePath" style="float:left; margin-right: 20px" alt="Alternate Text" />
                     <div>
-
                         @Html.ActionLink(Model.UserName, "Info", new { })
-
                         <p>
                             @Html.GetUserStatus(Model.UserName, new { @class = "badge badge-pill badge-online" }, new { @class = "badge badge-pill badge-offline" })
                         </p>
-
-
                     </div>
                 </div>
 
@@ -203,9 +186,6 @@
             <div class="modal-footer">
                 <button id="sendMessage" type="button" onclick="SendMessage()" class="btn btn-submit">Отправить</button>
             </div>
-
-
-
         </div>
     </div>
 </div>

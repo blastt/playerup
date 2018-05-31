@@ -4,28 +4,6 @@
 @using Market.Web.Helpers
 @model Market.Web.ViewModels.FeedbackListViewModel
 
-@*<table class="table table-striped">
-        @foreach (var feedback in Model)
-        {
-            <tr>
-                @if (feedback.Grade == Emotions.Good)
-                {
-                    <td><img src="~/Content/Images/smile-pos.png" style="width: 25px; height: 25px; vertical-align:bottom"/></td>
-                }
-                else
-                {
-                    <td><img src="~/Content/Images/smile-neg.png" style="width: 25px; height: 25px" /></td>
-                }
-                <td align="center">
-                    <div>
-                        @Html.ActionLink(feedback.WhoLeftName, "Info", "Profile", new {prof = feedback.WhoLeftName}, null)
-                    </div>
-                </td>
-                <td align="center">@feedback.Comment</td>
-                <td align="center">@feedback.Date.ToShortDateString()</td>
-            </tr>
-        }
-    </table>*@
 <div class="col-lg-12">
     <h4>Отзывы: <span class="feed-count-label">@Model.PageInfo.TotalItems</span></h4>
 </div>

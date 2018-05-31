@@ -1,55 +1,35 @@
 ﻿@model Market.Web.Models.RegisterViewModel
 @{
-    /**/
-
     ViewBag.Title = "Регистрация";
 }
 
 <div class="row">
     <div class="col-lg-5 auth-box" style="float: none; margin: 0 auto">
-
         @Html.Partial("_AuthMenu")
-
         <div class="auth-body">
             <div class="row">
-
-
                 <div class="col-md-12">
                     @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
                     {
                         @Html.AntiForgeryToken()
-                        <div class="form-group">
-                           
-                  
+                        <div class="form-group">                                            
                             @Html.TextBoxFor(m => m.UserName, new { @class = "form-control form-control-md", placeholder = "Имя пользователя" })
-                            @Html.ValidationMessageFor(m => m.UserName)
-                          
+                            @Html.ValidationMessageFor(m => m.UserName)                          
                         </div>
-                        <div class="form-group">
-                            
-                 
+                        <div class="form-group">                                             
                             @Html.TextBoxFor(m => m.Email, new { @class = "form-control form-control-md", placeholder = "Почта" })
-                            @Html.ValidationMessageFor(m => m.Email)
-                   
+                            @Html.ValidationMessageFor(m => m.Email)                   
                         </div>
-                        <div class="form-group">
-                            
-                     
+                        <div class="form-group">                                                
                             @Html.PasswordFor(m => m.Password, new { @class = "form-control form-control-md", placeholder = "Пароль" })
-                            @Html.ValidationMessageFor(m => m.Password)
-                         
+                            @Html.ValidationMessageFor(m => m.Password)                         
                         </div>
-                        <div class="form-group">
-                            
-                      
+                        <div class="form-group">                                                  
                             @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control form-control-md", placeholder = "Подтверждение пароля" })
-                            @Html.ValidationMessageFor(m => m.ConfirmPassword)
-                         
+                            @Html.ValidationMessageFor(m => m.ConfirmPassword)                         
                         </div>
-                        <div class="text-center">
-                            
-                                <input type="submit" class="btn btn-submit" value="Зарегистрироваться" />
-                           
+                        <div class="text-center">                            
+                                <input type="submit" class="btn btn-submit" value="Зарегистрироваться" />                          
                         </div>
                     }
                 </div>
@@ -57,6 +37,6 @@
         </div>
     </div>
 </div>
-        @section Scripts {
-            @Scripts.Render("~/bundles/jqueryval")
-        }
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

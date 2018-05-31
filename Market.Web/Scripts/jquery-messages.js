@@ -1,41 +1,72 @@
-﻿
-$(function SetDialogsClickable() {
-    $(".clickable").each(function () {
-        $(this).on('click', function (e) {
-            var id = $(this).data('id');
-            location.href = "/dialog/details?dialogId=" + id;
-        });
+﻿$(document).ready(function () {
+    var messageInput = $('#messageBody');
+    messageInput.click(function () {
+        SetMessagesViewed();
+    });
+    messageInput.keypress(function (e) {
+        if (e.which == 13) {
+            if (messageInput.val().trim() !== '') {
+                CreateNewMessage();
+                SetMessagesViewed();
+            }
+        }
     });
 });
 
 
+function SetMessagesViewed() {
+    $.ajax({
+        url: '/Message/SetMessagesViewed',
+        type: "POST",
+        data: { dialogId: $('#dialogId').val() },
+        dataType: "json",
+        success: function (response) {
 
-$(function SetDeleteDialogClickable() {
-    $("#messages #linkdelete").each(function () {
-
-        $(this).on('click', function (e) {
-            var obj = $(this); // first store $(this) in obj
-            var id = $(this).data('id'); // get id of data using this 
-            $.ajax({
-                url: "/Message/DeleteAjax",
-                data: { id: id },
-                //cache: false,
-                //contentType: false,
-                //processData: false,
-                //mimeType: "multipart/form-data",
-                type: "Post",
-                dataType: "Json",
-                success: function (result) {
-                    if (result.Success) {
-                        $(obj).closest("tr").hide('slow', function () { $(obj).closest("tr").remove(); }); // You can remove row like this
-                    }
-                    eval(result.Script);
-                },
-                error: function () {
-                    alert("خطا!");
-                }
-            });
-        });
+        }
     });
-});
 
+}
+
+window.onload = function () {
+    messageScrollToButton();
+    inboxScrollToButton();
+}
+function messageScrollToButton() {
+    var objDiv = $('#messages-col');
+    objDiv.scrollTop(objDiv[0].scrollHeight);
+}
+
+function inboxScrollToButton() {
+    $(window).scrollTop(320);
+}
+
+var btn = document.getElementById("send");
+var messageInput = $('#messageBody');
+btn.onclick = function () {
+    if (messageInput.val().trim() !== '') {
+        CreateNewMessage();
+    }
+
+}
+
+function CreateNewMessage() {
+    var message = {
+        "MessageBody": $('#messageBody').val(),
+        "ReceiverId": $('#receiverId').val()
+    };
+    $.ajax({
+        url: "/Message/New",
+        type: "POST",
+        contentType: "application/json",
+        data: JSON.stringify({ model: message }),
+        dataType: "Json",
+
+        success: function (result) {
+
+        },
+        error: function () {
+            alert("خطا!");
+        }
+    });
+    modal.style.display = "none";
+}

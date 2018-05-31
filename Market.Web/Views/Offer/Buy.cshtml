@@ -12,18 +12,14 @@
 
 <div class="row">
     <div class="col-lg-12">
-
         <div class="game-filter" id="game-filter">
             @foreach (var g in Model.Games)
             {
                 <a class="game-filter-item @Html.IsSelectedGame(games: g.Value, actions: "buy", controllers: "offer")" href="@Url.Action("Buy", "Offer", new { game = g.Value })">
                     <div><img src="@g.ImagePath" style="width:40px" alt="@g.Name" title="@g.Name" /></div>
                 </a>
-
             }
-
         </div>
-
     </div>
     <div class="col-lg-12 mb-2">
         <span class="game-title">Игра &#8594 <span>@game</span> </span>
@@ -36,12 +32,10 @@
         <div id="list">
         </div>
     </div>
-
 </div>
 <input type="hidden" name="Game" id="game" value="@Model.Game" />
 <input type="hidden" name="Page" id="page" value="@Model.Page" />
 <input type="hidden" name="SearchString" id="searchString" value="@Model.SearchString" />
-
 <script src="@RouteJs.RouteJsHandler.HandlerUrl"></script>
 
 @section scripts

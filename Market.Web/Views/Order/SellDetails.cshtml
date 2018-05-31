@@ -30,8 +30,6 @@
                 <div class="order-details-title">
                     <h4>Информащия о заказе</h4>
                 </div>
-
-
             </div>
             <div class="order-details-body">
                 <div class="row">
@@ -103,14 +101,9 @@
                             <input id="receiverId" value="@Model.BuyerId" type="hidden" />
 
                             <input type="submit" id="givefeed" value="Оставить отзыв покупателю" class="btn btn-order-leavefeedback mt-3" />
-
                         }
-
-
-
                     </div>
                 </div>
-
             </div>
             <div class="order-details-log-head">
                 <div class="order-details-title">
@@ -118,8 +111,6 @@
                         Журнал событий
                     </h4>
                 </div>
-
-
             </div>
             <div class="order-details-log-body">
 
@@ -152,11 +143,6 @@
                     }
                 }
             </div>
-            @*<div class="row">
-                    <div class="col-md-12">
-                        @Html.PageLinks(Model.PagingInfo, x => Url.Action("Inbox", new { page = x, sortOrder = ViewBag.CurrentSort, searchString = ViewBag.SearchString }))
-                    </div>
-                </div>*@
         </div>
     </div>
 
@@ -173,7 +159,6 @@
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
-
             <input type="hidden" id="receiverId" name="ReceiverId" value="@Model.Id" />
 
             <div class="modal-body">
@@ -198,17 +183,11 @@
                             </label>
                         </div>
                     </div>
-
-
-
-
                 </div>
 
                 <div class="form-group">
                     <textarea id="comment" class="form-control" rows="5"></textarea>
                 </div>
-
-
             </div>
             <div class="modal-footer">
                 <button id="leaveFeedback" type="button" onclick="SendMessage()" class="btn btn-submit">Оставить отзыв</button>

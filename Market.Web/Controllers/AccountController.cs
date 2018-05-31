@@ -21,12 +21,14 @@ namespace Market.Web.Controllers
     {
 
         private readonly IUserProfileService _userProfileService;
+        private readonly IIdentityMessageService _identityMessageService;
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
 
-        public AccountController(IUserProfileService userProfileService)
+        public AccountController(IUserProfileService userProfileService, IIdentityMessageService identityMessageService)
         {
             _userProfileService = userProfileService;
+            _identityMessageService = identityMessageService;
         }
 
         public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
@@ -106,13 +108,17 @@ namespace Market.Web.Controllers
             // send email to the user with the confirmation link
         }
         [AllowAnonymous]
-        public async Task<ActionResult> ConfirmEmail(string userId, string code)
+        public async Task<ActionResult> ConfirmEmail(string userId, string code, string email)
         {
             if (userId == null || code == null)
             {
                 return View("ChangeEmailError");
             }
-
+            var user = await UserManager.FindByIdAsync(userId);
+            if (user != null)
+            {
+                user.Email = email;
+            }
             var result = await UserManager.ConfirmEmailAsync(userId, code);
             return View(result.Succeeded ? "ConfirmEmailSuccess" : "ChangeEmailError");
         }
@@ -152,8 +158,13 @@ namespace Market.Web.Controllers
                     string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                     var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code, email = model.NewEmail }, protocol: Request.Url.Scheme);
 
-                    await UserManager.SendEmailAsync(user.Id, "Подтверждение почты", "Вы предоставили новый email-адрес для вашей" +
-                        " учётной записи Для смены адреса вам необходимо его активировать, щелкнув <a href=\"" + callbackUrl + "\">здесь</a>");
+                    await _identityMessageService.SendAsync(new IdentityMessage
+                    {
+                        Body = "Вы предоставили новый email-адрес для вашей" +
+                        " учётной записи Для смены адреса вам необходимо его активировать, щелкнув <a href=\"" + callbackUrl + "\">здесь</a>",
+                        Subject = "Подтверждение почты",
+                        Destination = model.NewEmail
+                    });
 
                     return View("UpdateEmailRequest");
 
@@ -323,11 +334,14 @@ namespace Market.Web.Controllers
                 else
                 {
                     string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                    var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                    var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code, email = user.ApplicationUser.Email }, protocol: Request.Url.Scheme);
                     await UserManager.SendEmailAsync(user.Id, "Подтверждение учетной записи", "Подтвердите вашу учетную запись, щелкнув <a href=\"" + callbackUrl + "\">здесь</a>");
                     ModelState.AddModelError("", "Нужно активировать ваш аккаунт. Перейдите по ссылке, которую мы вам выслали на почту");
+                    return View(model);
                 }
+                
             }
+            ModelState.AddModelError("", "Неудачная попытка входа.");
             return View(model);
             
         }
@@ -415,7 +429,7 @@ namespace Market.Web.Controllers
                     // Дополнительные сведения о включении подтверждения учетной записи и сброса пароля см. на странице https://go.microsoft.com/fwlink/?LinkID=320771.
                     // Отправка сообщения электронной почты с этой ссылкой
                     string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                    var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                    var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code, email = user.Email }, protocol: Request.Url.Scheme);
                     await UserManager.SendEmailAsync(user.Id, "Подтверждение учетной записи", "Подтвердите вашу учетную запись, щелкнув <a href=\"" + callbackUrl + "\">здесь</a>");
 
 

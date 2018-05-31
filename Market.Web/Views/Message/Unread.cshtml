@@ -1,5 +1,5 @@
 ﻿@model Market.Web.ViewModels.DialogListViewModel
-@using Microsoft.AspNet.Identity
+
 @{
     ViewBag.Title = "непрочитанные сообщения";
 
@@ -28,7 +28,6 @@
                     <th>@Html.ActionLink("Отправитель", "Inbox", "Message", new { sortOrder = ViewData["NameSortParm"], currentFilter = ViewData["SearchString"] }, null)</th>
                     <th>Сообщение</th>
                     <th class="date-table">@Html.ActionLink("Дата", "Inbox", "Message", new { sortOrder = ViewData["DateSortParm"], currentFilter = ViewData["SearchString"] }, null)</th>
-                    @*<th></th>*@
                 </tr>
                 @foreach (var dialog in Model.Dialogs)
                 {
@@ -69,32 +68,22 @@
 
 <table style="display:none">
     <tr id="dialog-block" style="display:none">
-
         <td class="clickable sender-table" id="dialog-name">
-
             <div class="messagess-count message-count-block-pos" id="dialog-block-counter">
                 countOfMessagess
             </div>
-
-
             <img class="img-circle avatar-small" id="dialog-block-img" src="source" alt="Alternate Text" />
 
             <span id="dialog-companion-name">otherUserName</span>
         </td>
-
         <td class="clickable" id="dialog-text" style=" max-width: 100px;overflow: hidden;text-overflow: ellipsis; white-space: nowrap; "><span id="message-text" class="wqe" style="">MessageBody</span></td>
-        @*<td>@messageGroup.</td>*@
         <td class="clickable date-table" id="dialog-date" title="date">date</td>
-
-        @*<td class="remove-table"><a id="linkdelete" class="remove-link"><img src="~/Content/Images/trash.png" class="remove-icon" /></a></td>*@
-        @*<td style="color:red">@Html.ActionLink("X", "DeleteStory", new { lastMessageId = messageGroup.FirstOrDefault().Id}, null)</td>*@
     </tr>
 </table>
 
 
 @section scripts
 {
-    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
             SetDialogsClickable();

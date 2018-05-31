@@ -4,38 +4,23 @@
     ViewBag.Title = "Выполнить вход";
 }
 
-
 <div class="row">
-    <div class="col-lg-5 auth-box" style="float: none; margin: 0 auto" >
-
-    
+    <div class="col-lg-5 auth-box" style="float: none; margin: 0 auto" >    
     @Html.Partial("_AuthMenu")
         <div class="auth-body">
             <div class="row">
-
-
                 <div class="col-md-12">
-
-                    <section id="loginForm">
-                        
+                    <section id="loginForm">                        
                         @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
                         {
-
                             @Html.AntiForgeryToken()
                             @Html.ValidationSummary(true, "", new { @class = "text-danger font-size-14 text-center" })
-                            <div class="form-group">
-                                @*@Html.LabelFor(m => m.UserNameOrEmail, new { @class = "col-form-label  col-form-label-md" })*@
-                                
-                                    @Html.TextBoxFor(m => m.UserNameOrEmail, new { @class = "form-control form-control-md", placeholder = "Имя пользователя или почта" })
-
-                                
+                            <div class="form-group">                                
+                                    @Html.TextBoxFor(m => m.UserNameOrEmail, new { @class = "form-control form-control-md", placeholder = "Имя пользователя или почта" })                               
                             </div>
                             <div class="form-group">
-                                @*@Html.LabelFor(m => m.Password, new { @class = "col-form-label  col-form-label-md" })*@
-                                
                                     @Html.PasswordFor(m => m.Password, new { @class = "form-control form-control-md", placeholder = "Пароль" })
-                                    @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
-                                
+                                    @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })                                
                             </div>
                             <div class="form-group font-size-14">
                                 <div class="row">
@@ -44,25 +29,15 @@
                                             @Html.CheckBoxFor(m => m.RememberMe, new { @class = "custom-control-input" })
                                             @Html.LabelFor(m => m.RememberMe, new { @class = "custom-control-label" })
                                         </div>
-                                    </div>
-                                    
+                                    </div>                                    
                                     <div class="col-md-6 text-right">
                                         @Html.ActionLink("Забыли пароль?", "ForgotPassword", "Account")
                                     </div>
                                 </div>
-                                
-                                
-                                
+                           </div>
+                            <div class="text-center">                                
+                                <input type="submit" value="Выполнить вход" class="btn btn-submit" />                               
                             </div>
-                            <div class="text-center">
-                                
-                                <input type="submit" value="Выполнить вход" class="btn btn-submit" />
-                               
-                            </div>
-                            @* Включите, когда будет включено подтверждение учетной записи для функции сброса пароля
-                    <p>
-                        @Html.ActionLink("Забыли пароль?", "ForgotPassword")
-                    </p>*@
                         }
                     </section>
                 </div>
