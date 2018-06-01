@@ -384,7 +384,7 @@
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <Content Include="Scripts\CreateOffer.js" />
+    <Content Include="Scripts\jquery-create-offer.js" />
     <Content Include="Scripts\Custom.js" />
     <Content Include="Scripts\esm\popper-utils.js" />
     <Content Include="Scripts\esm\popper-utils.min.js" />
@@ -404,7 +404,9 @@
     <Content Include="Content\bootstrap-reboot.css.map" />
     <Content Include="Content\bootstrap-grid.min.css.map" />
     <Content Include="Content\bootstrap-grid.css.map" />
+    <Content Include="Scripts\jquery-feedback-details.js" />
     <Content Include="Scripts\jquery-messages.js" />
+    <Content Include="Scripts\signalr-messages.js" />
     <Content Include="Views\Shared\_ConfirmEmail.cshtml" />
     <Content Include="____________1_Fso_icon.ico" />
     <None Include="compilerconfig.json" />
@@ -445,7 +447,7 @@
     <Content Include="Scripts\umd\popper-utils.min.js" />
     <Content Include="Scripts\umd\popper.js" />
     <Content Include="Scripts\umd\popper.min.js" />
-    <Content Include="Scripts\UserInfo.js" />
+    <Content Include="Scripts\jquery-user-info.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>

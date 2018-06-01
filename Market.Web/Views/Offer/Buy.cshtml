@@ -1,14 +1,18 @@
-﻿@model Market.Web.ViewModels.SearchOffersInfoViewModel
+﻿@model Market.Web.ViewModels.SearchViewModel
 @{
     ViewBag.Title = "Купить аккаунт " + Model.Game;
 }
 
 <div class="row">
     <div class="col-lg-12">
-        <a id="game-title"></a>
-        @{var game = Model.Game == null ? "csgo" : Model.Game; }
+        <div class="alert alert-secondary">
+            <p>
+                У нас вы можете купить аккаунт @Model.GameName по самым низким ценам, которые задают сами продавцы. Мы гарантируем безопасную сделку
+                в которой покупатель получит рабочий аккаунт, а продавец - деньги.
+        </div>
     </div>
 </div>
+
 
 <div class="row">
     <div class="col-lg-12">
@@ -22,8 +26,16 @@
         </div>
     </div>
     <div class="col-lg-12 mb-2">
-        <span class="game-title">Игра &#8594 <span>@game</span> </span>
-        @Html.ActionLink("Продать аккаунт", "Create", null, new { @class = "btn btn-link-sell" })
+        <div class="row">
+            <div class="col-sm-6">
+                <h1 class="game-title">Аккаунты @Model.GameName </h1>
+            </div>
+            <div class="col-sm-6 text-right">
+                @Html.ActionLink("Продать аккаунт", "Create", null, new { @class = "btn btn-link-sell" })
+            </div>
+        </div>
+
+
     </div>
 </div>
 <div class="row">
@@ -35,12 +47,20 @@
 </div>
 <input type="hidden" name="Game" id="game" value="@Model.Game" />
 <input type="hidden" name="Page" id="page" value="@Model.Page" />
+<input type="hidden" name="" id="minGamePrice" value="@Model.MinGamePrice" />
+<input type="hidden" name="" id="maxGamePrice" value="@Model.MaxGamePrice" />
+
 <input type="hidden" name="SearchString" id="searchString" value="@Model.SearchString" />
 <script src="@RouteJs.RouteJsHandler.HandlerUrl"></script>
 
 @section scripts
 {
     <script type="text/javascript" src="~/Scripts/Filters.js"></script>
-    <script type="text/javascript" src="~/Scripts/jquery-ui.js"></script>
-    <script type="text/javascript" src="~/Scripts/Custom.js"></script>
+
+    @Scripts.Render("~/bundles/jquery-ui")
+    @Scripts.Render("~/bundles/Custom")
+
+    <script>
+        
+    </script>
 }

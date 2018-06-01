@@ -13,6 +13,7 @@ namespace Market.Web.Helpers
         public static MvcHtmlString PagedListPager(this HtmlHelper html,
                                               PageInfoViewModel pageInfo, string jsFunctionName)
         {
+            
             StringBuilder result = new StringBuilder();
             TagBuilder div = new TagBuilder("div");
             

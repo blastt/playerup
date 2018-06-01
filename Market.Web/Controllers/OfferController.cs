@@ -26,7 +26,7 @@ namespace Market.Web.Controllers
         private readonly IFilterService _filterService;
         private readonly IFilterItemService _filterItemService;
         private readonly int offerDays = 30;
-        public int pageSize = 8;
+        public int pageSize = 1;
         public int pageSizeInUserInfo = 10;
         public OfferController(IOfferService offerService, IGameService gameService, IFilterService filterService, IFilterItemService filterItemService, IUserProfileService userProfileService)
         {
@@ -39,14 +39,22 @@ namespace Market.Web.Controllers
 
         // GET: Offer
         [HttpGet]
-        public async Task<ViewResult> Buy(SearchOffersInfoViewModel model)
+        public async Task<ViewResult> Buy(SearchViewModel model, string[] filters)
         {
             
             var offers = await _offerService.GetOffersAsync(o => o.Game.Value == model.Game && o.State == OfferState.active);
             if (offers.Count() != 0)
             {
+                model.MinGamePrice = offers.Min(o => o.Price);
+                model.MaxGamePrice = offers.Max(o => o.Price);
                 model.PriceFrom = offers.Min(o => o.Price);
                 model.PriceTo = offers.Max(o => o.Price);
+            }
+
+            var game = _gameService.GetGameByValue(model.Game);
+            if (game != null)
+            {
+                model.GameName = game.Name;
             }
             
 
@@ -104,8 +112,9 @@ namespace Market.Web.Controllers
             };
             return View(model);
         }
-        private OfferListViewModel SearchOffers(SearchViewModel searchInfo)
+        private OfferListViewModel SearchOffers(SearchViewModel searchInfo, string[] filters)
         {
+            var filterss = ViewBag.Filters;
             //Thread.Sleep(500);
 
             searchInfo.SearchString = searchInfo.SearchString ?? "";
@@ -233,16 +242,16 @@ namespace Market.Web.Controllers
 
         }
 
-        public PartialViewResult List(SearchViewModel searchInfo)
+        public PartialViewResult List(SearchViewModel searchInfo, string[] filters)
         {
 
 
-            var model = SearchOffers(searchInfo);
+            var model = SearchOffers(searchInfo, filters);
 
             return PartialView("_OfferBlock", model);
         }
 
-        public PartialViewResult Reset(SearchViewModel searchInfo)
+        public PartialViewResult Reset(SearchViewModel searchInfo, string[] filters)
         {
             var game = _gameService.GetGameByValue(searchInfo.Game);
             if (searchInfo.JsonFilters.Count == 0)
@@ -256,7 +265,7 @@ namespace Market.Web.Controllers
                 }
             }
 
-            var model = SearchOffers(searchInfo);
+            var model = SearchOffers(searchInfo, filters);
             
             return PartialView("List", model);
         }
@@ -419,11 +428,15 @@ namespace Market.Web.Controllers
             if (id != null)
             {
                 Offer offer = _offerService.GetOffer(id.Value);
-                offer.Views++;
-                _offerService.SaveOffer();
-                var model = Mapper.Map<Offer, DetailsOfferViewModel>(offer);
+                if (offer != null)
+                {
+                    offer.Views++;
+                    _offerService.SaveOffer();
+                    var model = Mapper.Map<Offer, DetailsOfferViewModel>(offer);
 
-                return View(model);
+                    return View(model);
+                }
+                
             }
             return HttpNotFound();
 

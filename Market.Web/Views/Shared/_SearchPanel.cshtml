@@ -1,4 +1,4 @@
-﻿@model Market.Web.ViewModels.SearchOffersInfoViewModel
+﻿@model Market.Web.ViewModels.SearchViewModel
 
 <div class="col-lg-3">
     <form id="searchForm" class="bs-component">
@@ -36,7 +36,7 @@
                         </div>
                         <div class="col-sm-6">
                             <div class="filter-btn mb-2">
-                                <input type="button" value="Сброс" class="btn btn-reset font-size-18" onclick="ResetOffers();" />
+                                <input type="button" value="Сброс" class="btn btn-reset font-size-18" onclick="ResetButton();" />
                             </div>
                         </div>
                     </div>
@@ -61,6 +61,10 @@
                         <div id="slider-range"></div>
                     </div>
                     <div class="form-group">
+                        @{
+                            ViewBag.Filters = Model.filters;
+                        } 
+
                         <div id="filter-item">
                         </div>
                     </div>

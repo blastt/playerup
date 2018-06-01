@@ -107,7 +107,7 @@
             </div>
             <div class="col-lg-12">
                 <div id="list-info">
-
+                    @Html.Action("OfferListInfo","Offer", new { userId = Model.Id, game = "all" })
                 </div>
             </div>
         </div>

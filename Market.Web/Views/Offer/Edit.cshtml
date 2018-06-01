@@ -102,11 +102,12 @@
 @section scripts
 {
     @Scripts.Render("~/bundles/jqueryval")
-    <script src="~/Scripts/Filters.js"></script>
-    <script src="~/Scripts/CreateOffer.js">
+    <script src="~/Scripts/Filters.js">
 
 
     </script>
+
+    @Scripts.Render("~/bundles/jquery-create-offer")
     <script>
         $(document).ready(function () {
             CalculatePrice();

@@ -2,6 +2,7 @@
 
 
 
+
 //Ajax paging
 //$(".page-item").each(function (index) {
 //    alert("ffq");
@@ -15,9 +16,8 @@
 
 //------
 $(document).ready(function () {
-    $('#page').val(page);
-    //$('html, body').animate({ scrollTop: 0 }, 0);
-    ResetOffers();
+    
+    RefreshPageOffers();
 });
 
 function SearchButton() {
@@ -25,12 +25,24 @@ function SearchButton() {
     SearchOffers();
 }
 
+function ResetButton() {
+    $('#page').val(1);
+    ResetOffers();
+}
+
 function SelectPage(page) {
 
     $('#page').val(page);
+    var game = $('#game').val();
+    //$('html, body').animate({ scrollTop: 0 }, 0);
     
-    $('html, body').animate({ scrollTop: 0 }, 0);
-    SearchOffers();
+    SearchOffersPage();
+
+    //var route = new Object();
+    //route.Page = page;
+    //route.Game = game;
+    //urlPath = Router.action('Offer', 'Buy', route);
+    //window.history.pushState("", "", urlPath);
 }
 function ChangeGame(game) {
     $('#game').val(game);
@@ -38,27 +50,162 @@ function ChangeGame(game) {
     ResetOffers();
 }
 
-function SearchOffers() {
-    var game = $('#game').val();
+function RefreshPageOffers() {
+    var g = $('#game').val();
     var page = $('#page').val();
     var searchString = $('#searchString').val();
     var filters = [];
-    $(".image-select").each(function () {              
+    $(".image-select").each(function () {
+        filters.push({ "attribute": $(this).find('.selselsel').val(), "value": "empty" })
+    });
+
+    var message = {
+        "page": page,
+        "sort": $('#sort').val(),
+        "priceFrom": $('#priceFrom').val(),
+        "priceTo": $('#priceTo').val(),
+        "isOnline": false,
+        "searchInDiscription": false,
+        "searchString": searchString,
+        "jsonFilters": filters,
+        "game": g
+    };
+    $.ajax({
+        url: '/Offer/Reset',
+        type: "POST",
+        contentType: "application/json",
+        data: JSON.stringify({ searchInfo: message }),
+        dataType: "html",
+        beforeSend: function () {
+            $('#list').empty();
+            //$('#find').show();
+            //$('#find').animate({ opacity: '0.7' }, 400);
+
+        },
+        success: function (response) {
+
+            //$('#find').hide()
+
+            $('#list').html(response);
+            Slider(parseFloat($('#priceFrom').val()), parseFloat($('#priceTo').val()));
+            SelectFilterItem(g, true);
+            //var urlPath;
+            //var routes = new Object();
+            //routes.game = g;
+            //urlPath = Router.action('Offer', 'Buy', routes);
+            //window.history.pushState("", "", urlPath);
+            //var currentPath = window.location.href.split('/');
+            //var urlPath = Router.action('Offer', 'Buy', { game: g });
+            //window.history.pushState({ "html": response.html, "pageTitle": response.pageTitle }, "", urlPath);
+            //$('#find').animate({ opacity: '0.0' }, 400, "", function () {
+
+            //});
+
+            //SelectFilterItem(g, false);
+        }
+    });
+}
+function SearchOffersPage() {
+    var game = $('#game').val();
+    var page = $('#page').val();
+    var sort = $('#sort').val();
+    var isOnline = $('#isOnline').is(':checked');
+    var searchInDiscription = $('#searchInDiscription').is(':checked');
+    var searchString = $('#searchString').val();
+    var filters = [];
+    $(".image-select").each(function () {
         filters.push({ "attribute": $(this).find('.selselsel').val(), "value": $(this).find('.selsel').val() })
+    });
+
+
+    var message = {
+        "page": page,
+        "sort": sort,
+        "isOnline": isOnline,
+        "searchInDiscription": searchInDiscription,
+        "searchString": searchString,
+
+        "jsonFilters": filters,
+        "game": game,
+        "priceFrom": $('#priceFrom').val(),
+        "priceTo": $('#priceTo').val()
+    };
+
+    $.ajax({
+        url: '/Offer/List',
+        type: "POST",
+        contentType: "application/json",
+        data: JSON.stringify({ searchInfo: message }),
+        dataType: "html",
+        beforeSend: function () {
+
+
+            // $('#loader').show();
+            //$('#loader').animate({ opacity: '0.7' }, 400);
+
+
+        },
+        success: function (response) {
+            var s = $('#sort').val();
+
+            $('#offer-block').html(response);
+
+            //urlPath = Router.action('Offer', 'Buy', routes);
+            //window.history.pushState({ "html": response.html, "pageTitle": response.pageTitle }, "", urlPath);
+            //$('#loader').animate({ opacity: '0.0' }, 400, "", function () {
+            //$('#loader').hide();
+            //});
+            var urlPath;
+            var routes = new Object();
+            if (page !== "1") {
+                routes.page = page;
+
+            }
+            routes.game = game;
+            urlPath = Router.action('Offer', 'Buy', routes);
+            var href = document.location.href.split('#')[0];
+            window.history.pushState("", "", href + "#page=" + page);
+
+
+            if (typeof s !== "undefined") {
+                $('#sort').val(s);
+            }
+
+            //SelectFilterItem(g, false);
+        },
+        error: function (response) {
+            alert("error");
+        }
+    });
+}
+
+function SearchOffers() {
+    var game = $('#game').val();
+    var page = 1;
+    var sort = $('#sort').val();
+    var isOnline = $('#isOnline').is(':checked');
+    var searchInDiscription = $('#searchInDiscription').is(':checked');
+    var searchString = $('#searchString').val();
+    var priceFrom = $('#priceFrom').val();
+    var priceTo = $('#priceTo').val();
+    var selsel = $('#selsel').val();
+    var filters = [];
+    $(".image-select").each(function () {              
+        filters.push({ attribute: $(this).find('.selselsel').val(), value: $(this).find('.selsel').val() })
     });
     
 
     var message = {
         "page": page,
-        "sort": $('#sort').val(),
-        "isOnline": $('#isOnline').is(':checked'),
-        "searchInDiscription": $('#searchInDiscription').is(':checked'),
+        "sort": sort,
+        "isOnline": isOnline,
+        "searchInDiscription": searchInDiscription,
         "searchString": searchString,
-        
         "jsonFilters": filters,
+        "Filters" : filters,
         "game": game,
-        "priceFrom": $('#priceFrom').val(),
-        "priceTo": $('#priceTo').val()
+        "priceFrom": priceFrom,
+        "priceTo": priceTo
     };
 
     $.ajax({
@@ -77,36 +224,67 @@ function SearchOffers() {
         },
         success: function (response) {
             var s = $('#sort').val();
+            
 
             $('#offer-block').html(response);
+            var urlPath;
+            var routes = new Object();            
+            
+         
+            if (sort !== "bestSeller" && sort !== undefined) {
+                routes.sort = sort;
+            }
+            
+            if (isOnline) {
+                routes.isOnline = isOnline;
+            }
+            if (searchInDiscription) {
+                routes.searchindiscription = searchInDiscription;
+            }
+            if (searchString !== "") {
+
+                routes.searchstring = searchString;
+            }
+            if (priceFrom !== $('#minGamePrice').val().split(',')[0]) {
+
+                routes.pricefrom = priceFrom;
+            }
+
+            if (priceTo !== $('#maxGamePrice').val().split(',')[0]) {
+
+                routes.priceto = priceTo;
+            }
+        
+            //routes.attribute = filtersStr.replace(/,\s*$/, "");
+
+            routes.game = game;
+            urlPath = Router.action('Offer', 'Buy', routes);
 
             
-            var urlPath;
-            var routes = new Object();
-            if (game != "csgo") {
-                routes.game = game;
+            var filtersString = "";
+            filters.forEach(function (element) {
+                if (element.value !== "empty") {
+                    filtersString += "filters=" + element.attribute + "=" + element.value + "&";
+                }
                 
+            });
+            
+            if (filtersString.length !== 0) {
+                urlPath += "?";
+                filtersString = filtersString.substring(0, filtersString.length - 1);
+                urlPath += filtersString;
             }
-            if (page != "1") {
-                routes.page = page;
-            }
-
+            
+            window.history.pushState("", "", urlPath);
             //urlPath = Router.action('Offer', 'Buy', routes);
             //window.history.pushState({ "html": response.html, "pageTitle": response.pageTitle }, "", urlPath);
             //$('#loader').animate({ opacity: '0.0' }, 400, "", function () {
                 //$('#loader').hide();
             //});
-
-
-            
-
-
+          
             if (typeof s !== "undefined") {
                 $('#sort').val(s);
             }
-
-
-            slider();
             
             //SelectFilterItem(g, false);
         },
@@ -131,6 +309,8 @@ function ResetOffers() {
         "searchInDiscription": false,
         "searchString": "",
         "jsonFilters": filters,
+        "priceFrom": $('#minGamePrice').val(),
+        "priceTo": $('#maxGamePrice').val(),
         "game": g
     };
     $.ajax({
@@ -140,7 +320,7 @@ function ResetOffers() {
         data: JSON.stringify({ searchInfo: message }),
         dataType: "html",
         beforeSend: function () {
-            $('#list').empty();
+            //$('#list').empty();
             //$('#find').show();
             //$('#find').animate({ opacity: '0.7' }, 400);
 
@@ -150,9 +330,14 @@ function ResetOffers() {
             //$('#find').hide()
             $('#searchForm').get(0).reset();
             $('#list').html(response);
+            
             Slider(parseFloat($('#priceFrom').val()), parseFloat($('#priceTo').val()));
             SelectFilterItem(g, true);
-            
+            var urlPath;
+            var routes = new Object();
+            routes.game = g;
+            urlPath = Router.action('Offer', 'Buy', routes);
+            window.history.pushState("", "", urlPath);
             //var currentPath = window.location.href.split('/');
             //var urlPath = Router.action('Offer', 'Buy', { game: g });
             //window.history.pushState({ "html": response.html, "pageTitle": response.pageTitle }, "", urlPath);
@@ -160,7 +345,6 @@ function ResetOffers() {
                 
             //});
 
-            slider();
 
             //SelectFilterItem(g, false);
         }
@@ -182,11 +366,10 @@ function ResetOffers() {
     
 //}
 function Slider(fromPrice, toPrice) {
-    
     $("#slider-range").slider({
         range: true,
-        min: fromPrice,
-        max: toPrice,
+        min: parseFloat($("#minGamePrice").val()),
+        max: parseFloat($("#maxGamePrice").val()),
         values: [fromPrice, toPrice],
         slide: function (event, ui) {
             $("#priceFrom").val(ui.values[0]);

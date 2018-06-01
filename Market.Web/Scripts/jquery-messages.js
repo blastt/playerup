@@ -29,44 +29,44 @@ function SetMessagesViewed() {
 
 window.onload = function () {
     messageScrollToButton();
-    inboxScrollToButton();
 }
 function messageScrollToButton() {
     var objDiv = $('#messages-col');
     objDiv.scrollTop(objDiv[0].scrollHeight);
 }
 
-function inboxScrollToButton() {
-    $(window).scrollTop(320);
-}
+//function inboxScrollToButton() {
+//    $(window).scrollTop(320);
+//}
 
 var btn = document.getElementById("send");
-var messageInput = $('#messageBody');
-btn.onclick = function () {
-    if (messageInput.val().trim() !== '') {
-        CreateNewMessage();
-    }
+        var messageInput = $('#messageBody');
+        btn.onclick = function () {
+            if (messageInput.val().trim() !== '') {
+                CreateNewMessage();
+            }
 
-}
-
-function CreateNewMessage() {
-    var message = {
-        "MessageBody": $('#messageBody').val(),
-        "ReceiverId": $('#receiverId').val()
-    };
-    $.ajax({
-        url: "/Message/New",
-        type: "POST",
-        contentType: "application/json",
-        data: JSON.stringify({ model: message }),
-        dataType: "Json",
-
-        success: function (result) {
-
-        },
-        error: function () {
-            alert("خطا!");
         }
-    });
-    modal.style.display = "none";
-}
+
+        function CreateNewMessage() {
+            var message = {
+                "MessageBody": $('#messageBody').val(),
+                "ReceiverId": $('#receiverId').val()
+            };
+            $.ajax({
+                url: "/Message/New",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify({ model: message }),
+                dataType: "Json",
+
+                success: function (result) {
+                    
+                   
+                },
+                error: function () {
+                    alert("خطا!");
+                }
+            });
+            modal.style.display = "none";
+        }

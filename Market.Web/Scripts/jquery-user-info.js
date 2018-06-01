@@ -1,7 +1,4 @@
-﻿$(document).ready(function () {
-
-    SearchOffersInfo();
-});
+﻿
 function SelectPageOffersInfo(page) {
     $('#page').val(page);
     SearchOffersInfo();

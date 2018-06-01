@@ -21,7 +21,7 @@
                     Непрочитанные сообщения:
                 </h3>
             </div>
-            
+
             <table class="table table-white" id="dialogs-table">
                 <tr>
 
@@ -84,10 +84,5 @@
 
 @section scripts
 {
-    <script type="text/javascript">
-        $(document).ready(function () {
-            SetDialogsClickable();
-            SetDeleteDialogClickable();
-        })
-    </script>
+    @Scripts.Render("~/bundles/jquery-dialogs")
 }

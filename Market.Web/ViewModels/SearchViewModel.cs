@@ -16,7 +16,8 @@ namespace Market.Web.ViewModels
     {
         public int Page { get; set; } = 1;
         public string Sort { get; set; } = "bestSeller";
-        public string[] Filters { get; set; }
+        public IEnumerable<GameViewModel> Games { get; set; }
+        public string[] filters { get; set; }
         public bool IsOnline { get; set; }
         public bool SearchInDiscription { get; set; }
         public string SearchString { get; set; } = "";
@@ -24,7 +25,7 @@ namespace Market.Web.ViewModels
         public string[] FilterValues { get; set; }
         public string[] FilterItemValues { get; set; } = new string [] { };
         public string Game { get; set; } = "dota2";
-
+        public string GameName { get; set; }
         public decimal MinGamePrice { get; set; }
 
         public decimal MaxGamePrice { get; set; }

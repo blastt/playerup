@@ -36,8 +36,60 @@ namespace Market.Web
             bundles.Add(new ScriptBundle("~/bundles/jquery-ui").Include(
                       "~/Scripts/jquery-ui.js"));
 
+
             bundles.Add(new StyleBundle("~/Content/jquery-ui").Include(
                       "~/Content/jquery-ui.css"));
+
+
+
+
+
+            bundles.Add(new ScriptBundle("~/bundles/Custom").Include(
+                      "~/Scripts/Custom.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/signalr-messages").Include(
+                      "~/Scripts/signalr-messages.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/jquery-create-offer").Include(
+                      "~/Scripts/jquery-create-offer.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/jquery-dialogs").Include(
+                      "~/Scripts/jquery-dialogs.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/jquery-feedback-details").Include(
+                      "~/Scripts/jquery-feedback-details.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/jquery-messages").Include(
+                      "~/Scripts/jquery-messages.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/jquery-modal-feedback").Include(
+                      "~/Scripts/jquery-modal-feedback.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/jquery-modal-send").Include(
+                      "~/Scripts/jquery-modal-send.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/jquery-modal").Include(
+                      "~/Scripts/jquery-modal.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/jquery-user-info").Include(
+                      "~/Scripts/jquery-user-info.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/jquery-modal-send").Include(
+                      "~/Scripts/jquery-modal-send.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/jquery-modal-send").Include(
+                      "~/Scripts/jquery-modal-send.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/jquery-modal-send").Include(
+                      "~/Scripts/jquery-modal-send.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/jquery-modal-send").Include(
+                      "~/Scripts/jquery-modal-send.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/jquery-modal-send").Include(
+                      "~/Scripts/jquery-modal-send.js"));
+
+
         }
     }
 }

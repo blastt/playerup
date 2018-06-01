@@ -21,6 +21,7 @@ namespace Market.Web.Controllers
         private readonly IMessageService _messageService;
         private readonly IOfferService _offerService;
         private readonly IDialogService _dialogService;
+        
         public MessageController(IMessageService messageService, IOfferService offerService, IUserProfileService userProfileService, IDialogService dialogService)
         {
             _hubContext = GlobalHost.ConnectionManager.GetHubContext<MessageHub>();
@@ -44,6 +45,7 @@ namespace Market.Web.Controllers
 
         public void DeleteGroup(int? lastMessageId)
         {
+            
             //var childMes = _db.Messages.Find(p => p.ParentMessageId == lastMessageId).LastOrDefault();
             //if (childMes != null && childMes.UserProfileId == User.Identity.GetUserId())
             //{

@@ -50,9 +50,6 @@ function SelectFilterItem(g, isListView) {
     });
 }
 
-
-
-
 function myfunction() {
     var x, i, j, selElmnt, a, b, c, span;
     /*look for any elements with the class "custom-select":*/
@@ -74,7 +71,6 @@ function myfunction() {
             var urlImg = selElmnt.options[j].dataset.url;
             span.setAttribute("src", urlImg)
             span.setAttribute("alt", "")
-
             span.style.width = "50px";
             span.style.marginRight = "15px";
             c = document.createElement("DIV");
@@ -84,6 +80,7 @@ function myfunction() {
             c.addEventListener("click", function (e) {
                 /*when an item is clicked, update the original select box,
                 and the selected item:*/
+                
                 var i, s, h;
                 s = this.parentNode.parentNode.getElementsByTagName("select")[0];
 
@@ -92,9 +89,8 @@ function myfunction() {
                 for (i = 0; i < s.length; i++) {
 
                     if (s.options[i].innerText.trim() === this.innerText.trim()) {
-
                         s.selectedIndex = i;
-                        
+
                         h.innerHTML = this.innerHTML;
                         break;
                     }
