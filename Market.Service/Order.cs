@@ -27,6 +27,9 @@ namespace Market.Service
         Order GetOrder(string accountLogin, string moderatorId, string sellerId, string buyerId);
         void UpdateOrder(Order order);
         void CreateOrder(Order order);
+        bool ConfirmAbortOrder(int orderId, string userId);
+        bool AbortOrder(int orderId, string currentUserId);
+        bool ConfirmOrderByMiddleman(int orderId, string currentUserId);
         bool CloseOrderByBuyer(int orderId);
         bool CloseOrderBySeller(int orderId);
         bool CloseOrderByMiddleman(int orderId);
@@ -80,11 +83,11 @@ namespace Market.Service
         }
 
         public Order GetOrder(string accountLogin, string middlemanId, string sellerId, string buyerId)
-        {            
-            Order order = ordersRepository.GetMany(o => o.Offer.AccountLogin == accountLogin && 
-            o.MiddlemanId == middlemanId && o.BuyerId == buyerId && o.SellerId == sellerId).FirstOrDefault();            
+        {
+            Order order = ordersRepository.GetMany(o => o.Offer.AccountLogin == accountLogin &&
+            o.MiddlemanId == middlemanId && o.BuyerId == buyerId && o.SellerId == sellerId).FirstOrDefault();
             return order;
-            
+
         }
 
         public void CreateOrder(Order order)
@@ -100,6 +103,50 @@ namespace Market.Service
         public async Task SaveOrderAsync()
         {
             await unitOfWork.CommitAsync();
+        }
+
+        public bool ConfirmAbortOrder(int orderId, string userId)
+        {
+            var order = GetOrder(orderId);
+            if (order != null)
+            {
+                OrderStatus newOrderStatus = null;
+                if (order.MiddlemanId == userId && order.CurrentStatus.Value == OrderStatuses.MiddlemanBackingAccount)
+                {
+                    newOrderStatus = orderStatusRepository.GetOrderStatusByValue(OrderStatuses.MiddlemanClosed);
+                    if (newOrderStatus != null)
+                    {
+                        var orderTransactions = order.Transactions.ToList();
+
+                        foreach (var transaction in orderTransactions)
+                        {
+                            transaction.Sender.Balance += transaction.Amount;
+                            transaction.Receiver.Balance -= transaction.Amount;
+
+                            order.Transactions.Add(new Transaction
+                            {
+                                Receiver = transaction.Sender,
+                                Sender = transaction.Receiver,
+                                Amount = transaction.Amount,
+                                TransactionDate = DateTime.Now
+                            });
+                        }
+
+                        order.StatusLogs.AddLast(new StatusLog()
+                        {
+                            OldStatus = order.CurrentStatus,
+                            NewStatus = newOrderStatus,
+                            TimeStamp = DateTime.Now
+                        });
+                        order.CurrentStatus = newOrderStatus;
+                        order.BuyerChecked = false;
+                        order.SellerChecked = false;
+                        return true;
+                    }
+                }
+            }
+            return false;
+
         }
 
         private bool CloseOrder(int orderId, Closer closer)
@@ -176,10 +223,11 @@ namespace Market.Service
                     }
 
                 }
-                
+
             }
             return false;
         }
+
 
         public bool CloseOrderByBuyer(int orderId)
         {
@@ -191,7 +239,7 @@ namespace Market.Service
             return CloseOrder(orderId, Closer.Buyer);
         }
 
-       
+
         public bool CloseOrderByMiddleman(int orderId)
         {
             return CloseOrder(orderId, Closer.Buyer);
@@ -201,7 +249,7 @@ namespace Market.Service
         {
             return CloseOrder(orderId, Closer.Automatically);
         }
-       
+
 
         public bool ConfirmOrder(int orderId, string currentUserId)
         {
@@ -225,7 +273,7 @@ namespace Market.Service
                                 TransactionDate = DateTime.Now
                             });
 
-                            mainCup.Balance -= amount;                                                                                  
+                            mainCup.Balance -= amount;
                             order.Seller.Balance += amount;
                             order.StatusLogs.AddLast(new StatusLog()
                             {
@@ -243,17 +291,118 @@ namespace Market.Service
                             });
                             order.CurrentStatus = orderStatusRepository.GetOrderStatusByValue(OrderStatuses.ClosedSuccessfully);
 
-                            
+
 
                             order.BuyerChecked = false;
                             order.SellerChecked = false;
 
 
-                            
+
                             //TempData["orderBuyStatus"] = "Спасибо за подтверждение сделки! Сделка успешно закрыта.";
                             //return RedirectToAction("BuyDetails", "Order", new { id = order.Id });
                             return true;
                         }
+                    }
+                }
+            }
+            return false;
+        }
+
+        public bool ConfirmOrderByMiddleman(int orderId, string currentUserId)
+        {
+            var order = GetOrder(orderId);
+            if (order != null)
+            {
+                if (order.CurrentStatus != null)
+                {
+                    if (order.MiddlemanId == currentUserId && order.CurrentStatus.Value == OrderStatuses.MiddlemanBackingAccount)
+                    {
+                        var mainCup = userProfileRepository.GetUserByName("palyerup");
+                        if (mainCup != null)
+                        {
+                            decimal amount = order.AmmountSellerGet.Value;
+                            transactionRepository.Add(new Transaction
+                            {
+                                Amount = amount,
+                                Receiver = order.Seller,
+                                Sender = mainCup,
+                                Order = order,
+                                TransactionDate = DateTime.Now
+                            });
+
+                            mainCup.Balance -= amount;
+                            order.Seller.Balance += amount;
+                            order.StatusLogs.AddLast(new StatusLog()
+                            {
+                                OldStatus = order.CurrentStatus,
+                                NewStatus = orderStatusRepository.GetOrderStatusByValue(OrderStatuses.PayingToSeller),
+                                TimeStamp = DateTime.Now
+                            });
+                            order.CurrentStatus = orderStatusRepository.GetOrderStatusByValue(OrderStatuses.PayingToSeller);
+
+                            order.StatusLogs.AddLast(new StatusLog()
+                            {
+                                OldStatus = order.CurrentStatus,
+                                NewStatus = orderStatusRepository.GetOrderStatusByValue(OrderStatuses.ClosedSuccessfully),
+                                TimeStamp = DateTime.Now
+                            });
+                            order.CurrentStatus = orderStatusRepository.GetOrderStatusByValue(OrderStatuses.ClosedSuccessfully);
+
+
+
+                            order.BuyerChecked = false;
+                            order.SellerChecked = false;
+
+
+
+                            //TempData["orderBuyStatus"] = "Спасибо за подтверждение сделки! Сделка успешно закрыта.";
+                            //return RedirectToAction("BuyDetails", "Order", new { id = order.Id });
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+
+        public bool AbortOrder(int orderId, string currentUserId)
+        {
+            var order = GetOrder(orderId);
+            if (order != null)
+            {
+                if (order.CurrentStatus != null)
+                {
+                    if (order.BuyerId == currentUserId && order.CurrentStatus.Value == OrderStatuses.BuyerConfirming)
+                    {
+
+
+                        order.StatusLogs.AddLast(new StatusLog()
+                        {
+                            OldStatus = order.CurrentStatus,
+                            NewStatus = orderStatusRepository.GetOrderStatusByValue(OrderStatuses.AbortedByBuyer),
+                            TimeStamp = DateTime.Now
+                        });
+                        order.CurrentStatus = orderStatusRepository.GetOrderStatusByValue(OrderStatuses.AbortedByBuyer);
+
+                        order.StatusLogs.AddLast(new StatusLog()
+                        {
+                            OldStatus = order.CurrentStatus,
+                            NewStatus = orderStatusRepository.GetOrderStatusByValue(OrderStatuses.MiddlemanBackingAccount),
+                            TimeStamp = DateTime.Now
+                        });
+                        order.CurrentStatus = orderStatusRepository.GetOrderStatusByValue(OrderStatuses.MiddlemanBackingAccount);
+
+
+
+                        order.BuyerChecked = false;
+                        order.SellerChecked = false;
+
+
+
+                        //TempData["orderBuyStatus"] = "Спасибо за подтверждение сделки! Сделка успешно закрыта.";
+                        //return RedirectToAction("BuyDetails", "Order", new { id = order.Id });
+                        return true;
+
                     }
                 }
             }

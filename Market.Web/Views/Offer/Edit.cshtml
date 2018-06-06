@@ -17,7 +17,7 @@
 
                     <div class="form-group">
                         @Html.LabelFor(m => m.Games, new { @class = "col-form-label  col-form-label-md" })
-                        @Html.DropDownListFor(m => m.Game, Model.Games, new { @class = "custom-select", id = "game", onchange = "SelectFilterItem(value, false);" })
+                        @Html.DropDownListFor(m => m.Game, Model.Games, new { @class = "custom-select", id = "game", onchange = "SelectFilterItemInCreate(value)" })
                     </div>
                     <div id="filter-item">
                     </div>

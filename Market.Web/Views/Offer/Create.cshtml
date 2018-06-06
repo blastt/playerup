@@ -1,7 +1,9 @@
 ﻿@using System.Globalization
 @model Market.Web.ViewModels.CreateOfferViewModel
 @{
-    ViewBag.Title = "Создать предложение";
+    ViewBag.Title = "Продать аккаунт — Продавайте аккаунты | Dota2 | CS:GO | WOT | и других игр.";
+    ViewBag.Description = "Здесь вы можете продать аккаунт выбранной вами игры. Мы так-же предоставляем гаранта для безопасной сделки." +
+        "Начните продавать безопасно прямо сейчас!";
 }
 
 <div class="row">
@@ -13,7 +15,7 @@
                 {
                     <div class="form-group">
                         @Html.LabelFor(m => m.Games, new { @class = "col-form-label  col-form-label-md" })
-                        @Html.DropDownListFor(m => m.Game, Model.Games, new { @class = "custom-select", id = "game", onchange = "SelectFilterItem(value, false);" })
+                        @Html.DropDownListFor(m => m.Game, Model.Games, new { @class = "custom-select", id = "game", onchange = "SelectFilterItemInCreate(value)" })
                     </div>
                     <div id="filter-item">
 

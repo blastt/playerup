@@ -13,7 +13,7 @@ namespace Market.Data.Configuration
         public AccountInfoConfiguration()
         {
             ToTable("AccountInfos");
-            HasRequired(o => o.Order).WithOptional(a => a.AccountInfo);
+            HasRequired(o => o.Order).WithMany(a => a.AccountInfos).HasForeignKey(a => a.OrderId);
 
         }
     }

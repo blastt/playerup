@@ -20,6 +20,9 @@
             Статус
         </th>
         <th>
+            Заказ
+        </th>
+        <th>
             Цена
         </th>
         <th></th>
@@ -39,6 +42,9 @@
         <td>
             @Html.DisplayFor(m => offer.DateCreated)
         </td>
+        <th>
+            @Html.DisplayFor(m => offer.HasOrder)
+        </th>
         <td>
             @Html.DisplayFor(m => offer.Price)
         </td>

@@ -1,8 +1,5 @@
 ﻿
 
-
-
-
 //Ajax paging
 //$(".page-item").each(function (index) {
 //    alert("ffq");
@@ -16,8 +13,16 @@
 
 //------
 $(document).ready(function () {
+    Slider(parseFloat($('#priceFrom').val()), parseFloat($('#priceTo').val()));
     
+    
+    
+});
+
+$(document).ready(function () {
+
     RefreshPageOffers();
+
 });
 
 function SearchButton() {
@@ -25,9 +30,25 @@ function SearchButton() {
     SearchOffers();
 }
 
+function SortChange() {
+    var s = $('#select-sort').val();
+    $('#sort').val(s);
+
+    SearchOffers();
+}
+
 function ResetButton() {
-    $('#page').val(1);
-    ResetOffers();
+    
+    var routes = new Object();
+    
+      
+
+    
+    routes.game = $('#game').val();;
+    urlPath = Router.action('Offer', 'Buy', routes);
+    window.history.pushState("", "", urlPath);
+    location.reload();
+    
 }
 
 function SelectPage(page) {
@@ -52,13 +73,15 @@ function ChangeGame(game) {
 
 function RefreshPageOffers() {
     var g = $('#game').val();
+
     var page = $('#page').val();
     var searchString = $('#searchString').val();
     var filters = [];
-    $(".image-select").each(function () {
-        filters.push({ "attribute": $(this).find('.selselsel').val(), "value": "empty" })
+    $(".filters").each(function () {
+        
+        filters.push($(this).val());
     });
-
+   
     var message = {
         "page": page,
         "sort": $('#sort').val(),
@@ -66,15 +89,14 @@ function RefreshPageOffers() {
         "priceTo": $('#priceTo').val(),
         "isOnline": false,
         "searchInDiscription": false,
-        "searchString": searchString,
-        "jsonFilters": filters,
+        "searchString": searchString,        
         "game": g
     };
     $.ajax({
         url: '/Offer/Reset',
         type: "POST",
         contentType: "application/json",
-        data: JSON.stringify({ searchInfo: message }),
+        data: JSON.stringify({ searchInfo: message, filters: filters}),
         dataType: "html",
         beforeSend: function () {
             $('#list').empty();
@@ -85,10 +107,33 @@ function RefreshPageOffers() {
         success: function (response) {
 
             //$('#find').hide()
-
+            
             $('#list').html(response);
-            Slider(parseFloat($('#priceFrom').val()), parseFloat($('#priceTo').val()));
-            SelectFilterItem(g, true);
+            SelectFilterItem($('#game').val(), true);
+
+            //$('.selsel').each(function () {
+            //    var h = $(this).parent().find('.select-selected');
+            //    alert(h.text());
+            //    //alert($(this).children('option').length);
+            //    $($(this).children('option')).each(function () {
+            //        //alert($(this).children('option').length);
+                    
+            //        if ($(this).html().trim() === "Без ранга") {
+            //            h.html($(this).html());
+            //            $(this).prop('selectedIndex', 4);
+            //        }
+            //    });
+            //});
+            //var x = document.getElementsByClassName("image-select");
+            //for (var j = 0; j < x.length; j++) {
+            //    selElmnt = x[i].getElementsByTagName("select")[0];
+            //    for (var k = 0; k < length; k++) {
+
+            //    }
+            //}
+
+            
+            //select.html("хуй");
             //var urlPath;
             //var routes = new Object();
             //routes.game = g;
@@ -109,12 +154,14 @@ function SearchOffersPage() {
     var game = $('#game').val();
     var page = $('#page').val();
     var sort = $('#sort').val();
+    var priceFrom = $('#priceFrom').val();
+    var priceTo = $('#priceTo').val();
     var isOnline = $('#isOnline').is(':checked');
     var searchInDiscription = $('#searchInDiscription').is(':checked');
     var searchString = $('#searchString').val();
     var filters = [];
-    $(".image-select").each(function () {
-        filters.push({ "attribute": $(this).find('.selselsel').val(), "value": $(this).find('.selsel').val() })
+    $(".filters").each(function () {
+        filters.push($(this).val());
     });
 
 
@@ -125,7 +172,6 @@ function SearchOffersPage() {
         "searchInDiscription": searchInDiscription,
         "searchString": searchString,
 
-        "jsonFilters": filters,
         "game": game,
         "priceFrom": $('#priceFrom').val(),
         "priceTo": $('#priceTo').val()
@@ -135,16 +181,9 @@ function SearchOffersPage() {
         url: '/Offer/List',
         type: "POST",
         contentType: "application/json",
-        data: JSON.stringify({ searchInfo: message }),
+        data: JSON.stringify({ searchInfo: message, filters: filters }),
         dataType: "html",
-        beforeSend: function () {
 
-
-            // $('#loader').show();
-            //$('#loader').animate({ opacity: '0.7' }, 400);
-
-
-        },
         success: function (response) {
             var s = $('#sort').val();
 
@@ -155,31 +194,61 @@ function SearchOffersPage() {
             //$('#loader').animate({ opacity: '0.0' }, 400, "", function () {
             //$('#loader').hide();
             //});
+            
+           
+
+
             var urlPath;
             var routes = new Object();
-            if (page !== "1") {
+
+
+            if (sort !== "bestSeller" && sort !== undefined) {
+                routes.sort = sort;
+            }
+
+            if (isOnline) {
+                routes.isOnline = isOnline;
+            }
+            if (searchInDiscription) {
+                routes.searchindiscription = searchInDiscription;
+            }
+            if (searchString !== "") {
+
+                routes.searchstring = searchString;
+            }
+            if (priceFrom !== $('#minGamePrice').val().split(',')[0]) {
+
+                routes.pricefrom = priceFrom;
+            }
+
+            if (priceTo !== $('#maxGamePrice').val().split(',')[0]) {
+
+                routes.priceto = priceTo;
+            }
+
+            //routes.attribute = filtersStr.replace(/,\s*$/, "");
+
+            routes.game = game;
+
+             if (page !== "1") {
                 routes.page = page;
 
             }
-            routes.game = game;
+            
             urlPath = Router.action('Offer', 'Buy', routes);
-            var href = document.location.href.split('#')[0];
-            window.history.pushState("", "", href + "#page=" + page);
-
+            window.history.pushState("", "", urlPath);
 
             if (typeof s !== "undefined") {
                 $('#sort').val(s);
             }
 
             //SelectFilterItem(g, false);
-        },
-        error: function (response) {
-            alert("error");
         }
     });
 }
 
 function SearchOffers() {
+
     var game = $('#game').val();
     var page = 1;
     var sort = $('#sort').val();
@@ -190,10 +259,11 @@ function SearchOffers() {
     var priceTo = $('#priceTo').val();
     var selsel = $('#selsel').val();
     var filters = [];
-    $(".image-select").each(function () {              
-        filters.push({ attribute: $(this).find('.selselsel').val(), value: $(this).find('.selsel').val() })
-    });
     
+    $(".filters").each(function () {
+        filters.push($(this).val());
+    });
+
 
     var message = {
         "page": page,
@@ -202,7 +272,7 @@ function SearchOffers() {
         "searchInDiscription": searchInDiscription,
         "searchString": searchString,
         "jsonFilters": filters,
-        "Filters" : filters,
+       
         "game": game,
         "priceFrom": priceFrom,
         "priceTo": priceTo
@@ -212,7 +282,7 @@ function SearchOffers() {
         url: '/Offer/List',
         type: "POST",
         contentType: "application/json",
-        data: JSON.stringify({ searchInfo: message }),
+        data: JSON.stringify({ searchInfo: message, filters: filters }),
         dataType: "html",
         beforeSend: function () {
             
@@ -231,12 +301,13 @@ function SearchOffers() {
             var routes = new Object();            
             
          
-            if (sort !== "bestSeller" && sort !== undefined) {
+            if (sort !== "bestSeller" && s !== undefined) {
+
                 routes.sort = sort;
             }
             
             if (isOnline) {
-                routes.isOnline = isOnline;
+                routes.isonline = isOnline;
             }
             if (searchInDiscription) {
                 routes.searchindiscription = searchInDiscription;
@@ -263,8 +334,8 @@ function SearchOffers() {
             
             var filtersString = "";
             filters.forEach(function (element) {
-                if (element.value !== "empty") {
-                    filtersString += "filters=" + element.attribute + "=" + element.value + "&";
+                if (element.split('=')[1] !== "empty") {
+                    filtersString += "filters=" + element + "&";
                 }
                 
             });
@@ -298,9 +369,7 @@ function ResetOffers() {
 
     var g = $('#game').val();
     var filters = [];
-    $(".image-select").each(function () {
-        filters.push({ "attribute": $(this).find('.selselsel').val(), "value": "empty" })
-    });
+    
 
     var message = {
         "page": 1,
@@ -317,7 +386,7 @@ function ResetOffers() {
         url: '/Offer/Reset',
         type: "POST",
         contentType: "application/json",
-        data: JSON.stringify({ searchInfo: message }),
+        data: JSON.stringify({ searchInfo: message, filters: filters }),
         dataType: "html",
         beforeSend: function () {
             //$('#list').empty();

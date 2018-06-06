@@ -14,6 +14,7 @@ using Microsoft.AspNet.SignalR;
 
 namespace Market.Web.Controllers
 {
+    [System.Web.Mvc.Authorize]
     public class MessageController : Controller
     {
         private readonly IHubContext _hubContext;
@@ -216,9 +217,9 @@ namespace Market.Web.Controllers
 
             DialogListViewModel model = new DialogListViewModel()
             {                
-                Dialogs = Mapper.Map<IEnumerable<Dialog>, IEnumerable<DialogViewModel>>(dialogs)
+                Dialogs = Mapper.Map<IEnumerable<Dialog>, IEnumerable<DialogViewModel>>(dialogs.OrderByDescending(d => d.Messages.LastOrDefault().CreatedDate))
 
-                
+
             };
             
             foreach (var d in model.Dialogs)
@@ -287,7 +288,7 @@ namespace Market.Web.Controllers
 
             DialogListViewModel model = new DialogListViewModel()
             {
-                Dialogs = Mapper.Map<IEnumerable<Dialog>, IEnumerable<DialogViewModel>>(_dialogService.GetDialogs())
+                Dialogs = Mapper.Map<IEnumerable<Dialog>, IEnumerable<DialogViewModel>>(_dialogService.GetDialogs().OrderByDescending(d => d.Messages.LastOrDefault().CreatedDate))
 
 
             };
@@ -313,69 +314,69 @@ namespace Market.Web.Controllers
         }
 
 
-        public ActionResult Delete(int? id)
-        {
-            if (id != null)
-            {
-                var user = _userProfileService.GetUserProfileById(User.Identity.GetUserId());
-                if (user != null)
-                {
+        //public ActionResult Delete(int? id)
+        //{
+        //    if (id != null)
+        //    {
+        //        var user = _userProfileService.GetUserProfileById(User.Identity.GetUserId());
+        //        if (user != null)
+        //        {
 
-                    var message = _messageService.GetMessage(id.Value);
-                    if (message.ReceiverId == User.Identity.GetUserId() || message.SenderId == User.Identity.GetUserId())
-                    {
-                        if (message.ReceiverId == User.Identity.GetUserId())
-                        {
-                            message.ReceiverDeleted = true;
-                        }
-                        if (message.SenderId == User.Identity.GetUserId())
-                        {
-                            message.SenderDeleted = true;
-                        }
-                        _messageService.SaveMessage();
-                        return RedirectToAction("Inbox");
-                    }
-                    else
-                    {
-                        return HttpNotFound("Message not found");
-                    }
-
-
-                }
-            }
-            return HttpNotFound("Delete Error!");
-        }
-
-        public JsonResult DeleteAjax(int? id)
-        {
-            if (id != null)
-            {
-                var user = _userProfileService.GetUserProfileById(User.Identity.GetUserId());
-                if (user != null)
-                {
-
-                    var message = _messageService.GetMessage(id.Value);
-                    if (message.ReceiverId == User.Identity.GetUserId() || message.SenderId == User.Identity.GetUserId())
-                    {
-                        if (message.ReceiverId == User.Identity.GetUserId())
-                        {
-                            message.ReceiverDeleted = true;
-                        }
-                        if (message.SenderId == User.Identity.GetUserId())
-                        {
-                            message.SenderDeleted = true;
-                        }
-                        _messageService.SaveMessage();
-                        return Json(new { Success = true });
-                    }
+        //            var message = _messageService.GetMessage(id.Value);
+        //            if (message.ReceiverId == User.Identity.GetUserId() || message.SenderId == User.Identity.GetUserId())
+        //            {
+        //                if (message.ReceiverId == User.Identity.GetUserId())
+        //                {
+        //                    message.ReceiverDeleted = true;
+        //                }
+        //                if (message.SenderId == User.Identity.GetUserId())
+        //                {
+        //                    message.SenderDeleted = true;
+        //                }
+        //                _messageService.SaveMessage();
+        //                return RedirectToAction("Inbox");
+        //            }
+        //            else
+        //            {
+        //                return HttpNotFound("Message not found");
+        //            }
 
 
+        //        }
+        //    }
+        //    return HttpNotFound("Delete Error!");
+        //}
 
-                }
-            }
-            return Json(new { Success = false });
+        //public JsonResult DeleteAjax(int? id)
+        //{
+        //    if (id != null)
+        //    {
+        //        var user = _userProfileService.GetUserProfileById(User.Identity.GetUserId());
+        //        if (user != null)
+        //        {
 
-        }
+        //            var message = _messageService.GetMessage(id.Value);
+        //            if (message.ReceiverId == User.Identity.GetUserId() || message.SenderId == User.Identity.GetUserId())
+        //            {
+        //                if (message.ReceiverId == User.Identity.GetUserId())
+        //                {
+        //                    message.ReceiverDeleted = true;
+        //                }
+        //                if (message.SenderId == User.Identity.GetUserId())
+        //                {
+        //                    message.SenderDeleted = true;
+        //                }
+        //                _messageService.SaveMessage();
+        //                return Json(new { Success = true });
+        //            }
+
+
+
+        //        }
+        //    }
+        //    return Json(new { Success = false });
+
+        //}
 
         public JsonResult SetMessagesViewed(int? dialogId)
         {
@@ -410,20 +411,19 @@ namespace Market.Web.Controllers
 
 
 
-        // GET: Message/Create
-        public ActionResult New(int? id) // orderId
-        {
-            string offerId = id == null ? "" : id.ToString();
-            ViewData["OrderId"] = offerId;
-            //ViewBag.UserProfileId = new SelectList(_db.UserProfiles.GetAll(), "Id", "Discription");
-            return View();
-        }
+        //// GET: Message/Create
+        //public ActionResult New(int? id) // orderId
+        //{
+        //    string offerId = id == null ? "" : id.ToString();
+        //    ViewData["OrderId"] = offerId;
+        //    //ViewBag.UserProfileId = new SelectList(_db.UserProfiles.GetAll(), "Id", "Discription");
+        //    return View();
+        //}
 
         // POST: Message/Create
         // Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
         // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [System.Web.Mvc.Authorize]
         public JsonResult New(MessageViewModel model)
         {
             

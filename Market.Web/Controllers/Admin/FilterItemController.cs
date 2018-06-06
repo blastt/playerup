@@ -67,7 +67,7 @@ namespace Market.Web.Controllers.Admin
         }
 
         [HttpPost]
-        public string GetFiltersForGameJson(string game)
+        public JsonResult GetFiltersForGameJson(string game)
         {
             //Dictionary<string, string> ranks = new Dictionary<string, string>();
             //[{\"Text\":\"2x2\",\"Value\":\"2x2\",\"FilterItems\":[]},{\"Text\":\"5x5\",\"Value\":\"5x5\",\"FilterItems\":[]}]
@@ -92,7 +92,7 @@ namespace Market.Web.Controllers.Admin
             var str = s.Serialize(filters);
             //check if any of the UserName matches the UserName specified in the Parameter using the ANY extension method.  
 
-            return str;
+            return Json(filters);
         }
         
     }

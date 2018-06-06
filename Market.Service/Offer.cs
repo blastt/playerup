@@ -20,7 +20,7 @@ namespace Market.Service
         Task<IEnumerable<Offer>> GetOffersAsync(Expression<Func<Offer, bool>> where);
         decimal CalculateMiddlemanPrice(decimal offerPrice);
         IEnumerable<Offer> SearchOffers(string game, string sort, ref bool isOnline, ref bool searchInDiscription,
-            string searchString, ref int page, int pageSize,ref int totalItems, ref decimal minGamePrice, ref decimal maxGamePrice, ref decimal priceFrom, ref decimal priceTo);
+            string searchString, ref int page, int pageSize,ref int totalItems, ref decimal minGamePrice, ref decimal maxGamePrice, ref decimal priceFrom, ref decimal priceTo, string[] filters);
         void CreateOffer(Offer offer);
         void UpdateOffer(Offer offer);
         bool DeactivateOffer(Offer offer, string currentUserId);
@@ -98,6 +98,46 @@ namespace Market.Service
                 offers = offersRepository.GetAll().Where(m => m.Game.Value == game);
             
             return offers;
+        }
+
+        private IEnumerable<Offer> SearchOffersByFilters(IEnumerable<Offer> offers, string[] filters)
+        {
+            
+            IList<Offer> listOffers = new List<Offer>();
+            if (filters != null)
+            {
+                bool equals = false;
+                foreach (var offer in offers)
+                {
+                    for (int i = 0; i < Math.Min(offer.FilterItems.Count, filters.Length); i++)
+                    {
+
+                        if (offer.FilterItems[i].Value != filters[i].Split('=')[1] && filters[i].Split('=')[1] != "empty")
+                        {
+                            if (offer.Filters[i].Value == filters[i].Split('=')[0])
+                            {
+                                equals = false;
+                                break;
+                            }
+
+
+                        }
+
+                        equals = true;
+                    }
+                    if (equals)
+                    {
+                        listOffers.Add(offer);
+                    }
+                    equals = false;
+
+                }
+            }
+            else
+            {
+                listOffers = offers.ToList();
+            }
+            return listOffers;
         }
 
         private IEnumerable<Offer> SearchOffersByPrice(IEnumerable<Offer> offers, ref decimal priceFrom, ref decimal priceTo, ref decimal minGamePrice,ref decimal maxGamePrice)
@@ -193,10 +233,11 @@ namespace Market.Service
         }
 
         public IEnumerable<Offer> SearchOffers(string game, string sort, ref bool isOnline, ref bool searchInDiscription,
-            string searchString, ref int page, int pageSize,ref int totalItems, ref decimal minGamePrice, ref decimal maxGamePrice, ref decimal priceFrom, ref decimal priceTo)
+            string searchString, ref int page,  int pageSize,ref int totalItems, ref decimal minGamePrice, ref decimal maxGamePrice, ref decimal priceFrom, ref decimal priceTo,string[] filters )
         {
             IEnumerable<Offer> offers;
             offers = SearchOffersByGame(game);
+            offers = SearchOffersByFilters(offers, filters);
             offers = offers.Where(o => o.State == OfferState.active);
             offers = SearchOffersByPrice(offers,ref priceFrom,ref priceTo,ref minGamePrice, ref maxGamePrice);
             offers = SearchOffersBySearchString(offers, searchString,ref searchInDiscription);

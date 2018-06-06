@@ -8,12 +8,8 @@
                 <h4 class="mb-0 font-weight-light"> Найдено предложений: <span style="font-weight:700">@Model.PageInfo.TotalItems</span></h4>
             </div>
             <div class="col-md-5">
-                <select class="custom-select" id="sort" onchange="SearchOffers();">
-                    <option value="bestSeller">Лучшие продавцы</option>
-                    <option value="priceDesc">От дорогих к дешевым</option>
-                    <option value="priceAsc">От дешевых к дорогим</option>
-                    <option value="newestOffer">Самые новые</option>
-                </select>
+                @Html.DropDownListFor(m => m.SearchInfo.Sort, Model.SearchInfo.SortItems, new {@class="custom-select", id="select-sort", onchange= "SortChange()" })
+                
             </div>
         </div>
         <div class="row">

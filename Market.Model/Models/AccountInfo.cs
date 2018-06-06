@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,6 +16,7 @@ namespace Market.Model.Models
         public string EmailPassword { get; set; }
         public string AdditionalInformation { get; set; }
 
+        public virtual int OrderId { get; set; }
         public virtual Order Order { get; set; }
 
     }

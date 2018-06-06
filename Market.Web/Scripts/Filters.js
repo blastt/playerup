@@ -1,9 +1,11 @@
 ﻿
 
 function CreateFilters(ranks) {
+ 
     var label, hidden, hidden2;
     var select;
     var div;
+    
     var mainDiv = $("#filter-item");
 
     mainDiv.empty();
@@ -11,6 +13,8 @@ function CreateFilters(ranks) {
         div = $("<div></div>");
         div.addClass("image-select");
         div.addClass("form-group");
+      
+        //$('#')
         select = $("<select class='selsel' id='filterItemValues' name='FilterItemValues'></select>");
         var defaultOption = $('<option>'+ranks[rank].Name+'</option>').val('empty');
         hidden2 = $('<input type="hidden" class="selselsel" id="filters" name="FilterValues">').val(ranks[rank].Value);
@@ -28,33 +32,56 @@ function CreateFilters(ranks) {
         mainDiv.append(div);
 
     }
-    myfunction();
+   
 }
 
 function SelectFilterItem(g, isListView) {
 
+   
+            myfunction();
+           
+
+}
+
+function SelectFilterItemInCreate(g) {
+
     $.ajax({
         url: "/FilterItem/GetFiltersForGameJson",
         contentType: "application/json",
-        dataType: "json",
+
         type: "POST",
         data: JSON.stringify({ game: g }),
+        dataType: "json",
 
-        success: function (ranks) {
-            CreateFilters(ranks);
+        beforeSend: function () {
+
+            //$('#find').show();
+            //$('#find').animate({ opacity: '0.7' }, 400);
 
         },
-        error: function myfunction() {
-            alert("hi");
+        success: function (ranks) {
+
+            CreateFilters(ranks);
+            myfunction();
+
+
+        },
+        async: false,
+        error: function () {
+
         }
+
     });
+
 }
 
 function myfunction() {
+   
     var x, i, j, selElmnt, a, b, c, span;
     /*look for any elements with the class "custom-select":*/
     x = document.getElementsByClassName("image-select");
     for (i = 0; i < x.length; i++) {
+
         selElmnt = x[i].getElementsByTagName("select")[0];
         /*for each element, create a new DIV that will act as the selected item:*/
         a = document.createElement("DIV");
@@ -64,6 +91,7 @@ function myfunction() {
         /*for each element, create a new DIV that will contain the option list:*/
         b = document.createElement("DIV");
         b.setAttribute("class", "select-items select-hide");
+       
         for (j = 1; j < selElmnt.length; j++) {
             /*for each option in the original select element,
             create a new DIV that will act as an option item:*/
@@ -83,20 +111,20 @@ function myfunction() {
                 
                 var i, s, h;
                 s = this.parentNode.parentNode.getElementsByTagName("select")[0];
-
+                
                 h = this.parentNode.previousSibling;
-
+           
                 for (i = 0; i < s.length; i++) {
 
                     if (s.options[i].innerText.trim() === this.innerText.trim()) {
                         s.selectedIndex = i;
-
                         h.innerHTML = this.innerHTML;
                         break;
                     }
                 }
                 h.click();
             });
+            
             b.appendChild(c);
         }
         x[i].appendChild(b);
@@ -108,6 +136,22 @@ function myfunction() {
             this.nextSibling.classList.toggle("select-hide");
             this.classList.toggle("select-arrow-active");
         });
+
+        //var filters = [];
+        
+        //filters.push(selElmnt.getElementsByClassName('selselsel')[0].value + "=" + x[i].selElmnt.value)
+        
+        //var q = x[i].getElementsByClassName('select-selected')[0];
+        //alert(filters);
+        //for (k = 0; k < selElmnt.length; k++) {
+
+        //    if (selElmnt.options[k].value.trim() === filters[i].split('=')[1]) {
+        //        selElmnt.selectedIndex = k;
+
+        //        q.innerHTML = "dafew";
+        //        break;
+        //    }
+        //}
     }
     document.addEventListener("click", closeAllSelect);
 }

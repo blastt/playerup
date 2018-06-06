@@ -26,7 +26,7 @@ namespace Market.Web.Controllers
         private readonly IFilterService _filterService;
         private readonly IFilterItemService _filterItemService;
         private readonly int offerDays = 30;
-        public int pageSize = 1;
+        public int pageSize = 8;
         public int pageSizeInUserInfo = 10;
         public OfferController(IOfferService offerService, IGameService gameService, IFilterService filterService, IFilterItemService filterItemService, IUserProfileService userProfileService)
         {
@@ -39,7 +39,7 @@ namespace Market.Web.Controllers
 
         // GET: Offer
         [HttpGet]
-        public async Task<ViewResult> Buy(SearchViewModel model, string[] filters)
+        public async Task<ViewResult> Buy(SearchViewModel model, string[] fi)
         {
             
             var offers = await _offerService.GetOffersAsync(o => o.Game.Value == model.Game && o.State == OfferState.active);
@@ -51,17 +51,46 @@ namespace Market.Web.Controllers
                 model.PriceTo = offers.Max(o => o.Price);
             }
 
+
+            
             var game = _gameService.GetGameByValue(model.Game);
+            IList<SelectFilter> selects = new List<SelectFilter>();
+            //IList<IList<FilterItemViewModel>> listOfOptions = new List<IList<FilterItemViewModel>>();
+            
+            foreach (var filter in game.Filters)
+            {
+                var filterItems = filter.FilterItems.OrderBy(f => f.Rank).ToList();
+                var selectOptions = new List<FilterItemViewModel>();
+
+                foreach (var filterItem in filterItems)
+                {
+                    selectOptions.Add(new FilterItemViewModel
+                    {
+                        Value = filterItem.Value,
+                        Name = filterItem.Name,
+                        ImagePath = filterItem.ImagePath,
+                        FilterValue = filter.Value
+
+                    });
+                }
+                selects.Add(new SelectFilter
+                {
+                    FilterName = filter.Text,
+                    FilterValue = filter.Value,
+                    Options = selectOptions
+                });
+            }
             if (game != null)
             {
                 model.GameName = game.Name;
             }
-            
+            model.SelectsOptions = selects;
 
             model.Games = Mapper.Map<IEnumerable<Game>,IEnumerable<GameViewModel>>(_gameService.GetGames());
             return View(model);
         }
 
+        [Authorize]
         public ViewResult Active()
         {
             IEnumerable<Offer> offersActive = _offerService.GetOffers().Where(m => m.UserProfileId == User.Identity.GetUserId() && m.State == OfferState.active);
@@ -71,7 +100,7 @@ namespace Market.Web.Controllers
             offerViewModels = Mapper.Map<IEnumerable<Offer>, IEnumerable<OfferViewModel>>(offersActive);
             OfferListViewModel model = new OfferListViewModel
             {
-                Offers = offerViewModels,
+                Offers = offerViewModels.OrderByDescending(o => o.DateCreated),
                 ActiveOffersCount = offersActive.Count(),
                 InactiveOffersCount = offersInactive.Count(),
                 CloseOffersCount = offersClosed.Count()
@@ -79,6 +108,7 @@ namespace Market.Web.Controllers
             return View(model);
         }
 
+        [Authorize]
         public ViewResult Inactive()
         {
             IEnumerable<Offer> offersActive = _offerService.GetOffers().Where(m => m.UserProfileId == User.Identity.GetUserId() && m.State == OfferState.active);
@@ -88,7 +118,7 @@ namespace Market.Web.Controllers
             offerViewModels = Mapper.Map<IEnumerable<Offer>, IEnumerable<OfferViewModel>>(offersInactive);
             OfferListViewModel model = new OfferListViewModel
             {
-                Offers = offerViewModels,
+                Offers = offerViewModels.OrderByDescending(o => o.DateCreated),
                 ActiveOffersCount = offersActive.Count(),
                 InactiveOffersCount = offersInactive.Count(),
                 CloseOffersCount = offersClosed.Count()
@@ -96,6 +126,7 @@ namespace Market.Web.Controllers
             return View(model);
         }
 
+        [Authorize]
         public ViewResult Closed()
         {
             IEnumerable<Offer> offersActive = _offerService.GetOffers().Where(m => m.UserProfileId == User.Identity.GetUserId() && m.State == OfferState.active);
@@ -105,7 +136,7 @@ namespace Market.Web.Controllers
             offerViewModels = Mapper.Map<IEnumerable<Offer>, IEnumerable<OfferViewModel>>(offersClosed);
             OfferListViewModel model = new OfferListViewModel
             {
-                Offers = offerViewModels,
+                Offers = offerViewModels.OrderByDescending(o => o.DateCreated),
                 ActiveOffersCount = offersActive.Count(),
                 InactiveOffersCount = offersInactive.Count(),
                 CloseOffersCount = offersClosed.Count()
@@ -114,6 +145,12 @@ namespace Market.Web.Controllers
         }
         private OfferListViewModel SearchOffers(SearchViewModel searchInfo, string[] filters)
         {
+            if (filters == null)
+            {
+                filters = new string[0];
+            }
+            var s = searchInfo.FilterValues;
+            var se = searchInfo.FilterItemValues;
             var filterss = ViewBag.Filters;
             //Thread.Sleep(500);
 
@@ -131,11 +168,12 @@ namespace Market.Web.Controllers
             int totalItems = 0;
             decimal priceFrom = searchInfo.PriceFrom;
             decimal priceTo = searchInfo.PriceTo;
+            
 
 
             //offer.Header.Replace(" ", "").ToLower().Contains(searchString.Replace(" ", "").ToLower()) || (searchInDescription ? (offer.Discription.Replace(" ", "").ToLower().Contains(searchString.Replace(" ", "").ToLower())) : searchInDescription)
             IEnumerable<Offer> foundOffers = _offerService.SearchOffers(game, sort, ref isOnline, ref searchInDiscription,
-                searchString, ref page, pageSize, ref totalItems, ref minGamePrice, ref maxGamePrice, ref priceFrom, ref priceTo);
+                searchString, ref page, pageSize, ref totalItems, ref minGamePrice, ref maxGamePrice, ref priceFrom, ref priceTo,filters);
             if (searchInfo.IsOnline)
             {
                 var loggedOnUsers = HttpRuntime.Cache["LoggedInUsers"] as Dictionary<string, DateTime>;
@@ -144,50 +182,16 @@ namespace Market.Web.Controllers
                     foundOffers = foundOffers.Where(o => loggedOnUsers.Any(u => u.Key == o.UserProfile.Name));
                 }
             }
+
+
             
-            IList<Offer> offers = new List<Offer>();
-            if (searchInfo.JsonFilters.Count != 0)
-            {
-                bool equals = false;
-                foreach (var offer in foundOffers)
-                {
-                    if (offer.FilterItems.Count == searchInfo.JsonFilters.Count)
-                    {
-                        for (int i = 0; i < offer.FilterItems.Count; i++)
-                        {
-
-                            if (offer.FilterItems[i].Value != searchInfo.JsonFilters[i].Value && searchInfo.JsonFilters[i].Value != "empty")
-                            {
-                                if (offer.Filters[i].Value == searchInfo.JsonFilters[i].Attribute)
-                                {
-                                    equals = false;
-                                    break;
-                                }
-
-
-                            }
-
-                            equals = true;
-                        }
-                        if (equals)
-                        {
-                            offers.Add(offer);
-                        }
-                        equals = false;
-                    }
-                }
-            }
-            else
-            {
-                offers = foundOffers.ToList();
-            }
 
             IList<SelectListItem> ranks = new List<SelectListItem>
             {
                 new SelectListItem() { Text = "Все ранги", Value = "none", Selected = true }
             };
             IList<OfferViewModel> offerList = new List<OfferViewModel>();
-            var offerViewModels = Mapper.Map<IEnumerable<Offer>, IEnumerable<OfferViewModel>>(offers);
+            var offerViewModels = Mapper.Map<IEnumerable<Offer>, IEnumerable<OfferViewModel>>(foundOffers);
 
             var games = _gameService.GetGames();
             var gameViewModels = Mapper.Map<IEnumerable<Game>, IEnumerable<GameViewModel>>(games);
@@ -233,10 +237,28 @@ namespace Market.Web.Controllers
                     
                     PageNumber = page,
                     PageSize = pageSize,
-                    TotalItems = offers.Count()
+                    TotalItems = foundOffers.Count()
                 }
             };
+            model.SearchInfo.SortItems = new List<SelectListItem>
+            {
+                new SelectListItem { Value = "bestSeller", Text = "Лучшие продавцы" },
+                new SelectListItem { Value = "priceDesc", Text = "От дорогих к дешевым" },
+                new SelectListItem { Value = "priceAsc", Text = "От дешевых к дорогим" },
+                new SelectListItem { Value = "newestOffer", Text = "Самые новые" }
+            };
 
+            foreach (var item in model.SearchInfo.SortItems)
+            {
+                if (item.Value == searchInfo.Sort)
+                {
+                    item.Selected = true;
+                }
+                else
+                {
+                    item.Selected = false;
+                }
+            }
 
             return model;
 
@@ -245,7 +267,7 @@ namespace Market.Web.Controllers
         public PartialViewResult List(SearchViewModel searchInfo, string[] filters)
         {
 
-
+            
             var model = SearchOffers(searchInfo, filters);
 
             return PartialView("_OfferBlock", model);
@@ -264,6 +286,7 @@ namespace Market.Web.Controllers
                     }
                 }
             }
+            
 
             var model = SearchOffers(searchInfo, filters);
             
@@ -316,23 +339,41 @@ namespace Market.Web.Controllers
         [Authorize]
         public ActionResult Create()
         {
-            CreateOfferViewModel model = new CreateOfferViewModel();
-            SelectList selectList = new SelectList(_gameService.GetGames());
-
-            IList<SelectListItem> games = new List<SelectListItem>();
-            model.SellerPaysMiddleman = true;
-            //games.Add(new SelectListItem { Value = "", Text = "Выберите игру", Selected = true, Disabled = tr });
-            foreach (var game in _gameService.GetGames())
+            var userProfile = _userProfileService.GetUserProfileById(User.Identity.GetUserId());
+            if (userProfile != null)
             {
-                games.Add(new SelectListItem { Value = game.Value, Text = game.Name });
+                var appUser = userProfile.ApplicationUser;
+                if (appUser != null)
+                {
+                    if (!(appUser.PhoneNumberConfirmed && appUser.EmailConfirmed))
+                    {
+                        return View("PhoneNumberRequest");
+                    }
+                    else
+                    {
+                        CreateOfferViewModel model = new CreateOfferViewModel();
+                        SelectList selectList = new SelectList(_gameService.GetGames());
+
+                        IList<SelectListItem> games = new List<SelectListItem>();
+                        model.SellerPaysMiddleman = true;
+                        //games.Add(new SelectListItem { Value = "", Text = "Выберите игру", Selected = true, Disabled = tr });
+                        foreach (var game in _gameService.GetGames())
+                        {
+                            games.Add(new SelectListItem { Value = game.Value, Text = game.Name });
+                        }
+
+                        model.Games = games;
+
+                        return View(model);
+                    }
+                }
+
             }
-
-            model.Games = games;
-
-            return View(model);
+            return HttpNotFound();
         }
 
         [HttpPost]
+        [Authorize]
         public ActionResult Create(CreateOfferViewModel model)
         {
 
@@ -347,10 +388,10 @@ namespace Market.Web.Controllers
                 var appUser = userProfile.ApplicationUser;
                 if (appUser != null)
                 {
-                    //if(!(appUser.PhoneNumberConfirmed && appUser.EmailConfirmed))
-                    //{
-                    //    return HttpNotFound("you are not confirmed email or phone number");
-                    //}
+                    if (!(appUser.PhoneNumberConfirmed && appUser.EmailConfirmed))
+                    {
+                        return HttpNotFound("you are not confirmed email or phone number");
+                    }
                 }
 
             }
@@ -482,6 +523,7 @@ namespace Market.Web.Controllers
                 }                
                 _offerService.DeactivateOffer(offer, User.Identity.GetUserId());
                 _offerService.SaveOffer();
+                return View();
             }
             return HttpNotFound();
         }
@@ -552,6 +594,7 @@ namespace Market.Web.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public ActionResult Edit(EditOfferViewModel model)
         {
             //EditOfferViewModel model = new EditOfferViewModel();
@@ -640,12 +683,18 @@ namespace Market.Web.Controllers
         {
             //check if any of the UserName matches the UserName specified in the Parameter using the ANY extension method.  
             bool exists = false;
-            Offer offer = _offerService.GetOffers().FirstOrDefault(x => x.AccountLogin == steamLogin);
+            Offer offer = _offerService.GetOffers().LastOrDefault(x => x.AccountLogin == steamLogin);
+
             if (offer != null)
             {
                 if (offer.Order != null)
-                {                    
-                    exists = false;
+                {
+                    if (offer.Order.CurrentStatus.Value == OrderStatuses.BuyerClosed || offer.Order.CurrentStatus.Value == OrderStatuses.SellerClosed ||
+                        offer.Order.CurrentStatus.Value == OrderStatuses.MiddlemanClosed)
+                    {
+                        exists = true;
+                    }
+                    
                     return Json(!exists, JsonRequestBehavior.AllowGet);                    
                 }
                 exists = true;
@@ -663,6 +712,6 @@ namespace Market.Web.Controllers
             var json = new JavaScriptSerializer().Serialize(_gameService.GetGameByValue(game).Filters);
             //check if any of the UserName matches the UserName specified in the Parameter using the ANY extension method.  
             return Json(json, JsonRequestBehavior.AllowGet);
-        }
+        }       
     }
 }

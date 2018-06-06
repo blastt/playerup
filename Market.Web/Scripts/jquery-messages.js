@@ -1,15 +1,23 @@
-﻿$(document).ready(function () {
+﻿
+
+$(document).ready(function () {
     var messageInput = $('#messageBody');
     messageInput.click(function () {
         SetMessagesViewed();
     });
     messageInput.keypress(function (e) {
         if (e.which == 13) {
-            if (messageInput.val().trim() !== '') {
+            event.returnValue = false;
+            if (messageInput.text().trim() !== '') {
+
                 CreateNewMessage();
                 SetMessagesViewed();
-            }
+            }            
+            return false;
+                
+            
         }
+        
     });
 });
 
@@ -42,7 +50,7 @@ function messageScrollToButton() {
 var btn = document.getElementById("send");
         var messageInput = $('#messageBody');
         btn.onclick = function () {
-            if (messageInput.val().trim() !== '') {
+            if (messageInput.text().trim() !== '') {
                 CreateNewMessage();
             }
 
@@ -50,9 +58,10 @@ var btn = document.getElementById("send");
 
         function CreateNewMessage() {
             var message = {
-                "MessageBody": $('#messageBody').val(),
+                "MessageBody": $('#messageBody').text(),
                 "ReceiverId": $('#receiverId').val()
             };
+            messageInput.text("");
             $.ajax({
                 url: "/Message/New",
                 type: "POST",
@@ -61,11 +70,11 @@ var btn = document.getElementById("send");
                 dataType: "Json",
 
                 success: function (result) {
-                    
+                    messageInput.text("");
                    
                 },
                 error: function () {
-                    alert("خطا!");
+                    messageInput.text("");
                 }
             });
             modal.style.display = "none";

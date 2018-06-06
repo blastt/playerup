@@ -31,7 +31,6 @@ namespace Market.Web.Mappings
             #region AccountInfo
 
             CreateMap<AccountInfo, AccountInfoViewModel>()
-                .ForMember(o => o.Id, map => map.MapFrom(vm => vm.Id))
               .ForMember(o => o.AdditionalInformation, map => map.MapFrom(vm => vm.AdditionalInformation))
               .ForMember(o => o.SteamPassword, map => map.MapFrom(vm => vm.Password))
               .ForMember(o => o.SteamLogin, map => map.MapFrom(vm => vm.Login))
@@ -63,6 +62,7 @@ namespace Market.Web.Mappings
                .ForMember(o => o.FilterItems, map => map.MapFrom(vm => vm.FilterItems))
                .ForMember(o => o.DateCreated, map => map.MapFrom(vm => vm.DateCreated))
                .ForMember(o => o.DateDeleted, map => map.MapFrom(vm => vm.DateDeleted))
+               .ForMember(o => o.HasOrder, map => map.MapFrom(vm => vm.Order != null))
                .ForMember(o => o.Price, map => map.MapFrom(vm => vm.Price))
                .ForMember(o => o.Game, map => map.MapFrom(vm => vm.Game))
                .ForMember(o => o.UserId, map => map.MapFrom(vm => vm.UserProfileId))
@@ -124,7 +124,7 @@ namespace Market.Web.Mappings
                 .ForMember(o => o.BuyerFeedbacked, map => map.MapFrom(vm => vm.BuyerFeedbacked))
                 .ForMember(o => o.SellerFeedbacked, map => map.MapFrom(vm => vm.SellerFeedbacked))
                 .ForPath(o => o.Id, map => map.MapFrom(vm => vm.Id))
-                .ForMember(o => o.AccountInfo, map => map.MapFrom(vm => vm.AccountInfo))
+                .ForMember(o => o.AccountInfos, map => map.MapFrom(vm => vm.AccountInfos))
                 .ForMember(o => o.BuyerId, map => map.MapFrom(vm => vm.BuyerId))
                 .ForMember(o => o.SellerId, map => map.MapFrom(vm => vm.SellerId))
                 .ForPath(o => o.BuyerName, map => map.MapFrom(vm => vm.Buyer.Name))
@@ -145,6 +145,7 @@ namespace Market.Web.Mappings
                .ForMember(o => o.Value, map => map.MapFrom(vm => vm.Value))
                .ForMember(o => o.ImagePath, map => map.MapFrom(vm => vm.ImagePath))
                .ForPath(o => o.FilterName, map => map.MapFrom(vm => vm.Filter.Text))
+               .ForPath(o => o.FilterValue, map => map.MapFrom(vm => vm.Filter.Value))
                .ForPath(o => o.GameName, map => map.MapFrom(vm => vm.Filter.Game.Name));
 
             CreateMap<FilterItem, EditFilterItemViewModel>()

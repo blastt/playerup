@@ -1,0 +1,26 @@
+﻿@model IEnumerable<Market.Web.ViewModels.AccountInfoViewModel>
+
+@{
+    ViewBag.Title = "OrderAccessDetails";
+    Layout = "~/Views/Shared/_MiddlemanLayout.cshtml";
+}
+
+@foreach (var info in Model)
+{
+<div class="alert alert-dark">
+    <div class="form-group">
+        Стим логин - @Html.DisplayFor(m => info.SteamLogin)
+    </div>
+    <div class="form-group">
+        Стим пароль - @Html.DisplayFor(m => info.SteamPassword)
+    </div>
+    <div class="form-group">
+        Стим email - @Html.DisplayFor(m => info.SteamEmail)
+    </div>
+    <div class="form-group">
+        Стим email логин - @Html.DisplayFor(m => info.EmailPassword)
+    </div>
+</div>
+}
+
+

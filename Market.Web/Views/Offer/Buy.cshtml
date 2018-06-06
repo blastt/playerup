@@ -1,9 +1,12 @@
 ﻿@model Market.Web.ViewModels.SearchViewModel
 @{
-    ViewBag.Title = "Купить аккаунт " + Model.Game;
+    ViewBag.Title = "Купить аккаунт " + Model.GameName + " Лучшие цены | Гарант | Безопасные сделки.";
+    ViewBag.Description =  "У нас вы можете купить аккаунт " + Model.GameName +" по самым низким ценам, которые задают сами продавцы. Мы гарантируем безопасную сделку" +
+                "в которой покупатель получит рабочий аккаунт, а продавец - деньги. Выбирайте себе аккаунт на нашем сайте!";
 }
 
-<div class="row">
+
+@*<div class="row">
     <div class="col-lg-12">
         <div class="alert alert-secondary">
             <p>
@@ -11,7 +14,7 @@
                 в которой покупатель получит рабочий аккаунт, а продавец - деньги.
         </div>
     </div>
-</div>
+</div>*@
 
 
 <div class="row">
@@ -53,6 +56,8 @@
 <input type="hidden" name="SearchString" id="searchString" value="@Model.SearchString" />
 <script src="@RouteJs.RouteJsHandler.HandlerUrl"></script>
 
+
+
 @section scripts
 {
     <script type="text/javascript" src="~/Scripts/Filters.js"></script>
@@ -61,6 +66,6 @@
     @Scripts.Render("~/bundles/Custom")
 
     <script>
-        
+
     </script>
 }

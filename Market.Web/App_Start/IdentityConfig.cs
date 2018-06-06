@@ -33,19 +33,27 @@ namespace Market.Web
 
         private async Task ConfigSendGridasync(IdentityMessage message)
         {
+            try
+            {
+                // Create a Web transport for sending email.
+                var apiKey = Environment.GetEnvironmentVariable("SENDGRID_KEY");
+                //var apiKey = "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";
+                var client = new SendGridClient(apiKey);
+                var from = new EmailAddress("support@playerup.ru", "PlayerUp");
+                var subject = message.Subject;
+
+                var to = new EmailAddress(message.Destination);
+                var plainTextContent = message.Body;
+                var htmlContent = message.Body;
+                var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
+                var response = await client.SendEmailAsync(msg);
+            }
+            catch (Exception)
+            {
+
+               
+            }
             
-            // Create a Web transport for sending email.
-            var apiKey = Environment.GetEnvironmentVariable("SENDGRID_KEY");
-            //var apiKey = "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";
-            var client = new SendGridClient(apiKey);
-            var from = new EmailAddress("support@playerup.ru", "PlayerUp");
-            var subject = message.Subject;
-            
-            var to = new EmailAddress(message.Destination);
-            var plainTextContent = message.Body;
-            var htmlContent = message.Body;
-            var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
-            var response = await client.SendEmailAsync(msg);
         }
     }
 

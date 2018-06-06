@@ -43,7 +43,9 @@ namespace Market.Web.ViewModels
         public string SellerId { get; set; }
         public string SellerName { get; set; }
 
-        public AccountInfo AccountInfo { get; set; }
+        public IList<StatusLog> Logs { get; set; } = new List<StatusLog>();
+
+        public virtual IList<AccountInfo> AccountInfos { get; set; } = new List<AccountInfo>();
 
         public DateTime DateCreated { get; set; }
     }

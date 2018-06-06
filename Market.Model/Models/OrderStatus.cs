@@ -20,7 +20,9 @@ namespace Market.Model.Models
         BuyerClosed,
         SellerClosed,
         MiddlemanClosed,
-        ClosedAutomatically
+        ClosedAutomatically,
+        AbortedByBuyer,
+        MiddlemanBackingAccount
     }
 
     public class OrderStatus

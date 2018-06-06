@@ -114,33 +114,44 @@
             </div>
             <div class="order-details-log-body">
 
-                @foreach (var status in Model.StatusLogs)
-                {
+                @*@foreach (var status in Model.StatusLogs)
+        {
 
-                    if (status.NewStatus.Value != Market.Model.Models.OrderStatuses.MiddlemanClosed &&
-                        status.NewStatus.Value != Market.Model.Models.OrderStatuses.SellerClosed &&
-                        status.NewStatus.Value != Market.Model.Models.OrderStatuses.BuyerClosed &&
-                    status.NewStatus.Value != Market.Model.Models.OrderStatuses.ClosedAutomatically)
-                    {
-                        <div class="order-details-node">
-                            <div class="node-circle"></div>
-                            <div class="node-name">@status.OldStatus.FinishedName</div>
-                            <div class="node-date">@status.TimeStamp</div>
-                        </div>
-                    }
-                    if (status.NewStatus.Value == Market.Model.Models.OrderStatuses.ClosedSuccessfully ||
-                    status.NewStatus.Value == Market.Model.Models.OrderStatuses.MiddlemanClosed ||
-                    status.NewStatus.Value == Market.Model.Models.OrderStatuses.SellerClosed ||
-                    status.NewStatus.Value == Market.Model.Models.OrderStatuses.BuyerClosed ||
-                    status.NewStatus.Value == Market.Model.Models.OrderStatuses.ClosedAutomatically)
-                    {
-                        <div class="order-details-node">
-                            <div class="node-circle"></div>
-                            <div class="node-name">@status.NewStatus.FinishedName</div>
-                            <div class="node-date">@status.TimeStamp</div>
-                            <div class="node-circle-final"></div>
-                        </div>
-                    }
+            if (status.NewStatus.Value != Market.Model.Models.OrderStatuses.MiddlemanClosed &&
+                status.NewStatus.Value != Market.Model.Models.OrderStatuses.SellerClosed &&
+                status.NewStatus.Value != Market.Model.Models.OrderStatuses.BuyerClosed &&
+            status.NewStatus.Value != Market.Model.Models.OrderStatuses.ClosedAutomatically)
+            {
+                <div class="order-details-node">
+                    <div class="node-circle"></div>
+                    <div class="node-name">@status.OldStatus.FinishedName</div>
+                    <div class="node-date">@status.TimeStamp</div>
+                </div>
+            }
+            if (status.NewStatus.Value == Market.Model.Models.OrderStatuses.ClosedSuccessfully ||
+            status.NewStatus.Value == Market.Model.Models.OrderStatuses.MiddlemanClosed ||
+            status.NewStatus.Value == Market.Model.Models.OrderStatuses.SellerClosed ||
+            status.NewStatus.Value == Market.Model.Models.OrderStatuses.BuyerClosed ||
+            status.NewStatus.Value == Market.Model.Models.OrderStatuses.ClosedAutomatically||
+                status.NewStatus.Value == Market.Model.Models.OrderStatuses.MiddlemanBackingAccount)
+            {
+                <div class="order-details-node">
+                    <div class="node-circle"></div>
+                    <div class="node-name">@status.NewStatus.FinishedName</div>
+                    <div class="node-date">@status.TimeStamp</div>
+                    <div class="node-circle-final"></div>
+                </div>
+            }
+        }*@
+
+                @foreach (var log in Model.Logs)
+                {
+                    
+                    <div class="order-details-node">
+                        <div class="node-circle"></div>
+                        <div class="node-name">@log.OldStatus.FinishedName</div>
+                        <div class="node-date">@log.TimeStamp</div>
+                    </div>
                 }
             </div>
         </div>
@@ -159,7 +170,7 @@
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
-            <input type="hidden" id="receiverId" name="ReceiverId" value="@Model.Id" />
+            <input type="hidden" id="receiverId" name="ReceiverId" value="@Model.BuyerId" />
 
             <div class="modal-body">
 

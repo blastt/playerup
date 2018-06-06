@@ -2,6 +2,7 @@
 using Hangfire;
 using Market.Model.Models;
 using Market.Service;
+using Market.Web.Hangfire;
 using Market.Web.ViewModels;
 using Microsoft.AspNet.Identity;
 using System;
@@ -13,16 +14,18 @@ using System.Web.Mvc;
 
 namespace Market.Web.Controllers
 {
+    [Authorize]
     public class OrderController : Controller
     {
         private readonly IUserProfileService _userProfileService;
         private readonly IOrderStatusService _orderStatusService;
+        private readonly IStatusLogService _statusLogService;
         private readonly IOfferService _offerService;
         private readonly ITransactionService _transactionService;
         private readonly IOrderService _orderService;
         private readonly IGameService _gameService;
         public int pageSize = 5;
-        public OrderController(IOfferService offerService, IOrderStatusService orderStatusService, ITransactionService transactionService, IGameService gameService, IOrderService orderService, IUserProfileService userProfileService)
+        public OrderController(IOfferService offerService, IStatusLogService statusLogService, IOrderStatusService orderStatusService, ITransactionService transactionService, IGameService gameService, IOrderService orderService, IUserProfileService userProfileService)
         {
             _orderStatusService = orderStatusService;
             _offerService = offerService;
@@ -30,6 +33,7 @@ namespace Market.Web.Controllers
             _transactionService = transactionService;
             _orderService = orderService;
             _userProfileService = userProfileService;
+            _statusLogService = statusLogService;
         }
 
         public ActionResult OrderBuy()
@@ -44,7 +48,7 @@ namespace Market.Web.Controllers
                 ViewData["SellCount"] = ordersSell.Count();
                 var model = new OrderListViewModel
                 {
-                    Orders = orderViewModels
+                    Orders = orderViewModels.OrderByDescending(o => o.DateCreated)
 
                 };
                 
@@ -68,7 +72,7 @@ namespace Market.Web.Controllers
                 ViewData["SellCount"] = ordersSell.Count();
                 var model = new OrderListViewModel
                 {
-                    Orders = orderViewModels
+                    Orders = orderViewModels.OrderByDescending(o => o.DateCreated)
 
                 };
 
@@ -136,7 +140,21 @@ namespace Market.Web.Controllers
                         {
                             model.ShowProvideData = true;
                         }
-                        
+
+                        IList<StatusLog> orderLogs = new List<StatusLog>();
+
+                        foreach (var log in order.StatusLogs)
+                        {
+                            orderLogs.Add(log);
+                            if (log.NewStatus.Value == OrderStatuses.AbortedByBuyer)
+                            {
+                                var test = order.StatusLogs.FirstOrDefault(s => s.NewStatus.Value == OrderStatuses.BuyerConfirming);
+                                orderLogs.Remove(test);
+                            }
+                        }
+
+                        model.Logs = orderLogs;
+
                         model.CurrentStatusName = order.CurrentStatus.DuringName;
                         model.StatusLogs = order.StatusLogs;
                         model.ModeratorId = order.MiddlemanId;
@@ -172,6 +190,9 @@ namespace Market.Web.Controllers
                         }
                         TempData["orderBuyStatus"] = "Сделка закрыта.";
                         _orderService.SaveOrder();
+                        MarketHangfire.SetSendEmailChangeStatus(order.Id, order.Seller.ApplicationUser.Email, order.CurrentStatus.DuringName, Url.Action("SellDetails", "Order", new { id = order.Id }, protocol: Request.Url.Scheme));
+
+                        MarketHangfire.SetSendEmailChangeStatus(order.Id, order.Buyer.ApplicationUser.Email, order.CurrentStatus.DuringName, Url.Action("BuyDetails", "Order", new { id = order.Id }, protocol: Request.Url.Scheme));
                         return RedirectToAction("BuyDetails", new { id = order.Id });
                     }
                 }
@@ -186,7 +207,10 @@ namespace Market.Web.Controllers
                             order.JobId = null;
                         }
                         TempData["orderSellStatus"] = "Сделка закрыта.";
-                        _orderService.SaveOrderAsync();
+                        _orderService.SaveOrder();
+                        MarketHangfire.SetSendEmailChangeStatus(order.Id, order.Seller.ApplicationUser.Email, order.CurrentStatus.DuringName, Url.Action("SellDetails", "Order", new { id = order.Id }, protocol: Request.Url.Scheme));
+
+                        MarketHangfire.SetSendEmailChangeStatus(order.Id, order.Buyer.ApplicationUser.Email, order.CurrentStatus.DuringName, Url.Action("BuyDetails", "Order", new { id = order.Id }, protocol: Request.Url.Scheme));
                         return RedirectToAction("SellDetails", new { id = order.Id });
                     }
                 }
@@ -199,9 +223,13 @@ namespace Market.Web.Controllers
                         if (order != null)
                         {
                             BackgroundJob.Delete(order.JobId);
+
                             order.JobId = null;
                         }
                         _orderService.SaveOrder();
+                        MarketHangfire.SetSendEmailChangeStatus(order.Id, order.Seller.ApplicationUser.Email, order.CurrentStatus.DuringName, Url.Action("SellDetails", "Order", new { id = order.Id }, protocol: Request.Url.Scheme));
+
+                        MarketHangfire.SetSendEmailChangeStatus(order.Id, order.Buyer.ApplicationUser.Email, order.CurrentStatus.DuringName, Url.Action("BuyDetails", "Order", new { id = order.Id }, protocol: Request.Url.Scheme));
                     }
                 }
                 
@@ -209,6 +237,33 @@ namespace Market.Web.Controllers
                 
 
 
+            }
+            return HttpNotFound();
+        }
+
+        public ActionResult Abort(int? id)
+        {
+            if (id != null)
+            {
+                bool result = _orderService.AbortOrder(id.Value, User.Identity.GetUserId());
+                var order = _orderService.GetOrder(id.Value);
+                if (result && order != null)
+                {
+                    if (order.JobId != null)
+                    {
+                        BackgroundJob.Delete(order.JobId);
+                        order.JobId = null;
+                    }
+
+                    _orderService.SaveOrder();
+
+                    MarketHangfire.SetSendEmailChangeStatus(order.Id, order.Seller.ApplicationUser.Email, order.CurrentStatus.DuringName, Url.Action("SellDetails", "Order", new { id = order.Id }, protocol: Request.Url.Scheme));
+
+                    MarketHangfire.SetSendEmailChangeStatus(order.Id, order.Buyer.ApplicationUser.Email, order.CurrentStatus.DuringName, Url.Action("BuyDetails", "Order", new { id = order.Id }, protocol: Request.Url.Scheme));
+
+                    _orderService.SaveOrder();
+                    return RedirectToAction("BuyDetails", "Order", new { id });
+                }
             }
             return HttpNotFound();
         }
@@ -268,6 +323,21 @@ namespace Market.Web.Controllers
                         {
                             model.ShowProvideData = true;
                         }
+
+                        IList<StatusLog> orderLogs = new List<StatusLog>();
+
+                        foreach (var log in order.StatusLogs)
+                        {
+                            orderLogs.Add(log);
+                            if (log.NewStatus.Value == OrderStatuses.AbortedByBuyer)
+                            {
+                                var test = order.StatusLogs.FirstOrDefault(s => s.NewStatus.Value == OrderStatuses.BuyerConfirming);
+                                orderLogs.Remove(test);
+                            }
+                        }
+
+                        model.Logs = orderLogs;
+
                         model.CurrentStatusName = order.CurrentStatus.DuringName;
 
                         model.StatusLogs = order.StatusLogs;

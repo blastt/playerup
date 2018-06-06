@@ -1,10 +1,10 @@
 ﻿@model Market.Web.ViewModels.SearchViewModel
 
-<div class="col-lg-3">
+<div class="col-lg-3 pr-2">
     <form id="searchForm" class="bs-component">
         <div class="filter card mb-4">
             <div class="filter-header">
-                <h3 class="text-700">Фильтры</h3>
+                <h3 class="text-700">Найти предложение</h3>
             </div>
             <div class="filter-body">
                 <div class="filter-parameters">
@@ -29,12 +29,12 @@
 
                     </div>
                     <div class="row mb-4">
-                        <div class="col-sm-6">
+                        <div class="col-sm-6 pr-1">
                             <div class="filter-btn mb-2">
                                 <input type="button" value="Поиск" class="btn btn-search font-size-18" onclick="SearchButton();" />
                             </div>
                         </div>
-                        <div class="col-sm-6">
+                        <div class="col-sm-6 pl-1">
                             <div class="filter-btn mb-2">
                                 <input type="button" value="Сброс" class="btn btn-reset font-size-18" onclick="ResetButton();" />
                             </div>
@@ -42,7 +42,7 @@
                     </div>
                     <div class="form-group mb-5">
                         <div class="filter-label">
-                            <span>ЦЕНА</span>
+                            <span>Цена</span>
                         </div>
                         <div class="price-container row">
                             <div class="filter-price-from">
@@ -61,9 +61,54 @@
                         <div id="slider-range"></div>
                     </div>
                     <div class="form-group">
-                        @{
-                            ViewBag.Filters = Model.filters;
-                        } 
+                        @if (Model.SelectsOptions.Count != 0)
+                        {
+                        <div class="filter-label">
+                            <span>Игровые фильтры</span>
+                        </div>
+                        }
+                        @foreach (var select in Model.SelectsOptions)
+                        {
+
+                            <div class="image-select">
+                                <select class='filters' id='users-contain' name='filters'>
+
+                                    <option value="@select.FilterValue=empty">@select.FilterName</option>
+                                    @foreach (var option in select.Options)
+                                    {
+
+                                        var innerText = option.FilterValue + "=" + option.Value;
+                                        var selected = "";
+                                        foreach (var filter in Model.Filters)
+                                        {
+                                            if (filter.Split('=')[0] == option.FilterValue && filter.Split('=')[1] == option.Value)
+                                            {
+                                                selected = "selected=\"selected\"";
+                                            }
+                                        }
+
+                                        <option data-url="@option.ImagePath" @selected value="@innerText">@option.Name</option>
+                                    }
+                                </select>
+                            </div>
+
+                        }
+                        <input type="hidden" name="sort" id="sort" value="@Model.Sort" />
+
+                        @*<select class='selsel' id='filterItemValues' name='FilterItemValues'>
+
+                            </select>
+
+                            @if (Model.Filters != null)
+                            {
+                                for (int i = 0; i < Model.Filters.Length; i++)
+                                {
+                                    var id = $"filter[{Model.Filters[i].Split('=')[0]}]";
+                                    <input type="hidden" id="@id" class="filters" name="filters" value="@Model.Filters[i]" />
+                                }
+
+                            }*@
+
 
                         <div id="filter-item">
                         </div>

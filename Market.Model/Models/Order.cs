@@ -89,7 +89,8 @@ namespace Market.Model.Models
         public virtual string SellerId { get; set; }
         public virtual UserProfile Seller { get; set; }
 
-        public virtual AccountInfo AccountInfo { get; set; }
+
+        public virtual IList<AccountInfo> AccountInfos { get; set; } = new List<AccountInfo>();
 
         public DateTime DateCreated { get; set; } = DateTime.Now;
     }

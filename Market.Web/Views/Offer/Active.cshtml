@@ -11,7 +11,8 @@
             <p class="lead">Здесь отображается информация по предложениям</p>
         </div>
         @{Html.RenderAction("AccountMenu", "Account"); }
-        <div class="account-container">
+
+        <div class="account-container">            
             @{Html.RenderPartial("_AccountOffersMenu", Model); }
             <div class="form-inline form-offer-filter">
                 <h3 class="mb-0 text-gray text-300">

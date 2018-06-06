@@ -66,6 +66,12 @@
                 {
                     @Html.ActionLink("Закрыть", "Close", "Order", new { id = order.Id }, null)
                 }
+                @if (order.CurrentStatus.Value == OrderStatuses.MiddlemanBackingAccount)
+                {
+                    @Html.ActionLink("Закрыть сделку успешно", "CloseOrderSuccess", "Middleman", new { id = order.Id }, null)
+                    @Html.ActionLink("Вернуть деньги покупателю", "ConfirmAbortOrder", "Middleman", new { id = order.Id }, null)
+                }
+                @Html.ActionLink("Данные", "OrderAccessDetails", new { id = order.Id })
                 @Html.ActionLink("Транзакции", "OrderTransactionDetails", new { id = order.Id })
             </td>
         </tr>

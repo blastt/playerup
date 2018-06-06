@@ -11,6 +11,7 @@ using System.Web.Mvc;
 
 namespace Market.Web.Controllers
 {
+    [Authorize]
     public class DialogController : Controller
     {
         private readonly IUserProfileService _userProfileService;
@@ -25,6 +26,7 @@ namespace Market.Web.Controllers
             _dialogService = dialogService;
         }
 
+        
         public ActionResult Details(int? dialogId)
         {
             string currentUserId = User.Identity.GetUserId();

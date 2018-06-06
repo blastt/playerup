@@ -6,13 +6,34 @@
 @{
     ViewBag.Title = "Информация о предложении";
 }
+<div class="nav-row">
+    <div class="row">
 
-<link rel="stylesheet" href="/resources/demos/style.css">
+        <div class="col-md-1">
+            <i class="back-arrow"></i>
+            <a class="back-link" href="javascript:history.back()"> Назад</a>
+        </div>
+        <div class="col-md-11">
+            <ul class="ul-nav">
+                <li>
+                    @Html.ActionLink("Аккаунты", "Buy", "Offer", new { game = Model.Game.Value }, null)
+
+                </li>
+                <li>
+                    @Html.ActionLink(Model.Game.Name, "Buy", "Offer", new { game = Model.Game.Value }, null)
+
+
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+@*<link rel="stylesheet" href="/resources/demos/style.css">*@
     <div class="main-block">
         <div class="row">
             <div class="col-md-3">
-                <div class="card details-user-block mb-3">
-                    <img class="img-circle img-center" src="@Model.UserProfile.ImagePath" alt="Alternate Text" style="width:80px; height:80px" />
+                <div class="card details-user-block mb-4">
+                    <img alt="Аватар" class="img-circle img-center" src="@Model.UserProfile.ImagePath" alt="Alternate Text" style="width:80px; height:80px" />
 
                     <div class="details-user-name-contact">
                         <div class="row">
@@ -57,7 +78,7 @@
                 </div>
             </div>
             <div class="col-md-5">
-                <div class="card details-offer-block  mb-3">
+                <div class="card details-offer-block  mb-4">
                     <ul>
                         <li class="li-details">
                             <label class="label-details">Игра</label>
@@ -99,14 +120,14 @@
             </div>
 
             <div class="col-md-4">
-                <div class="card offer-buying-block mb-3" style="height: 300px">
+                <div class="card offer-buying-block mb-4" style="height: 300px">
                     <div style="text-align:center">
                         <p class="price">@Html.DisplayFor(m => m.Price)</p>
                     </div>
                     <div class="text-center mb-4">
                         @using (Html.BeginForm("Checkoutme", "Checkout", FormMethod.Get))
                         {
-                            <input type="hidden" name="offerId" value="@Model.Id" />
+                            <input type="hidden" name="Id" value="@Model.Id" />
 
                             <input type="submit" name="buy" value="Купить" class=" btn btn-buy-big font-size-18" />
                         }
@@ -168,7 +189,7 @@
             <div class="modal-body">
 
                 <div class="form-group">
-                    <img class="img-circle avatar-48" src="@Model.UserProfile.ImagePath" style="float:left; margin-right: 20px" alt="Alternate Text" />
+                    <img alt="Аватар" class="img-circle avatar-48" src="@Model.UserProfile.ImagePath" style="float:left; margin-right: 20px" />
                     <div>
                         @Html.ActionLink(Model.UserName, "Info", new { })
                         <p>

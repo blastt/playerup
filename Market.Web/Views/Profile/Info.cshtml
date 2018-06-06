@@ -9,7 +9,7 @@
 <div class="row">
     <div class="col-md-4">
         <div class="card info-user-block mb-3" style="text-align:center">
-            <img class="img-circle img-center avatar-148" src="@Model.ImagePath" alt="Alternate Text" />
+            <img alt="Аватар" class="img-circle img-center avatar-148" src="@Model.ImagePath" alt="Alternate Text" />
             <div class=" info-name">
                 <div class="row">
                     <div class="col-sm-7 info-name-nick">
@@ -133,7 +133,7 @@
             <div class="modal-body">
 
                 <div class="form-group">
-                    <img class="img-circle avatar-48" src="@Model.ImagePath" style="float:left; margin-right: 20px" alt="Alternate Text" />
+                    <img alt="Аватар" class="img-circle avatar-48" src="@Model.ImagePath" style="float:left; margin-right: 20px" alt="Alternate Text" />
                     <div>
 
                         @Html.ActionLink(Model.Name, "Info", new { })
@@ -169,7 +169,7 @@
 
 @section scripts
 {
-    <script type="text/javascript" src="~/Scripts/UserInfo.js">
+    <script type="text/javascript" src="~/Scripts/jquery-user-info.js">
 
     </script>
     <script type="text/javascript" src="~/Scripts/jquery-modal-send.js"></script>

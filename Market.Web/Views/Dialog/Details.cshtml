@@ -43,7 +43,7 @@
                                         </div>
                                         <div class="row">
                                             <div class="col-lg-12">
-                                                <span id="message-body" style="font-size: 16px">
+                                                <span id="message-body" style="font-size: 16px; word-wrap: break-word">
                                                     @message.MessageBody
                                                 </span>
                                             </div>
@@ -60,7 +60,8 @@
                     <div class="col-lg-6">
                         <input type="hidden" id="dialogId" value="@Model.Id" />
                         <input type="hidden" id="receiverId" value="@Model.otherUserId" />
-                        <input placeholder="Написать сообщение..." type="text" id="messageBody" class="form-control" onfocus="SetMessageViewed()" />
+                        <div style="min-height:38px" role="textbox" id="messageBody" contenteditable="true" aria-multiline="true" class="form-control" onfocus="SetMessageViewed()">
+                        </div>
                     </div>
                     <div class="col-lg-2">
 
@@ -93,7 +94,7 @@
             </div>
             <div class="row">
                 <div class="col-lg-12">
-                    <span id="message-body" style="font-size: 16px">
+                    <span id="message-body" style="font-size: 16px; word-wrap: break-word">
                         message
                     </span>
 

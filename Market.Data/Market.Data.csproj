@@ -87,6 +87,10 @@
     <Compile Include="Migrations\201805300802342_LockoutReason.Designer.cs">
       <DependentUpon>201805300802342_LockoutReason.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201806042020492_AccountInfos.cs" />
+    <Compile Include="Migrations\201806042020492_AccountInfos.Designer.cs">
+      <DependentUpon>201806042020492_AccountInfos.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\AccountInfoRepository.cs" />
@@ -123,6 +127,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201805300802342_LockoutReason.resx">
       <DependentUpon>201805300802342_LockoutReason.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806042020492_AccountInfos.resx">
+      <DependentUpon>201806042020492_AccountInfos.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

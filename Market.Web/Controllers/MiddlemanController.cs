@@ -50,11 +50,11 @@ namespace Market.Web.Controllers
                         transModel.OrderHeader = order.Offer.Header;
                         transModel.OrderId = order.Id;
                         model.Add(transModel);
-                    }                    
+                    }
                 }
                 return View(model.AsEnumerable());
             }
-            return HttpNotFound();                      
+            return HttpNotFound();
         }
 
         // GET: Middleman
@@ -71,7 +71,7 @@ namespace Market.Web.Controllers
                 }
             }
             var ordersViewModel = Mapper.Map<IEnumerable<Order>, IEnumerable<OrderViewModel>>(orders);
-            
+
             return View(ordersViewModel);
         }
 
@@ -82,6 +82,23 @@ namespace Market.Web.Controllers
             var ordersViewModel = Mapper.Map<IEnumerable<Order>, IEnumerable<OrderViewModel>>(orders);
 
             return View(ordersViewModel);
+        }
+
+        public ActionResult OrderAccessDetails(int? id)
+        {
+            if (id != null)
+            {
+                var order = _orderService.GetOrder(id.Value);
+                if (order != null)
+                {
+                    if (order.MiddlemanId == User.Identity.GetUserId())
+                    {
+                        var model = Mapper.Map<IEnumerable<AccountInfo>, IEnumerable<AccountInfoViewModel>>(order.AccountInfos);
+                        return View(model);
+                    }
+                }
+            }
+            return HttpNotFound();
         }
 
         public ActionResult ProcessOrder(int? id)
@@ -105,7 +122,7 @@ namespace Market.Web.Controllers
                         order.BuyerChecked = false;
                         order.SellerChecked = false;
                         order.MiddlemanId = User.Identity.GetUserId();
-                        
+
                         if (order.JobId != null)
                         {
                             BackgroundJob.Delete(order.JobId);
@@ -143,11 +160,12 @@ namespace Market.Web.Controllers
                 var order = _orderService.GetOrder(id.Value);
                 if (order != null)
                 {
-                    var accInfo = order.AccountInfo;
+                    var accInfo = order.AccountInfos.Last();
                     var model = Mapper.Map<AccountInfo, AccountInfoViewModel>(accInfo);
                     model.SellerId = order.SellerId;
                     model.BuyerId = order.BuyerId;
                     model.ModeratorId = order.MiddlemanId;
+                    model.OrderId = order.Id;
                     return View(model);
                 }
             }
@@ -160,62 +178,115 @@ namespace Market.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var accInfo = _accountInfoService.GetAccountInfo(model.Id);
-                if (accInfo != null)
+                var accountInfo = Mapper.Map<AccountInfoViewModel, AccountInfo>(model);
+                var buyerOrder = _orderService.GetOrder(model.SteamLogin, model.ModeratorId, model.SellerId, model.BuyerId);
+                if (buyerOrder != null)
                 {
-                    accInfo.Login = model.SteamLogin;
-                    accInfo.Password = model.SteamPassword;
-                    accInfo.Email = model.SteamEmail;
-                    accInfo.AdditionalInformation = model.AdditionalInformation;
-
-                    var buyerOrder = _orderService.GetOrder(model.SteamLogin, model.ModeratorId, model.SellerId, model.BuyerId);
-                    if (buyerOrder != null)
+                    if (buyerOrder.CurrentStatus != null)
                     {
-                        if (buyerOrder.CurrentStatus != null)
+                        if (buyerOrder.CurrentStatus.Value == OrderStatuses.MidddlemanChecking)
                         {
-                            if (buyerOrder.CurrentStatus.Value == OrderStatuses.MidddlemanChecking)
+                            buyerOrder.StatusLogs.AddLast(new StatusLog()
                             {
-                                buyerOrder.StatusLogs.AddLast(new StatusLog()
-                                {
-                                    OldStatus = buyerOrder.CurrentStatus,
-                                    NewStatus = _orderStatusService.GetOrderStatusByValue(OrderStatuses.BuyerConfirming),
-                                    TimeStamp = DateTime.Now
-                                });
-                                buyerOrder.CurrentStatus = _orderStatusService.GetOrderStatusByValue(OrderStatuses.BuyerConfirming);
+                                OldStatus = buyerOrder.CurrentStatus,
+                                NewStatus = _orderStatusService.GetOrderStatusByValue(OrderStatuses.BuyerConfirming),
+                                TimeStamp = DateTime.Now
+                            });
+                            buyerOrder.CurrentStatus = _orderStatusService.GetOrderStatusByValue(OrderStatuses.BuyerConfirming);
 
 
-                                buyerOrder.BuyerChecked = false;
-                                buyerOrder.SellerChecked = false;
+                            buyerOrder.BuyerChecked = false;
+                            buyerOrder.SellerChecked = false;
 
 
-                                _accountInfoService.UpdateAccountInfo(accInfo);
-                                buyerOrder.AccountInfo = accInfo;
-                                
+                            buyerOrder.AccountInfos.Add(accountInfo);
+                            _accountInfoService.CreateAccountInfo(accountInfo);
 
-                                if (buyerOrder.JobId != null)
-                                {
-                                    BackgroundJob.Delete(buyerOrder.JobId);
-                                    buyerOrder.JobId = null;
-                                }
-                                _orderService.SaveOrder();
-
-                                buyerOrder.JobId = MarketHangfire.SetConfirmOrderJob(buyerOrder.Id, TimeSpan.FromDays(2));
-
-
-                                MarketHangfire.SetSendEmailChangeStatus(buyerOrder.Id, buyerOrder.Seller.ApplicationUser.Email, buyerOrder.CurrentStatus.DuringName, Url.Action("SellDetails", "Order", new { id = buyerOrder.Id }, protocol: Request.Url.Scheme));
-
-                                MarketHangfire.SetSendEmailChangeStatus(buyerOrder.Id, buyerOrder.Buyer.ApplicationUser.Email, buyerOrder.CurrentStatus.DuringName, Url.Action("BuyDetails", "Order", new { id = buyerOrder.Id }, protocol: Request.Url.Scheme));
-
-                                _orderService.SaveOrder();
-
-                                return RedirectToAction("ProvideDataToBuyer", new { orderId = buyerOrder.Id });
+                            if (buyerOrder.JobId != null)
+                            {
+                                BackgroundJob.Delete(buyerOrder.JobId);
+                                buyerOrder.JobId = null;
                             }
+                            _orderService.SaveOrder();
+
+                            buyerOrder.JobId = MarketHangfire.SetConfirmOrderJob(buyerOrder.Id, TimeSpan.FromDays(2));
+
+
+                            MarketHangfire.SetSendEmailChangeStatus(buyerOrder.Id, buyerOrder.Seller.ApplicationUser.Email, buyerOrder.CurrentStatus.DuringName, Url.Action("SellDetails", "Order", new { id = buyerOrder.Id }, protocol: Request.Url.Scheme));
+
+                            MarketHangfire.SetSendEmailChangeStatus(buyerOrder.Id, buyerOrder.Buyer.ApplicationUser.Email, buyerOrder.CurrentStatus.DuringName, Url.Action("BuyDetails", "Order", new { id = buyerOrder.Id }, protocol: Request.Url.Scheme));
+
+                            _orderService.SaveOrder();
+
+                            return RedirectToAction("ProvideDataToBuyer", new { orderId = buyerOrder.Id });
                         }
                     }
+
                 }
             }
-
             return HttpNotFound();
         }
+
+
+        public ActionResult ConfirmAbortOrder(int? id)
+        {
+            if (id != null)
+            {
+                bool result = _orderService.ConfirmAbortOrder(id.Value, User.Identity.GetUserId());
+                var order = _orderService.GetOrder(id.Value);
+                if (result && order != null)
+                {
+                    if (order.JobId != null)
+                    {
+                        BackgroundJob.Delete(order.JobId);
+                        order.JobId = null;
+                    }
+
+                    _orderService.SaveOrder();
+
+                    MarketHangfire.SetSendEmailChangeStatus(order.Id, order.Seller.ApplicationUser.Email, order.CurrentStatus.DuringName, Url.Action("SellDetails", "Order", new { id = order.Id }, protocol: Request.Url.Scheme));
+
+                    MarketHangfire.SetSendEmailChangeStatus(order.Id, order.Buyer.ApplicationUser.Email, order.CurrentStatus.DuringName, Url.Action("BuyDetails", "Order", new { id = order.Id }, protocol: Request.Url.Scheme));
+
+                    _orderService.SaveOrder();
+                    return RedirectToAction("BuyDetails", "Order", new { id });
+                }
+            }
+            return HttpNotFound();
+        }
+
+        public ActionResult CloseOrderSuccess(int? Id)
+        {
+            string userId = User.Identity.GetUserId();
+            if (userId != null && Id != null)
+            {
+                var order = _orderService.GetOrder(Id.Value);
+
+                bool closeResult = false;
+                if (userId == order.MiddlemanId)
+                {
+                    closeResult = _orderService.ConfirmOrderByMiddleman(order.Id, userId);
+                    if (closeResult)
+                    {
+                        if (order != null)
+                        {
+                            if (order.JobId != null)
+                            {
+                                BackgroundJob.Delete(order.JobId);
+                                order.JobId = null;
+                            }
+
+                        }
+                        TempData["orderBuyStatus"] = "Сделка закрыта.";
+                        _orderService.SaveOrder();
+                        return RedirectToAction("MyOrderList");
+                    }
+                }
+
+
+            }
+            return HttpNotFound();
+        }
+
     }
 }

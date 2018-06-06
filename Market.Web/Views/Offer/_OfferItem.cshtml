@@ -51,15 +51,18 @@
                     <div class="mb-2">
                         @if (Model.SellerPaysMiddleman)
                         {
-                            <span style="color:green">Гарант за счет продавца @Html.DisplayFor(m => m.MiddlemanPrice)</span>
+                            <span class="font-size-14" style="color:green">Гарант за счет продавца @Html.DisplayFor(m => m.MiddlemanPrice)</span>
                         }
                         else
                         {
-                            <span style="color:red">Гарант за ваш счет @Html.DisplayFor(m => m.MiddlemanPrice)</span>
+                            <span class="font-size-14" style="color:red">Гарант за ваш счет @Html.DisplayFor(m => m.MiddlemanPrice)</span>
                         }
                     </div>
                     <div class="mb-2">
-                        @Html.ActionLink("Подробнее", "Details", new { id = Model.Id }, new { @class = "btn btn-details" })
+                        <noindex>
+                            @Html.ActionLink("Подробнее", "Details", new { id = Model.Id }, new { @class = "btn btn-details" })
+                        </noindex>
+                        
                     </div>
                     <div>
                         @Html.ActionLink("Купить", "Checkoutme", "Checkout", new { id = Model.Id }, new { @class = "btn btn-buy" })

@@ -1,5 +1,5 @@
 ﻿body {
-    padding-top: 130px
+    padding-top: 100px
 }
 
 th {
@@ -13,6 +13,7 @@ th {
 }
 
 .card-footer {
+    font-size: 14px;
     z-index: 1030
 }
 
@@ -54,12 +55,12 @@ input[type="checkbox"].input-validation-error {
 }
 
 .nav-item {
-    margin-left: 10px;
-    margin-right: 10px
+    margin-left: 7px;
+    margin-right: 7px
 }
 
 .navbar-nav {
-    margin-left: 40px
+    margin-left: 20px
 }
 /* Set padding to keep content from hitting the edges */
 .body-content {
@@ -83,6 +84,7 @@ textarea {
 
 
 .image-select {
+    margin-bottom: 1.375rem;
     position: relative;
     font-family: Arial;
 }
@@ -214,7 +216,7 @@ ul {
 
 .filter {
     font-size: 14px;
-    padding: 25px 20px
+    padding: 25px 25px
 }
 
 .filter-header {
@@ -232,6 +234,7 @@ ul {
 .filter-label {
     color: #404040;
     font-weight: 400;
+    font-size: 16px;
     margin-bottom: 15px;
     padding-bottom: 7px;
     border-bottom: 1px solid rgba(0, 0, 0, 0.05)
@@ -1163,6 +1166,7 @@ div#users-contain {
 }
 
 .btn-currentpage {
+   
     color: #fff;
     background-color: #62b2e2;
     border-color: #62b2e2;
@@ -1296,7 +1300,10 @@ div#users-contain {
 }
 
 .offer-filter {
-    padding: 40px;
+
+    padding-left: 40px;
+    padding-right: 40px;
+    padding-top: 40px;
     background-color: white;
     border-top-right-radius: 15px;
 }
@@ -1772,8 +1779,8 @@ dl dd a {
 }
 
 .success-block {
-    font-weight: 700;
-    font-size: 22px;
+    font-weight: 300;
+    font-size: 20px;
     margin-bottom: 50px
 }
 
@@ -2101,4 +2108,65 @@ ul.ul-avatars li {
     height: 100%;
     vertical-align: bottom;
     position: relative;
+}
+
+.ul-nav{
+    margin-bottom: 0px;
+    line-height: 35px;
+}
+ul.ul-nav li {
+    display: inline;
+    margin: 0px 3px
+}
+
+    /*ul.ul-auth li.active {
+        border-top: 6px solid #5bc2ff;
+        background-color: #fff
+    }*/
+
+    ul.ul-nav li a {
+        color: #a9a9a9
+    }
+
+    ul.ul-nav li::before {
+        content: " \276D ";
+        margin-right: 5px
+    }
+    ul.ul-nav li:first-child::before {
+        content: "";
+        
+    }
+
+      
+
+        ul.ul-nav li a.active {
+            color:brown
+        }
+    ul.ul-nav li a:hover  {
+        color: black
+    }
+
+.back-link {
+  line-height: 35px;
+    vertical-align: central;
+    text-decoration: none
+}
+
+    
+.back-arrow{
+    font-style:normal
+}
+    .back-arrow::before {
+        vertical-align: central;
+        font-size: 24px;
+        content: ' \276C ';
+        text-decoration: none
+    }
+
+.nav-row{
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    font-size: 14px;
+    font-weight: 300;
+    padding-bottom: 10px;
+    margin-bottom: 30px
 }

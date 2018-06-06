@@ -73,7 +73,6 @@ namespace Market.Web.Mappings
             #region AccountInfo
 
             CreateMap<AccountInfoViewModel, AccountInfo>()
-                .ForMember(o => o.Id, map => map.MapFrom(vm => vm.Id))
               .ForMember(o => o.Login, map => map.MapFrom(vm => vm.SteamLogin))
               .ForMember(o => o.Password, map => map.MapFrom(vm => vm.SteamPassword))
               .ForMember(o => o.Email, map => map.MapFrom(vm => vm.SteamEmail))

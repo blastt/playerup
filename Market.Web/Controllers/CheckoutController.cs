@@ -93,6 +93,8 @@ namespace Trader.WEB.Controllers
                 };
                 offer.State = OfferState.closed;
 
+               
+
                 offer.Order.StatusLogs.AddLast(new StatusLog()
                 {
                     OldStatus = _orderStatusService.GetOrderStatusByValue(OrderStatuses.OrderCreating),
@@ -347,6 +349,7 @@ namespace Trader.WEB.Controllers
             if (ModelState.IsValid)
             {
                 var accountInfo = Mapper.Map<AccountInfoViewModel, AccountInfo>(model);
+                
                 var moderator = _userProfileService.GetUserProfileById(model.ModeratorId);
 
                 bool moderIsInrole = false;
@@ -367,7 +370,7 @@ namespace Trader.WEB.Controllers
                     {
                         if (order.CurrentStatus != null)
                         {
-                            if (order.AccountInfo == null && order.CurrentStatus.Value == OrderStatuses.SellerProviding)
+                            if (order.CurrentStatus.Value == OrderStatuses.SellerProviding)
                             {
                                 order.StatusLogs.AddLast(new StatusLog()
                                 {
@@ -380,7 +383,8 @@ namespace Trader.WEB.Controllers
 
                                 order.BuyerChecked = false;
                                 order.SellerChecked = false;
-                                order.AccountInfo = accountInfo;
+                                accountInfo.Order = order;
+                                _accountInfoService.CreateAccountInfo(accountInfo);
                                 if (order.JobId != null)
                                 {
                                     BackgroundJob.Delete(order.JobId);
@@ -436,5 +440,7 @@ namespace Trader.WEB.Controllers
             }
             return HttpNotFound();
         }
+
+        
     }
 }

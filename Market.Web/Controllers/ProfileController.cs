@@ -242,8 +242,8 @@ namespace Trader.WEB.Controllers
                     string fileName = String.Format(@"{0}{1}", System.Guid.NewGuid(), extName);
 
                     // сохраняем файл в папку Files в проекте
-                    string fullPath = Server.MapPath("~/Content/Images/FilterItems/" + fileName);
-                    string urlPath = Url.Content("~/Content/Images/FilterItems/" + fileName);
+                    string fullPath = Server.MapPath("~/Content/Images/Avatars/" + fileName);
+                    string urlPath = Url.Content("~/Content/Images/Avatars/" + fileName);
                     image.SaveAs(fullPath);
                     user.ImagePath = urlPath;
                     _userProfileService.SaveUserProfile();

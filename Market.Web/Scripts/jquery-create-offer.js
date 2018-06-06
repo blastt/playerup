@@ -4,7 +4,7 @@
     $(':checkbox').change(function () {
         CalculatePrice();
     });
-    SelectFilterItem(game, true);
+    SelectFilterItemInCreate(game)
 });
 
 

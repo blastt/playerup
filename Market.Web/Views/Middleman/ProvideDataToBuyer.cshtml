@@ -8,7 +8,6 @@
 <div class="container">
     @using (Html.BeginForm("ProvideDataToBuyer", "Middleman", FormMethod.Post, new { @onsubmit = "return confirm('Вы уверены, что хотите отправить данные?');" }))
     {
-        @Html.HiddenFor(m => m.Id)
         @Html.HiddenFor(m => m.BuyerId)
         @Html.HiddenFor(m => m.ModeratorId)
         @Html.HiddenFor(m => m.SellerId)
@@ -77,7 +76,7 @@
         <div class="form-group">
             @using (Html.BeginForm("Close", "Order", FormMethod.Post, new { @onsubmit = "return confirm('Вы уверены, что хотите закрыть сделку?');" }))
             {
-            <input type="hidden" name="id" value="@Model.Id" />
+            <input type="hidden" name="id" value="@Model.OrderId" />
             <input type="submit" name="Close" value="Закрыть сделку" class="btn btn-order-close mt-3" />
             }
         </div>

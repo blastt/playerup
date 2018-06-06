@@ -9,9 +9,9 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&amp;subset=cyrillic" rel="stylesheet">
     <link rel="stylesheet" href="~/Content/range-slider.css">
     <link rel="stylesheet" href="~/Content/jquery-ui.css">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title | @Request.Url.Host</title>
+    <meta name="description" content="@ViewBag.Description">
     @Styles.Render("~/Content/css")
 
     @Scripts.Render("~/bundles/modernizr")
@@ -25,7 +25,7 @@
     <div class="navbar navbar-expand-lg fixed-top navbar-dark bg-primary">
         <div class="container">
             <a href="@Url.Action("Buy","Offer")" class="navbar-brand">
-                <img width="140" src="~/Content/Images/logo.svg" />
+                <img alt="Лого" width="140" src="~/Content/Images/logo.svg" />
             </a>
             <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -58,6 +58,7 @@
 
     </div>
     <div class="container pb-5">
+        
         @RenderBody()
     </div>
     <div class="container">
@@ -75,12 +76,12 @@
                                 <ul class="ul-social">
                                     <li>
                                         <a href="">
-                                            <img width="35" src="~/Content/Images/vk.svg" />
+                                            <img alt="vk" width="35" src="~/Content/Images/vk.svg" />
                                         </a>
                                     </li>
                                     <li>
                                         <a href="">
-                                            <img width="35" src="~/Content/Images/facebook.svg" />
+                                            <img alt="facebook" width="35" src="~/Content/Images/facebook.svg" />
                                         </a>
                                     </li>
                                 </ul>
@@ -99,7 +100,7 @@
                         </ul>
                     </div>
                     <div class="col-md-3 text-right">
-                        <img width="35" class="mr-1" src="~/Content/Images/mail.svg" />
+                        <img alt="Почта" width="35" class="mr-1" src="~/Content/Images/mail.svg" />
                         <span>
                             support@playerup.ru
                         </span>

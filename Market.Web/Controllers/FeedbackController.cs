@@ -11,6 +11,7 @@ using System.Web.Mvc;
 
 namespace Market.Web.Controllers
 {
+    [Authorize]
     public class FeedbackController : Controller
     {
 

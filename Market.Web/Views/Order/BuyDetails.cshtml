@@ -86,23 +86,23 @@
                                 <div class="row">
                                     <div class="col-lg-12">
                                         <label>Логин:</label>
-                                        @Html.DisplayFor(m => m.AccountInfo.Login)
+                                        @Html.DisplayFor(m => m.AccountInfos.Last().Login)
                                     </div>
                                     <div class="col-lg-12">
                                         <label>Пароль:</label>
-                                        @Html.DisplayFor(m => m.AccountInfo.Password)
+                                        @Html.DisplayFor(m => m.AccountInfos.Last().Password)
                                     </div>
                                     <div class="col-lg-12">
                                         <label>Почта:</label>
-                                        @Html.DisplayFor(m => m.AccountInfo.Email)
+                                        @Html.DisplayFor(m => m.AccountInfos.Last().Email)
                                     </div>
                                     <div class="col-lg-12">
                                         <label>Пароль для почты:</label>
-                                        @Html.DisplayFor(m => m.AccountInfo.EmailPassword)
+                                        @Html.DisplayFor(m => m.AccountInfos.Last().EmailPassword)
                                     </div>
                                     <div class="col-lg-12">
                                         <label>Дополнительная информация:</label>
-                                        @Html.DisplayFor(m => m.AccountInfo.AdditionalInformation)
+                                        @Html.DisplayFor(m => m.AccountInfos.Last().AdditionalInformation)
                                     </div>
                                 </div>
                             </div>
@@ -117,6 +117,12 @@
                                 @Html.HiddenFor(m => m.ModeratorId)
                                 @Html.Hidden("Id", Model.Id)
                                 <input type="submit" value="Подтвердить получение" class="btn btn-order-confirm mb-3" />
+                            }
+                            using (Html.BeginForm("Abort", "Order", null, FormMethod.Get, null))
+                            {
+                                @Html.HiddenFor(m => m.ModeratorId)
+                                @Html.Hidden("Id", Model.Id)
+                                <input type="submit" value="Прервать сделку" class="btn btn-order-confirm mb-3" />
                             }
 
 
@@ -170,32 +176,41 @@
 
             </div>
             <div class="order-details-log-body">
-                @foreach (var status in Model.StatusLogs)
+                @*@foreach (var status in Model.StatusLogs)
+                    {
+                        if (status.NewStatus.Value != Market.Model.Models.OrderStatuses.MiddlemanClosed &&
+                           status.NewStatus.Value != Market.Model.Models.OrderStatuses.SellerClosed &&
+                           status.NewStatus.Value != Market.Model.Models.OrderStatuses.BuyerClosed &&
+                       status.NewStatus.Value != Market.Model.Models.OrderStatuses.ClosedAutomatically)
+                        {
+                            <div class="order-details-node">
+                                <div class="node-circle"></div>
+                                <div class="node-name">@status.OldStatus.FinishedName</div>
+                                <div class="node-date">@status.TimeStamp</div>
+                            </div>
+                        }
+                        if (status.NewStatus.Value == Market.Model.Models.OrderStatuses.ClosedSuccessfully ||
+                            status.NewStatus.Value == Market.Model.Models.OrderStatuses.MiddlemanClosed ||
+                            status.NewStatus.Value == Market.Model.Models.OrderStatuses.SellerClosed ||
+                            status.NewStatus.Value == Market.Model.Models.OrderStatuses.BuyerClosed ||
+                            status.NewStatus.Value == Market.Model.Models.OrderStatuses.ClosedAutomatically||
+                            status.NewStatus.Value == Market.Model.Models.OrderStatuses.MiddlemanBackingAccount)
+                        {
+                            <div class="order-details-node">
+                                <div class="node-circle"></div>
+                                <div class="node-name">@status.NewStatus.FinishedName</div>
+                                <div class="node-date">@status.TimeStamp</div>
+                                <div class="node-circle-final"></div>
+                            </div>
+                        }
+                    }*@
+                @foreach (var log in Model.Logs)
                 {
-                    if (status.NewStatus.Value != Market.Model.Models.OrderStatuses.MiddlemanClosed &&
-                       status.NewStatus.Value != Market.Model.Models.OrderStatuses.SellerClosed &&
-                       status.NewStatus.Value != Market.Model.Models.OrderStatuses.BuyerClosed &&
-                   status.NewStatus.Value != Market.Model.Models.OrderStatuses.ClosedAutomatically)
-                    {
-                        <div class="order-details-node">
-                            <div class="node-circle"></div>
-                            <div class="node-name">@status.OldStatus.FinishedName</div>
-                            <div class="node-date">@status.TimeStamp</div>
-                        </div>
-                    }
-                    if (status.NewStatus.Value == Market.Model.Models.OrderStatuses.ClosedSuccessfully ||
-                        status.NewStatus.Value == Market.Model.Models.OrderStatuses.MiddlemanClosed ||
-                        status.NewStatus.Value == Market.Model.Models.OrderStatuses.SellerClosed ||
-                        status.NewStatus.Value == Market.Model.Models.OrderStatuses.BuyerClosed ||
-                        status.NewStatus.Value == Market.Model.Models.OrderStatuses.ClosedAutomatically)
-                    {
-                        <div class="order-details-node">
-                            <div class="node-circle"></div>
-                            <div class="node-name">@status.NewStatus.FinishedName</div>
-                            <div class="node-date">@status.TimeStamp</div>
-                            <div class="node-circle-final"></div>
-                        </div>
-                    }
+                    <div class="order-details-node">
+                        <div class="node-circle"></div>
+                        <div class="node-name">@log.OldStatus.FinishedName</div>
+                        <div class="node-date">@log.TimeStamp</div>
+                    </div>
                 }
             </div>
             @*<div class="row">
@@ -220,7 +235,7 @@
                 </button>
             </div>
 
-            <input type="hidden" id="receiverId" name="ReceiverId" value="@Model.Id" />
+            <input type="hidden" id="receiverId" name="ReceiverId" value="@Model.SellerId" />
 
             <div class="modal-body">
 

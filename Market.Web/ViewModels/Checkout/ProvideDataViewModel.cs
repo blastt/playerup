@@ -8,7 +8,6 @@ namespace Market.Web.ViewModels
 {
     public class AccountInfoViewModel
     {
-        public int Id { get; set; }
         [Required]
         public string SteamLogin { get; set; }
 
@@ -31,5 +30,7 @@ namespace Market.Web.ViewModels
         public string BuyerId { get; set; }
         [Required]
         public string SellerId { get; set; }
+
+        public int OrderId { get; set; }
     }
 }

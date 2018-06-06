@@ -143,11 +143,22 @@ namespace Market.Web
             //    url: "game/{game}/Page={page}",
             //    defaults: new { controller = "Offer", action = "Buy", game = "csgo", page = "1" }
             //);
+            //routes.MapRoute(
+            //    name: null,
+            //    url: "buy/{game}/{page}",
+            //    defaults: new { controller = "Offer", action = "Buy", game = UrlParameter.Optional,
+            //        page = UrlParameter.Optional
+            //    }
+            //);
+
             routes.MapRoute(
                 name: null,
-                url: "buy/{game}/{page}",
-                defaults: new { controller = "Offer", action = "Buy", game = UrlParameter.Optional,
-                    page = UrlParameter.Optional
+                url: "buy/{game}",
+                defaults: new
+                {
+                    controller = "Offer",
+                    action = "Buy",
+                    game = UrlParameter.Optional
                 }
             );
 

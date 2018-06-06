@@ -249,12 +249,10 @@
     <Compile Include="Controllers\DialogController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\FeedbackController.cs" />
-    <Compile Include="Controllers\GodController.cs" />
     <Compile Include="Controllers\HelpController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\MessageController.cs" />
     <Compile Include="Controllers\MiddlemanController.cs" />
-    <Compile Include="Controllers\Moderator\ModeratorController.cs" />
     <Compile Include="Controllers\OfferController.cs" />
     <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
@@ -275,6 +273,7 @@
     <Compile Include="Helpers\ActiveHelpers.cs" />
     <Compile Include="Helpers\DateHelpers.cs" />
     <Compile Include="Helpers\EmailHelpers.cs" />
+    <Compile Include="Helpers\NavHelpers.cs" />
     <Compile Include="Helpers\OnlineHelpers.cs" />
     <Compile Include="Helpers\OrderStatusHelpers.cs" />
     <Compile Include="Helpers\PagingHelpers.cs" />
@@ -581,11 +580,14 @@
     <Content Include="Views\Admin\LockoutUserAsync.cshtml" />
     <Content Include="Views\Admin\Inbox.cshtml" />
     <Content Include="Views\Admin\Details.cshtml" />
+    <Content Include="Views\Middleman\OrderAccessDetails.cshtml" />
+    <Content Include="Views\Offer\PhoneNumberRequest.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\Images\FilterItems\" />
     <Folder Include="Content\Images\Icons\" />
+    <Folder Include="Controllers\Moderator\" />
     <Folder Include="Views\FilterItem\" />
     <Folder Include="Views\Filter\" />
     <Folder Include="Views\Game\" />
