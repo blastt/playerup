@@ -26,7 +26,7 @@ namespace Market.Web.Controllers
         private readonly IFilterService _filterService;
         private readonly IFilterItemService _filterItemService;
         private readonly int offerDays = 30;
-        public int pageSize = 8;
+        public int pageSize = 1;
         public int pageSizeInUserInfo = 10;
         public OfferController(IOfferService offerService, IGameService gameService, IFilterService filterService, IFilterItemService filterItemService, IUserProfileService userProfileService)
         {

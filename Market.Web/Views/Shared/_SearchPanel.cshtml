@@ -28,18 +28,7 @@
                         </div>
 
                     </div>
-                    <div class="row mb-4">
-                        <div class="col-sm-6 pr-1">
-                            <div class="filter-btn mb-2">
-                                <input type="button" value="Поиск" class="btn btn-search font-size-18" onclick="SearchButton();" />
-                            </div>
-                        </div>
-                        <div class="col-sm-6 pl-1">
-                            <div class="filter-btn mb-2">
-                                <input type="button" value="Сброс" class="btn btn-reset font-size-18" onclick="ResetButton();" />
-                            </div>
-                        </div>
-                    </div>
+
                     <div class="form-group mb-5">
                         <div class="filter-label">
                             <span>Цена</span>
@@ -60,12 +49,24 @@
                         </div>
                         <div id="slider-range"></div>
                     </div>
+                    <div class="row mb-4">
+                        <div class="col-sm-6 pr-1">
+                            <div class="filter-btn mb-2">
+                                <input type="button" value="Поиск" class="btn btn-search font-size-18" onclick="SearchButton();" />
+                            </div>
+                        </div>
+                        <div class="col-sm-6 pl-1">
+                            <div class="filter-btn mb-2">
+                                <input type="button" value="Сброс" class="btn btn-reset font-size-18" onclick="ResetButton();" />
+                            </div>
+                        </div>
+                    </div>
                     <div class="form-group">
                         @if (Model.SelectsOptions.Count != 0)
                         {
-                        <div class="filter-label">
-                            <span>Игровые фильтры</span>
-                        </div>
+                            <div class="filter-label">
+                                <span>Игровые фильтры</span>
+                            </div>
                         }
                         @foreach (var select in Model.SelectsOptions)
                         {
@@ -97,22 +98,23 @@
 
                         @*<select class='selsel' id='filterItemValues' name='FilterItemValues'>
 
-                            </select>
+            </select>
 
-                            @if (Model.Filters != null)
-                            {
-                                for (int i = 0; i < Model.Filters.Length; i++)
-                                {
-                                    var id = $"filter[{Model.Filters[i].Split('=')[0]}]";
-                                    <input type="hidden" id="@id" class="filters" name="filters" value="@Model.Filters[i]" />
-                                }
+            @if (Model.Filters != null)
+            {
+                for (int i = 0; i < Model.Filters.Length; i++)
+                {
+                    var id = $"filter[{Model.Filters[i].Split('=')[0]}]";
+                    <input type="hidden" id="@id" class="filters" name="filters" value="@Model.Filters[i]" />
+                }
 
-                            }*@
+            }*@
 
 
                         <div id="filter-item">
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
