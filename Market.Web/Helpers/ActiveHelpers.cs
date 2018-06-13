@@ -44,7 +44,7 @@ namespace Market.Web.Helpers
                 viewContext = html.ViewContext.ParentActionViewContext;
 
             RouteValueDictionary routeValues = viewContext.RouteData.Values;
-            string currentGame = routeValues["game"] == null ? "dota2" : routeValues["game"].ToString();
+            string currentGame = routeValues["game"] == null ? "csgo" : routeValues["game"].ToString();
             string currentAction = routeValues["action"].ToString();
             string currentController = routeValues["controller"].ToString();
 

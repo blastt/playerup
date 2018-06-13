@@ -33,6 +33,8 @@ namespace Market.Model.Models
 
         public bool SellerPaysMiddleman { get; set; }
 
+        public virtual IList<ScreenshotPath> ScreenshotPathes { get; set; } = new List<ScreenshotPath>();
+
         public decimal? MiddlemanPrice
         {
             get

@@ -244,7 +244,27 @@ namespace Trader.WEB.Controllers
                     // сохраняем файл в папку Files в проекте
                     string fullPath = Server.MapPath("~/Content/Images/Avatars/" + fileName);
                     string urlPath = Url.Content("~/Content/Images/Avatars/" + fileName);
-                    image.SaveAs(fullPath);
+                    
+                    try
+                    {
+                        //Default.png
+                        var name = user.ImagePath.Split('/').LastOrDefault();
+                        if (name != null)
+                        {
+                            if (name != "Default.png")
+                            {
+                                System.IO.File.Delete(Server.MapPath(user.ImagePath));
+                            }
+                        }
+                        
+                        image.SaveAs(fullPath);
+                        
+                    }
+                    catch (Exception)
+                    {
+                        return HttpNotFound();
+                    }
+                    
                     user.ImagePath = urlPath;
                     _userProfileService.SaveUserProfile();
                     return RedirectToAction("Buy", "Offer");

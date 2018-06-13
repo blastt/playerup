@@ -26,7 +26,7 @@ namespace Market.Web.Controllers
         private readonly IFilterService _filterService;
         private readonly IFilterItemService _filterItemService;
         private readonly int offerDays = 30;
-        public int pageSize = 1;
+        public int pageSize = 4;
         public int pageSizeInUserInfo = 10;
         public OfferController(IOfferService offerService, IGameService gameService, IFilterService filterService, IFilterItemService filterItemService, IUserProfileService userProfileService)
         {
@@ -39,10 +39,10 @@ namespace Market.Web.Controllers
 
         // GET: Offer
         [HttpGet]
-        public async Task<ViewResult> Buy(SearchViewModel model, string[] fi)
+        public ViewResult Buy(SearchViewModel model, string[] fi)
         {
             
-            var offers = await _offerService.GetOffersAsync(o => o.Game.Value == model.Game && o.State == OfferState.active);
+            var offers = _offerService.GetOffers().Where(o => o.Game.Value == model.Game && o.State == OfferState.active).ToList();
             if (offers.Count() != 0)
             {
                 model.MinGamePrice = offers.Min(o => o.Price);
@@ -57,36 +57,44 @@ namespace Market.Web.Controllers
             IList<SelectFilter> selects = new List<SelectFilter>();
             //IList<IList<FilterItemViewModel>> listOfOptions = new List<IList<FilterItemViewModel>>();
             
-            foreach (var filter in game.Filters)
-            {
-                var filterItems = filter.FilterItems.OrderBy(f => f.Rank).ToList();
-                var selectOptions = new List<FilterItemViewModel>();
-
-                foreach (var filterItem in filterItems)
-                {
-                    selectOptions.Add(new FilterItemViewModel
-                    {
-                        Value = filterItem.Value,
-                        Name = filterItem.Name,
-                        ImagePath = filterItem.ImagePath,
-                        FilterValue = filter.Value
-
-                    });
-                }
-                selects.Add(new SelectFilter
-                {
-                    FilterName = filter.Text,
-                    FilterValue = filter.Value,
-                    Options = selectOptions
-                });
-            }
+            
             if (game != null)
             {
+                foreach (var filter in game.Filters)
+                {
+                    var filterItems = filter.FilterItems.OrderBy(f => f.Rank).ToList();
+                    var selectOptions = new List<FilterItemViewModel>();
+
+                    foreach (var filterItem in filterItems)
+                    {
+                        selectOptions.Add(new FilterItemViewModel
+                        {
+                            Value = filterItem.Value,
+                            Name = filterItem.Name,
+                            ImagePath = filterItem.ImagePath,
+                            FilterValue = filter.Value
+
+                        });
+                    }
+                    selects.Add(new SelectFilter
+                    {
+                        FilterName = filter.Text,
+                        FilterValue = filter.Value,
+                        Options = selectOptions
+                    });
+                }
                 model.GameName = game.Name;
             }
             model.SelectsOptions = selects;
-
-            model.Games = Mapper.Map<IEnumerable<Game>,IEnumerable<GameViewModel>>(_gameService.GetGames());
+            model.SortItems = new List<SelectListItem>
+            {
+                new SelectListItem { Value = "bestSeller", Text = "Лучшие продавцы" },
+                new SelectListItem { Value = "priceDesc", Text = "От дорогих к дешевым" },
+                new SelectListItem { Value = "priceAsc", Text = "От дешевых к дорогим" },
+                new SelectListItem { Value = "newestOffer", Text = "Самые новые" }
+            };
+            model.Offers = Mapper.Map<IEnumerable<Offer>, IEnumerable<OfferViewModel>>(offers);
+            model.Games = Mapper.Map<IEnumerable<Game>,IEnumerable<GameViewModel>>(_gameService.GetGames().OrderBy(g => g.Rank));
             return View(model);
         }
 
@@ -143,7 +151,7 @@ namespace Market.Web.Controllers
             };
             return View(model);
         }
-        private OfferListViewModel SearchOffers(SearchViewModel searchInfo, string[] filters)
+        private OfferListViewModel SearchOffers(SearchViewModel searchInfo,  string[] filters)
         {
             if (filters == null)
             {
@@ -155,7 +163,7 @@ namespace Market.Web.Controllers
             //Thread.Sleep(500);
 
             searchInfo.SearchString = searchInfo.SearchString ?? "";
-            searchInfo.Game = searchInfo.Game ?? "dota2";
+            searchInfo.Game = searchInfo.Game ?? "csgo";
 
             decimal minGamePrice = 0;
             decimal maxGamePrice = 0;
@@ -270,7 +278,7 @@ namespace Market.Web.Controllers
             
             var model = SearchOffers(searchInfo, filters);
 
-            return PartialView("_OfferBlock", model);
+            return PartialView("List", model);
         }
 
         public PartialViewResult Reset(SearchViewModel searchInfo, string[] filters)
@@ -357,7 +365,7 @@ namespace Market.Web.Controllers
                         IList<SelectListItem> games = new List<SelectListItem>();
                         model.SellerPaysMiddleman = true;
                         //games.Add(new SelectListItem { Value = "", Text = "Выберите игру", Selected = true, Disabled = tr });
-                        foreach (var game in _gameService.GetGames())
+                        foreach (var game in _gameService.GetGames().OrderBy(g => g.Rank))
                         {
                             games.Add(new SelectListItem { Value = game.Value, Text = game.Name });
                         }
@@ -374,7 +382,7 @@ namespace Market.Web.Controllers
 
         [HttpPost]
         [Authorize]
-        public ActionResult Create(CreateOfferViewModel model)
+        public ActionResult Create(CreateOfferViewModel model, HttpPostedFileBase[] images)
         {
 
 
@@ -447,8 +455,26 @@ namespace Market.Web.Controllers
                     return View("_CreateOfferFilterError");
                 }
             }
-            
 
+           
+            foreach (var image in images)
+            {
+                if (image != null && image.ContentLength <= 1000000 && (image.ContentType == "image/jpeg" || image.ContentType == "image/png"))
+                {
+                    string extName = System.IO.Path.GetExtension(image.FileName);
+                    string fileName = String.Format(@"{0}{1}", System.Guid.NewGuid(), extName);
+
+                    // сохраняем файл в папку Files в проекте
+                    string fullPath = Server.MapPath("~/Content/Images/Screenshots/" + fileName);
+                    string urlPath = Url.Content("~/Content/Images/Screenshots/" + fileName);
+                    image.SaveAs(fullPath);
+                    offer.ScreenshotPathes.Add(new ScreenshotPath { Value = urlPath } );
+                }
+                else
+                {
+                    offer.ScreenshotPathes.Add(new ScreenshotPath { Value = null });
+                }
+            }
 
             offer.Game = game;
             offer.UserProfile = _userProfileService.GetUserProfileById(User.Identity.GetUserId());
@@ -569,7 +595,7 @@ namespace Market.Web.Controllers
 
 
             IList<SelectListItem> games = new List<SelectListItem>();
-            foreach (var game in _gameService.GetGames())
+            foreach (var game in _gameService.GetGames().OrderBy(g => g.Rank))
             {
                 games.Add(new SelectListItem { Value = game.Value, Text = game.Name });
             }
@@ -580,6 +606,7 @@ namespace Market.Web.Controllers
                 Offer offer = _offerService.GetOffer(id.Value);
                 if (offer != null && offer.UserProfileId == User.Identity.GetUserId())
                 {
+
                     var model = Mapper.Map<Offer, EditOfferViewModel>(offer);
                     model.Game = offer.Game.Value;
                     model.Games = games;
@@ -595,12 +622,13 @@ namespace Market.Web.Controllers
 
         [HttpPost]
         [Authorize]
-        public ActionResult Edit(EditOfferViewModel model)
+        public ActionResult Edit(EditOfferViewModel model, HttpPostedFileBase[] images)
         {
             //EditOfferViewModel model = new EditOfferViewModel();
+            
             if (!ModelState.IsValid)
             {
-                return View(model);
+                return RedirectToAction("View" , new { id = model.Id });
             }
             var userProfile = _userProfileService.GetUserProfileById(User.Identity.GetUserId());
             if (userProfile != null)
@@ -668,6 +696,43 @@ namespace Market.Web.Controllers
                 {
                     return View("_CreateOfferFilterError");
                 }
+
+                for (int i = 0; i < offer.ScreenshotPathes.Count; i++)
+                {
+                    try
+                    {
+                        
+                        if (images[i] != null && images[i].ContentLength <= 1000000 && (images[i].ContentType == "image/jpeg" || images[i].ContentType == "image/png"))
+                        {
+                            if (offer.ScreenshotPathes[i].Value != null)
+                            {
+                                System.IO.File.Delete(Server.MapPath(offer.ScreenshotPathes[i].Value));
+
+                            }
+                            string extName = System.IO.Path.GetExtension(images[i].FileName);
+                            string fileName = String.Format(@"{0}{1}", System.Guid.NewGuid(), extName);
+
+                            // сохраняем файл в папку Files в проекте
+                            string fullPath = Server.MapPath("~/Content/Images/Screenshots/" + fileName);
+                            string urlPath = Url.Content("~/Content/Images/Screenshots/" + fileName);
+                            try
+                            {
+                                images[i].SaveAs(fullPath);
+                            }
+                            catch (Exception)
+                            {
+                                return HttpNotFound();
+                            }
+                            offer.ScreenshotPathes[i].Value = urlPath;
+                        }
+
+                    }
+                    catch (Exception)
+                    {
+                        return HttpNotFound();
+                    }
+                    
+                }                
 
                 _offerService.SaveOffer();
 

@@ -3,7 +3,39 @@
 
 <div class="row mt-2" id="lll">
     <div class="col-lg-12">
-        @Html.Partial("_OfferList", Model)
+        <div class="bs-component">
+            @if (Model.Offers.Any())
+            {
+                <div class="row mb-3 sort">
+                    <div class="col-md-7 sort-counter">
+                        <h4 class="mb-0 font-weight-light"> Найдено предложений: <span class="font-weight-bold">@Model.PageInfo.TotalItems</span></h4>
+                    </div>
+                    <div class="col-md-5">
+                        @Html.DropDownListFor(m => m.SearchInfo.Sort, Model.SearchInfo.SortItems, new { @class = "custom-select", id = "select-sort", onchange = "SortChange()" })
+
+                    </div>
+                </div>
+                <div class="row">
+                    @foreach (var offer in Model.Offers)
+                    {
+                        Html.RenderPartial("_offerItem", offer);
+
+                    }
+                    <div class="col-md-12">
+                        @Html.PagedListPager(Model.PageInfo, "SelectPage")
+                    </div>
+                </div>
+            }
+
+            else
+            {
+                <div class="row">
+                    <div class="mt-5 col-md-12 text-center">
+                        Нет результатов
+                    </div>
+                </div>
+            }
+        </div>
     </div>
 </div>
 

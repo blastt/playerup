@@ -61,6 +61,7 @@
     <Compile Include="Models\Game.cs" />
     <Compile Include="Models\FilterItem.cs" />
     <Compile Include="Models\Identity\ApplicationUser.cs" />
+    <Compile Include="Models\ScreenshotPath.cs" />
     <Compile Include="Models\Message.cs" />
     <Compile Include="Models\Offer.cs" />
     <Compile Include="Models\Order.cs" />

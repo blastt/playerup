@@ -35,6 +35,7 @@ namespace Market.Web.ViewModels
 
         public string[] FilterValues { get; set; }
 
+        public IList<ScreenshotPath> ScreenshotPathes { get; set; } = new List<ScreenshotPath>(3);
 
         public string[] FilterItemValues { get; set; }
 

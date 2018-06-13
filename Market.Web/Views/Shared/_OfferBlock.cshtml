@@ -15,7 +15,7 @@
         <div class="row">
             @foreach (var offer in Model.Offers)
             {
-                @Html.Partial("_offerItem", offer)
+                {Html.RenderPartial("_offerItem", offer);}
 
             }
             <div class="col-md-12">

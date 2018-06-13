@@ -187,7 +187,7 @@ function SearchOffersPage() {
         success: function (response) {
             var s = $('#sort').val();
 
-            $('#offer-block').html(response);
+            $('#list').html(response);
 
             //urlPath = Router.action('Offer', 'Buy', routes);
             //window.history.pushState({ "html": response.html, "pageTitle": response.pageTitle }, "", urlPath);
@@ -296,7 +296,7 @@ function SearchOffers() {
             var s = $('#sort').val();
             
 
-            $('#offer-block').html(response);
+            $('#list').html(response);
             var urlPath;
             var routes = new Object();            
             

@@ -24,33 +24,47 @@ namespace Market.Web
             //JobHelper.SetSerializerSettings(new Newtonsoft.Json.JsonSerializerSettings() { ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore });
             Bootstrapper.Run();
         }
+       
         protected void Application_EndRequest()
         {
             //var db = new MarketEntities();
             
             var loggedInUsers = (Dictionary<string, DateTime>)HttpRuntime.Cache["LoggedInUsers"];
 
-            if (User.Identity.IsAuthenticated)
+            if (User != null)
             {
-                var userName = User.Identity.Name;
-                if (loggedInUsers != null)
+                if (User.Identity.IsAuthenticated)
                 {
-                    loggedInUsers[userName] = DateTime.Now;
-                    HttpRuntime.Cache["LoggedInUsers"] = loggedInUsers;
-                }
-            }
-
-            if (loggedInUsers != null)
-            {
-                foreach (var item in loggedInUsers.ToList())
-                {
-                    if (item.Value < DateTime.Now.AddMinutes(-10))
+                    var userName = User.Identity.Name;
+                    if (loggedInUsers != null)
                     {
-                        loggedInUsers.Remove(item.Key);
+                        loggedInUsers[userName] = DateTime.Now;
+                        HttpRuntime.Cache["LoggedInUsers"] = loggedInUsers;
                     }
                 }
-                HttpRuntime.Cache["LoggedInUsers"] = loggedInUsers;
+
+                if (loggedInUsers != null)
+                {
+                    foreach (var item in loggedInUsers.ToList())
+                    {
+                        if (item.Value < DateTime.Now.AddMinutes(-10))
+                        {
+                            loggedInUsers.Remove(item.Key);
+                        }
+                    }
+                    HttpRuntime.Cache["LoggedInUsers"] = loggedInUsers;
+                }
+                //else
+                //{
+                //    loggedInUsers = new Dictionary<string, DateTime>();
+                //    //add this user to the list
+                //    loggedInUsers.Add(User.Identity.Name, DateTime.Now);
+                //    //add the list into the cache
+                //    HttpRuntime.Cache["LoggedInUsers"] = loggedInUsers;
+                //}
             }
+
+
 
         }
 

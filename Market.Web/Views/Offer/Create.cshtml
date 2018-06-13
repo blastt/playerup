@@ -11,7 +11,7 @@
         <div class="col-lg-8">
             <div class="create-offer-form">
                 <h3 class="text-center text-gray text-700 mb-4">Разместить объявление</h3>
-                @using (Html.BeginForm("Create", "Offer", FormMethod.Post, new { id = "createForm" }))
+                @using (Html.BeginForm("Create", "Offer", FormMethod.Post, new { id = "createForm", enctype = "multipart/form-data" }))
                 {
                     <div class="form-group">
                         @Html.LabelFor(m => m.Games, new { @class = "col-form-label  col-form-label-md" })
@@ -39,6 +39,52 @@
                         @Html.ValidationMessageFor(m => m.Discription)
                     </div>
                     <div class="form-group">
+                        @Html.Label("Скриншоты", new { @class = "col-form-label  col-form-label-md" })
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="screenshot-place">
+                                    <label class="mb-0" for="image-input1" style="padding: 10px 5px; width: 100%; height: 100%; cursor: pointer">
+                                        <img style="width: 100%; height: 100%" id="blah1" src="~/Content/Images/add-image.png" alt="your image" />
+                                    </label>
+
+                                    <a id="removeImage1" href='javascript:;' style="width: 100px; height: 100px; display:none">
+
+
+                                        <input id="image-input1" data-slot="1" type="file" style="display:none" accept="image/*" name="Images" onchange='readURL(this)'>
+                                    </a>
+
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="screenshot-place">
+                                    <label class="mb-0" for="image-input2" style="padding: 10px 5px; width: 100%; height: 100%; cursor: pointer">
+                                        <img style="width: 100%; height: 100%" id="blah2" src="~/Content/Images/add-image.png" alt="your image" />
+                                    </label>
+
+                                    <a id="removeImage2" href='javascript:;' style="width: 100px; height: 100px; display:none">
+
+
+                                        <input id="image-input2" data-slot="2" type="file" style="display:none" accept="image/*" name="Images" onchange='readURL(this)'>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="screenshot-place">
+                                    <label class="mb-0" for="image-input3" style="padding: 10px 5px; width: 100%; height: 100%; cursor: pointer">
+                                        <img style="width: 100%; height: 100%" id="blah3" src="~/Content/Images/add-image.png" alt="your image" />
+                                    </label>
+
+                                    <a id="removeImage3" href='javascript:;' style="width: 100px; height: 100px;display:none">
+
+
+                                        <input id="image-input3" data-slot="3" type="file" accept="image/*" name="Images" onchange='readURL(this)'>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="form-group">
 
                         <div class="col-md-5" style="padding: 0px; margin-right: 40px">
                             @Html.LabelFor(m => m.Price, new { @class = "col-form-label  col-form-label-md" })
@@ -49,6 +95,14 @@
                                 @Html.TextBoxFor(m => m.Price, "", new { @class = "form-control", onchange = "CalculatePrice()", id = "ListingPrice", autocomplete = "off" })
                                 @Html.ValidationMessageFor(m => m.Price)
                             </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="custom-control custom-checkbox">
+
+                            @Html.CheckBoxFor(m => m.SellerPaysMiddleman, new { @class = "custom-control-input", @id = "sellerPay", @checked = "checked" })
+                            <label class="custom-control-label" for="sellerPay">Оплатить безопасную сделку вместо покупателя</label>
+                            @*<label class="col-form-label  col-form-label-md" for="sellerPay">Оплатить безопасную сделку вместо покупателя</label>*@
                         </div>
                     </div>
                     <div class="form-group">
@@ -75,14 +129,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <div class="custom-control custom-checkbox">
 
-                            @Html.CheckBoxFor(m => m.SellerPaysMiddleman, new { @class = "custom-control-input", @id = "sellerPay", @checked = "checked" })
-                            <label class="custom-control-label" for="sellerPay">Оплатить безопасную сделку вместо покупателя</label>
-                            @*<label class="col-form-label  col-form-label-md" for="sellerPay">Оплатить безопасную сделку вместо покупателя</label>*@
-                        </div>
-                    </div>
                     <div class="confirm-buton">
                         <div class="form-group text-right">
                             <input class="btn btn-submit" type="submit" name="create" value="Разместить" />
@@ -106,6 +153,56 @@
 
 
     </script>
+
+    <script>
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    var numbers = input.dataset.slot;
+                    $('#blah' + numbers).attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+        
+    </script>
+
+    @*<script>
+        $("#image-input1").change(function () {
+            readURL(this);
+            $("#removeImage1").toggle(); // show remove link
+        });
+        $("#image-input2").change(function () {
+            readURL(this);
+            $("#removeImage2").toggle(); // show remove link
+        });
+        $("#image-input3").change(function () {
+            readURL(this);
+            $("#removeImage3").toggle(); // show remove link
+        });
+
+        $("#removeImage1").click(function (e) {
+            e.preventDefault(); // prevent default action of link
+            $('#blah1').attr('src', ""); //clear image src
+            $("#image-input1").val(""); // clear image input value
+            $("#removeImage1").toggle(); // hide remove link.
+        });
+        $("#removeImage2").click(function (e) {
+            e.preventDefault(); // prevent default action of link
+            $('#blah2').attr('src', ""); //clear image src
+            $("#image-input2").val(""); // clear image input value
+            $("#removeImage2").toggle(); // hide remove link.
+        });
+        $("#removeImage3").click(function (e) {
+            e.preventDefault(); // prevent default action of link
+            $('#blah3').attr('src', ""); //clear image src
+            $("#image-input3").val(""); // clear image input value
+            $("#removeImage3").toggle(); // hide remove link.
+        });
+    </script>*@
 
     @Scripts.Render("~/bundles/jquery-create-offer")
 

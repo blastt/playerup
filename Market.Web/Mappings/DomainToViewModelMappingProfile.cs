@@ -83,6 +83,7 @@ namespace Market.Web.Mappings
                 .ForMember(o => o.Header, map => map.MapFrom(vm => vm.Header))
                 .ForMember(o => o.Discription, map => map.MapFrom(vm => vm.Discription))
                 .ForMember(o => o.SellerPaysMiddleman, map => map.MapFrom(vm => vm.SellerPaysMiddleman))
+                .ForMember(o => o.ScreenshotPathes, map => map.MapFrom(vm => vm.ScreenshotPathes))
                 .ForMember(o => o.SteamLogin, map => map.MapFrom(vm => vm.AccountLogin))
                 .ForMember(o => o.Price, map => map.MapFrom(vm => vm.Price))
                 .ForAllOtherMembers(opt => opt.Ignore());
@@ -94,6 +95,7 @@ namespace Market.Web.Mappings
                .ForMember(o => o.FilterItems, map => map.MapFrom(vm => vm.FilterItems))
                .ForMember(o => o.Game, map => map.MapFrom(vm => vm.Game))
                .ForMember(o => o.UserId, map => map.MapFrom(vm => vm.UserProfileId))
+               .ForMember(o => o.ScreenshotPathes, map => map.MapFrom(vm => vm.ScreenshotPathes))
                .ForPath(o => o.Rating, map => map.MapFrom(vm => vm.UserProfile.Rating))
                .ForPath(o => o.UserName, map => map.MapFrom(vm => vm.UserProfile.Name))
                .ForPath(o => o.UserProfile, map => map.MapFrom(vm => vm.UserProfile))

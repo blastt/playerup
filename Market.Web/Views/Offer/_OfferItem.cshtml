@@ -11,7 +11,7 @@
             <div class="row">
                 <div class="col-sm-4">
                     <div class="item-rating mb-3">
-                        <img class="img-circle avatar-48 mr-2" align="left" src="@Model.User.ImagePath" alt="Alternate Text" />
+                        <img class="img-circle avatar-48 mr-2" style="border: 1px solid #d8d8d8" align="left" src="@Model.User.ImagePath" alt="Alternate Text" />
                         @Html.ActionLink(Model.UserName, "Info", "Profile", new { userName = Model.UserName }, null)
                         <br />
                         Рейтинг <span class="text-700">@Model.Rating</span>

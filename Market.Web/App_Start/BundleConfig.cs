@@ -25,7 +25,9 @@ namespace Market.Web
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
-                      "~/Content/site.css"));
+                      "~/Content/site.css",
+                      "~/Content/jquery-ui.css",
+                      "~/Content/range-slider.css"));
 
             bundles.Add(new StyleBundle("~/Content/accordion").Include(
                       "~/Content/Accordion.css"));
@@ -35,6 +37,34 @@ namespace Market.Web
 
             bundles.Add(new ScriptBundle("~/bundles/jquery-ui").Include(
                       "~/Scripts/jquery-ui.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/main").Include(
+                    "~/Scripts/bootstrap.js",
+                      "~/Scripts/Main.js",
+                      "~/Scripts/jquery-{version}.js",
+                      "~/Scripts/jquery.signalR-2.2.3.min.js",
+
+                      "~/Scripts/respond.js",
+                      "~/signalr/hubs",
+                      "~/Scripts/signalr-messages.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/search-panel").Include(
+                     "~/Scripts/Filters.js",
+                     "~/Scripts/jquery-ui.js",
+                     "~/Scripts/Custom.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/signalr").Include(
+                      "~/Scripts/jquery.signalR-2.2.3.min.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/hubs").Include(
+                     "~/signalr/hubs"));
+
+            bundles.Add(new ScriptBundle("~/bundles/filters.js").Include(
+                     "~/Scripts/Filters.js"));
+
+            bundles.Add(new StyleBundle("~/Content/range-slider").Include(
+                    "~/Content/range-slider.css"));
+
 
 
             bundles.Add(new StyleBundle("~/Content/jquery-ui").Include(

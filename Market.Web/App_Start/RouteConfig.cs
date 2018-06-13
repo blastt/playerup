@@ -24,14 +24,14 @@ namespace Market.Web
 
             routes.MapRoute(
                     name: null,
-                    url: "account/order/sell/{orderId}",
-                    defaults: new { controller = "Order", action = "SellDetails", orderId = "" }
+                    url: "account/order/sell/{id}",
+                    defaults: new { controller = "Order", action = "SellDetails", id = "" }
                 );
 
             routes.MapRoute(
                     name: null,
-                    url: "account/order/buy/{orderId}",
-                    defaults: new { controller = "Order", action = "BuyDetails", orderId = "" }
+                    url: "account/order/buy/{id}",
+                    defaults: new { controller = "Order", action = "BuyDetails", id = "" }
                 );
 
             routes.MapRoute(

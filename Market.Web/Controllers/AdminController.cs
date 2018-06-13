@@ -104,8 +104,8 @@ namespace Market.Web.Controllers
                     string fileName = String.Format(@"{0}{1}", System.Guid.NewGuid(), extName);
 
                     // сохраняем файл в папку Files в проекте
-                    string fullPath = Server.MapPath("~/Content/Images/FilterItems/" + fileName);
-                    string urlPath = Url.Content("~/Content/Images/FilterItems/" + fileName);
+                    string fullPath = Server.MapPath("~/Content/Images/GameIcons/" + fileName);
+                    string urlPath = Url.Content("~/Content/Images/GameIcons/" + fileName);
                     image.SaveAs(fullPath);
                     game.ImagePath = urlPath;
                 }
@@ -149,8 +149,8 @@ namespace Market.Web.Controllers
                         string fileName = String.Format(@"{0}{1}", System.Guid.NewGuid(), extName);
 
                         // сохраняем файл в папку Files в проекте
-                        string fullPath = Server.MapPath("~/Content/Images/FilterItems/" + fileName);
-                        string urlPath = Url.Content("~/Content/Images/FilterItems/" + fileName);
+                        string fullPath = Server.MapPath("~/Content/Images/GameIcons/" + fileName);
+                        string urlPath = Url.Content("~/Content/Images/GameIcons/" + fileName);
                         image.SaveAs(fullPath);
                         game.ImagePath = urlPath;
                     }

@@ -19,6 +19,8 @@ namespace Market.Web.ViewModels
         public int Views { get; set; }
         public DateTime? DateCreated { get; set; } = DateTime.Now;
 
+        public IList<ScreenshotPath> ScreenshotPathes { get; set; } = new List<ScreenshotPath>();
+
         public bool SellerPaysMiddleman { get; set; }
 
         [DataType(DataType.Currency)]

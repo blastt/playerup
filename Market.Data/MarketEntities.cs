@@ -60,6 +60,7 @@ namespace Marketplace.Data
             modelBuilder.Configurations.Add(new StatusLogConfiguration());
             modelBuilder.Configurations.Add(new BillingConfiguration());
             modelBuilder.Configurations.Add(new TransactionConfiguration());
+            modelBuilder.Configurations.Add(new ScreenshotPathConfiguration());
             base.OnModelCreating(modelBuilder);
         }
         public virtual DbSet<UserProfile> UserProfiles { get; set; }
@@ -76,5 +77,6 @@ namespace Marketplace.Data
         public virtual DbSet<StatusLog> StatusLogs { get; set; }
         public virtual DbSet<Billing> Billings { get; set; }
         public virtual DbSet<Transaction> Transactions { get; set; }
+        public virtual DbSet<ScreenshotPath> ScreenshotPathes { get; set; }
     }
 }

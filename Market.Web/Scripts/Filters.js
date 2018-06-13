@@ -21,8 +21,9 @@ function CreateFilters(ranks) {
         select.append(defaultOption);
         for (var item in ranks[rank].FilterItems) {
 
-            var url = ranks[rank].FilterItems[item].ImagePath;
-            var option = $('<option data-url="' + url + '"></option>').val(ranks[rank].FilterItems[item].Value).text(ranks[rank].FilterItems[item].Name);
+            //var url = ranks[rank].FilterItems[item].ImagePath;
+            //var option = $('<option data-url="' + url + '"></option>').val(ranks[rank].FilterItems[item].Value).text(ranks[rank].FilterItems[item].Name);
+            var option = $('<option></option>').val(ranks[rank].FilterItems[item].Value).text(ranks[rank].FilterItems[item].Name);
 
             select.append(option);
         }
@@ -102,7 +103,7 @@ function myfunction() {
             span.style.width = "50px";
             span.style.marginRight = "15px";
             c = document.createElement("DIV");
-            c.appendChild(span);
+            //c.appendChild(span);
             c.innerHTML += selElmnt.options[j].innerHTML;
             
             c.addEventListener("click", function (e) {

@@ -21,6 +21,8 @@ namespace Market.Web.ViewModels
 
     public class SearchViewModel
     {
+
+        public IEnumerable<OfferViewModel> Offers { get; set; } = new List<OfferViewModel>();
         public int Page { get; set; } = 1;
         public string Sort { get; set; } = "bestSeller";
         public IEnumerable<GameViewModel> Games { get; set; }
@@ -36,7 +38,7 @@ namespace Market.Web.ViewModels
 
         public string[] FilterValues { get; set; }
         public string[] FilterItemValues { get; set; } = new string [] { };
-        public string Game { get; set; } = "dota2";
+        public string Game { get; set; } = "csgo";
         public string GameName { get; set; }
         public decimal MinGamePrice { get; set; }
 

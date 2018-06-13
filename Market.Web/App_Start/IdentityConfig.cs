@@ -20,6 +20,7 @@ using Twilio;
 using Twilio.Rest.Api.V2010.Account;
 using Twilio.Types;
 using System.Net.Mail;
+using System.Configuration;
 
 namespace Market.Web
 {
@@ -61,11 +62,10 @@ namespace Market.Web
     {
         public async Task SendAsync(IdentityMessage message)
         {
-            var accountSid = "ACb0ac84bf73d0ed0f84ee7939d98c28e5";
-            // Your Auth Token from twilio.com/console
-            var authToken = "24dc4ae21e8bc3bfa70edb3ec783345d";
+            var ACCOUNT_SID = ConfigurationManager.AppSettings["ACCOUNT_SID"];
+            var AUTH_TOKEN = ConfigurationManager.AppSettings["AUTH_TOKEN"];
 
-            TwilioClient.Init(accountSid, authToken);
+            TwilioClient.Init(ACCOUNT_SID, AUTH_TOKEN);
 
             var msg = await MessageResource.CreateAsync(
                 to: new PhoneNumber(message.Destination),
@@ -73,6 +73,7 @@ namespace Market.Web
                 body: message.Body
                 );
             
+
         }
     }
 

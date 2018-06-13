@@ -64,6 +64,7 @@
     <Compile Include="Configuration\OfferConfiguration.cs" />
     <Compile Include="Configuration\OrderConfiguration.cs" />
     <Compile Include="Configuration\OrderStatusConfiguration.cs" />
+    <Compile Include="Configuration\ScreenshotPathConfiguration.cs" />
     <Compile Include="Configuration\StatusLogConfiguration.cs" />
     <Compile Include="Configuration\TransactionConfiguration.cs" />
     <Compile Include="Configuration\UserProfileConfiguration.cs" />
@@ -75,21 +76,9 @@
     <Compile Include="Infrastructure\RepositoryBase.cs" />
     <Compile Include="Infrastructure\UnitOfWork.cs" />
     <Compile Include="MarketEntities.cs" />
-    <Compile Include="Migrations\201805141954037_Transactions.cs" />
-    <Compile Include="Migrations\201805141954037_Transactions.Designer.cs">
-      <DependentUpon>201805141954037_Transactions.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201805191631343_Name2.cs" />
-    <Compile Include="Migrations\201805191631343_Name2.Designer.cs">
-      <DependentUpon>201805191631343_Name2.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201805300802342_LockoutReason.cs" />
-    <Compile Include="Migrations\201805300802342_LockoutReason.Designer.cs">
-      <DependentUpon>201805300802342_LockoutReason.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201806042020492_AccountInfos.cs" />
-    <Compile Include="Migrations\201806042020492_AccountInfos.Designer.cs">
-      <DependentUpon>201806042020492_AccountInfos.cs</DependentUpon>
+    <Compile Include="Migrations\201806101038011_Initial.cs" />
+    <Compile Include="Migrations\201806101038011_Initial.Designer.cs">
+      <DependentUpon>201806101038011_Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -119,17 +108,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201805141954037_Transactions.resx">
-      <DependentUpon>201805141954037_Transactions.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201805191631343_Name2.resx">
-      <DependentUpon>201805191631343_Name2.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201805300802342_LockoutReason.resx">
-      <DependentUpon>201805300802342_LockoutReason.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201806042020492_AccountInfos.resx">
-      <DependentUpon>201806042020492_AccountInfos.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201806101038011_Initial.resx">
+      <DependentUpon>201806101038011_Initial.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
