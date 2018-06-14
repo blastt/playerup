@@ -8,9 +8,10 @@ using Microsoft.Owin.Security;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using TinifyAPI;
 
 namespace Market.Web.Controllers
 {
@@ -93,7 +94,7 @@ namespace Market.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult CreateGame(CreateGameViewModel model, HttpPostedFileBase image = null)
+        public async Task<ActionResult> CreateGame(CreateGameViewModel model, HttpPostedFileBase image = null)
         {
             if (ModelState.IsValid)
             {
@@ -107,6 +108,10 @@ namespace Market.Web.Controllers
                     string fullPath = Server.MapPath("~/Content/Images/GameIcons/" + fileName);
                     string urlPath = Url.Content("~/Content/Images/GameIcons/" + fileName);
                     image.SaveAs(fullPath);
+                    var source = Tinify.FromFile(fullPath);
+
+                    await source.ToFile(fullPath);
+                    source.Dispose();
                     game.ImagePath = urlPath;
                 }
                 _gameService.CreateGame(game);
@@ -133,7 +138,7 @@ namespace Market.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult EditGame(EditGameViewModel model, HttpPostedFileBase image = null)
+        public async Task<ActionResult> EditGame(EditGameViewModel model, HttpPostedFileBase image = null)
         {
             if (ModelState.IsValid)
             {
@@ -152,7 +157,11 @@ namespace Market.Web.Controllers
                         string fullPath = Server.MapPath("~/Content/Images/GameIcons/" + fileName);
                         string urlPath = Url.Content("~/Content/Images/GameIcons/" + fileName);
                         image.SaveAs(fullPath);
+                        var source = Tinify.FromFile(fullPath);
+                        await source.ToFile(fullPath);
+                        source.Dispose();
                         game.ImagePath = urlPath;
+
                     }
                     _gameService.SaveGame();
                     return RedirectToAction("GameList");
@@ -278,7 +287,7 @@ namespace Market.Web.Controllers
             return View(model);
         }
         [HttpPost]
-        public ActionResult CreateFilterItem(CreateFilterItemViewModel model, HttpPostedFileBase image = null)
+        public async Task<ActionResult> CreateFilterItem(CreateFilterItemViewModel model, HttpPostedFileBase image = null)
         {
             if (ModelState.IsValid)
             {
@@ -295,6 +304,9 @@ namespace Market.Web.Controllers
                         string fullPath = Server.MapPath("~/Content/Images/FilterItems/" + fileName);
                         string urlPath = Url.Content("~/Content/Images/FilterItems/" + fileName);
                         image.SaveAs(fullPath);
+                        var source = Tinify.FromFile(fullPath);
+                        await source.ToFile(fullPath);
+                        source.Dispose();
                         filterItem.ImagePath = urlPath;
                     }
                     filterItem.Filter = filter;
@@ -332,7 +344,7 @@ namespace Market.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult EditFilterItem(CreateFilterItemViewModel model, HttpPostedFileBase image = null)
+        public async Task<ActionResult> EditFilterItem(CreateFilterItemViewModel model, HttpPostedFileBase image = null)
         {
             if (ModelState.IsValid)
             {
@@ -354,6 +366,9 @@ namespace Market.Web.Controllers
                         string fullPath = Server.MapPath("~/Content/Images/FilterItems/" + fileName);
                         string urlPath = Url.Content("~/Content/Images/FilterItems/" + fileName);
                         image.SaveAs(fullPath);
+                        var source = Tinify.FromFile(fullPath);
+                        await source.ToFile(fullPath);
+                        source.Dispose();
                         filterItem.ImagePath = urlPath;
                     }
                     _filterItemService.SaveFilterItem();
@@ -540,7 +555,7 @@ namespace Market.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult EditUser(EditUserProfileViewModel model, HttpPostedFileBase image = null)
+        public async Task<ActionResult> EditUser(EditUserProfileViewModel model, HttpPostedFileBase image = null)
         {
             if (ModelState.IsValid)
             {
@@ -565,6 +580,9 @@ namespace Market.Web.Controllers
                         string fullPath = Server.MapPath("~/Content/Images/FilterItems/" + fileName);
                         string urlPath = Url.Content("~/Content/Images/FilterItems/" + fileName);
                         image.SaveAs(fullPath);
+                        var source = Tinify.FromFile(fullPath);
+                        await source.ToFile(fullPath);
+                        source.Dispose();
                         user.ImagePath = urlPath;
                     }
                     _userProfileService.SaveUserProfile();

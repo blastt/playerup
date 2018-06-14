@@ -29,20 +29,20 @@ namespace Market.Web
         {
             ConfigureAuth(app);
 
-       //     MarketHangfire.ConfigureHangfire(app);
+            MarketHangfire.ConfigureHangfire(app);
 
-       //     GlobalConfiguration.Configuration
-			    //.UseSqlServerStorage("MarketEntities");
-            
-
-       //     //JobHelper.SetSerializerSettings(new Newtonsoft.Json.JsonSerializerSettings() { ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore });
+            GlobalConfiguration.Configuration
+                .UseSqlServerStorage("MarketEntities");
 
 
-       //     app.UseHangfireDashboard("/hangfire", new DashboardOptions
-       //     {
-       //         Authorization = new[] { new MyAuthorizationFilter() }
-       //     });
-       //     app.UseHangfireServer();
+            //JobHelper.SetSerializerSettings(new Newtonsoft.Json.JsonSerializerSettings() { ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore });
+
+
+            app.UseHangfireDashboard("/hangfire", new DashboardOptions
+            {
+                Authorization = new[] { new MyAuthorizationFilter() }
+            });
+            app.UseHangfireServer();
 
 
             //app.UseCookieAuthentication(new CookieAuthenticationOptions

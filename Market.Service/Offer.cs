@@ -106,8 +106,12 @@ namespace Market.Service
             IList<Offer> listOffers = new List<Offer>();
             if (filters != null)
             {
+                if (offers.Any() && offers.FirstOrDefault().FilterItems.Count != filters.Length)
+                {
+                    listOffers = offers.ToList();
+                }
                 bool equals = false;
-                foreach (var offer in offers)
+                foreach (var offer in offers.ToList())
                 {
                     for (int i = 0; i < Math.Min(offer.FilterItems.Count, filters.Length); i++)
                     {

@@ -7,9 +7,10 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-
+using TinifyAPI;
 
 namespace Trader.WEB.Controllers
 {
@@ -231,7 +232,7 @@ namespace Trader.WEB.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public ActionResult Upload(HttpPostedFileBase image)
+        public async Task<ActionResult> Upload(HttpPostedFileBase image)
         {
             var user = _userProfileService.GetUserProfileById(User.Identity.GetUserId());
             if (user != null)
@@ -258,12 +259,26 @@ namespace Trader.WEB.Controllers
                         }
                         
                         image.SaveAs(fullPath);
-                        
+                        var source = Tinify.FromFile(fullPath);
+                        var resized = source.Resize(new
+                        {
+                            method = "scale",
+                            width = 150,
+                            height = 150
+                        });
+                        await source.ToFile(fullPath);
+                        source.Dispose();
                     }
-                    catch (Exception)
+                    catch (TinifyAPI.Exception)
                     {
                         return HttpNotFound();
                     }
+
+                    catch (System.Exception)
+                    {
+                        return HttpNotFound();
+                    }
+                    
                     
                     user.ImagePath = urlPath;
                     _userProfileService.SaveUserProfile();

@@ -37,8 +37,7 @@ namespace Market.Web
             try
             {
                 // Create a Web transport for sending email.
-                var apiKey = Environment.GetEnvironmentVariable("SENDGRID_KEY");
-                //var apiKey = "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";
+                var apiKey = ConfigurationManager.AppSettings["SENDGRID_KEY"];
                 var client = new SendGridClient(apiKey);
                 var from = new EmailAddress("support@playerup.ru", "PlayerUp");
                 var subject = message.Subject;

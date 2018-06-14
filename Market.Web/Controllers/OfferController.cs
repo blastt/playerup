@@ -39,21 +39,21 @@ namespace Market.Web.Controllers
 
         // GET: Offer
         [HttpGet]
-        public ViewResult Buy(SearchViewModel model, string[] fi)
+        public ViewResult Buy(SearchViewModel searchInfo, string[] fi)
         {
             
-            var offers = _offerService.GetOffers().Where(o => o.Game.Value == model.Game && o.State == OfferState.active).ToList();
-            if (offers.Count() != 0)
+            var offers = _offerService.GetOffers().Where(o => o.Game.Value == searchInfo.Game && o.State == OfferState.active).ToList();
+            if (offers.Any())
             {
-                model.MinGamePrice = offers.Min(o => o.Price);
-                model.MaxGamePrice = offers.Max(o => o.Price);
-                model.PriceFrom = offers.Min(o => o.Price);
-                model.PriceTo = offers.Max(o => o.Price);
+                searchInfo.MinGamePrice = offers.Min(o => o.Price);
+                searchInfo.MaxGamePrice = offers.Max(o => o.Price);
+                searchInfo.PriceFrom = offers.Min(o => o.Price);
+                searchInfo.PriceTo = offers.Max(o => o.Price);
             }
 
-
+            var model = SearchOffers(searchInfo, null);
             
-            var game = _gameService.GetGameByValue(model.Game);
+            var game = _gameService.GetGameByValue(searchInfo.Game);
             IList<SelectFilter> selects = new List<SelectFilter>();
             //IList<IList<FilterItemViewModel>> listOfOptions = new List<IList<FilterItemViewModel>>();
             
@@ -83,17 +83,10 @@ namespace Market.Web.Controllers
                         Options = selectOptions
                     });
                 }
-                model.GameName = game.Name;
+                searchInfo.GameName = game.Name;
             }
-            model.SelectsOptions = selects;
-            model.SortItems = new List<SelectListItem>
-            {
-                new SelectListItem { Value = "bestSeller", Text = "Лучшие продавцы" },
-                new SelectListItem { Value = "priceDesc", Text = "От дорогих к дешевым" },
-                new SelectListItem { Value = "priceAsc", Text = "От дешевых к дорогим" },
-                new SelectListItem { Value = "newestOffer", Text = "Самые новые" }
-            };
-            model.Offers = Mapper.Map<IEnumerable<Offer>, IEnumerable<OfferViewModel>>(offers);
+            model.SearchInfo.SelectsOptions = selects;
+            
             model.Games = Mapper.Map<IEnumerable<Game>,IEnumerable<GameViewModel>>(_gameService.GetGames().OrderBy(g => g.Rank));
             return View(model);
         }
