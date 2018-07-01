@@ -4,7 +4,7 @@ using Market.Model.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace Market.Service
@@ -20,11 +20,19 @@ namespace Market.Service
     public interface IOrderService
     {
         IEnumerable<Order> GetOrders();
+        IQueryable<Order> GetOrders(params Expression<Func<Order, object>>[] includes);
+        IQueryable<Order> GetOrders(Expression<Func<Order, bool>> where, params Expression<Func<Order, object>>[] includes);
+        IQueryable<Order> GetOrdersAsNoTracking();
+        IQueryable<Order> GetOrdersAsNoTracking(Expression<Func<Order, bool>> where, params Expression<Func<Order, object>>[] includes);
+
+
         //IEnumerable<Offer> GetCategoryGadgets(string categoryName, string gadgetName = null);
         Order GetOrder(int id);
         Task<Order> GetOrderAsync(int id);
 
         Order GetOrder(string accountLogin, string moderatorId, string sellerId, string buyerId);
+        Order GetOrder(string accountLogin, string moderatorId, string sellerId, string buyerId, params Expression<Func<Order, object>>[] include);
+        Order GetOrder(int id, params Expression<Func<Order, object>>[] includes);
         void UpdateOrder(Order order);
         void CreateOrder(Order order);
         bool ConfirmAbortOrder(int orderId, string userId);
@@ -66,6 +74,28 @@ namespace Market.Service
             return orders;
         }
 
+        public IQueryable<Order> GetOrders(params Expression<Func<Order, object>>[] includes)
+        {
+            var orders = ordersRepository.GetAll(includes);
+            return orders;
+        }
+
+        public IQueryable<Order> GetOrders(Expression<Func<Order, bool>> where, params Expression<Func<Order, object>>[] includes)
+        {
+            var query = ordersRepository.GetMany(where, includes);
+            return query;
+        }
+        public IQueryable<Order> GetOrdersAsNoTracking()
+        {
+            var query = ordersRepository.GetAllAsNoTracking();
+            return query;
+        }
+        public IQueryable<Order> GetOrdersAsNoTracking(Expression<Func<Order, bool>> where, params Expression<Func<Order, object>>[] includes)
+        {
+            var query = ordersRepository.GetManyAsNoTracking(where, includes);
+            return query;
+        }
+
         public void UpdateOrder(Order order)
         {
             ordersRepository.Update(order);
@@ -73,6 +103,12 @@ namespace Market.Service
         public Order GetOrder(int id)
         {
             var order = ordersRepository.GetById(id);
+            return order;
+        }
+
+        public Order GetOrder(int id, params Expression<Func<Order, object>>[] includes)
+        {
+            var order = ordersRepository.Get(o => o.Id == id, includes);
             return order;
         }
 
@@ -86,6 +122,14 @@ namespace Market.Service
         {
             Order order = ordersRepository.GetMany(o => o.Offer.AccountLogin == accountLogin &&
             o.MiddlemanId == middlemanId && o.BuyerId == buyerId && o.SellerId == sellerId).FirstOrDefault();
+            return order;
+
+        }
+
+        public Order GetOrder(string accountLogin, string middlemanId, string sellerId, string buyerId, params Expression<Func<Order, object>>[] includes)
+        {
+            Order order = ordersRepository.GetMany(o => o.Offer.AccountLogin == accountLogin &&
+            o.MiddlemanId == middlemanId && o.BuyerId == buyerId && o.SellerId == sellerId, includes).FirstOrDefault();
             return order;
 
         }
@@ -107,7 +151,7 @@ namespace Market.Service
 
         public bool ConfirmAbortOrder(int orderId, string userId)
         {
-            var order = GetOrder(orderId);
+            var order = GetOrder(orderId, i => i.CurrentStatus, i => i.StatusLogs, i => i.Transactions, i => i.Middleman);
             if (order != null)
             {
                 OrderStatus newOrderStatus = null;
@@ -151,7 +195,7 @@ namespace Market.Service
 
         private bool CloseOrder(int orderId, Closer closer)
         {
-            var order = GetOrder(orderId);
+            var order = GetOrder(orderId, i => i.CurrentStatus, i => i.StatusLogs, i => i.Transactions);
             if (order != null)
             {
                 if (order.CurrentStatus.Value == OrderStatuses.BuyerPaying ||
@@ -253,7 +297,7 @@ namespace Market.Service
 
         public bool ConfirmOrder(int orderId, string currentUserId)
         {
-            var order = GetOrder(orderId);
+            var order = GetOrder(orderId, i => i.Buyer, i => i.CurrentStatus, i => i.Seller, i => i.StatusLogs);
             if (order != null)
             {
                 if (order.CurrentStatus != null)
@@ -310,7 +354,7 @@ namespace Market.Service
 
         public bool ConfirmOrderByMiddleman(int orderId, string currentUserId)
         {
-            var order = GetOrder(orderId);
+            var order = GetOrder(orderId, i => i.Seller, i => i.CurrentStatus, i => i.Seller, i => i.StatusLogs);
             if (order != null)
             {
                 if (order.CurrentStatus != null)
@@ -367,7 +411,7 @@ namespace Market.Service
 
         public bool AbortOrder(int orderId, string currentUserId)
         {
-            var order = GetOrder(orderId);
+            var order = GetOrder(orderId, i => i.Buyer, i => i.CurrentStatus, i => i.StatusLogs);
             if (order != null)
             {
                 if (order.CurrentStatus != null)

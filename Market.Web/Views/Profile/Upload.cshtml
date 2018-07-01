@@ -1,4 +1,4 @@
-﻿@model string
+﻿@model Market.Web.ViewModels.UserProfileViewModel
 
 @{
     ViewBag.Title = "Загрузить аватар";
@@ -14,18 +14,18 @@
                     <div class="form-group">
                         <div style="position:relative;">
                             <ul class="ul-avatars">
-                                <li><img id="blah" src="@Model" alt="your image" class="avatar-148" />
+                                <li><img id="blah" src="@Model.Avatar96Path" alt="your image" class="avatar-148" />
                                 <br />
                                 <span class="font-size-12">148px</span>
                                 </li>
                                 <li>
-                                    <img id="blah" src="@Model" alt="your image" class="avatar-48" />
+                                    <img id="blah" src="@Model.Avatar48Path" alt="your image" class="avatar-48" />
                                     <br />
                                     <span class="font-size-12">48px</span>
                                 </li>
 
                                 <li>
-                                    <img id="blah" src="@Model" alt="your image" class="avatar-32" />
+                                    <img id="blah" src="@Model.Avatar32Path" alt="your image" class="avatar-32" />
                                     <br />
                                     <span class="font-size-12">32px</span>
                                 </li>

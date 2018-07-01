@@ -1,10 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Market.Model.Models
 {
@@ -72,25 +67,25 @@ namespace Market.Model.Models
         public decimal? AmmountSellerGet { get; set; } // сумма, которую заплатали с учетом комиссии
         public decimal? WithdrawAmountSellerGet { get; set; } // сумма, которую заплатали без учета комиссии
 
-        public virtual ICollection<Feedback> Feedbacks { get; set; } = new List<Feedback>();
+        public ICollection<Feedback> Feedbacks { get; set; } = new List<Feedback>();
 
-        public virtual Offer Offer { get; set; }
+        public Offer Offer { get; set; }
 
-        public virtual int CurrentStatusId { get; set; }
-        public virtual OrderStatus CurrentStatus { get; set; }
-        public virtual LinkedList<StatusLog> StatusLogs { get; set; } = new LinkedList<StatusLog>();
+        public int CurrentStatusId { get; set; }
+        public OrderStatus CurrentStatus { get; set; }
+        public LinkedList<StatusLog> StatusLogs { get; set; } = new LinkedList<StatusLog>();
 
-        public virtual IList<Transaction> Transactions { get; set; } = new List<Transaction>();
+        public IList<Transaction> Transactions { get; set; } = new List<Transaction>();
 
-        public virtual string MiddlemanId { get; set; }
-        public virtual UserProfile Middleman { get; set; }
-        public virtual string BuyerId { get; set; }
-        public virtual UserProfile Buyer { get; set; }
-        public virtual string SellerId { get; set; }
-        public virtual UserProfile Seller { get; set; }
+        public string MiddlemanId { get; set; }
+        public UserProfile Middleman { get; set; }
+        public string BuyerId { get; set; }
+        public UserProfile Buyer { get; set; }
+        public string SellerId { get; set; }
+        public UserProfile Seller { get; set; }
 
 
-        public virtual IList<AccountInfo> AccountInfos { get; set; } = new List<AccountInfo>();
+        public IList<AccountInfo> AccountInfos { get; set; } = new List<AccountInfo>();
 
         public DateTime DateCreated { get; set; } = DateTime.Now;
     }

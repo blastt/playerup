@@ -7,6 +7,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
@@ -30,8 +31,6 @@ namespace Market.Web.Controllers
         private readonly IFilterItemService _filterItemService;
         private readonly IDialogService _dialogService;
         private readonly int offerDays = 30;
-        public int pageSize = 4;
-        public int pageSizeInUserInfo = 10;
         public AdminController(IOfferService offerService, IGameService gameService, IFilterService filterService, IDialogService dialogService, IFilterItemService filterItemService, IUserProfileService userProfileService)
         {
             _offerService = offerService;
@@ -61,20 +60,20 @@ namespace Market.Web.Controllers
 
         public ActionResult OfferList()
         {
-            OfferListViewModel model = new OfferListViewModel()
+            var model = new OfferListViewModel()
             {
-                Offers = Mapper.Map<IEnumerable<Offer>, IEnumerable<OfferViewModel>>(_offerService.GetOffers())
+                Offers = Mapper.Map<IEnumerable<Offer>, IEnumerable<OfferViewModel>>(_offerService.GetOffers(i => i.Game))
             };
             return View(model);
         }
 
         public ActionResult DeleteOffer(int id)
         {
-            Offer offer = _offerService.GetOffer(id);
+            var offer = _offerService.GetOffer(id);
             if (offer != null)
             {
                 _offerService.Delete(offer);
-                TempData["message"] = string.Format("Предложение удалено");
+                TempData["message"] = "Предложение удалено";
                 _offerService.SaveOffer();
             }
             return RedirectToAction("OfferList");
@@ -82,7 +81,7 @@ namespace Market.Web.Controllers
 
         public ActionResult GameList()
         {
-            IEnumerable<GameViewModel> model = Mapper.Map<IEnumerable<Game>, IEnumerable<GameViewModel>>(_gameService.GetGames());
+            IEnumerable<GameViewModel> model = Mapper.Map<IEnumerable<Game>, IEnumerable<GameViewModel>>(_gameService.GetGamesAsNoTracking());
 
             return View(model);
         }
@@ -101,17 +100,32 @@ namespace Market.Web.Controllers
                 var game = Mapper.Map<CreateGameViewModel, Game>(model);
                 if (image != null && (image.ContentType == "image/jpeg" || image.ContentType == "image/png"))
                 {
-                    string extName = System.IO.Path.GetExtension(image.FileName);
-                    string fileName = String.Format(@"{0}{1}", System.Guid.NewGuid(), extName);
+                    var extName = System.IO.Path.GetExtension(image.FileName);
+                    var fileName = $@"{Guid.NewGuid()}{extName}";
 
                     // сохраняем файл в папку Files в проекте
-                    string fullPath = Server.MapPath("~/Content/Images/GameIcons/" + fileName);
-                    string urlPath = Url.Content("~/Content/Images/GameIcons/" + fileName);
+                    var fullPath = Server.MapPath("~/Content/Images/GameIcons/" + fileName);
+                    var urlPath = Url.Content("~/Content/Images/GameIcons/" + fileName);
                     image.SaveAs(fullPath);
-                    var source = Tinify.FromFile(fullPath);
+                    Tinify.Key = ConfigurationManager.AppSettings["TINYPNG_APIKEY"];
+                    try
+                    {
+                        using (var s = Tinify.FromFile(fullPath))
+                        {
+                            var resized = s.Resize(new
+                            {
+                                method = "fit",
+                                width = 40,
+                                height = 40
+                            });
+                            await resized.ToFile(fullPath);
+                        }
 
-                    await source.ToFile(fullPath);
-                    source.Dispose();
+                    }
+                    catch (System.Exception)
+                    {
+                        // ignored
+                    }
                     game.ImagePath = urlPath;
                 }
                 _gameService.CreateGame(game);
@@ -151,15 +165,31 @@ namespace Market.Web.Controllers
                     if (image != null && (image.ContentType == "image/jpeg" || image.ContentType == "image/png"))
                     {
                         string extName = System.IO.Path.GetExtension(image.FileName);
-                        string fileName = String.Format(@"{0}{1}", System.Guid.NewGuid(), extName);
+                        string fileName = $@"{Guid.NewGuid()}{extName}";
 
                         // сохраняем файл в папку Files в проекте
                         string fullPath = Server.MapPath("~/Content/Images/GameIcons/" + fileName);
                         string urlPath = Url.Content("~/Content/Images/GameIcons/" + fileName);
                         image.SaveAs(fullPath);
-                        var source = Tinify.FromFile(fullPath);
-                        await source.ToFile(fullPath);
-                        source.Dispose();
+                        Tinify.Key = ConfigurationManager.AppSettings["TINYPNG_APIKEY"];
+                        try
+                        {
+                            using (var s = Tinify.FromFile(fullPath))
+                            {
+                                var resized = s.Resize(new
+                                {
+                                    method = "fit",
+                                    width = 40,
+                                    height = 40
+                                });
+                                await resized.ToFile(fullPath);
+                            }
+
+                        }
+                        catch (System.Exception)
+                        {
+                            // ignored
+                        }
                         game.ImagePath = urlPath;
 
                     }
@@ -176,7 +206,7 @@ namespace Market.Web.Controllers
             if (game != null)
             {
                 _gameService.Delete(game);
-                TempData["message"] = string.Format("Игра удалена");
+                TempData["message"] = "Игра удалена";
                 _offerService.SaveOffer();
             }
             return RedirectToAction("GameList");
@@ -184,7 +214,7 @@ namespace Market.Web.Controllers
 
         public ActionResult FilterList()
         {
-            IEnumerable<FilterViewModel> model = Mapper.Map<IEnumerable<Model.Models.Filter>, IEnumerable<FilterViewModel>>(_filterService.GetFilters());
+            IEnumerable<FilterViewModel> model = Mapper.Map<IEnumerable<Model.Models.Filter>, IEnumerable<FilterViewModel>>(_filterService.GetFiltersAsNoTracking());
 
             return View(model);
         }
@@ -259,7 +289,7 @@ namespace Market.Web.Controllers
             if (filter != null)
             {
                 _filterService.Delete(filter);
-                TempData["message"] = string.Format("Игра удалена");
+                TempData["message"] = "Игра удалена";
                 _offerService.SaveOffer();
             }
             return RedirectToAction("GameList");
@@ -268,14 +298,14 @@ namespace Market.Web.Controllers
         public ActionResult FilterItemList()
         {
             IEnumerable<FilterItemViewModel> model = Mapper.Map<IEnumerable<FilterItem>, IEnumerable<FilterItemViewModel>>(_filterItemService.GetFilterItems());
-            model = model.OrderBy(m => m.Rank).OrderBy(m => m.FilterName).OrderBy(m => m.GameName);
+            model = model.OrderBy(m => m.Rank).ThenBy(m => m.FilterName).ThenBy(m => m.GameName);
             return View(model);
         }
         [HttpGet]
         public ActionResult CreateFilterItem()
         {
             CreateFilterItemViewModel model = new CreateFilterItemViewModel();
-            foreach (var filter in _filterService.GetFilters())
+            foreach (var filter in _filterService.GetFilters(f => true, f => f.Game))
             {
                 model.Filters.Add(new SelectListItem()
                 {
@@ -291,22 +321,40 @@ namespace Market.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var filterItem = Mapper.Map<CreateFilterItemViewModel, Model.Models.FilterItem>(model);
+                var filterItem = Mapper.Map<CreateFilterItemViewModel, FilterItem>(model);
                 var filter = _filterService.GetFilterByValue(model.FilterValue);
                 if (filter != null)
                 {
                     if (image != null && (image.ContentType == "image/jpeg" || image.ContentType == "image/png"))
                     {
+
                         string extName = System.IO.Path.GetExtension(image.FileName);
-                        string fileName = String.Format(@"{0}{1}", System.Guid.NewGuid(), extName);
+                        string fileName = $@"{Guid.NewGuid()}{extName}";
 
                         // сохраняем файл в папку Files в проекте
                         string fullPath = Server.MapPath("~/Content/Images/FilterItems/" + fileName);
                         string urlPath = Url.Content("~/Content/Images/FilterItems/" + fileName);
                         image.SaveAs(fullPath);
-                        var source = Tinify.FromFile(fullPath);
-                        await source.ToFile(fullPath);
-                        source.Dispose();
+                        Tinify.Key = ConfigurationManager.AppSettings["TINYPNG_APIKEY"];
+                        try
+                        {
+
+                            using (var s = Tinify.FromFile(fullPath))
+                            {
+                                var resized = s.Resize(new
+                                {
+                                    method = "fit",
+                                    width = 100,
+                                    height = 70
+                                });
+                                await resized.ToFile(fullPath);
+                            }
+
+                        }
+                        catch (System.Exception)
+                        {
+                            // ignored
+                        }
                         filterItem.ImagePath = urlPath;
                     }
                     filterItem.Filter = filter;
@@ -359,16 +407,32 @@ namespace Market.Web.Controllers
                     filterItem.Filter = filter;
                     if (image != null && (image.ContentType == "image/jpeg" || image.ContentType == "image/png"))
                     {
-                        string extName = System.IO.Path.GetExtension(image.FileName);
-                        string fileName = String.Format(@"{0}{1}", System.Guid.NewGuid(), extName);
+                        Tinify.Key = ConfigurationManager.AppSettings["TINYPNG_APIKEY"];
+                        var extName = System.IO.Path.GetExtension(image.FileName);
+                        var fileName = $@"{Guid.NewGuid()}{extName}";
 
                         // сохраняем файл в папку Files в проекте
-                        string fullPath = Server.MapPath("~/Content/Images/FilterItems/" + fileName);
-                        string urlPath = Url.Content("~/Content/Images/FilterItems/" + fileName);
+                        var fullPath = Server.MapPath("~/Content/Images/FilterItems/" + fileName);
+                        var urlPath = Url.Content("~/Content/Images/FilterItems/" + fileName);
                         image.SaveAs(fullPath);
-                        var source = Tinify.FromFile(fullPath);
-                        await source.ToFile(fullPath);
-                        source.Dispose();
+                        try
+                        {
+                            using (var s = Tinify.FromFile(fullPath))
+                            {
+                                var resized = s.Resize(new
+                                {
+                                    method = "fit",
+                                    width = 100,
+                                    height = 70
+                                });
+                                await resized.ToFile(fullPath);
+                            }
+
+                        }
+                        catch (System.Exception)
+                        {
+                            // ignored
+                        }
                         filterItem.ImagePath = urlPath;
                     }
                     _filterItemService.SaveFilterItem();
@@ -384,7 +448,7 @@ namespace Market.Web.Controllers
             if (filter != null)
             {
                 _filterService.Delete(filter);
-                TempData["message"] = string.Format("Игра удалена");
+                TempData["message"] = "Игра удалена";
                 _offerService.SaveOffer();
             }
             return RedirectToAction("GameList");
@@ -448,9 +512,6 @@ namespace Market.Web.Controllers
                     }
                     dialogs = unreadDialogs;
                     break;
-
-                default:
-                    break;
             }
             //switch (sortOrder)
             //{
@@ -484,8 +545,8 @@ namespace Market.Web.Controllers
                 {
                     d.otherUserId = otherUser.Id;
                     d.otherUserName = otherUser.Name;
-                    d.otherUserImage = otherUser.ImagePath;
-                    d.CountOfNewMessages = d.Messages.Where(m => !m.ToViewed && m.SenderId != currentUser.Id).Count();
+                    d.otherUserImage = otherUser.Avatar48Path;
+                    d.CountOfNewMessages = d.Messages.Count(m => !m.ToViewed && m.SenderId != currentUser.Id);
                 }
             }
             return View(model);
@@ -505,12 +566,12 @@ namespace Market.Web.Controllers
                     if (dialog.CompanionId == currentUserId)
                     {
                         dialogWithUserId = dialog.CreatorId;
-                        dialogWithUserImage = dialog.Creator.ImagePath;
+                        dialogWithUserImage = dialog.Creator.Avatar48Path;
                     }
                     else if (dialog.CreatorId == currentUserId)
                     {
                         dialogWithUserId = dialog.CompanionId;
-                        dialogWithUserImage = dialog.Companion.ImagePath;
+                        dialogWithUserImage = dialog.Companion.Avatar48Path;
                     }
 
                     if (dialogWithUserId == null)
@@ -559,7 +620,7 @@ namespace Market.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = _userProfileService.GetUserProfileById(model.Id);
+                var user = _userProfileService.GetUserProfile(u => u.Id == model.Id, i => i.ApplicationUser);
 
                 if (user != null)
                 {
@@ -574,16 +635,81 @@ namespace Market.Web.Controllers
                     if (image != null && (image.ContentType == "image/jpeg" || image.ContentType == "image/png"))
                     {
                         string extName = System.IO.Path.GetExtension(image.FileName);
-                        string fileName = String.Format(@"{0}{1}", System.Guid.NewGuid(), extName);
+                        string fileName32 = String.Format(@"{0}{1}", System.Guid.NewGuid(), extName);
+                        string fileName48 = String.Format(@"{0}{1}", System.Guid.NewGuid(), extName);
+                        string fileName96 = String.Format(@"{0}{1}", System.Guid.NewGuid(), extName);
 
                         // сохраняем файл в папку Files в проекте
-                        string fullPath = Server.MapPath("~/Content/Images/FilterItems/" + fileName);
-                        string urlPath = Url.Content("~/Content/Images/FilterItems/" + fileName);
-                        image.SaveAs(fullPath);
-                        var source = Tinify.FromFile(fullPath);
-                        await source.ToFile(fullPath);
-                        source.Dispose();
-                        user.ImagePath = urlPath;
+                        string fullPath32 = Server.MapPath("~/Content/Images/Avatars/" + fileName32);
+                        string urlPath32 = Url.Content("~/Content/Images/Avatars/" + fileName32);
+                        string fullPath48 = Server.MapPath("~/Content/Images/Avatars/" + fileName48);
+                        string urlPath48 = Url.Content("~/Content/Images/Avatars/" + fileName48);
+                        string fullPath96 = Server.MapPath("~/Content/Images/Avatars/" + fileName96);
+                        string urlPath96 = Url.Content("~/Content/Images/Avatars/" + fileName96);
+
+                        Tinify.Key = ConfigurationManager.AppSettings["TINYPNG_APIKEY"];
+                        //Default.png
+
+                        var name32 = user.Avatar32Path.Split('/').LastOrDefault();
+                        var name48 = user.Avatar48Path.Split('/').LastOrDefault();
+                        var name96 = user.Avatar96Path.Split('/').LastOrDefault();
+                        if (name32 != null && name48 != null && name96 != null)
+                        {
+                            if (name32 != "Default32.png" && name48 != "Default48.png" && name96 != "Default96.png")
+                            {
+                                System.IO.File.Delete(Server.MapPath(user.Avatar32Path));
+                                System.IO.File.Delete(Server.MapPath(user.Avatar48Path));
+                                System.IO.File.Delete(Server.MapPath(user.Avatar96Path));
+                            }
+                        }
+
+
+                        image.SaveAs(fullPath32);
+                        image.SaveAs(fullPath48);
+                        image.SaveAs(fullPath96);
+                        try
+                        {
+                            using (var s = Tinify.FromFile(fullPath32))
+                            {
+                                var resized = s.Resize(new
+                                {
+                                    method = "fit",
+                                    width = 32,
+                                    height = 32
+                                });
+                                await resized.ToFile(fullPath32);
+                            }
+                            using (var s = Tinify.FromFile(fullPath48))
+                            {
+                                var resized = s.Resize(new
+                                {
+                                    method = "fit",
+                                    width = 48,
+                                    height = 48
+                                });
+                                await resized.ToFile(fullPath48);
+                            }
+                            using (var s = Tinify.FromFile(fullPath96))
+                            {
+                                var resized = s.Resize(new
+                                {
+                                    method = "fit",
+                                    width = 96,
+                                    height = 96
+                                });
+                                await resized.ToFile(fullPath96);
+                            }
+                        }
+                        catch (System.Exception)
+                        {
+                            // ignored
+                        }
+
+
+                        user.Avatar32Path = urlPath32;
+                        user.Avatar48Path = urlPath48;
+                        user.Avatar96Path = urlPath96;
+                        _userProfileService.SaveUserProfile();
                     }
                     _userProfileService.SaveUserProfile();
                     return RedirectToAction("FilterItemList");
@@ -596,7 +722,7 @@ namespace Market.Web.Controllers
         {
             if (id != null)
             {
-                LockoutUserViewModel model = new LockoutUserViewModel()
+                var model = new LockoutUserViewModel()
                 {
                     UserId = id
                 };
@@ -606,44 +732,44 @@ namespace Market.Web.Controllers
         }
 
         [HttpPost]
-        public async System.Threading.Tasks.Task<ActionResult> LockoutUserAsync(LockoutUserViewModel model)
+        public async Task<ActionResult> LockoutUserAsync(LockoutUserViewModel model)
         {
             if (!ModelState.IsValid)
             {
                 return HttpNotFound();
             }
             var result = await UserManager.SetLockoutEnabledAsync(model.UserId, true);
-            TempData["message"] = string.Format("Ошибка");
+            TempData["message"] = "Ошибка";
             if (result.Succeeded)
             {
                 
-                var lockoutResult = await UserManager.SetLockoutEndDateAsync(model.UserId, DateTimeOffset.MaxValue);
+                await UserManager.SetLockoutEndDateAsync(model.UserId, DateTimeOffset.MaxValue);
                 var user = UserManager.FindById(model.UserId);
                 user.UserProfile.LockoutReason = model.LockoutReason;
                 var updateStampResult = await UserManager.UpdateSecurityStampAsync(model.UserId);
                 
                 if (result.Succeeded && updateStampResult.Succeeded)
                 {
-                    TempData["message"] = string.Format("Пользователь заблокирован");
+                    TempData["message"] = "Пользователь заблокирован";
                 }
 
             }
             return RedirectToAction("UserList");
         }
 
-        public virtual async System.Threading.Tasks.Task<ActionResult> UnlockUserAccount(string id)
+        public virtual async Task<ActionResult> UnlockUserAccount(string id)
         {
             var result = UserManager.SetLockoutEnabledAsync(id, false);
             var user =_userProfileService.GetUserProfileById(id);
             if (user != null)
             {
-                TempData["message"] = string.Format("Ошибка");
+                TempData["message"] = "Ошибка";
                 if (result.Result.Succeeded)
                 {
                     user.LockoutReason = null;
                     _userProfileService.SaveUserProfile();
                     await UserManager.ResetAccessFailedCountAsync(id);
-                    TempData["message"] = string.Format("Пользователь Разблокирован");
+                    TempData["message"] = "Пользователь Разблокирован";
                 }
                 return RedirectToAction("UserList");
             }

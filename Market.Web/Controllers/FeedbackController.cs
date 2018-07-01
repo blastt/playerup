@@ -6,7 +6,6 @@ using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace Market.Web.Controllers
@@ -31,7 +30,8 @@ namespace Market.Web.Controllers
         }
         public ActionResult All()
         {
-            var user = _userProfileService.GetUserProfileById(User.Identity.GetUserId());
+            var currentUserId = User.Identity.GetUserId();
+            var user = _userProfileService.GetUserProfile(u => u.Id == currentUserId, i => i.FeedbacksMy);
             if (user != null)
             {
                 var positiveFeedbacks = user.FeedbacksMy;
@@ -47,7 +47,8 @@ namespace Market.Web.Controllers
 
         public ActionResult Positive()
         {
-            var user = _userProfileService.GetUserProfileById(User.Identity.GetUserId());
+            var currentUserId = User.Identity.GetUserId();
+            var user = _userProfileService.GetUserProfile(u => u.Id == currentUserId, i => i.FeedbacksMy);
             if (user != null)
             {
                 var positiveFeedbacks = user.FeedbacksMy.Where(f => f.Grade == Emotions.Good);
@@ -63,7 +64,8 @@ namespace Market.Web.Controllers
 
         public ActionResult Negative()
         {
-            var user = _userProfileService.GetUserProfileById(User.Identity.GetUserId());
+            var currentUserId = User.Identity.GetUserId();
+            var user = _userProfileService.GetUserProfile(u => u.Id == currentUserId, i => i.FeedbacksMy);
             if (user != null)
             {
                 var positiveFeedbacks = user.FeedbacksMy.Where(f => f.Grade == Emotions.Bad);
@@ -82,7 +84,8 @@ namespace Market.Web.Controllers
         public PartialViewResult FeedbackList(string userId, string filter, int page = 1)
         {
             FeedbackListViewModel model = new FeedbackListViewModel();
-            var user = _userProfileService.GetUserProfileById(userId);
+            var currentUserId = User.Identity.GetUserId();
+            var user = _userProfileService.GetUserProfile(u => u.Id == currentUserId, i => i.FeedbacksMy.Select(f => f.Order.Offer), i => i.FeedbacksMy.Select(f => f.UserFrom));
             if (user != null)
             {
                 IEnumerable<Feedback> feedbacks = user.FeedbacksMy;
@@ -135,7 +138,8 @@ namespace Market.Web.Controllers
                 }
                 if (model.OrderId != null)
                 {
-                    Order order = _orderService.GetOrder(model.OrderId.Value);
+                    Order order = _orderService.GetOrder(model.OrderId.Value, i => i.Seller, i => i.Buyer, i => i.Feedbacks, 
+                        i => i.Seller.FeedbacksMy, i => i.Buyer.FeedbacksMy, i => i.Seller.FeedbacksToOthers, i => i.Buyer.FeedbacksToOthers);
 
                     if (order != null && order.BuyerId == model.ReceiverId && order.SellerId == User.Identity.GetUserId() && !order.SellerFeedbacked)
                     {
@@ -214,7 +218,7 @@ namespace Market.Web.Controllers
             {
                 if (model.OrderId != null)
                 {
-                    Order order = _orderService.GetOrder(model.OrderId.Value);
+                    Order order = _orderService.GetOrder(model.OrderId.Value, i => i.Seller, i => i.Buyer, i => i.Feedbacks);
 
                     if (order != null && order.Seller.Id == model.ReceiverId && order.BuyerId == User.Identity.GetUserId() && !order.BuyerFeedbacked)
                     {
@@ -247,7 +251,7 @@ namespace Market.Web.Controllers
 
         public PartialViewResult FeedbackListInfo(SearchFeedbacksInfoViewModel searchInfo)
         {
-            var user = _userProfileService.GetUserProfileById(searchInfo.UserId);
+            var user = _userProfileService.GetUserProfile(u => u.Id == searchInfo.UserId, i => i.FeedbacksMy);
             if (user != null)
             {
                 var modelFeedbacks = Mapper.Map<IEnumerable<Feedback>, IEnumerable<FeedbackViewModel>>(user.FeedbacksMy);

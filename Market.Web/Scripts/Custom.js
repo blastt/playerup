@@ -1,6 +1,18 @@
-﻿$(document).ready(function () {
+﻿var elementPosition = $('#searchForm').offset();
+$(window).scroll(function () {
+    if ($(window).scrollTop() + 10 > elementPosition.top) {
+        $('#searchForm').css('position', 'sticky').css('top', '10px');
+    } else {
+        $('#searchForm').css('position', 'static');
+    }
+});
+$(document).ready(function () {
+    
     Slider(parseFloat($('#priceFrom').val()), parseFloat($('#priceTo').val()));
     SelectFilterItem($('#game').val(), true);
+    var elementPosition = $('#searchForm').offset();
+
+    
     //RefreshPageOffers();
 
 });

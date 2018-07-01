@@ -1,5 +1,4 @@
-﻿@using Microsoft.AspNet.Identity
-@using Market.Web.Helpers
+﻿@using Market.Web.Helpers
 <!DOCTYPE html>
 <html>
 <head>
@@ -22,7 +21,7 @@
     <div class="navbar navbar-expand-lg fixed-top navbar-dark bg-primary">
         <div class="container">
             <a href="@Url.Action("Buy", "Offer")" class="navbar-brand">
-                <img alt="Лого" width="140" src="~/Content/Images/logo.png" />
+                <img alt="Лого" width="120" src="~/Content/Images/logo.svg" />
             </a>
             <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -62,32 +61,9 @@
         <footer class="card-footer">
             <div class="text-center">
                 <div class="row">
-                    <div class="col-md-3 text-left">
-                        <div class="row mb-2">
-                            <div class="col-sm-12">
-                                <span>Мы в социальных сетях</span>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <ul class="ul-social">
-                                    <li>
-                                        <a href="">
-                                            <img alt="vk" width="35" src="~/Content/Images/vk.svg" />
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="">
-                                            <img alt="facebook" width="35" src="~/Content/Images/facebook.svg" />
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
+                    
+                    <div class="col-md-12 text-center">
 
-                    </div>
-                    <div class="col-md-6 text-center">
-                        <p class="mb-3">Все права принадлежат © 2018 playerup.ru</p>
                         <ul class="ul-footer">
                             <li>@Html.ActionLink("Купить", "Buy", "Offer")</li>
                             <li>@Html.ActionLink("Продать", "Create", "Offer")</li>
@@ -95,13 +71,28 @@
                             <li>@Html.ActionLink("FAQ", "Faq", "Help")</li>
                             <li>@Html.ActionLink("Оферта", "PublicOffer", "Help")</li>
                         </ul>
+
+                        <p class="mb-3">Контакты для связи: support@playerup.ru</p>
+                        <p class="mb-3">Copyright © playerup.ru, 2012-2018. Все права защищены.</p>
+                        <ul class="ul-footer-social">
+                            <li>
+                                <a href="" class="vk-link">
+                                    <img src="~/Content/Images/vk.png" alt="vk" />
+                                </a>                                                              
+                            </li>
+                            <li>
+                                <a href="" class="facebook-link">
+                                    <img src="~/Content/Images/facebook.png" alt="vk" />
+                                </a>
+                            </li>
+                            <li>
+                                <a href="" class="steam-link">
+                                    <img src="~/Content/Images/steam.png" alt="vk" />
+                                </a>
+                            </li>
+                        </ul>
                     </div>
-                    <div class="col-md-3 text-right">
-                        <img alt="Почта" width="35" class="mr-1" src="~/Content/Images/mail.svg" />
-                        <span>
-                            support@playerup.ru
-                        </span>
-                    </div>
+                    
                 </div>
 
             </div>
@@ -109,9 +100,11 @@
         </footer>
     </div>
 
-
-
     @Scripts.Render("~/bundles/main")
+    <script src="~/signalr/hubs">
+    </script>
+    <script src="~/Scripts/signalr-messages.js">
+    </script>
     @RenderSection("scripts", required: false)
 </body>
 </html>

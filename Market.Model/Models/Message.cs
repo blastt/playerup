@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 
 namespace Market.Model.Models
@@ -21,13 +16,13 @@ namespace Market.Model.Models
         public bool ReceiverDeleted { get; set; }
         public DateTime CreatedDate { get; set; }
 
-        public virtual string SenderId { get; set; }
-        public virtual string ReceiverId { get; set; }
-        public virtual UserProfile Sender { get; set; }
-        public virtual UserProfile Receiver { get; set; }
+        public string SenderId { get; set; }
+        public string ReceiverId { get; set; }
+        public UserProfile Sender { get; set; }
+        public UserProfile Receiver { get; set; }
 
-        public virtual int DialogId { get; set; }
-        public virtual Dialog Dialog { get; set; }
+        public int DialogId { get; set; }
+        public Dialog Dialog { get; set; }
         
     }
 }

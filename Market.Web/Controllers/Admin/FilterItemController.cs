@@ -3,12 +3,8 @@ using Market.Model.Models;
 using Market.Service;
 using Market.Web.ViewModels;
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Runtime.Serialization.Json;
-using System.Web;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
 
@@ -72,7 +68,7 @@ namespace Market.Web.Controllers.Admin
             //Dictionary<string, string> ranks = new Dictionary<string, string>();
             //[{\"Text\":\"2x2\",\"Value\":\"2x2\",\"FilterItems\":[]},{\"Text\":\"5x5\",\"Value\":\"5x5\",\"FilterItems\":[]}]
             // Сделать проверку на налл
-            Game g = _gameService.GetGameByValue(game);
+            Game g = _gameService.GetGameByValue(game, i => i.Filters, i => i.Filters.Select(fi => fi.FilterItems));
 
             IList<FilterViewModel> filters = new List<FilterViewModel>();
             if (g != null)

@@ -1,5 +1,4 @@
-﻿using System.Web;
-using System.Web.Optimization;
+﻿using System.Web.Optimization;
 
 namespace Market.Web
 {
@@ -39,14 +38,13 @@ namespace Market.Web
                       "~/Scripts/jquery-ui.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/main").Include(
+                    "~/Scripts/jquery-{version}.js",
                     "~/Scripts/bootstrap.js",
-                      "~/Scripts/Main.js",
-                      "~/Scripts/jquery-{version}.js",
-                      "~/Scripts/jquery.signalR-2.2.3.min.js",
-
-                      "~/Scripts/respond.js",
-                      "~/signalr/hubs",
-                      "~/Scripts/signalr-messages.js"));
+                    "~/Scripts/respond.js",
+                      "~/Scripts/Main.js",                                           
+                      "~/Scripts/jquery.signalR-2.2.3.min.js"
+                                                                 
+                      ));
 
             bundles.Add(new ScriptBundle("~/bundles/search-panel").Include(
                      "~/Scripts/Filters.js",

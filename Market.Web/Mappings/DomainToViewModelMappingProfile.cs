@@ -1,11 +1,7 @@
 ﻿using AutoMapper;
 using Market.Model.Models;
-using Market.Web.ExtentionMethods;
 using Market.Web.ViewModels;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 
 namespace Market.Web.Mappings
 {
@@ -196,7 +192,7 @@ namespace Market.Web.Mappings
             CreateMap<Message, MessageViewModel>()
                 .ForMember(o => o.Id, map => map.MapFrom(vm => vm.Id))
                 .ForMember(o => o.ToViewed, map => map.MapFrom(vm => vm.ToViewed))
-                .ForPath(o => o.SenderImage, map => map.MapFrom(vm => vm.Sender.ImagePath))
+                .ForPath(o => o.SenderImage, map => map.MapFrom(vm => vm.Sender.Avatar48Path))
                 .ForMember(o => o.FromViewed, map => map.MapFrom(vm => vm.FromViewed))
                 .ForMember(o => o.MessageBody, map => map.MapFrom(vm => vm.MessageBody))
                 .ForMember(o => o.ReceiverDeleted, map => map.MapFrom(vm => vm.ReceiverDeleted))
@@ -245,7 +241,6 @@ namespace Market.Web.Mappings
 
             CreateMap<UserProfile, InfoUserProfileViewModel>()
                 .ForMember(o => o.Id, map => map.MapFrom(vm => vm.Id))
-                .ForMember(o => o.ImagePath, map => map.MapFrom(vm => vm.ImagePath))
                 .ForMember(o => o.IsOnline, map => map.MapFrom(vm => vm.IsOnline))
                 .ForMember(o => o.Name, map => map.MapFrom(vm => vm.Name))
                 .ForMember(o => o.AllFeedbackCount, map => map.MapFrom(vm => vm.AllFeedbackCount))
@@ -259,7 +254,6 @@ namespace Market.Web.Mappings
                 .ForPath(o => o.PhoneNumber, map => map.MapFrom(vm => vm.ApplicationUser.PhoneNumber))
                 .ForPath(o => o.Email, map => map.MapFrom(vm => vm.ApplicationUser.Email))
                 .ForPath(o => o.RegistrationDate, map => map.MapFrom(vm => vm.RegistrationDate))
-                .ForPath(o => o.ImagePath, map => map.MapFrom(vm => vm.ImagePath))
                 .ForPath(o => o.Balance, map => map.MapFrom(vm => vm.Balance))
                 .ForPath(o => o.EmailConfirmed, map => map.MapFrom(vm => vm.ApplicationUser.EmailConfirmed))
                 .ForPath(o => o.PhoneNumberConfirmed, map => map.MapFrom(vm => vm.ApplicationUser.PhoneNumberConfirmed))
@@ -277,7 +271,7 @@ namespace Market.Web.Mappings
                 .ForPath(o => o.PhoneNumber, map => map.MapFrom(vm => vm.ApplicationUser.PhoneNumber))
                 .ForPath(o => o.Email, map => map.MapFrom(vm => vm.ApplicationUser.Email))
                 .ForPath(o => o.RegistrationDate, map => map.MapFrom(vm => vm.RegistrationDate))
-                .ForPath(o => o.ImagePath, map => map.MapFrom(vm => vm.ImagePath))
+                .ForPath(o => o.ImagePath, map => map.MapFrom(vm => vm.Avatar48Path))
                 .ForPath(o => o.Balance, map => map.MapFrom(vm => vm.Balance))
                 .ForPath(o => o.EmailConfirmed, map => map.MapFrom(vm => vm.ApplicationUser.EmailConfirmed))
                 .ForPath(o => o.PhoneNumberConfirmed, map => map.MapFrom(vm => vm.ApplicationUser.PhoneNumberConfirmed))

@@ -3,10 +3,8 @@ using Hangfire;
 using Market.Model.Models;
 using Market.Service;
 using Market.Web.Hangfire;
-using Market.Web.Helpers;
 using Market.Web.ViewModels;
 using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -48,7 +46,7 @@ namespace Trader.WEB.Controllers
         {
             if (id != null)
             {
-                var offer = _offerService.GetOffer(id.Value);
+                var offer = _offerService.GetOffer(id.Value, o => o.Game, o => o.UserProfile);
                 if (offer != null && offer.Order == null && offer.State == OfferState.active && offer.UserProfileId != User.Identity.GetUserId())
                 {
                     CheckoutViewModel model = new CheckoutViewModel()
@@ -82,7 +80,8 @@ namespace Trader.WEB.Controllers
         public ActionResult Checkoutme(CheckoutViewModel model)
         {
             //UserProfile buyer = _db.UserProfiles.Get(User.Identity.GetUserId());
-            Offer offer = _offerService.GetOffer(model.OfferId);
+            Offer offer = _offerService.GetOffer(model.OfferId, o => o.UserProfile, o => o.Order, o => o.Order.StatusLogs, o => o.Order.CurrentStatus,
+                o => o.Order.Seller.ApplicationUser, o => o.Order.Buyer.ApplicationUser, o => o.Order.CurrentStatus);
             if (offer != null && offer.Order == null && offer.State == OfferState.active && offer.UserProfileId != User.Identity.GetUserId())
             {
                 offer.Order = new Order
@@ -104,18 +103,9 @@ namespace Trader.WEB.Controllers
                 offer.Order.CurrentStatus = _orderStatusService.GetOrderStatusByValue(OrderStatuses.BuyerPaying);
 
                 //_offerService.UpdateOffer(offer);
-                
 
-                var userProfiles = _userProfileService.GetUserProfiles()
-                    .Where(u => u.ApplicationUser.Roles.Contains(new IdentityUserRole() { RoleId = "1", UserId = u.Id }));
-                foreach (var user in userProfiles)
-                {
-                    user.MessagesAsReceiver.Add(new Message()
-                    {
-                        CreatedDate = DateTime.Now,
-                        MessageBody = "Get"
-                    });
-                }
+
+                
                 TempData["orderBuyStatus"] = "Заказ создан!";
 
                 if (offer.JobId != null)
@@ -156,7 +146,7 @@ namespace Trader.WEB.Controllers
             // Добавить логику оплаты
             if (id != null)
             {
-                Order order = _orderService.GetOrder(id.Value);
+                Order order = _orderService.GetOrder(id.Value, i => i.Seller, i => i.Buyer, i => i.Offer, i => i.CurrentStatus, i => i.Seller.ApplicationUser, i => i.Buyer.ApplicationUser);
                 if (order != null && order.CurrentStatus.Value == OrderStatuses.BuyerPaying)
                 {
                     var mainCup = _userProfileService.GetUserProfileByName("palyerup");
@@ -220,7 +210,7 @@ namespace Trader.WEB.Controllers
                         order.BuyerChecked = false;
                         order.SellerChecked = false;
 
-                        if (order != null)
+                        if (order.JobId != null)
                         {
                             BackgroundJob.Delete(order.JobId);
                             order.JobId = null;
@@ -251,7 +241,7 @@ namespace Trader.WEB.Controllers
             // Добавить логику оплаты
             if (orderId != null)
             {
-                Order order = _orderService.GetOrder(orderId.Value);
+                Order order = _orderService.GetOrder(orderId.Value, i => i.CurrentStatus , i => i.StatusLogs);
                 if (order != null && order.CurrentStatus.Value == OrderStatuses.PayingToSeller)
                 {
                     order.StatusLogs.AddLast(new StatusLog()
@@ -321,7 +311,7 @@ namespace Trader.WEB.Controllers
         {
             if (Id != null && moderatorId != null && buyerId != null && sellerId != null)
             {
-                Order order = _orderService.GetOrder(Id.Value);
+                Order order = _orderService.GetOrder(Id.Value, i => i.Middleman, i => i.Seller, i => i.Buyer, i => i.CurrentStatus, i => i.Offer);
                 if (sellerId == User.Identity.GetUserId())
                 {
                     if (order.MiddlemanId == moderatorId && order.SellerId == sellerId &&
@@ -350,7 +340,7 @@ namespace Trader.WEB.Controllers
             {
                 var accountInfo = Mapper.Map<AccountInfoViewModel, AccountInfo>(model);
                 
-                var moderator = _userProfileService.GetUserProfileById(model.ModeratorId);
+                var moderator = _userProfileService.GetUserProfile(u => u.Id == model.ModeratorId, i => i.ApplicationUser);
 
                 bool moderIsInrole = false;
                 if (moderator != null)
@@ -365,7 +355,8 @@ namespace Trader.WEB.Controllers
                 }
                 if (moderIsInrole)
                 {
-                    var order = _orderService.GetOrder(model.SteamLogin, model.ModeratorId, model.SellerId, model.BuyerId);
+                    var order = _orderService.GetOrder(model.SteamLogin, model.ModeratorId, model.SellerId,
+                        model.BuyerId, i => i.CurrentStatus, i => i.StatusLogs, i => i.Seller.ApplicationUser, i => i.Buyer.ApplicationUser);
                     if (order != null)
                     {
                         if (order.CurrentStatus != null)
@@ -413,7 +404,7 @@ namespace Trader.WEB.Controllers
             if (id != null)
             {
                 bool result = _orderService.ConfirmOrder(id.Value, User.Identity.GetUserId());
-                var order = _orderService.GetOrder(id.Value);
+                var order = _orderService.GetOrder(id.Value, i => i.CurrentStatus, i => i.Seller.ApplicationUser, i => i.Buyer.ApplicationUser);
                 if (result && order != null)
                 {
                     if (order.JobId != null)

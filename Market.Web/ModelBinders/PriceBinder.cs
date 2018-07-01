@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-
-namespace Market.Web.ModelBinders
+﻿namespace Market.Web.ModelBinders
 {
     
 }

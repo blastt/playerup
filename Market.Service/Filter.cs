@@ -4,8 +4,7 @@ using Market.Model.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Linq.Expressions;
 
 namespace Market.Service
 {
@@ -13,6 +12,9 @@ namespace Market.Service
     public interface IFilterService
     {
         IEnumerable<Filter> GetFilters();
+        IQueryable<Filter> GetFilters(Expression<Func<Filter, bool>> where, params Expression<Func<Filter, object>>[] includes);
+        IQueryable<Filter> GetFiltersAsNoTracking(Expression<Func<Filter, bool>> where, params Expression<Func<Filter, object>>[] includes);
+        IQueryable<Filter> GetFiltersAsNoTracking(params Expression<Func<Filter, object>>[] includes);
         Filter GetFilter(int id);
         void Delete(Filter filter);
         void CreateFilter(Filter message);
@@ -39,6 +41,25 @@ namespace Market.Service
             return filters;
         }
 
+        public IQueryable<Filter> GetFilters(Expression<Func<Filter, bool>> where, params Expression<Func<Filter, object>>[] includes)
+        {
+            var query = filtersRepository.GetMany(where, includes);
+            return query;
+        }
+
+        public IQueryable<Filter> GetFiltersAsNoTracking(params Expression<Func<Filter, object>>[] includes)
+        {
+            var query = filtersRepository.GetAll(includes);
+            return query;
+        }
+
+        public IQueryable<Filter> GetFiltersAsNoTracking(Expression<Func<Filter, bool>> where, params Expression<Func<Filter, object>>[] includes)
+        {
+            var query = filtersRepository.GetManyAsNoTracking(where);
+            return query;
+        }
+
+     
         public Filter GetFilterByValue(string value)
         {
             return filtersRepository.GetFilterByValue(value);

@@ -1,8 +1,4 @@
 ﻿using Marketplace.Data;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Market.Data.Infrastructure
@@ -17,10 +13,7 @@ namespace Market.Data.Infrastructure
             this.dbFactory = dbFactory;
         }
 
-        public MarketEntities DbContext
-        {
-            get { return dbContext ?? (dbContext = dbFactory.Init()); }
-        }
+        public MarketEntities DbContext => dbContext ?? (dbContext = dbFactory.Init());
 
         public void Commit()
         {

@@ -4,12 +4,10 @@ using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using Market.Web.ViewModels;
 using AutoMapper;
 using Market.Web.Hubs;
-using System.Runtime.Remoting.Contexts;
 using Microsoft.AspNet.SignalR;
 
 namespace Market.Web.Controllers
@@ -146,7 +144,7 @@ namespace Market.Web.Controllers
             ViewData["SearchString"] = searchString;
             ViewData["CurrentFilter"] = currentFilter;
             var currentUser = _userProfileService.GetUserProfileById(User.Identity.GetUserId());
-            var dialogs = _dialogService.GetUserDialogs(currentUser.Id);
+            var dialogs = _dialogService.GetUserDialogs(currentUser.Id , i => i.Messages);
 
             //var messages = _db.Messages.Find(m => m.ReceiverId == User.Identity.GetUserId());
 
@@ -230,8 +228,8 @@ namespace Market.Web.Controllers
                 {
                     d.otherUserId = otherUser.Id;
                     d.otherUserName = otherUser.Name;
-                    d.otherUserImage = otherUser.ImagePath;
-                    d.CountOfNewMessages = d.Messages.Where(m => !m.ToViewed && m.SenderId != currentUser.Id).Count();
+                    d.otherUserImage = otherUser.Avatar48Path;
+                    d.CountOfNewMessages = d.Messages.Count(m => !m.ToViewed && m.SenderId != currentUser.Id);
                 }
             }
             return View(model);
@@ -247,48 +245,12 @@ namespace Market.Web.Controllers
             ViewData["SearchString"] = searchString;
             ViewData["CurrentFilter"] = currentFilter;
             var currentUser = _userProfileService.GetUserProfileById(User.Identity.GetUserId());
-            var dialogs = new List<DialogViewModel>();
-
-            //var messages = _db.Messages.Find(m => m.ReceiverId == User.Identity.GetUserId());
-
-            if (!String.IsNullOrEmpty(searchString))
-            {
-                //dialogs = dialogs.Where(s => s.MessageBody.Contains(searchString) && s.ReceiverId == User.Identity.GetUserId());
-            }
-            if (!String.IsNullOrEmpty(senderName))
-            {
-                //var userProfile = _userProfileService.GetUserProfiles().Where(m => m.ApplicationUser.UserName == senderName).FirstOrDefault();
-                //if (userProfile != null)
-                //{
-                //    messages = messages.Where(s => s.SenderId == userProfile.Id && s.ReceiverId == User.Identity.GetUserId());
-                //}
-                //else
-                //{
-                //    messages = Array.Empty<Message>();
-                //}
-
-            }
-
-            //switch (sortOrder)
-            //{
-            //    case "name_desc":
-            //        //messages = messages.OrderByDescending(s => s.SenderName);
-            //        break;
-            //    case "Date":
-            //        messages = messages.OrderBy(s => s.CreatedDate);
-            //        break;
-            //    case "date_desc":
-            //        messages = messages.OrderByDescending(s => s.CreatedDate);
-            //        break;
-
-            //    default:  // Name ascending 
-            //        messages = messages.OrderByDescending(s => s.CreatedDate);
-            //        break;
-            //}
+            var dialogs = _dialogService.GetUserDialogs(currentUser.Id, i => i.Messages).ToList();
+            var modelListDialogs = new List<DialogViewModel>();
 
             DialogListViewModel model = new DialogListViewModel()
             {
-                Dialogs = Mapper.Map<IEnumerable<Dialog>, IEnumerable<DialogViewModel>>(_dialogService.GetDialogs().OrderByDescending(d => d.Messages.LastOrDefault().CreatedDate))
+                Dialogs = Mapper.Map<IEnumerable<Dialog>, IEnumerable<DialogViewModel>>(dialogs.OrderByDescending(d => d.Messages.LastOrDefault().CreatedDate))
 
 
             };
@@ -301,15 +263,15 @@ namespace Market.Web.Controllers
                 {
                     d.otherUserId = otherUser.Id;
                     d.otherUserName = otherUser.Name;
-                    d.otherUserImage = otherUser.ImagePath;
-                    d.CountOfNewMessages = d.Messages.Where(m => !m.ToViewed && m.SenderId != currentUser.Id).Count();
+                    d.otherUserImage = otherUser.Avatar48Path;
+                    d.CountOfNewMessages = d.Messages.Count(m => !m.ToViewed && m.SenderId != currentUser.Id);
                 }
                 if (d.CountOfNewMessages != 0)
                 {
-                    dialogs.Add(d);
+                    modelListDialogs.Add(d);
                 }
             }
-            model.Dialogs = dialogs;
+            model.Dialogs = modelListDialogs;
             return View(model);
         }
 
@@ -382,7 +344,7 @@ namespace Market.Web.Controllers
         {
             if (dialogId != null)
             {
-                var dialog = _dialogService.GetDialog(dialogId.Value);
+                var dialog = _dialogService.GetDialog(d => d.Id == dialogId.Value, i => i.Messages);
                 var dialogMessagessAll = dialog.Messages;
                 if (dialogMessagessAll != null)
                 {
@@ -397,7 +359,7 @@ namespace Market.Web.Controllers
             var user = _userProfileService.GetUserProfileById(User.Identity.GetUserId());
             int newDialogsCount = 0;
 
-            foreach (var d in _dialogService.GetUserDialogs(user.Id))
+            foreach (var d in _dialogService.GetUserDialogs(user.Id, i => i.Messages))
             {
                 if (d.Messages.Any(m => !m.ToViewed && m.SenderId != User.Identity.GetUserId()))
                 {
@@ -436,8 +398,11 @@ namespace Market.Web.Controllers
                 }
 
 
-                var toUser = _userProfileService.GetUserProfileById(model.ReceiverId);
-                var fromUser = _userProfileService.GetUserProfileById(User.Identity.GetUserId());
+                var toUser = _userProfileService.GetUserProfile(u => u.Id == model.ReceiverId, u => u.DialogsAsСompanion, u => u.DialogsAsCreator,
+                    u => u.DialogsAsCreator.Select(i => i.Messages), u => u.DialogsAsСompanion.Select(i => i.Messages));
+                var currentUserId = User.Identity.GetUserId();
+                var fromUser = _userProfileService.GetUserProfile(u => u.Id == currentUserId, u => u.DialogsAsСompanion, u => u.DialogsAsCreator,
+                    u => u.DialogsAsCreator.Select(i => i.Messages), u => u.DialogsAsСompanion.Select(i => i.Messages));
                 if (toUser != null && fromUser!= null && toUser.Id != fromUser.Id)
                 {
                     
@@ -490,7 +455,7 @@ namespace Market.Web.Controllers
                     }                    
 
 
-                    AddMessage(fromUser.Id, toUser.Name, fromUser.Name, message.MessageBody, message.CreatedDate.ToString(), fromUser.ImagePath); // hub
+                    AddMessage(fromUser.Id, toUser.Name, fromUser.Name, message.MessageBody, message.CreatedDate.ToString(), fromUser.Avatar48Path); // hub
                     return Json(new { success = true });
                 }
                 return Json(new { success = false, responseText = "Ошибка при отправке сообщения. Повторите попытку" }, JsonRequestBehavior.AllowGet);

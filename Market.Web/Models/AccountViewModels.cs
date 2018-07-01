@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using Market.Web.Attributes;
 
 namespace Market.Web.Models
 {

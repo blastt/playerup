@@ -1,7 +1,4 @@
 ﻿using Market.Data.Infrastructure;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Marketplace.Data.Infrastructure
 {

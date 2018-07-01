@@ -1,10 +1,6 @@
 ﻿using AutoMapper;
 using Market.Model.Models;
 using Market.Web.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace Market.Web.Mappings
 {
@@ -94,7 +90,7 @@ namespace Market.Web.Mappings
                .ForMember(o => o.SenderId, map => map.MapFrom(vm => vm.SenderId))
                .ReverseMap()
                .ForPath(o => o.ReceiverName, map => map.MapFrom(vm => vm.Receiver.Name))
-               .ForPath(o => o.SenderImage, map => map.MapFrom(vm => vm.Sender.ImagePath))
+               .ForPath(o => o.SenderImage, map => map.MapFrom(vm => vm.Sender.Avatar48Path))
                .ForPath(o => o.SenderName, map => map.MapFrom(vm => vm.Sender.Name))
                .ReverseMap()
                .ForMember(o => o.CreatedDate, map => map.MapFrom(vm => vm.CreatedDate));

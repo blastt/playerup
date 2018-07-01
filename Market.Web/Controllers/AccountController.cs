@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Globalization;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -11,7 +9,6 @@ using Microsoft.Owin.Security;
 using Market.Web.Models;
 using Market.Model.Models;
 using Market.Service;
-using static Market.Web.Controllers.ManageController;
 using System.Collections.Generic;
 
 namespace Market.Web.Controllers
@@ -75,10 +72,6 @@ namespace Market.Web.Controllers
         {
             return PartialView("_AccountMenu");
         }
-        public ActionResult ControlPanel()
-        {
-            return View();
-        }
 
 
         [Authorize]
@@ -95,11 +88,14 @@ namespace Market.Web.Controllers
 
                 // Persiste the changes
                 // generage email confirmation code
-                string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                var code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                if (Request.Url != null)
+                {
+                    var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, Request.Url.Scheme);
 
-                await UserManager.SendEmailAsync(user.Id, "Подтверждение почты", "Для почтверждения почты" +
-                    " учётной записи Для смены адреса вам необходимо его активировать, щелкнув <a href=\"" + callbackUrl + "\">здесь</a>");
+                    await UserManager.SendEmailAsync(user.Id, "Подтверждение почты", "Для почтверждения почты" +
+                                                                                     " учётной записи Для смены адреса вам необходимо его активировать, щелкнув <a href=\"" + callbackUrl + "\">здесь</a>");
+                }
 
                 return View("VerifyEmailRequest");
             }
@@ -155,16 +151,19 @@ namespace Market.Web.Controllers
                    
                     // generage email confirmation code
 
-                    string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                    var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code, email = model.NewEmail }, protocol: Request.Url.Scheme);
-
-                    await _identityMessageService.SendAsync(new IdentityMessage
+                    var code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                    if (Request.Url != null)
                     {
-                        Body = "Вы предоставили новый email-адрес для вашей" +
-                        " учётной записи Для смены адреса вам необходимо его активировать, щелкнув <a href=\"" + callbackUrl + "\">здесь</a>",
-                        Subject = "Подтверждение почты",
-                        Destination = model.NewEmail
-                    });
+                        var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code, email = model.NewEmail }, protocol: Request.Url.Scheme);
+
+                        await _identityMessageService.SendAsync(new IdentityMessage
+                        {
+                            Body = "Вы предоставили новый email-адрес для вашей" +
+                                   " учётной записи Для смены адреса вам необходимо его активировать, щелкнув <a href=\"" + callbackUrl + "\">здесь</a>",
+                            Subject = "Подтверждение почты",
+                            Destination = model.NewEmail
+                        });
+                    }
 
                     return View("UpdateEmailRequest");
 
@@ -280,12 +279,10 @@ namespace Market.Web.Controllers
 
             // Сбои при входе не приводят к блокированию учетной записи
             // Чтобы ошибки при вводе пароля инициировали блокирование учетной записи, замените на shouldLockout: true
-            var userName = model.UserNameOrEmail;
-            var test = _userProfileService.GetUserProfiles();
-            var user = _userProfileService.GetUserProfiles().FirstOrDefault(m => model.UserNameOrEmail == m.ApplicationUser.Email || model.UserNameOrEmail == m.ApplicationUser.UserName);
+            var user = _userProfileService.GetUserProfiles(m => model.UserNameOrEmail == m.ApplicationUser.Email || model.UserNameOrEmail == m.ApplicationUser.UserName, p => p.ApplicationUser).FirstOrDefault();
             if (user != null)
             {
-                userName = user.Name;
+                var userName = user.Name;
 
                 if (await UserManager.IsEmailConfirmedAsync(user.Id))
                 {
@@ -314,9 +311,8 @@ namespace Market.Web.Controllers
                             else
                             {
                                 //create a new list
-                                var loggedInUsers = new Dictionary<string, DateTime>();
+                                var loggedInUsers = new Dictionary<string, DateTime> {{userName, DateTime.Now}};
                                 //add this user to the list
-                                loggedInUsers.Add(userName, DateTime.Now);
                                 //add the list into the cache
                                 HttpRuntime.Cache["LoggedInUsers"] = loggedInUsers;
                             }
@@ -327,7 +323,7 @@ namespace Market.Web.Controllers
                             return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
                         case SignInStatus.Failure:
                         default:
-                            ModelState.AddModelError("", "Неудачная попытка входа.");
+                            ModelState.AddModelError("", @"Неудачная попытка входа.");
                             return View(model);
                     }
                 }
@@ -339,7 +335,6 @@ namespace Market.Web.Controllers
                     ModelState.AddModelError("", "Нужно активировать ваш аккаунт. Перейдите по ссылке, которую мы вам выслали на почту");
                     return View(model);
                 }
-                
             }
             ModelState.AddModelError("", "Неудачная попытка входа.");
             return View(model);
@@ -411,15 +406,20 @@ namespace Market.Web.Controllers
                     return HttpNotFound("User exists!");
                 }
                 var user = new ApplicationUser { UserName = model.UserName, Email = model.Email };
-                string urlPath = Url.Content("~/Content/Images/Avatars/Default.png");
+                string urlPath32 = Url.Content("~/Content/Images/Avatars/Default32.png");
+                string urlPath48 = Url.Content("~/Content/Images/Avatars/Default48.png");
+                string urlPath96 = Url.Content("~/Content/Images/Avatars/Default96.png");
                 UserProfile profile = new UserProfile
                 {
                     Id = user.Id,
-                    ImagePath = urlPath,
+                    Avatar32Path = urlPath32,
+                    Avatar48Path = urlPath48,
+                    Avatar96Path = urlPath96,
                     Name = user.UserName,
                     RegistrationDate = DateTime.Now,
                     ApplicationUser = user
                 };
+
                 _userProfileService.CreateUserProfile(profile);
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
@@ -512,7 +512,7 @@ namespace Market.Web.Controllers
                 {
                     await UserManager.SmsService.SendAsync(message);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     return View("UpdatePhoneNumberError");
                 }
@@ -547,7 +547,7 @@ namespace Market.Web.Controllers
                 return View("UpdatePhoneNumberSuccess");
                 //return RedirectToAction("Settings", new { Message = ManageMessageId.AddPhoneSuccess });
             }
-            ModelState.AddModelError("", "Failed to verify phone");
+            ModelState.AddModelError("", @"Failed to verify phone");
             return View("UpdatePhoneNumberError");
         }
 
@@ -590,14 +590,14 @@ namespace Market.Web.Controllers
                 {
                     await UserManager.SmsService.SendAsync(message);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
 
                     return View("UpdatePhoneNumberError");
                 }
                 
             }
-            return RedirectToAction("VerifyPhoneNumber", new { PhoneNumber = model.PhoneNumber });
+            return RedirectToAction("VerifyPhoneNumber", new {model.PhoneNumber });
         }
 
 
@@ -627,9 +627,13 @@ namespace Market.Web.Controllers
 
                 // Дополнительные сведения о включении подтверждения учетной записи и сброса пароля см. на странице https://go.microsoft.com/fwlink/?LinkID=320771.
                 // Отправка сообщения электронной почты с этой ссылкой
-                string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
-                var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, password = model.Password, code = code }, protocol: Request.Url.Scheme);
-                await UserManager.SendEmailAsync(user.Id, "Сброс пароля", "Сбросьте ваш пароль, щелкнув <a href=\"" + callbackUrl + "\">здесь</a>");
+                var code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
+                if (Request.Url != null)
+                {
+                    var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, password = model.Password, code = code }, protocol: Request.Url.Scheme);
+                    await UserManager.SendEmailAsync(user.Id, "Сброс пароля", "Сбросьте ваш пароль, щелкнув <a href=\"" + callbackUrl + "\">здесь</a>");
+                }
+
                 return RedirectToAction("ForgotPasswordConfirmation", "Account");
             }
 
@@ -661,9 +665,9 @@ namespace Market.Web.Controllers
                 }
                 if (User.Identity.IsAuthenticated)
                 {
-                    return View("Этот аккаунт активирован");
+                    return HttpNotFound();
                 }
-                var result = await UserManager.ResetPasswordAsync(user.Id, code, password);
+                await UserManager.ResetPasswordAsync(user.Id, code, password);
                 
                 return View("ChangePasswordSuccess");
             }

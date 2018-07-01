@@ -1,23 +1,8 @@
-﻿using Autofac;
-using Autofac.Integration.Mvc;
-using Hangfire;
-using Hangfire.Common;
-using Hangfire.SqlServer;
-using Market.Model.Models;
-using Market.Service;
+﻿using Hangfire;
 using Market.Web.Hangfire;
-using Market.Web.ModelBinders;
-using Marketplace.Data;
-using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
-using Microsoft.Owin.Security.Cookies;
 using Owin;
-using System;
-using System.Configuration;
 using System.Globalization;
-using System.Reflection;
-using System.Web.Mvc;
 
 [assembly: OwinStartupAttribute(typeof(Market.Web.Startup))]
 namespace Market.Web
@@ -28,7 +13,7 @@ namespace Market.Web
         public void Configuration(IAppBuilder app)
         {
             ConfigureAuth(app);
-
+            
             MarketHangfire.ConfigureHangfire(app);
 
             GlobalConfiguration.Configuration

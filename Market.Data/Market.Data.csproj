@@ -45,12 +45,7 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration\AccountInfoConfiguration.cs" />
@@ -79,6 +74,10 @@
     <Compile Include="Migrations\201806101038011_Initial.cs" />
     <Compile Include="Migrations\201806101038011_Initial.Designer.cs">
       <DependentUpon>201806101038011_Initial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201806270915203_Avatars.cs" />
+    <Compile Include="Migrations\201806270915203_Avatars.Designer.cs">
+      <DependentUpon>201806270915203_Avatars.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -110,6 +109,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201806101038011_Initial.resx">
       <DependentUpon>201806101038011_Initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806270915203_Avatars.resx">
+      <DependentUpon>201806270915203_Avatars.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

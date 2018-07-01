@@ -1,10 +1,6 @@
 ﻿using Market.Data.Infrastructure;
 using Market.Model.Models;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Market.Data.Repositories
 {
@@ -17,13 +13,18 @@ namespace Market.Data.Repositories
 
         public UserProfile GetUserById(string userId)
         {
-            return DbContext.UserProfiles.Where(u => u.Id == userId).FirstOrDefault();
+            return DbContext.UserProfiles.Find(userId);
         }
 
+        
+        
         public UserProfile GetUserByName(string userName)
         {
             return DbContext.UserProfiles.Where(u => u.Name == userName).FirstOrDefault();
         }
+
+        
+
 
     }
 
@@ -31,6 +32,7 @@ namespace Market.Data.Repositories
     {
         UserProfile GetUserByName(string userName);
         UserProfile GetUserById(string userId);
+        
 
     }
 }

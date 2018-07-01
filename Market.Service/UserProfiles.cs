@@ -4,14 +4,15 @@ using Market.Model.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Linq.Expressions;
 
 namespace Market.Service
 {
     public interface IUserProfileService
     {
         IEnumerable<UserProfile> GetUserProfiles();
+        IQueryable<UserProfile> GetUserProfiles(Expression<Func<UserProfile, bool>> where, params Expression<Func<UserProfile, object>>[] includes);
+        UserProfile GetUserProfile(Expression<Func<UserProfile, bool>> where, params Expression<Func<UserProfile, object>>[] includes);
         UserProfile GetUserProfileById(string id);
         UserProfile GetUserProfileByName(string name);
         void CreateUserProfile(UserProfile userProfile);
@@ -38,7 +39,11 @@ namespace Market.Service
             return userProfile;
         }
 
-        
+        public IQueryable<UserProfile> GetUserProfiles(Expression<Func<UserProfile, bool>> where, params Expression<Func<UserProfile, object>>[] includes)
+        {
+            var userProfile = userProfilesRepository.GetManyAsNoTracking(where, includes);
+            return userProfile;
+        }
 
 
         public UserProfile GetUserProfileById(string id)
@@ -46,6 +51,14 @@ namespace Market.Service
             var userProfile = userProfilesRepository.GetUserById(id);
             return userProfile;
         }
+
+        public UserProfile GetUserProfile(Expression<Func<UserProfile, bool>> where, params Expression<Func<UserProfile, object>>[] includes)
+        {
+            var userProfile = userProfilesRepository.Get(where, includes);
+            return userProfile;
+        }
+
+
 
         public void UpdateUserProfile(UserProfile userProfile)
         {
@@ -57,6 +70,9 @@ namespace Market.Service
             var userProfile = userProfilesRepository.GetUserByName(name);
             return userProfile;
         }
+
+        
+
 
         public void CreateUserProfile(UserProfile userProfile)
         {

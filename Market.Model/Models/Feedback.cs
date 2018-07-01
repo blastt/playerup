@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 
 namespace Market.Model.Models
@@ -21,13 +16,13 @@ namespace Market.Model.Models
         public string Comment { get; set; }
         public DateTime DateLeft { get; set; } = DateTime.Now;
 
-        public virtual Order Order { get; set; }
+        public Order Order { get; set; }
 
-        public virtual string UserToId { get; set; }
-        public virtual UserProfile UserTo { get; set; }
+        public string UserToId { get; set; }
+        public UserProfile UserTo { get; set; }
 
-        public virtual string UserFromId { get; set; }
-        public virtual UserProfile UserFrom { get; set; }
+        public string UserFromId { get; set; }
+        public UserProfile UserFrom { get; set; }
 
     }
 }

@@ -3,10 +3,7 @@ using Market.Model.Models;
 using Market.Service;
 using Market.Web.ViewModels;
 using Microsoft.AspNet.Identity;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace Market.Web.Controllers
@@ -34,19 +31,19 @@ namespace Market.Web.Controllers
             string dialogWithUserImage = null;
             if (dialogId != null)
             {
-                Dialog dialog = _dialogService.GetDialog(dialogId.Value);
+                Dialog dialog = _dialogService.GetDialog(d => d.Id == dialogId.Value, i => i.Creator, i => i.Companion, i => i.Messages);
                 if (dialog != null && (_dialogService.GetUserDialogs(currentUserId).Count() != 0))
                 {
 
                     if (dialog.CompanionId == currentUserId)
                     {
                         dialogWithUserId = dialog.CreatorId;
-                        dialogWithUserImage = dialog.Creator.ImagePath;
+                        dialogWithUserImage = dialog.Creator.Avatar48Path;
                     }
                     else if (dialog.CreatorId == currentUserId)
                     {
                         dialogWithUserId = dialog.CompanionId;
-                        dialogWithUserImage = dialog.Companion.ImagePath;
+                        dialogWithUserImage = dialog.Companion.Avatar48Path;
                     }                                                             
                     
                     if (dialogWithUserId == null)

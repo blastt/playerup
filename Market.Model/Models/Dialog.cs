@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Market.Model.Models
 {
@@ -10,13 +6,13 @@ namespace Market.Model.Models
     {
         public int Id { get; set; }
 
-        public virtual string CreatorId { get; set; }
-        public virtual UserProfile Creator { get; set; }
+        public string CreatorId { get; set; }
+        public UserProfile Creator { get; set; }
 
-        public virtual string CompanionId { get; set; }
-        public virtual UserProfile Companion { get; set; }
+        public string CompanionId { get; set; }
+        public UserProfile Companion { get; set; }
 
-        public virtual ICollection<Message> Messages { get; set; } = new List<Message>();
+        public ICollection<Message> Messages { get; set; } = new List<Message>();
 
     }
 }

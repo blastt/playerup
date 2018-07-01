@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 
 namespace Market.Model.Models
@@ -68,13 +64,13 @@ namespace Market.Model.Models
         public DateTime? DateDeleted { get; set; }
 
 
-        public virtual int GameId { get; set; }
-        public virtual Game Game { get; set; }
+        public int GameId { get; set; }
+        public Game Game { get; set; }
 
-        public virtual Order Order { get; set; }
-        public virtual string UserProfileId { get; set; }
-        public virtual UserProfile UserProfile { get; set; }
-        public virtual IList<Filter> Filters { get; set; } = new List<Filter>();
-        public virtual IList<FilterItem> FilterItems { get; set; } = new List<FilterItem>();
+        public Order Order { get; set; }
+        public string UserProfileId { get; set; }
+        public UserProfile UserProfile { get; set; }
+        public IList<Filter> Filters { get; set; } = new List<Filter>();
+        public IList<FilterItem> FilterItems { get; set; } = new List<FilterItem>();
     }
 }

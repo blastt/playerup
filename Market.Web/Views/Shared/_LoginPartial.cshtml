@@ -6,7 +6,7 @@
         using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "nav navbar-nav navbar-right" }))
         {
             @Html.AntiForgeryToken()
-            <li class="nav-item position-relative" id="orders" style="padding-top: 20px">
+            <li class="nav-item position-relative" id="orders" style="padding-top: 28px">
                 <a href="@Url.Action("OrderBuy", "Order")" class="ml-0 mr-0">
                     @{
                         var ordersCount = Html.Action("GetOrdersCount", "Order");
@@ -18,7 +18,7 @@
                     <img width="23" alt="Уведомления" height="23" class="notice" src="~/Content/Images/notices.svg" />
                 </a>
             </li>
-            <li class="nav-item position-relative" id="messagess" style="padding-top: 20px">
+            <li class="nav-item position-relative" id="messagess" style="padding-top: 28px">
                 <a href="@Url.Action("Inbox", "Message")" class="ml-0 mr-0">
                     @{
                         var messagessCount = Html.Action("GetMessagessCount", "Message");
@@ -37,9 +37,9 @@
                     <span class="text-700">@Html.Action("Balance", "Profile")</span>
                 </a>
             </li>
-            <li class="nav-item" style="padding-top: 15px">
+            <li class="nav-item" style="padding-top: 22px">
                 <a href="@Url.Action("Inbox", "Message")">
-                    <img alt="Аватар" class="img-circle avatar-32" src="@Html.Action("Photo", "Profile" , new { userId = User.Identity.GetUserId() })" alt="Alternate Text" />
+                    <img alt="Аватар" class="img-circle avatar-32" src="@Html.Action("Photo", "Profile" , new { userId = User.Identity.GetUserId() })"/>
                 </a>
             </li>
             <li class="nav-item dropdown">

@@ -1,0 +1,23 @@
+﻿@model Market.Web.ViewModels.OfferViewModel
+
+@{
+    ViewBag.Title = "Ваше предложение было активировано";
+}
+
+
+<div class="text-center">
+    <div class="alert alert-success  success-block">
+        <p class="line-height-40">
+            <span>Ваше предложение было размещено</span>
+
+        </p>
+    </div>
+    <p>
+        <span>@Html.ActionLink("Посмотреть объявление", "Details", "Offer", new { id = @Model.Id }, new { }) |</span>
+        <span>
+            @Html.ActionLink("Перейти в рубрику", "Buy", "Offer", new {game = @Model.Game.Value}, new {}) |
+        </span>
+        <span>@Html.ActionLink("Редактировать", "Edit", "Offer", new { id = @Model.Id }, new { })</span>
+    </p>
+</div>
+

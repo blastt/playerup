@@ -1,22 +1,15 @@
 ﻿using Hangfire;
 using Owin;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using Market.Web.Hangfire;
 using Autofac;
 
 using Market.Service;
 using Autofac.Integration.Mvc;
 using Market.Data.Repositories;
-using System.Globalization;
 using Market.Data.Infrastructure;
 using Microsoft.AspNet.Identity;
 using System.Reflection;
 using Marketplace.Data.Infrastructure;
-using System.Web.Mvc;
-using Market.Model.Models;
 
 namespace Market.Web.Hangfire
 {

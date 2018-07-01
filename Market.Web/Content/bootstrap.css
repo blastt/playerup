@@ -173,10 +173,10 @@ sup {
 }
 
 a {
-  color: #007bff;
-  text-decoration: none;
-  background-color: transparent;
-  -webkit-text-decoration-skip: objects;
+    color: #62b2e2;
+    text-decoration: none;
+    background-color: transparent;
+    -webkit-text-decoration-skip: objects;
 }
 
 a:hover {
@@ -3866,13 +3866,17 @@ tbody.collapse.show {
 }
 
 .nav-link {
-  display: block;
-  padding: 1.25rem 1rem;
+    display: block;
+    padding: 1.75rem 1rem;
+    
 }
 
-.nav-link:hover, .nav-link:focus {
-  text-decoration: none;
-}
+    .nav-link:hover, .nav-link:focus {
+        
+        color: aqua;
+        text-decoration: none;
+        transition: color .3s linear,background-color .3s linear;
+    }
 
 .nav-link.disabled {
   color: #6c757d;
@@ -3894,9 +3898,10 @@ tbody.collapse.show {
   border-top-right-radius: 0.25rem;
 }
 
-.nav-tabs .nav-link:hover, .nav-tabs .nav-link:focus {
-  border-color: #e9ecef #e9ecef #dee2e6;
-}
+    .nav-tabs .nav-link:hover, .nav-tabs .nav-link:focus {
+        border-color: #e9ecef #e9ecef #dee2e6;
+        
+    }
 
 .nav-tabs .nav-link.disabled {
   color: #6c757d;
@@ -3985,7 +3990,7 @@ tbody.collapse.show {
 .navbar-brand {
   display: inline-block;
 
-  margin-right: 1rem;
+  margin-right: 2rem;
   font-size: 1.25rem;
   line-height: inherit;
   white-space: nowrap;

@@ -1,11 +1,4 @@
-﻿using Hangfire;
-using Market.Model.Models;
-using Market.Service;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Web;
+﻿using Market.Service;
 
 namespace Market.Web.Hangfire
 {

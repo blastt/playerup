@@ -1,12 +1,8 @@
-﻿using Hangfire;
-using Hangfire.Common;
-using Market.Web.App_Start;
-using Marketplace.Data;
+﻿using Market.Web.App_Start;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using System.Web.Caching;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
@@ -22,6 +18,9 @@ namespace Market.Web
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             //JobHelper.SetSerializerSettings(new Newtonsoft.Json.JsonSerializerSettings() { ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore });
+            var loggedInUsers = new Dictionary<string, DateTime>();
+            HttpRuntime.Cache["LoggedInUsers"] = loggedInUsers;
+
             Bootstrapper.Run();
         }
        

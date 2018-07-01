@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Market.Model.Models
 {
@@ -17,7 +12,7 @@ namespace Market.Model.Models
 
         public int Rank { get; set; } // порядковый номер среди рангов
 
-        public virtual ICollection<Offer> Offers { get; set; }
-        public virtual ICollection<Filter> Filters { get; set; }
+        public ICollection<Offer> Offers { get; set; }
+        public ICollection<Filter> Filters { get; set; }
     }
 }

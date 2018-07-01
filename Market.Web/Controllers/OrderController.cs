@@ -5,11 +5,9 @@ using Market.Service;
 using Market.Web.Hangfire;
 using Market.Web.ViewModels;
 using Microsoft.AspNet.Identity;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
 
 namespace Market.Web.Controllers
@@ -24,7 +22,7 @@ namespace Market.Web.Controllers
         private readonly ITransactionService _transactionService;
         private readonly IOrderService _orderService;
         private readonly IGameService _gameService;
-        public int pageSize = 5;
+        public int pageSize = 1;
         public OrderController(IOfferService offerService, IStatusLogService statusLogService, IOrderStatusService orderStatusService, ITransactionService transactionService, IGameService gameService, IOrderService orderService, IUserProfileService userProfileService)
         {
             _orderStatusService = orderStatusService;
@@ -38,8 +36,9 @@ namespace Market.Web.Controllers
 
         public ActionResult OrderBuy()
         {
-            var ordersBuy = _orderService.GetOrders().Where(m => m.BuyerId == User.Identity.GetUserId());
-            var ordersSell = _orderService.GetOrders().Where(m => m.SellerId == User.Identity.GetUserId());
+            var currentUserId = User.Identity.GetUserId();
+            var ordersBuy = _orderService.GetOrdersAsNoTracking(m => m.BuyerId == currentUserId, i => i.CurrentStatus, i => i.Offer, i => i.Seller);
+            var ordersSell = _orderService.GetOrders().Where(m => m.SellerId == currentUserId);
 
             if (ordersBuy != null)
             {
@@ -62,8 +61,9 @@ namespace Market.Web.Controllers
 
         public ActionResult OrderSell()
         {
-            var ordersBuy = _orderService.GetOrders().Where(m => m.BuyerId == User.Identity.GetUserId());
-            var ordersSell = _orderService.GetOrders().Where(m => m.SellerId == User.Identity.GetUserId());
+            var currentUserId = User.Identity.GetUserId();
+            var ordersBuy = _orderService.GetOrders().Where(m => m.BuyerId == currentUserId);
+            var ordersSell = _orderService.GetOrdersAsNoTracking(m => m.SellerId == currentUserId, i => i.CurrentStatus, i => i.Offer, i => i.Buyer);
 
             if (ordersBuy != null)
             {
@@ -88,7 +88,7 @@ namespace Market.Web.Controllers
             if (Id != null)
             {
 
-                var order = await _orderService.GetOrderAsync(Id.Value);
+                var order = _orderService.GetOrder(Id.Value, i => i.Seller, i => i.Middleman, i => i.Buyer, i => i.CurrentStatus, i => i.StatusLogs, i => i.AccountInfos ,i => i.Offer , i => i.StatusLogs.Select(m => m.OldStatus), i => i.StatusLogs.Select(m => m.NewStatus));
                 if (order != null)
                 {
                     if (order.BuyerId == User.Identity.GetUserId())
@@ -246,7 +246,8 @@ namespace Market.Web.Controllers
             if (id != null)
             {
                 bool result = _orderService.AbortOrder(id.Value, User.Identity.GetUserId());
-                var order = _orderService.GetOrder(id.Value);
+                var order = _orderService.GetOrder(id.Value, i => i.Seller, i => i.Buyer,
+                    i => i.Buyer.ApplicationUser, i => i.Seller.ApplicationUser, i => i.CurrentStatus);
                 if (result && order != null)
                 {
                     if (order.JobId != null)
@@ -272,7 +273,7 @@ namespace Market.Web.Controllers
         {
             if (Id != null)
             {
-                var order = _orderService.GetOrder(Id.Value);
+                var order = _orderService.GetOrder(Id.Value, i => i.Seller, i => i.Middleman, i => i.CurrentStatus, i => i.Buyer, i => i.Offer, i => i.StatusLogs, i => i.StatusLogs.Select(m => m.OldStatus), i => i.StatusLogs.Select(m => m.NewStatus));
                 if (order != null)
                 {
                     if (order.SellerId == User.Identity.GetUserId())
@@ -358,8 +359,8 @@ namespace Market.Web.Controllers
             string currentUserId = User.Identity.GetUserId();
             int ordersCount = 0;
             string result = null;
-            var ordersBuyer = _orderService.GetOrders().Where(o => o.BuyerId == currentUserId && !o.BuyerChecked);
-            var ordersSeller = _orderService.GetOrders().Where(o => o.SellerId == currentUserId && !o.SellerChecked);
+            var ordersBuyer = _orderService.GetOrders(o => o.BuyerId == currentUserId && !o.BuyerChecked, i => i.Buyer);
+            var ordersSeller = _orderService.GetOrders(o => o.SellerId == currentUserId && !o.SellerChecked, i => i.Seller);
             if (ordersBuyer != null && ordersSeller != null)
             {
                 ordersCount = ordersBuyer.Count() + ordersSeller.Count();

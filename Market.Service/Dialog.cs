@@ -4,8 +4,7 @@ using Market.Model.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Linq.Expressions;
 
 namespace Market.Service
 {
@@ -14,11 +13,12 @@ namespace Market.Service
     {
         IEnumerable<Dialog> GetDialogs();
         Dialog GetDialog(int id);
+        Dialog GetDialog(Expression<Func<Dialog, bool>> where, params Expression<Func<Dialog, object>>[] includes);
         void CreateDialog(Dialog message);
         void SaveDialog();
         Dialog GetPrivateDialog(UserProfile user1, UserProfile user2);
         string GetOtherUserInDialog(int dialogId, string userId);
-        IEnumerable<Dialog> GetUserDialogs(string userId);
+        IEnumerable<Dialog> GetUserDialogs(string userId, params Expression<Func<Dialog, object>>[] includes);
         int UnreadDialogsForUserCount(string userId);
         int UnreadMessagesInDialogCount(Dialog dialog);
     }
@@ -50,6 +50,13 @@ namespace Market.Service
             var dialog = dialogsRepository.GetById(id);
             return dialog;
         }
+
+        public Dialog GetDialog(Expression<Func<Dialog, bool>> where, params Expression<Func<Dialog, object>>[] includes)
+        {
+            var dialog = dialogsRepository.Get(where, includes);
+            return dialog;
+        }
+
         public void CreateDialog(Dialog dialog)
         {
             dialogsRepository.Add(dialog);
@@ -96,7 +103,8 @@ namespace Market.Service
         public int UnreadDialogsForUserCount(string userId)
         {
             int unreadDialogsCount = 0;
-            var user = userProfileRepository.GetUserById(userId);
+            var user = userProfileRepository.GetManyAsNoTracking(u => u.Id == userId, 
+                i => i.DialogsAsCreator.Select(d => d.Messages), i => i.DialogsAsСompanion.Select(d => d.Messages)).SingleOrDefault();
             if (user != null)
             {
                 var creatorDialogs = user.DialogsAsCreator;
@@ -120,9 +128,9 @@ namespace Market.Service
             return unreadDialogsCount;
         }
 
-        public IEnumerable<Dialog> GetUserDialogs(string userId)
+        public IEnumerable<Dialog> GetUserDialogs(string userId, params Expression<Func<Dialog, object>>[] includes)
         {
-            var dialogs = dialogsRepository.GetMany(d => d.CompanionId == userId || d.CreatorId == userId);
+            var dialogs = dialogsRepository.GetMany(d => d.CompanionId == userId || d.CreatorId == userId, includes);
             return dialogs;
         }
 

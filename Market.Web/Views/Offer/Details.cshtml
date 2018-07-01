@@ -1,5 +1,4 @@
-﻿@using System.Globalization
-@using Microsoft.AspNet.Identity
+﻿@using Microsoft.AspNet.Identity
 
 @model Market.Web.ViewModels.DetailsOfferViewModel
 
@@ -33,7 +32,7 @@
         <div class="row">
             <div class="col-md-3">
                 <div class="card details-user-block mb-3">
-                    <img alt="Аватар" class="img-circle img-center" src="@Model.UserProfile.ImagePath" style="width:80px; height:80px; border: 1px solid #d8d8d8" />
+                    <img alt="Аватар" class="img-circle img-center" src="@Model.UserProfile.Avatar96Path" style="width:80px; height:80px; border: 1px solid #d8d8d8" />
 
                     <div class="details-user-name-contact">
                         <div class="row">
@@ -198,7 +197,7 @@
             <div class="modal-body">
 
                 <div class="form-group">
-                    <img alt="Аватар" class="img-circle avatar-48" src="@Model.UserProfile.ImagePath" style="float:left; margin-right: 20px" />
+                    <img alt="Аватар" height="48" width="48" class="img-circle" src="@Model.UserProfile.Avatar48Path" style="float:left; margin-right: 20px" />
                     <div>
                         @Html.ActionLink(Model.UserName, "Info", new { })
                         <p>

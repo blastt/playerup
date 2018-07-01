@@ -1,21 +1,14 @@
 ﻿using Autofac;
 using Autofac.Integration.Mvc;
-using Hangfire;
 using Market.Data.Infrastructure;
 using Market.Data.Repositories;
 using Market.Service;
-using Market.Web.Hangfire;
-using Market.Web.Hubs;
 using Market.Web.Mappings;
 using Marketplace.Data.Infrastructure;
 using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.SignalR;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Reflection;
-using System.Web;
 using System.Web.Mvc;
 
 namespace Market.Web.App_Start

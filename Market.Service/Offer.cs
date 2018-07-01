@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Market.Service
@@ -13,13 +12,18 @@ namespace Market.Service
     public interface IOfferService
     {
         IEnumerable<Offer> GetOffers();
+        IQueryable<Offer> GetOffersAsNoTracking();
+        IQueryable<Offer> GetOffers(Expression<Func<Offer, bool>> where, params Expression<Func<Offer, object>>[] includes);
+        IQueryable<Offer> GetOffers(params Expression<Func<Offer, object>>[] includes);
+        IQueryable<Offer> GetOffersAsNoTracking(Expression<Func<Offer, bool>> where, params Expression<Func<Offer, object>>[] includes);
         //IEnumerable<Offer> GetCategoryGadgets(string categoryName, string gadgetName = null);
         Offer GetOffer(int id);
         void Delete(Offer offer);
-        Task<Offer> GetOfferAsync(int id);
-        Task<IEnumerable<Offer>> GetOffersAsync(Expression<Func<Offer, bool>> where);
+        Offer GetOffer(int id, params Expression<Func<Offer, object>>[] includes);
+        //Task<Offer> GetOfferAsync(int id);
+        //Task<IEnumerable<Offer>> GetOffersAsync(Expression<Func<Offer, bool>> where);
         decimal CalculateMiddlemanPrice(decimal offerPrice);
-        IEnumerable<Offer> SearchOffers(string game, string sort, ref bool isOnline, ref bool searchInDiscription,
+        IQueryable<Offer> SearchOffers(string game, string sort, ref bool isOnline, ref bool searchInDiscription,
             string searchString, ref int page, int pageSize,ref int totalItems, ref decimal minGamePrice, ref decimal maxGamePrice, ref decimal priceFrom, ref decimal priceTo, string[] filters);
         void CreateOffer(Offer offer);
         void UpdateOffer(Offer offer);
@@ -47,11 +51,35 @@ namespace Market.Service
             return offers;
         }
 
-        public async Task<IEnumerable<Offer>> GetOffersAsync(Expression<Func<Offer, bool>> where)
+        public IQueryable<Offer> GetOffers(params Expression<Func<Offer, object>>[] includes)
         {
-            var offers = await offersRepository.GetManyAsync(where);
+            var offers = offersRepository.GetAll(includes);
             return offers;
         }
+
+        public IQueryable<Offer> GetOffers(Expression<Func<Offer, bool>> where, params Expression<Func<Offer, object>>[] includes)
+        {
+            var query = offersRepository.GetMany(where, includes);
+            return query;
+        }
+        public IQueryable<Offer> GetOffersAsNoTracking()
+        {
+            var query = offersRepository.GetAllAsNoTracking();
+            return query;
+        }
+        public IQueryable<Offer> GetOffersAsNoTracking(Expression<Func<Offer, bool>> where, params Expression<Func<Offer, object>>[] includes)
+        {
+            var query = offersRepository.GetManyAsNoTracking(where, includes);
+            return query;
+        }
+
+
+
+        //public async Task<IEnumerable<Offer>> GetOffersAsync(Expression<Func<Offer, bool>> where)
+        //{
+        //    var offers = await offersRepository.GetManyAsync(where);
+        //    return offers;
+        //}
 
         public bool DeactivateOffer(Offer offer, string currentUserId)
         {
@@ -70,11 +98,17 @@ namespace Market.Service
             return offer;
         }
 
-        public async Task<Offer> GetOfferAsync(int id)
+        public Offer GetOffer(int id, params Expression<Func<Offer, object>>[] includes)
         {
-            var offer = await offersRepository.GetAsync(o => o.Id == id);
+            var offer = offersRepository.Get(o => o.Id == id, includes);
             return offer;
         }
+
+        //public async Task<Offer> GetOfferAsync(int id)
+        //{
+        //    var offer = await offersRepository.GetAsync(o => o.Id == id);
+        //    return offer;
+        //}
 
         public void Delete(Offer offer)
         {
@@ -91,16 +125,13 @@ namespace Market.Service
             offersRepository.Update(offer);
         }
 
-        private IEnumerable<Offer> SearchOffersByGame(string game)
+        private IQueryable<Offer> SearchOffersByGame(string game)
         {
-            IEnumerable<Offer> offers;
-            
-                offers = offersRepository.GetAll().Where(m => m.Game.Value == game);
-            
-            return offers;
+            return offersRepository.GetManyAsNoTracking(m => m.Game.Value == game, i => i.Game, i => i.UserProfile, i => i.FilterItems, i => i.Filters);
+                        
         }
 
-        private IEnumerable<Offer> SearchOffersByFilters(IEnumerable<Offer> offers, string[] filters)
+        private IQueryable<Offer> SearchOffersByFilters(IQueryable<Offer> offers, string[] filters)
         {
             
             IList<Offer> listOffers = new List<Offer>();
@@ -139,18 +170,19 @@ namespace Market.Service
             }
             else
             {
-                listOffers = offers.ToList();
+                return offers;
             }
-            return listOffers;
+            return listOffers.AsQueryable();
         }
 
-        private IEnumerable<Offer> SearchOffersByPrice(IEnumerable<Offer> offers, ref decimal priceFrom, ref decimal priceTo, ref decimal minGamePrice,ref decimal maxGamePrice)
+        private IQueryable<Offer> SearchOffersByPrice(IQueryable<Offer> offers, ref decimal priceFrom, ref decimal priceTo, ref decimal minGamePrice,ref decimal maxGamePrice)
         {
-            if (offers.Count() != 0)
+            var offersList = offers;
+            if (offers.Any())
             {
-                minGamePrice = offers.Min(m => m.Price);
+                minGamePrice = offersList.Min(m => m.Price);
 
-                maxGamePrice = offers.Max(m => m.Price);
+                maxGamePrice = offersList.Max(m => m.Price);
 
 
                 if (priceFrom == 0)
@@ -168,16 +200,13 @@ namespace Market.Service
                 decimal priceF = priceFrom;
                 decimal priceT = priceTo;
 
-                offers = from offer in offers
-                         where offer.Price >= priceF &&
-                                offer.Price <= priceT
-                         select offer;
+                offersList = offersList.Where(offer => offer.Price >= priceF && offer.Price <= priceT);
             }
             
-            return offers;
+            return offersList;
         }
 
-        private IEnumerable<Offer> SearchOffersBySearchString(IEnumerable<Offer> offers, string searchString, ref bool searchInDiscription)
+        private IQueryable<Offer> SearchOffersBySearchString(IQueryable<Offer> offers, string searchString, ref bool searchInDiscription)
         {
             if (searchInDiscription)
             {
@@ -190,15 +219,14 @@ namespace Market.Service
             return offers;
         }
 
-        private IEnumerable<Offer> SearchOffersByPage(IEnumerable<Offer> offers,ref int page, int pageSize, ref int totalItems)
+        private IQueryable<Offer> SearchOffersByPage(IQueryable<Offer> offers,ref int page, int pageSize, ref int totalItems)
 
         {
-            totalItems = offers.Count();
-            offers = offers.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+            offers = offers.Skip((page - 1) * pageSize).Take(pageSize);
             return offers;
         }
 
-        private IEnumerable<Offer> SortOffers(IEnumerable<Offer> offers, string sort)
+        private IQueryable<Offer> SortOffers(IQueryable<Offer> offers, string sort)
         {
             switch (sort)
             {
@@ -236,15 +264,15 @@ namespace Market.Service
             return offers;
         }
 
-        public IEnumerable<Offer> SearchOffers(string game, string sort, ref bool isOnline, ref bool searchInDiscription,
+        public IQueryable<Offer> SearchOffers(string game, string sort, ref bool isOnline, ref bool searchInDiscription,
             string searchString, ref int page,  int pageSize,ref int totalItems, ref decimal minGamePrice, ref decimal maxGamePrice, ref decimal priceFrom, ref decimal priceTo,string[] filters )
         {
-            IEnumerable<Offer> offers;
+            IQueryable<Offer> offers;
             offers = SearchOffersByGame(game);
             offers = SearchOffersByFilters(offers, filters);
-            offers = offers.Where(o => o.State == OfferState.active);
-            offers = SearchOffersByPrice(offers,ref priceFrom,ref priceTo,ref minGamePrice, ref maxGamePrice);
+            offers = offers.Where(o => o.State == OfferState.active);            
             offers = SearchOffersBySearchString(offers, searchString,ref searchInDiscription);
+            offers = SearchOffersByPrice(offers, ref priceFrom, ref priceTo, ref minGamePrice, ref maxGamePrice);
             offers = SortOffers(offers, sort);
             return offers;
         }

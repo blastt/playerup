@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
 
 namespace Market.Web.ViewModels
 {
@@ -28,7 +25,9 @@ namespace Market.Web.ViewModels
         [DataType(DataType.Currency)]
         public decimal Balance { get; set; }
 
-        public string ImagePath { get; set; }
+        public string Avatar32Path { get; set; }
+        public string Avatar48Path { get; set; }
+        public string Avatar96Path { get; set; }
 
         public bool IsBanned { get; set; }
 

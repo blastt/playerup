@@ -5,6 +5,7 @@ using Market.Web.ViewModels;
 using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -83,7 +84,7 @@ namespace Trader.WEB.Controllers
         }
         public ActionResult Info(string userName)
         {
-            var profile = _userProfileService.GetUserProfileByName(userName);
+            var profile = _userProfileService.GetUserProfiles(u => u.Name == userName, u => u.Offers, u => u.FeedbacksMy, u => u.OrdersAsSeller).SingleOrDefault();
             if (profile == null)
             {
                 return HttpNotFound();
@@ -93,9 +94,7 @@ namespace Trader.WEB.Controllers
             model.InfoUserId = profile.Id;
             model.OffersViewModel.Offers = Mapper.Map<IEnumerable<Offer>, IEnumerable<OfferViewModel>>(profile.Offers.Where(o => o.State == OfferState.active));
             model.FeedbacksViewModel.Feedbacks = Mapper.Map<IEnumerable<Feedback>, IEnumerable<FeedbackViewModel>>(profile.FeedbacksMy);
-            
-            var games = _gameService.GetGames();
-            
+            model.SuccessOrderRate = profile.OrdersAsSeller.Count;
             model.FeedbacksViewModel.PageInfo = new PageInfoViewModel
             {
                 PageSize = 4,
@@ -209,7 +208,7 @@ namespace Trader.WEB.Controllers
             {
 
 
-                return profile.ImagePath;
+                return profile.Avatar32Path;
 
             }
             return null;
@@ -221,11 +220,9 @@ namespace Trader.WEB.Controllers
         {
             var userProfile = _userProfileService.GetUserProfileById(User.Identity.GetUserId());
             if (userProfile != null)
-            {
-                if (userProfile.ImagePath != null)
-                {
-                    return View((object)userProfile.ImagePath);
-                }
+            {                
+                var model = Mapper.Map<UserProfile, UserProfileViewModel>(userProfile);
+                return View(model);               
             }
             return View();
         }
@@ -240,49 +237,99 @@ namespace Trader.WEB.Controllers
                 if (image != null && image.ContentLength <= 1000000 && (image.ContentType == "image/jpeg" || image.ContentType == "image/png"))
                 {
                     string extName = System.IO.Path.GetExtension(image.FileName);
-                    string fileName = String.Format(@"{0}{1}", System.Guid.NewGuid(), extName);
+                    string fileName32 = String.Format(@"{0}{1}", System.Guid.NewGuid(), extName);
+                    string fileName48 = String.Format(@"{0}{1}", System.Guid.NewGuid(), extName);
+                    string fileName96 = String.Format(@"{0}{1}", System.Guid.NewGuid(), extName);
 
                     // сохраняем файл в папку Files в проекте
-                    string fullPath = Server.MapPath("~/Content/Images/Avatars/" + fileName);
-                    string urlPath = Url.Content("~/Content/Images/Avatars/" + fileName);
+                    string fullPath32 = Server.MapPath("~/Content/Images/Avatars/" + fileName32);
+                    string urlPath32 = Url.Content("~/Content/Images/Avatars/" + fileName32);
+                    string fullPath48 = Server.MapPath("~/Content/Images/Avatars/" + fileName48);
+                    string urlPath48 = Url.Content("~/Content/Images/Avatars/" + fileName48);
+                    string fullPath96 = Server.MapPath("~/Content/Images/Avatars/" + fileName96);
+                    string urlPath96 = Url.Content("~/Content/Images/Avatars/" + fileName96);
+
+                    Tinify.Key = ConfigurationManager.AppSettings["TINYPNG_APIKEY"];
+                    await Tinify.Validate();
+                    //Default.png
                     
-                    try
-                    {
-                        //Default.png
-                        var name = user.ImagePath.Split('/').LastOrDefault();
-                        if (name != null)
+                        var name32 = user.Avatar32Path.Split('/').LastOrDefault();
+                        var name48 = user.Avatar48Path.Split('/').LastOrDefault();
+                        var name96 = user.Avatar96Path.Split('/').LastOrDefault();
+                        if (name32 != null && name48 != null && name96 != null)
                         {
-                            if (name != "Default.png")
+                            if (name32 != "Default32.png" && name48 != "Default48.png" && name96 != "Default96.png")
                             {
-                                System.IO.File.Delete(Server.MapPath(user.ImagePath));
+                                System.IO.File.Delete(Server.MapPath(user.Avatar32Path));
+                                System.IO.File.Delete(Server.MapPath(user.Avatar48Path));
+                                System.IO.File.Delete(Server.MapPath(user.Avatar96Path));
                             }
                         }
-                        
-                        image.SaveAs(fullPath);
-                        var source = Tinify.FromFile(fullPath);
-                        var resized = source.Resize(new
-                        {
-                            method = "scale",
-                            width = 150,
-                            height = 150
-                        });
-                        await source.ToFile(fullPath);
-                        source.Dispose();
-                    }
-                    catch (TinifyAPI.Exception)
-                    {
-                        return HttpNotFound();
-                    }
+                    
 
+                    image.SaveAs(fullPath32);
+                    image.SaveAs(fullPath48);
+                    image.SaveAs(fullPath96);
+                    try
+                    {
+                        using (var s = Tinify.FromFile(fullPath32))
+                        {
+                            var resized = s.Resize(new
+                            {
+                                method = "fit",
+                                width = 32,
+                                height = 32
+                            });
+                            await resized.ToFile(fullPath32);
+                        }
+                        using (var s = Tinify.FromFile(fullPath48))
+                        {
+                            var resized = s.Resize(new
+                            {
+                                method = "fit",
+                                width = 48,
+                                height = 48
+                            });
+                            await resized.ToFile(fullPath48);
+                        }
+                        using (var s = Tinify.FromFile(fullPath96))
+                        {
+                            var resized = s.Resize(new
+                            {
+                                method = "fit",
+                                width = 96,
+                                height = 96
+                            });
+                            await resized.ToFile(fullPath96);
+                        }
+                    }
                     catch (System.Exception)
                     {
-                        return HttpNotFound();
+                        // ignored
                     }
+
+
+                    user.Avatar32Path = urlPath32;
+                        user.Avatar48Path = urlPath48;
+                        user.Avatar96Path = urlPath96;
+                        _userProfileService.SaveUserProfile();
+
+                        //catch (TinifyAPI.Exception)
+                        //{
+                        //    return HttpNotFound();
+                        //}
+
+                        //catch (System.Exception)
+                        //{
+                        //    return HttpNotFound();
+                        //}
+
+
+
+                        return RedirectToAction("Buy", "Offer");
                     
                     
-                    user.ImagePath = urlPath;
-                    _userProfileService.SaveUserProfile();
-                    return RedirectToAction("Buy", "Offer");
+                    
                 }
                 
             }

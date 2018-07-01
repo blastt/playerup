@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Market.Model.Models
 {
@@ -33,9 +29,9 @@ namespace Market.Model.Models
         public OrderStatuses Value { get; set; }
 
 
-        public virtual IList<Order> Orders { get; set; }
+        public IList<Order> Orders { get; set; }
 
-        public virtual IList<StatusLog> NewStatusLogs { get; set; }
-        public virtual IList<StatusLog> OldStatusLogs { get; set; }
+        public IList<StatusLog> NewStatusLogs { get; set; }
+        public IList<StatusLog> OldStatusLogs { get; set; }
     }
 }

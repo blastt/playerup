@@ -1,25 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using System.Web;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
-using Market.Web.Models;
 using Marketplace.Data;
 using Market.Model.Models;
 using SendGrid;
 using SendGrid.Helpers.Mail;
-using Twilio.Clients;
 using Twilio;
 using Twilio.Rest.Api.V2010.Account;
 using Twilio.Types;
-using System.Net.Mail;
 using System.Configuration;
 
 namespace Market.Web

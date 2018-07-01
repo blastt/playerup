@@ -70,10 +70,10 @@
             @Html.DisplayFor(m => user.Balance)
         </td>
         <td>
-            <img src="@user.ImagePath" width="70" alt="Alternate Text" />
+            <img src="@user.Avatar48Path" width="70" alt="Alternate Text" />
         </td>
         <td class="font-size-14">
-            @Html.ActionLink("Удалить", "DeleteUser", new { id = user.Id })
+            @*@Html.ActionLink("Удалить", "DeleteUser", new { id = user.Id })*@
             @Html.ActionLink("Редактировать", "EditUser", new { id = user.Id })
             @Html.ActionLink("Заблокировать", "LockoutUserAsync", new { id = user.Id })
             @Html.ActionLink("Разблокировать", "UnlockUserAccount", new { id = user.Id })

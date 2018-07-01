@@ -1,11 +1,6 @@
 ﻿
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 
 namespace Market.Model.Models
@@ -13,8 +8,9 @@ namespace Market.Model.Models
     public class UserProfile
     {
         public string Id { get; set; }
-        public string ImagePath { get; set; }
-
+        public string Avatar32Path { get; set; }
+        public string Avatar48Path { get; set; }
+        public string Avatar96Path { get; set; }
 
         public int PositiveFeedbackCount
         {
@@ -89,14 +85,7 @@ namespace Market.Model.Models
 
             get
             {
-                var ordersAsSeller = OrdersAsSeller.Where(o => o.CurrentStatus.Value == OrderStatuses.Feedbacking ||
-                o.CurrentStatus.Value == OrderStatuses.ClosedSuccessfully);
-                var ordersAsBuyer = OrdersAsBuyer.Where(o => o.CurrentStatus.Value == OrderStatuses.Feedbacking ||
-                o.CurrentStatus.Value == OrderStatuses.ClosedSuccessfully);
-                if (ordersAsSeller != null && ordersAsBuyer != null)
-                {
-                    return ordersAsBuyer.Count() + ordersAsSeller.Count();
-                }
+                
                 
                 return 0;
             }
@@ -114,24 +103,24 @@ namespace Market.Model.Models
 
         public string Name { get; set; }
 
-        public virtual IList<Billing> Billings { get; set; } = new List<Billing>();
-        public virtual IList<Transaction> TransactionsAsReceiver { get; set; } = new List<Transaction>();
-        public virtual IList<Transaction> TransactionsAsSender { get; set; } = new List<Transaction>();
+        public IList<Billing> Billings { get; set; } = new List<Billing>();
+        public IList<Transaction> TransactionsAsReceiver { get; set; } = new List<Transaction>();
+        public IList<Transaction> TransactionsAsSender { get; set; } = new List<Transaction>();
 
         public decimal Balance { get; set; }
-        public virtual ApplicationUser ApplicationUser { get; set; }
-        public virtual ICollection<Message> MessagesAsSender { get; set; } = new List<Message>();
-        public virtual ICollection<Message> MessagesAsReceiver { get; set; } = new List<Message>();
-        public virtual ICollection<Offer> Offers { get; set; } = new List<Offer>();
+        public ApplicationUser ApplicationUser { get; set; }
+        public ICollection<Message> MessagesAsSender { get; set; } = new List<Message>();
+        public ICollection<Message> MessagesAsReceiver { get; set; } = new List<Message>();
+        public ICollection<Offer> Offers { get; set; } = new List<Offer>();
 
-        public virtual ICollection<Order> OrdersAsSeller { get; set; } = new List<Order>();
-        public virtual ICollection<Order> OrdersAsBuyer { get; set; } = new List<Order>();
-        public virtual ICollection<Order> OrdersAsMiddleman { get; set; } = new List<Order>();
+        public ICollection<Order> OrdersAsSeller { get; set; } = new List<Order>();
+        public ICollection<Order> OrdersAsBuyer { get; set; } = new List<Order>();
+        public ICollection<Order> OrdersAsMiddleman { get; set; } = new List<Order>();
 
-        public virtual ICollection<Feedback> FeedbacksMy { get; set; } = new List<Feedback>();
-        public virtual ICollection<Feedback> FeedbacksToOthers { get; set; } = new List<Feedback>();
+        public ICollection<Feedback> FeedbacksMy { get; set; } = new List<Feedback>();
+        public ICollection<Feedback> FeedbacksToOthers { get; set; } = new List<Feedback>();
 
-        public virtual ICollection<Dialog> DialogsAsCreator { get; set; } = new List<Dialog>();
-        public virtual ICollection<Dialog> DialogsAsСompanion { get; set; } = new List<Dialog>();
+        public ICollection<Dialog> DialogsAsCreator { get; set; } = new List<Dialog>();
+        public ICollection<Dialog> DialogsAsСompanion { get; set; } = new List<Dialog>();
     }
 }

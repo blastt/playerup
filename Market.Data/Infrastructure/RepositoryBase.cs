@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Market.Data.Infrastructure
@@ -65,7 +64,18 @@ namespace Market.Data.Infrastructure
             
         }
 
-       
+        public virtual T GetById(int id, params Expression<Func<T, object>>[] includes)
+        {
+            var set = dbSet;
+            foreach (var include in includes)
+            {
+                set.Include(include);
+            }
+            return set.Find(id);
+
+        }
+
+
 
 
 
@@ -74,9 +84,57 @@ namespace Market.Data.Infrastructure
             return dbSet.ToList();
         }
 
+        public virtual IQueryable<T> GetAll(params Expression<Func<T, object>>[] includes)
+        {
+
+            var set = dbSet.AsQueryable();
+            foreach (var include in includes)
+            {
+                set = set.Include(include);
+            }
+            return set;
+        }
+
+        public virtual IQueryable<T> GetAllAsNoTracking(params Expression<Func<T, object>>[] includes)
+        {
+
+            var set = dbSet.AsNoTracking();
+            foreach (var include in includes)
+            {
+                set = set.Include(include);
+            }
+            return set;
+        }
+
+
         public virtual IEnumerable<T> GetMany(Expression<Func<T, bool>> where)
         {
             return dbSet.Where(where).ToList();
+        }
+
+        public virtual IEnumerable<T> GetManyAsNoTracking(Expression<Func<T, bool>> where)
+        {
+            return dbSet.AsNoTracking().Where(where).ToList();
+        }
+
+        public virtual IQueryable<T> GetMany(Expression<Func<T, bool>> where, params Expression<Func<T, object>>[] includes)
+        {
+            var query = dbSet.Where(where);
+            foreach (var include in includes)
+            {
+                query = query.Include(include);
+            }
+            return query;
+        }
+
+        public virtual IQueryable<T> GetManyAsNoTracking(Expression<Func<T, bool>> where, params Expression<Func<T, object>>[] includes)
+        {
+            var query = dbSet.AsNoTracking().Where(where);
+            foreach (var include in includes)
+            {
+                query = query.Include(include);
+            }
+            return query;
         }
 
         public async virtual Task<IEnumerable<T>> GetManyAsync(Expression<Func<T, bool>> where)
@@ -87,6 +145,16 @@ namespace Market.Data.Infrastructure
         public T Get(Expression<Func<T, bool>> where)
         {
             return dbSet.Where(where).FirstOrDefault<T>();
+        }
+
+        public T Get(Expression<Func<T, bool>> where, params Expression<Func<T, object>>[] includes)
+        {
+            var query = dbSet.Where(where);
+            foreach (var include in includes)
+            {
+                query = query.Include(include);
+            }
+            return query.FirstOrDefault<T>();
         }
         public Task<T> GetAsync(Expression<Func<T, bool>> where)
         {
