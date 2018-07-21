@@ -12,6 +12,7 @@ namespace Market.Service
     {
         IEnumerable<UserProfile> GetUserProfiles();
         IQueryable<UserProfile> GetUserProfiles(Expression<Func<UserProfile, bool>> where, params Expression<Func<UserProfile, object>>[] includes);
+        IQueryable<UserProfile> GetUserProfilesAsNoTracking(params Expression<Func<UserProfile, object>>[] includes);
         UserProfile GetUserProfile(Expression<Func<UserProfile, bool>> where, params Expression<Func<UserProfile, object>>[] includes);
         UserProfile GetUserProfileById(string id);
         UserProfile GetUserProfileByName(string name);
@@ -43,6 +44,12 @@ namespace Market.Service
         {
             var userProfile = userProfilesRepository.GetManyAsNoTracking(where, includes);
             return userProfile;
+        }
+
+        public IQueryable<UserProfile> GetUserProfilesAsNoTracking(params Expression<Func<UserProfile, object>>[] includes)
+        {
+            var query = userProfilesRepository.GetAll(includes);
+            return query;
         }
 
 

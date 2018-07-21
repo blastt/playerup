@@ -24,6 +24,7 @@ namespace Market.Web.Mappings
             CreateMap<Feedback, FeedbackViewModel>();
             CreateMap<UserProfile, UserProfileViewModel>();
             CreateMap<AccountInfo, AccountInfoViewModel>();
+            CreateMap<Withdraw, WithdrawViewModel>();
             #region AccountInfo
 
             CreateMap<AccountInfo, AccountInfoViewModel>()
@@ -297,6 +298,16 @@ namespace Market.Web.Mappings
             .ForPath(o => o.SenderName, map => map.MapFrom(vm => vm.Sender.Name))
             .ForPath(o => o.ReceiverName, map => map.MapFrom(vm => vm.Receiver.Name))
             .ForMember(o => o.TransactionDate, map => map.MapFrom(vm => vm.TransactionDate));
+            #endregion
+
+            #region Withdraw
+            CreateMap<Withdraw, WithdrawViewModel>()
+                .ForMember(o => o.Id, map => map.MapFrom(vm => vm.Id))
+                .ForMember(o => o.Amount, map => map.MapFrom(vm => vm.Amount))
+                .ForMember(o => o.Details, map => map.MapFrom(vm => vm.Details))
+                .ForMember(o => o.DateCrated, map => map.MapFrom(vm => vm.DateCrated))
+                .ForPath(o => o.UserName, map => map.MapFrom(vm => vm.User.Name))
+                .ForMember(o => o.PaywayName, map => map.MapFrom(vm => vm.PaywayName));
             #endregion
         }
     }

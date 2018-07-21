@@ -19,7 +19,7 @@ namespace Market.Web.Hangfire
         public void Do(int itemId, string callbackUrl)
         {
             
-            var offer = offerService.GetOffer(itemId);
+            var offer = offerService.GetOffer(itemId, i => i.UserProfile, i => i.UserProfile.ApplicationUser);
             if (offer != null)
             {
                 offerService.DeactivateOffer(offer, offer.UserProfileId);

@@ -242,11 +242,11 @@ namespace Trader.WEB.Controllers
                     string fileName96 = String.Format(@"{0}{1}", System.Guid.NewGuid(), extName);
 
                     // сохраняем файл в папку Files в проекте
-                    string fullPath32 = Server.MapPath("~/Content/Images/Avatars/" + fileName32);
+                    string fullPath32 = Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "\\Content\\Images\\Avatars", fileName32);
                     string urlPath32 = Url.Content("~/Content/Images/Avatars/" + fileName32);
-                    string fullPath48 = Server.MapPath("~/Content/Images/Avatars/" + fileName48);
+                    string fullPath48 = Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "\\Content\\Images\\Avatars", fileName48);
                     string urlPath48 = Url.Content("~/Content/Images/Avatars/" + fileName48);
-                    string fullPath96 = Server.MapPath("~/Content/Images/Avatars/" + fileName96);
+                    string fullPath96 = Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "\\Content\\Images\\Avatars", fileName96);
                     string urlPath96 = Url.Content("~/Content/Images/Avatars/" + fileName96);
 
                     Tinify.Key = ConfigurationManager.AppSettings["TINYPNG_APIKEY"];

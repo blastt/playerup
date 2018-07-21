@@ -151,7 +151,7 @@ namespace Market.Service
 
         public bool ConfirmAbortOrder(int orderId, string userId)
         {
-            var order = GetOrder(orderId, i => i.CurrentStatus, i => i.StatusLogs, i => i.Transactions, i => i.Middleman);
+            var order = GetOrder(orderId, i => i.CurrentStatus, i => i.StatusLogs, i => i.Transactions, i => i.Middleman, id => id.Transactions.Select(m => m.Sender), id => id.Transactions.Select(m => m.Receiver));
             if (order != null)
             {
                 OrderStatus newOrderStatus = null;
@@ -195,7 +195,7 @@ namespace Market.Service
 
         private bool CloseOrder(int orderId, Closer closer)
         {
-            var order = GetOrder(orderId, i => i.CurrentStatus, i => i.StatusLogs, i => i.Transactions);
+            var order = GetOrder(orderId, i => i.CurrentStatus, i => i.StatusLogs, i => i.Transactions, id => id.Transactions.Select(m => m.Sender), id => id.Transactions.Select(m => m.Receiver));
             if (order != null)
             {
                 if (order.CurrentStatus.Value == OrderStatuses.BuyerPaying ||
@@ -280,13 +280,13 @@ namespace Market.Service
 
         public bool CloseOrderBySeller(int orderId)
         {
-            return CloseOrder(orderId, Closer.Buyer);
+            return CloseOrder(orderId, Closer.Seller);
         }
 
 
         public bool CloseOrderByMiddleman(int orderId)
         {
-            return CloseOrder(orderId, Closer.Buyer);
+            return CloseOrder(orderId, Closer.Middleman);
         }
 
         public bool CloseOrderAutomatically(int orderId)

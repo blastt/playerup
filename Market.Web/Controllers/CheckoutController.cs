@@ -2,16 +2,25 @@
 using Hangfire;
 using Market.Model.Models;
 using Market.Service;
+using Market.Web.ExtentionMethods;
 using Market.Web.Hangfire;
 using Market.Web.ViewModels;
 using Microsoft.AspNet.Identity;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using System.Xml;
 
 namespace Trader.WEB.Controllers
 {
@@ -25,11 +34,12 @@ namespace Trader.WEB.Controllers
         private readonly IOrderService _orderService;
         private readonly IOfferService _offerService;
         private readonly IAccountInfoService _accountInfoService;
+        private readonly IWithdrawService _withdrawService;
         private readonly IIdentityMessageService _identityMessageService;
         public CheckoutController(IUserProfileService userProfileService, IOrderService orderService,
             IOfferService offerService, IAccountInfoService accountInfoService,
             IOrderStatusService orderStatusService, IBillingService billingService,
-            ITransactionService transactionService, IIdentityMessageService identityMessageService)
+            ITransactionService transactionService, IIdentityMessageService identityMessageService, IWithdrawService withdrawService)
         {
             _orderStatusService = orderStatusService;
             _userProfileService = userProfileService;
@@ -39,8 +49,18 @@ namespace Trader.WEB.Controllers
             _billingService = billingService;
             _transactionService = transactionService;
             _identityMessageService = identityMessageService;
+            _withdrawService = withdrawService;
         }
 
+        public ActionResult Success()
+        {
+            return View();
+        }
+
+        public ActionResult Error()
+        {
+            return View();
+        }
         [HttpGet]
         public ActionResult Checkoutme(int? id)
         {
@@ -70,7 +90,7 @@ namespace Trader.WEB.Controllers
                     }
                     return View(model);
                 }
-                
+
             }
             return HttpNotFound();
         }
@@ -80,19 +100,37 @@ namespace Trader.WEB.Controllers
         public ActionResult Checkoutme(CheckoutViewModel model)
         {
             //UserProfile buyer = _db.UserProfiles.Get(User.Identity.GetUserId());
-            Offer offer = _offerService.GetOffer(model.OfferId, o => o.UserProfile, o => o.Order, o => o.Order.StatusLogs, o => o.Order.CurrentStatus,
-                o => o.Order.Seller.ApplicationUser, o => o.Order.Buyer.ApplicationUser, o => o.Order.CurrentStatus);
+            Offer offer = _offerService.GetOffer(model.OfferId, o => o.UserProfile, o => o.Order, o => o.Order.StatusLogs, o => o.Order.CurrentStatus
+                , o => o.Order.Seller, o => o.Order.Buyer, o => o.Order.Seller.ApplicationUser, o => o.Order.Buyer.ApplicationUser, o => o.Order.CurrentStatus);
             if (offer != null && offer.Order == null && offer.State == OfferState.active && offer.UserProfileId != User.Identity.GetUserId())
             {
+                var currentUserId = User.Identity.GetUserId();
+                var user = _userProfileService.GetUserProfile(u => u.Id == currentUserId);
                 offer.Order = new Order
                 {
-                    BuyerId = User.Identity.GetUserId(),
+                    BuyerId = currentUserId,
                     SellerId = offer.UserProfileId,
                     DateCreated = DateTime.Now
                 };
                 offer.State = OfferState.closed;
 
-               
+                if (user != null)
+                {
+                    if (user.Balance >= model.OrderSum)
+                    {
+                        // withdraw
+                        // chenge status
+                        // return
+                    }
+                    else
+                    {
+                        //    HttpClient client = new HttpClient();
+                        //    client.DefaultRequestHeaders.Add("Authorization", "Basic " + Convert.ToBase64String(Encoding.GetEncoding("ISO-8859-1").GetBytes("5ac35eb73b1eaf90618b456b:49YehvH0IJr19yCNtmWxBR3TbuwKCCaN")));
+                        //    client.DefaultRequestHeaders.Add("Ik-Api-Account-Id", "5ac35ee33c1eafbd6d8b4572");
+                        //    var response = await client.GetAsync("https://api.interkassa.com/v1/purse");
+                        //    var responseString = await response.Content.ReadAsStringAsync();
+                    }
+                }
 
                 offer.Order.StatusLogs.AddLast(new StatusLog()
                 {
@@ -105,7 +143,7 @@ namespace Trader.WEB.Controllers
                 //_offerService.UpdateOffer(offer);
 
 
-                
+
                 TempData["orderBuyStatus"] = "Заказ создан!";
 
                 if (offer.JobId != null)
@@ -114,12 +152,12 @@ namespace Trader.WEB.Controllers
                     offer.JobId = null;
                 }
                 _offerService.SaveOffer();
+                var order = _orderService.GetOrder(offer.Order.Id, o => o.Buyer.ApplicationUser, o => o.Seller.ApplicationUser, o => o.CurrentStatus);
+                MarketHangfire.SetSendEmailChangeStatus(order.Id, order.Seller.ApplicationUser.Email, order.CurrentStatus.DuringName, Url.Action("SellDetails", "Order", new { id = order.Id }, protocol: Request.Url.Scheme));
 
-                MarketHangfire.SetSendEmailChangeStatus(offer.Order.Id, offer.Order.Seller.ApplicationUser.Email, offer.Order.CurrentStatus.DuringName, Url.Action("SellDetails", "Order", new { id = offer.Order.Id }, protocol: Request.Url.Scheme));
+                MarketHangfire.SetSendEmailChangeStatus(order.Id, order.Buyer.ApplicationUser.Email, order.CurrentStatus.DuringName, Url.Action("BuyDetails", "Order", new { id = order.Id }, protocol: Request.Url.Scheme));
 
-                MarketHangfire.SetSendEmailChangeStatus(offer.Order.Id, offer.Order.Buyer.ApplicationUser.Email, offer.Order.CurrentStatus.DuringName, Url.Action("BuyDetails", "Order", new { id = offer.Order.Id }, protocol: Request.Url.Scheme));
-
-                offer.Order.JobId = MarketHangfire.SetOrderCloseJob(offer.Order.Id, TimeSpan.FromDays(1));
+                offer.Order.JobId = MarketHangfire.SetOrderCloseJob(order.Id, TimeSpan.FromDays(1));
 
                 _orderService.SaveOrder();
 
@@ -130,9 +168,255 @@ namespace Trader.WEB.Controllers
 
         }
 
-        public void Test()
+        public ActionResult BalanceOperations()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public ActionResult CashIn()
+        {
+            string userId = User.Identity.GetUserId();
+            return View((object)userId);
+        }
+
+
+        [HttpPost]
+        [AllowAnonymous]
+        public void MoneyIn()
+        {
+            var secretKey = "LMcg7uCyA8I3injU";
+            var pars = new SortedDictionary<string, string>();
+            var keys = Request.Form.AllKeys;
+            foreach (var key in keys.Where(key => key.IndexOf("ik_") >= 0 && key != "ik_sign"))
+                pars.Add(key, Request.Form[key]);
+            var hash = string.Join(":", pars.Select(x => x.Value).ToArray().Concat(new[] { secretKey }));
+            var md5 = new MD5CryptoServiceProvider();
+            var isSame = Convert.ToBase64String(md5.ComputeHash(Encoding.UTF8.GetBytes(hash))) == Request.Form["ik_sign"];
+            if (isSame)
+            {
+
+                var userId = Request.Form["ik_x_user_id"];
+                var user = _userProfileService.GetUserProfile(u => u.Id == userId);
+                if (user != null)
+                {
+                    var amount = Decimal.Parse(Request.Form["ik_am"]);
+                    user.Balance += amount;
+                    _billingService.CreateBilling(new Billing
+                    {
+                        User = user,
+                        DateCeated = DateTime.Now,
+                        Amount = amount
+                    });
+                    _userProfileService.SaveUserProfile();
+                }
+
+            }
+
+        }
+
+        [HttpGet]
+        public ActionResult CashOut()
+        {
+            return View();
+        }
+
+
+        //public ContentResult Test()
+        //{
+
+
+        //    var request = (HttpWebRequest)WebRequest.Create("https://api.interkassa.com/v1/account");
+        //    request.ContentType = "application/json; charset=utf-8";
+        //    request.Method = WebRequestMethods.Http.Get;
+        //    request.Headers.Add("Authorization", "Basic " + Convert.ToBase64String(Encoding.GetEncoding("ISO-8859-1").GetBytes("5ac35eb73b1eaf90618b456b:49YehvH0IJr19yCNtmWxBR3TbuwKCCaN")));
+        //    HttpWebResponse response = request.GetResponse() as HttpWebResponse;
+        //    using (var reader = new StreamReader(response.GetResponseStream(), Encoding.UTF8))
+        //    {
+        //        var json = System.Text.RegularExpressions.Regex.Unescape(reader.ReadToEnd());
+        //        XmlDocument doc = JsonConvert.DeserializeXmlNode(json, "root");
+        //        var res = $"<xml>{doc.InnerXml}</xml>";
+        //        return Content(res, "text/xml");
+        //    }
+        //}
+
+        //public ContentResult TestLocal()
+        //{
+
+
+        //    var request = (HttpWebRequest)WebRequest.Create("https://api.interkassa.com/v1/account");
+        //    request.ContentType = "application/json; charset=utf-8";
+
+        //    request.Method = WebRequestMethods.Http.Get;
+
+        //    request.UserAgent = "false";
+        //    request.Headers.Add("Authorization", "Basic " + Convert.ToBase64String(Encoding.GetEncoding("ISO-8859-1").GetBytes("5ac35eb73b1eaf90618b456b:49YehvH0IJr19yCNtmWxBR3TbuwKCCaN")));
+        //    //request.ContentType = "application/x-www-form-urlencoded";
+
+        //    // write the data to the request stream         
+
+
+        //    // iirc this actually triggers the post
+        //    string q = "{'status':'ok','code':0,'data':{'5ac35ee33c1eafbd6d8b4572':{'_id':'5ac35ee33c1eafbd6d8b4572','nm':'\u0411\u0438\u0437\u043d\u0435\u0441 - \u043a\u0430\u0431\u0438\u043d\u0435\u0442','tp':'b','usr':[{'id':'5ac35eb73b1eaf90618b456b','o':'1','rl':'b_o'}]},'5ac35ee33c1eafbd6d8b4571':{'_id':'5ac35ee33c1eafbd6d8b4571','nm':'\u041b\u0438\u0447\u043d\u044b\u0439 \u043a\u0430\u0431\u0438\u043d\u0435\u0442','tp':'c','usr':[{'id':'5ac35eb73b1eaf90618b456b','o':'1','rl':'c_o'}]}}}";
+
+
+        //    //response.ContentType = "application/json";
+
+
+
+        //    var json = System.Text.RegularExpressions.Regex.Unescape(q);
+        //    XmlDocument doc = JsonConvert.DeserializeXmlNode(json, "root");
+        //    var res = $"<xml>{doc.InnerXml}</xml>";
+        //    return Content(res, "text/xml");
+
+
+
+
+
+        //    //return Content("Error");
+
+
+
+        //}
+
+        public JsonResult GetFields(string paywayId)
+        {
+            //var json = Payments();
+
+            string q = Payments();
+            var data = JObject.Parse(q.Replace(@"\", @"\\"));
+
+            var payway = data["data"][paywayId];
+            var d = payway["prm"].Children().Count();
+
+            IList<DetailsField> fields = new List<DetailsField>(d);
+
+            foreach (JToken field in payway["prm"].Children())
+            {
+                string regex = "";
+                if (field["re"] != null)
+                {
+                    regex = field["re"].Value<string>();
+                }
+                string example = "";
+                if (field["ex"] != null)
+                {
+
+                    example = field["ex"].Value<string>();
+                }
+                if (field["tt"] != null && example == "")
+                {
+                    example = field["tt"].Value<string>();
+                }
+                string name = "";
+
+                if (field["al"] != null)
+                {
+
+                    name = field["al"].Value<string>();
+                }
+                fields.Add(new DetailsField
+                {
+                    Regex = regex,
+                    Example = example,
+                    Name = name
+                }
+                );
+            }
+
+            //var result = JsonConvert.SerializeObject(fields);
+            return Json(fields);
+        }
+        //public async Task<string> GetPurses()
+        //{
+        //    HttpClient client = new HttpClient();
+        //    client.DefaultRequestHeaders.Add("Authorization", "Basic " + Convert.ToBase64String(Encoding.GetEncoding("ISO-8859-1").GetBytes("5ac35eb73b1eaf90618b456b:49YehvH0IJr19yCNtmWxBR3TbuwKCCaN")));
+        //    client.DefaultRequestHeaders.Add("Ik-Api-Account-Id", "5ac35ee33c1eafbd6d8b4572");
+        //    var response = await client.GetAsync("https://api.interkassa.com/v1/purse");
+        //    var responseString = await response.Content.ReadAsStringAsync();
+
+        //    return responseString;
+        //}
+
+        [HttpPost]
+        public ActionResult Withdraw(CreateWithdrawViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var userId = User.Identity.GetUserId();
+                var user = _userProfileService.GetUserProfile(u => u.Id == userId);
+                var withdraw = Mapper.Map<CreateWithdrawViewModel, Withdraw>(model);
+                withdraw.User = user;
+                if (user.Balance >= withdraw.Amount && withdraw.Amount > 50)
+                {
+                    user.Balance -= withdraw.Amount;
+                    
+                    _withdrawService.CreateWithdraw(withdraw);
+                    _withdrawService.SaveWithdraw();
+                    return View("SuccessWithdraw");
+                }
+                return View("ErrorWithdraw");
+            }
+            return HttpNotFound();
+            //data.Add("details", det);
+            //HttpClient client = new HttpClient();
+            ////client.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
+            //client.DefaultRequestHeaders.Add("Authorization", "Basic " + Convert.ToBase64String(Encoding.GetEncoding("ISO-8859-1").GetBytes("5ac35eb73b1eaf90618b456b:49YehvH0IJr19yCNtmWxBR3TbuwKCCaN")));
+            //client.DefaultRequestHeaders.Add("Ik-Api-Account-Id", "5ac35ee33c1eafbd6d8b4572");
+            //data.Add("calcKey", "ikPayerPrice");
+            //data.Add("action", "process");
+            //data.Add("paymentNo", Guid.NewGuid().ToString("n"));
+            //data.Add("purseId", "407835843341");
+
+            //var q = QueryStringBuilder.BuildQueryString(new
+            //{
+            //    details = det,
+            //    calcKey = "ikPayerPrice",
+            //    action = "process",
+            //    purseId = "407835843341",
+            //    paymentNo = Guid.NewGuid().ToString("n"),
+            //    amount = data["amount"],
+            //    paywayId = data["paywayId"]
+            //});
+
+            //var stringContent = new StringContent(q,
+            //             UnicodeEncoding.UTF8,
+            //             "application/x-www-form-urlencoded");
+            //var resp = await client.PostAsync("https://api.interkassa.com/v1/withdraw", stringContent);
+            //var responseString = System.Text.RegularExpressions.Regex.Unescape(await resp.Content.ReadAsStringAsync());
+            //var jObject = JObject.Parse(responseString.Replace(@"\", @"\\"));
+            //if (jObject["status"].Value<string>() == "ok" && jObject["message"].Value<string>() == "Success")
+            //{
+            //    decimal amount = Decimal.Parse(jObject["data"]["withdraww"]["psAmount"].Value<string>());
+            //}
+
+
+        }
+
+        [NonAction]
+        public string Payments()
         {
 
+
+            var request = (HttpWebRequest)WebRequest.Create("https://api.interkassa.com/v1/paysystem-output-payway");
+            request.Method = WebRequestMethods.Http.Get;
+            request.ContentType = "application/json; charset=utf-8";
+            request.Headers.Add("Authorization", "Basic " + Convert.ToBase64String(Encoding.GetEncoding("ISO-8859-1").GetBytes("5ac35eb73b1eaf90618b456b:49YehvH0IJr19yCNtmWxBR3TbuwKCCaN")));
+            //request.Headers.Add("Ik-Api-Account-Id", "5ac35ee33c1eafbd6d8b4571");
+
+            HttpWebResponse response = request.GetResponse() as HttpWebResponse;
+
+
+
+            using (var reader = new StreamReader(response.GetResponseStream(), Encoding.UTF8))
+            {
+
+                var json = System.Text.RegularExpressions.Regex.Unescape(reader.ReadToEnd());
+                //XmlDocument doc = JsonConvert.DeserializeXmlNode(json, "root");
+                //var res = $"<xml>{doc.InnerXml}</xml>";
+                return json;
+            }
+            //return Content("Error");
         }
         [HttpGet]
         public ActionResult Paid()
@@ -241,7 +525,7 @@ namespace Trader.WEB.Controllers
             // Добавить логику оплаты
             if (orderId != null)
             {
-                Order order = _orderService.GetOrder(orderId.Value, i => i.CurrentStatus , i => i.StatusLogs);
+                Order order = _orderService.GetOrder(orderId.Value, i => i.CurrentStatus, i => i.StatusLogs);
                 if (order != null && order.CurrentStatus.Value == OrderStatuses.PayingToSeller)
                 {
                     order.StatusLogs.AddLast(new StatusLog()
@@ -259,6 +543,8 @@ namespace Trader.WEB.Controllers
             }
 
         }
+
+
 
         private bool CheckSign(HttpContext context)
         {
@@ -339,7 +625,7 @@ namespace Trader.WEB.Controllers
             if (ModelState.IsValid)
             {
                 var accountInfo = Mapper.Map<AccountInfoViewModel, AccountInfo>(model);
-                
+
                 var moderator = _userProfileService.GetUserProfile(u => u.Id == model.ModeratorId, i => i.ApplicationUser);
 
                 bool moderIsInrole = false;
@@ -412,7 +698,7 @@ namespace Trader.WEB.Controllers
                         BackgroundJob.Delete(order.JobId);
                         order.JobId = null;
                     }
-                    
+
                     _orderService.SaveOrder();
 
                     order.JobId = MarketHangfire.SetLeaveFeedbackJob(order.SellerId, order.BuyerId, order.Id, TimeSpan.FromDays(15));
@@ -432,6 +718,6 @@ namespace Trader.WEB.Controllers
             return HttpNotFound();
         }
 
-        
+
     }
 }

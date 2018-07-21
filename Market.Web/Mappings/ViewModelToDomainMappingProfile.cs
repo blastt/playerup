@@ -159,6 +159,16 @@ namespace Market.Web.Mappings
 
             #endregion
 
+            #region Withdraw
+
+            CreateMap<CreateWithdrawViewModel, Withdraw>()
+               .ForMember(o => o.PaywayName, map => map.MapFrom(vm => vm.PaywayName))
+               .ForMember(o => o.Amount, map => map.MapFrom(vm => vm.Amount))
+               .ForMember(o => o.Details, map => map.MapFrom(vm => vm.Details))
+               .ForAllOtherMembers(opt => opt.Ignore());
+
+            #endregion
+
             CreateMap<EditOfferViewModel, Order>();
 
         }

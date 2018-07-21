@@ -32,7 +32,7 @@
         <div class="row">
             <div class="col-md-3">
                 <div class="card details-user-block mb-3">
-                    <img alt="Аватар" class="img-circle img-center" src="@Model.UserProfile.Avatar96Path" style="width:80px; height:80px; border: 1px solid #d8d8d8" />
+                    <img alt="Аватар" class="img-circle img-center" src="@Model.UserProfile.Avatar96Path" style="width:96px; height:96px" />
 
                     <div class="details-user-name-contact">
                         <div class="row">
@@ -128,7 +128,7 @@
                         {
                             <input type="hidden" name="Id" value="@Model.Id" />
 
-                            <input type="submit" name="buy" value="Купить" class=" btn btn-buy-big font-size-18" />
+                            <input type="submit" value="Купить" class=" btn btn-buy-big font-size-18" />
                         }
 
                     </div>
@@ -138,7 +138,7 @@
                         {
                             <span>
                                 Гарант за счет
-                                покупетеля: @Html.DisplayFor(m => m.MiddlemanPrice)
+                                продавца: @Html.DisplayFor(m => m.MiddlemanPrice)
                             </span>
                         }
                         else

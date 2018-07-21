@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Optimization;
@@ -23,7 +24,12 @@ namespace Market.Web
 
             Bootstrapper.Run();
         }
-       
+
+        protected void Application_AuthorizeRequest()
+        {
+            Response.AppendHeader("Authorization", "Basic " + Convert.ToBase64String(Encoding.UTF8.GetBytes("5ac35eb73b1eaf90618b456b:49YehvH0IJr19yCNtmWxBR3TbuwKCCaN")));
+        }
+
         protected void Application_EndRequest()
         {
             //var db = new MarketEntities();

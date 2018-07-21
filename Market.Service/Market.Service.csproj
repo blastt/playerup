@@ -49,6 +49,7 @@
     <Compile Include="StatusLog.cs" />
     <Compile Include="Transaction.cs" />
     <Compile Include="UserProfiles.cs" />
+    <Compile Include="Withdraw.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Market.Data\Market.Data.csproj">

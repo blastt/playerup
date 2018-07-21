@@ -1,7 +1,10 @@
 ﻿using Market.Data.Infrastructure;
 using Market.Data.Repositories;
 using Market.Model.Models;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 
 namespace Market.Service
 {
@@ -9,6 +12,7 @@ namespace Market.Service
     {
         IEnumerable<FilterItem> GetFilterItems();
         FilterItem GetFilterItem(int id);
+        IQueryable<FilterItem> GetFilterItemsAsNoTracking(params Expression<Func<FilterItem, object>>[] includes);
         void CreateFilterItem(FilterItem message);
         void SaveFilterItem();
     }
@@ -22,6 +26,12 @@ namespace Market.Service
         {
             this.filterItemsRepository = filterItemsRepository;
             this.unitOfWork = unitOfWork;
+        }
+
+        public IQueryable<FilterItem> GetFilterItemsAsNoTracking(params Expression<Func<FilterItem, object>>[] includes)
+        {
+            var query = filterItemsRepository.GetAll(includes);
+            return query;
         }
 
         #region IFilterService Members

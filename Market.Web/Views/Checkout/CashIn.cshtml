@@ -1,0 +1,49 @@
+﻿@model object
+@{ 
+    ViewBag.Title = "CashIn";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="row">
+    <div class="col-lg-12">
+        <div class="pay-form">
+            <div class="text-center">
+                <h3 class="text-center text-gray text-700 mb-5">Денежные операции</h3>
+                <div class="payway-section">
+                    @Html.ActionLink("Пополнить", "CashIn", null, new { @class = "payway-link " + Html.IsSelected(actions: "CashIn", controllers: "Checkout") })
+
+                    @Html.ActionLink("Снять", "CashOut", null, new { @class = "payway-link " + Html.IsSelected(actions: "CashOut", controllers: "Checkout") })
+                </div>
+                
+            </div>
+            <p>
+                Введите сумму, на которую вы хотите пополнить личный счёт, и нажмите на кнопку "Пополнить".
+                Вы будете переадресованы на сайт платёжной системы,
+                где сможете завершить платеж. Комиссия взимается в соответствии с тарифами выбранной платёжной системы.
+            </p>
+
+            <div class="col-lg-6">
+                <div class="row">
+                    <form id="payment" name="payment" method="post" action="https://sci.interkassa.com/" enctype="utf-8">
+                        <input type="hidden" name="ik_co_id" value="5b3932aa3d1eaf34748b4568" />
+                        <input type="hidden" name="ik_pm_no" value="@Guid.NewGuid().ToString("n")" />
+
+                        <input type="hidden" name="ik_cur" value="RUB" />
+                        <input type="hidden" name="ik_desc" value="Event Description" />
+                        <input type="hidden" name="ik_x_user_id" value="@Model.ToString()" />
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text pl-3 pr-3 text-700 font-size-18">₽</span>
+
+
+                            </div>
+                            <input type="text" name="ik_am" placeholder="100.00" class="form-control form-control-lg" />
+                            <input type="submit" value="Пополнить" class="btn btn-cashin ml-3">
+                        </div>
+
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

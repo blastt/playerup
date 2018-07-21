@@ -1,4 +1,5 @@
-﻿using Market.Service;
+﻿using Hangfire;
+using Market.Service;
 using System;
 using System.Threading.Tasks;
 
@@ -13,9 +14,10 @@ namespace Market.Web.Hangfire
             this.orderService = orderService;
         }
 
+        [DisableConcurrentExecution(10 * 60)]
         public async Task Do(int orderId)
         {
-            var order = await orderService.GetOrderAsync(orderId);
+            var order = orderService.GetOrder(orderId, i => i.BuyerId, i => i.SellerId);
             
             if (order != null)
             {

@@ -44,6 +44,7 @@ namespace Market.Web.Hangfire
             builder.RegisterType<LeaveFeedbackJob>().AsSelf().InstancePerLifetimeScope();
             builder.RegisterType<DeactivateOfferJob>().AsSelf().InstancePerLifetimeScope();
             builder.RegisterType<SendEmailChangeStatus>().AsSelf().InstancePerLifetimeScope();
+            builder.RegisterType<SendEmailAccountData>().AsSelf().InstancePerLifetimeScope();
             //builder.RegisterType<OrderService>().As<IOrderService>();
             IContainer container = builder.Build();
             GlobalConfiguration.Configuration.UseActivator(new MarketJobActivator(container));
@@ -79,6 +80,12 @@ namespace Market.Web.Hangfire
         {
             return BackgroundJob.Enqueue<SendEmailChangeStatus>(
                 j => j.Do(orderId, userEmail, currentStatus, callbackUrl));
+        }
+
+        public static string SetSendEmailAccountData(string login, string password, string email, string emailPassword, string additionalInfo, string userEmail)
+        {
+            return BackgroundJob.Enqueue<SendEmailAccountData>(
+                j => j.Do(login, password, email, emailPassword, additionalInfo, userEmail));
         }
     }
 }

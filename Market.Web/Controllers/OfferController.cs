@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -56,7 +57,7 @@ namespace Market.Web.Controllers
 
             var model = SearchOffers(searchInfo, null);
 
-            var game = _gameService.GetGamesAsNoTracking(g => g.Value == searchInfo.Game, f => f.Filters, ff => ff.Filters.Select(fi => fi.FilterItems)).FirstOrDefault();
+            var game = _gameService.GetGamesAsNoTracking(g => g.Value == searchInfo.Game, f => f.Filters, ff => ff.Filters.Select(fi => fi.FilterItems)).ToList().FirstOrDefault();
 
             IList<SelectFilter> selects = new List<SelectFilter>();
             //IList<IList<FilterItemViewModel>> listOfOptions = new List<IList<FilterItemViewModel>>();                      
@@ -97,10 +98,10 @@ namespace Market.Web.Controllers
         public ViewResult Active()
         {
             var currentUserId = User.Identity.GetUserId();
-            IEnumerable<Offer> offersActive = _offerService.GetOffers(m => m.UserProfileId == currentUserId && m.State == OfferState.active, o => o.Game);
-            IEnumerable<Offer> offersInactive = _offerService.GetOffers(m => m.UserProfileId == currentUserId && m.State == OfferState.inactive, o => o.Game);
-            IEnumerable<Offer> offersClosed = _offerService.GetOffers(m => m.UserProfileId == currentUserId && m.State == OfferState.closed, o => o.Game);
-            var offerViewModels = Mapper.Map<IEnumerable<Offer>, IEnumerable<OfferViewModel>>(offersActive);
+            IEnumerable<Offer> offersActive = _offerService.GetOffers(m => m.UserProfileId == currentUserId && m.State == OfferState.active, o => o.Game).ToList();
+            IEnumerable<Offer> offersInactive = _offerService.GetOffers(m => m.UserProfileId == currentUserId && m.State == OfferState.inactive, o => o.Game).ToList();
+            IEnumerable<Offer> offersClosed = _offerService.GetOffers(m => m.UserProfileId == currentUserId && m.State == OfferState.closed, o => o.Game).ToList();
+            var offerViewModels = Mapper.Map<IEnumerable<Offer>, IEnumerable<OfferViewModel>>(offersActive.ToList());
             OfferListViewModel model = new OfferListViewModel
             {
                 Offers = offerViewModels.OrderByDescending(o => o.DateCreated),
@@ -108,6 +109,7 @@ namespace Market.Web.Controllers
                 InactiveOffersCount = offersInactive.Count(),
                 CloseOffersCount = offersClosed.Count()
             };
+            
             return View(model);
         }
 
@@ -115,10 +117,10 @@ namespace Market.Web.Controllers
         public ViewResult Inactive()
         {
             var currentUserId = User.Identity.GetUserId();
-            IEnumerable<Offer> offersActive = _offerService.GetOffers(m => m.UserProfileId == currentUserId && m.State == OfferState.active, o => o.Game);
-            IEnumerable<Offer> offersInactive = _offerService.GetOffers(m => m.UserProfileId == currentUserId && m.State == OfferState.inactive, o => o.Game);
-            IEnumerable<Offer> offersClosed = _offerService.GetOffers(m => m.UserProfileId == currentUserId && m.State == OfferState.closed, o => o.Game);
-            var offerViewModels = Mapper.Map<IEnumerable<Offer>, IEnumerable<OfferViewModel>>(offersInactive);
+            IEnumerable<Offer> offersActive = _offerService.GetOffers(m => m.UserProfileId == currentUserId && m.State == OfferState.active, o => o.Game).ToList();
+            IEnumerable<Offer> offersInactive = _offerService.GetOffers(m => m.UserProfileId == currentUserId && m.State == OfferState.inactive, o => o.Game).ToList();
+            IEnumerable<Offer> offersClosed = _offerService.GetOffers(m => m.UserProfileId == currentUserId && m.State == OfferState.closed, o => o.Game).ToList();
+            var offerViewModels = Mapper.Map<IEnumerable<Offer>, IEnumerable<OfferViewModel>>(offersInactive.ToList());
             OfferListViewModel model = new OfferListViewModel
             {
                 Offers = offerViewModels.OrderByDescending(o => o.DateCreated),
@@ -133,10 +135,10 @@ namespace Market.Web.Controllers
         public ViewResult Closed()
         {
             var currentUserId = User.Identity.GetUserId();
-            IEnumerable<Offer> offersActive = _offerService.GetOffers(m => m.UserProfileId == currentUserId && m.State == OfferState.active, o => o.Game);
-            IEnumerable<Offer> offersInactive = _offerService.GetOffers(m => m.UserProfileId == currentUserId && m.State == OfferState.inactive, o => o.Game);
-            IEnumerable<Offer> offersClosed = _offerService.GetOffers(m => m.UserProfileId == currentUserId && m.State == OfferState.closed, o => o.Game);
-            var offerViewModels = Mapper.Map<IEnumerable<Offer>, IEnumerable<OfferViewModel>>(offersClosed);
+            IEnumerable<Offer> offersActive = _offerService.GetOffers(m => m.UserProfileId == currentUserId && m.State == OfferState.active, o => o.Game).ToList();
+            IEnumerable<Offer> offersInactive = _offerService.GetOffers(m => m.UserProfileId == currentUserId && m.State == OfferState.inactive, o => o.Game).ToList();
+            IEnumerable<Offer> offersClosed = _offerService.GetOffers(m => m.UserProfileId == currentUserId && m.State == OfferState.closed, o => o.Game).ToList();
+            var offerViewModels = Mapper.Map<IEnumerable<Offer>, IEnumerable<OfferViewModel>>(offersClosed.ToList());
             OfferListViewModel model = new OfferListViewModel
             {
                 Offers = offerViewModels.OrderByDescending(o => o.DateCreated),
@@ -277,7 +279,7 @@ namespace Market.Web.Controllers
             searchInfo.SearchString = searchInfo.SearchString ?? "";
             var offers = _offerService.GetOffers(m => m.UserProfileId == searchInfo.UserId && m.State == OfferState.active, o => o.Game);
 
-            var modelOffers = Mapper.Map<IEnumerable<Offer>, IEnumerable<OfferViewModel>>(offers);
+            var modelOffers = Mapper.Map<IEnumerable<Offer>, IEnumerable<OfferViewModel>>(offers.ToList());
             IList<GameViewModel> gameList = new List<GameViewModel>();
             var offerViewModels = modelOffers.ToList();
             foreach (var offer in offerViewModels)
@@ -321,10 +323,10 @@ namespace Market.Web.Controllers
         public ActionResult Create()
         {
             var currentUserId = User.Identity.GetUserId();
-            var userProfile = _userProfileService.GetUserProfiles(u => u.Id == currentUserId, i => i.ApplicationUser).SingleOrDefault();
+            var userProfile = _userProfileService.GetUserProfiles(u => u.Id == currentUserId, i => i.ApplicationUser).ToList().SingleOrDefault();
             var appUser = userProfile?.ApplicationUser;
             if (appUser == null) return HttpNotFound();
-            if (!(appUser.PhoneNumberConfirmed && appUser.EmailConfirmed))
+            if (!(appUser.EmailConfirmed))
             {
                 return View("PhoneNumberRequest");
             }
@@ -362,7 +364,7 @@ namespace Market.Web.Controllers
                 var appUser = userProfile.ApplicationUser;
                 if (appUser != null)
                 {
-                    if (!(appUser.PhoneNumberConfirmed && appUser.EmailConfirmed))
+                    if (!(appUser.EmailConfirmed))
                     {
                         return HttpNotFound("you are not confirmed email or phone number");
                     }
@@ -428,7 +430,7 @@ namespace Market.Web.Controllers
                     var extName = System.IO.Path.GetExtension(image.FileName);
                     var fileName = $@"{Guid.NewGuid()}{extName}";
                     // сохраняем файл в папку Files в проекте
-                    var fullPath = Server.MapPath("~/Content/Images/Screenshots/" + fileName);
+                    string fullPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "\\Content\\Images\\Avatars", fileName);
                     var urlPath = Url.Content("~/Content/Images/Screenshots/" + fileName);
                     image.SaveAs(fullPath);
 
@@ -690,7 +692,7 @@ namespace Market.Web.Controllers
                             var extName = System.IO.Path.GetExtension(images[i].FileName);
                             var fileName = $@"{Guid.NewGuid()}{extName}";
                             // сохраняем файл в папку Files в проекте
-                            var fullPath = Server.MapPath("~/Content/Images/Screenshots/" + fileName);
+                            string fullPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "\\Content\\Images\\Screenshots", fileName);
                             var urlPath = Url.Content("~/Content/Images/Screenshots/" + fileName);
                             try
                             {
@@ -725,7 +727,7 @@ namespace Market.Web.Controllers
         {
             //check if any of the UserName matches the UserName specified in the Parameter using the ANY extension method.  
             bool exists = false;
-            Offer offer = _offerService.GetOffers(x => x.AccountLogin == steamLogin, o => o.Order).LastOrDefault();
+            Offer offer = _offerService.GetOffers(x => x.AccountLogin == steamLogin, o => o.Order).ToList().LastOrDefault();
 
             if (offer != null)
             {

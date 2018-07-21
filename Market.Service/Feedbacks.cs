@@ -48,9 +48,9 @@ namespace Market.Service
 
         public void LeaveAutomaticFeedback(string sellerId, string buyerId, int orderId)
         {
-            var seller = userProfileRepository.GetUserById(sellerId);
-            var buyer = userProfileRepository.GetUserById(buyerId);
-            var order = orderRepository.GetById(orderId);
+            var seller = userProfileRepository.Get(u => u.Id == sellerId, i => i.FeedbacksToOthers);
+            var buyer = userProfileRepository.Get(u => u.Id == buyerId, i => i.FeedbacksToOthers);
+            var order = orderRepository.GetById(orderId, i => i.BuyerId, i => i.SellerId);
             if (seller != null && buyer != null && order != null)
             {
                 if (order.BuyerId == buyerId && order.SellerId == sellerId) // добавить условие на статус заказа

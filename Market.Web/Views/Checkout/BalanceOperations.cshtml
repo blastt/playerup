@@ -1,0 +1,15 @@
+﻿
+@{
+    ViewBag.Title = "BalanceOperations";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="text-center">
+    <h2>Денежные операции</h2>
+
+    @Html.ActionLink("Пополнить", "CashIn")
+
+    @Html.ActionLink("Снять", "CashOut")
+</div>
+
+

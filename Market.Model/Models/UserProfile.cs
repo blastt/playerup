@@ -122,5 +122,7 @@ namespace Market.Model.Models
 
         public ICollection<Dialog> DialogsAsCreator { get; set; } = new List<Dialog>();
         public ICollection<Dialog> DialogsAsСompanion { get; set; } = new List<Dialog>();
+
+        public ICollection<Withdraw> Withdraws { get; set; } = new List<Withdraw>();
     }
 }

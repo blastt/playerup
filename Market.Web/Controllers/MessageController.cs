@@ -441,18 +441,17 @@ namespace Market.Web.Controllers
                     newDialogsCount = _dialogService.UnreadDialogsForUserCount(toUser.Id);
 
                     _hubContext.Clients.User(toUser.Name).updateMessage(newDialogsCount);// hub
-                    foreach (var d in _dialogService.GetUserDialogs(toUser.Id))
-                    {
+                    
                         int messageInDialogCount = 0;
-                        messageInDialogCount = _dialogService.UnreadMessagesInDialogCount(d);
-                        var lastMessage = d.Messages.LastOrDefault();
+                        messageInDialogCount = _dialogService.UnreadMessagesInDialogCount(privateDialog);
+                        var lastMessage = privateDialog.Messages.LastOrDefault();
                         if (lastMessage != null)
                         {
 
-                            _hubContext.Clients.User(toUser.Name).updateMessageInDialog(toUser.Name, fromUser.Id, fromUser.Name, messageInDialogCount, lastMessage.MessageBody, lastMessage.CreatedDate.ToShortDateString(), d.Id);
+                            _hubContext.Clients.User(toUser.Name).updateMessageInDialog(toUser.Name, fromUser.Id, fromUser.Name, messageInDialogCount, lastMessage.MessageBody, lastMessage.CreatedDate.ToShortDateString(), privateDialog.Id);
                         }
                         
-                    }                    
+                                      
 
 
                     AddMessage(fromUser.Id, toUser.Name, fromUser.Name, message.MessageBody, message.CreatedDate.ToString(), fromUser.Avatar48Path); // hub

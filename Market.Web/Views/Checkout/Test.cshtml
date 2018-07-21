@@ -1,0 +1,20 @@
+﻿
+@{
+    ViewBag.Title = "Test";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Test</h2>
+@{ 
+    var link = "https://api.interkassa.com/v1/account?" + "Authorization=Basic "  + System.Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes("5ac35eb73b1eaf90618b456b:49YehvH0IJr19yCNtmWxBR3TbuwKCCaN"));
+}
+<form id="payment" name="payment" method="post"  action="@link"  enctype="utf-8">
+    
+        <input type="submit" value="Вывести" class="btn btn-cashin ml-3">
+    
+   
+
+</form>
+
+
+

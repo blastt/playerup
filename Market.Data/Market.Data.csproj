@@ -63,6 +63,7 @@
     <Compile Include="Configuration\StatusLogConfiguration.cs" />
     <Compile Include="Configuration\TransactionConfiguration.cs" />
     <Compile Include="Configuration\UserProfileConfiguration.cs" />
+    <Compile Include="Configuration\WithdrawConfiguration.cs" />
     <Compile Include="Infrastructure\DBFactory.cs" />
     <Compile Include="Infrastructure\Disposable.cs" />
     <Compile Include="Infrastructure\IDbFactory.cs" />
@@ -78,6 +79,14 @@
     <Compile Include="Migrations\201806270915203_Avatars.cs" />
     <Compile Include="Migrations\201806270915203_Avatars.Designer.cs">
       <DependentUpon>201806270915203_Avatars.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201807181015268_Withdraw.cs" />
+    <Compile Include="Migrations\201807181015268_Withdraw.Designer.cs">
+      <DependentUpon>201807181015268_Withdraw.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201807191115064_WithdrawDate.cs" />
+    <Compile Include="Migrations\201807191115064_WithdrawDate.Designer.cs">
+      <DependentUpon>201807191115064_WithdrawDate.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -95,6 +104,7 @@
     <Compile Include="Repositories\StatusLogRepository.cs" />
     <Compile Include="Repositories\TransactionRepository.cs" />
     <Compile Include="Repositories\UserProfileRepository.cs" />
+    <Compile Include="Repositories\WithdrawRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -112,6 +122,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201806270915203_Avatars.resx">
       <DependentUpon>201806270915203_Avatars.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807181015268_Withdraw.resx">
+      <DependentUpon>201807181015268_Withdraw.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807191115064_WithdrawDate.resx">
+      <DependentUpon>201807191115064_WithdrawDate.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

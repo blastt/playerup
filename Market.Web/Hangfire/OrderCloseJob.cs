@@ -1,4 +1,5 @@
-﻿using Market.Service;
+﻿using Hangfire;
+using Market.Service;
 
 namespace Market.Web.Hangfire
 {
@@ -12,6 +13,7 @@ namespace Market.Web.Hangfire
             this.orderService = orderService;
         }
 
+        [DisableConcurrentExecution(10 * 60)]
         public void Do(int orderId)
         {           
             orderService.CloseOrderAutomatically(orderId);

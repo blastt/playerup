@@ -1,0 +1,67 @@
+﻿@model IEnumerable<Market.Web.ViewModels.WithdrawViewModel>
+
+@{
+    ViewBag.Title = "OfferList";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<table class="table table-striped table-bordered table-light table-sm">
+    <tr>
+        <th>
+            Имя
+        </th>
+        <th>
+            Платежка
+        </th>
+        <th>
+            Реквезиты
+        </th>
+        <th>
+            Сумма
+        </th>
+
+        <th>
+            Создан
+        </th>
+
+        <th></th>
+    </tr>
+    @foreach (var withdraw in Model)
+    {
+        
+        var cls = "";
+        if (withdraw.IsPaid)
+        {
+            cls = " table-danger";
+        }
+        else if (withdraw.IsCanceled)
+        {
+            cls = " table-success";
+        }
+        
+    <tr class="@cls">
+        <td>
+            @Html.DisplayFor(m => withdraw.UserName)
+        </td>
+        <td>
+            @Html.DisplayFor(m => withdraw.PaywayName)
+        </td>
+        <td>
+            @Html.DisplayFor(m => withdraw.Details)
+        </td>
+        <td>
+            @Html.DisplayFor(m => withdraw.Amount)
+        </td>
+
+        <td>
+            @Html.DisplayFor(m => withdraw.DateCrated)
+        </td>
+
+        <td class="font-size-14">
+            @Html.ActionLink("Отменить перевод", "CancelWithdraw", new { id = withdraw.Id })
+            @Html.ActionLink("Подтвердить перевод", "CancelWithdraw", new { id = withdraw.Id })
+        </td>
+    </tr>
+    }
+</table>
+

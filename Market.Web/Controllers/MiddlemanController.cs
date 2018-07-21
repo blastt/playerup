@@ -218,10 +218,8 @@ namespace Market.Web.Controllers
                                 Url.Action("SellDetails", "Order", new {id = buyerOrder.Id},
                                     protocol: Request.Url.Scheme));
 
-                            MarketHangfire.SetSendEmailChangeStatus(buyerOrder.Id,
-                                buyerOrder.Buyer.ApplicationUser.Email, buyerOrder.CurrentStatus.DuringName,
-                                Url.Action("BuyDetails", "Order", new {id = buyerOrder.Id},
-                                    protocol: Request.Url.Scheme));
+                            MarketHangfire.SetSendEmailAccountData(accountInfo.Login, accountInfo.Password, accountInfo.Email, accountInfo.EmailPassword, 
+                                accountInfo.AdditionalInformation, buyerOrder.Buyer.ApplicationUser.Email);
                         }
 
                         _orderService.SaveOrder();

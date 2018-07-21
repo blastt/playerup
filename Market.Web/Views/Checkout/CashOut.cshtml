@@ -1,0 +1,156 @@
+﻿
+@{
+    ViewBag.Title = "CashOut";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="pay-form">
+
+            @using (Html.BeginForm("Withdraw", "Checkout", FormMethod.Post))
+            {
+                <div class="text-center">
+                    <h3 class="text-center text-gray text-700 mb-5">Денежные операции</h3>
+                    <div class="payway-section">
+                        @Html.ActionLink("Пополнить", "CashIn", null, new { @class = "payway-link " + Html.IsSelected(actions: "CashIn", controllers: "Checkout") })
+
+                        @Html.ActionLink("Снять", "CashOut", null, new { @class = "payway-link " + Html.IsSelected(actions: "CashOut", controllers: "Checkout") })
+                    </div>
+                </div>
+
+                <p>
+                    <span class="text-700 mr-2" style="font-size: 20px">1</span> Выберите платежную систему:
+                </p>
+
+
+                <div class="pl-4">
+                    <div class="col-lg-12">
+                        <div class="row">
+
+                            <div id="520500478f2a2d081000000a" name="qiwi" class="payway icon-qiwi active">
+
+                            </div>
+
+                            <div id="52d6bc169baabb91058b4567" name="yandex" class="payway icon-yandex">
+
+                            </div>
+
+
+                            <div id="59a9217f3b1eafad4c8b4567" name="visa-mastercard" class="payway icon-visa">
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <p class="mt-4">
+                    <span class="text-700 mr-2" style="font-size: 20px">2</span> Введите ваш номер счета:
+                </p>
+
+                <div class="pl-4">
+                    <div class="col-lg-3">
+                        <div class="row">
+                            <div id="details-list">
+                                <input type="text" name="details" placeholder="Номер кошелька" class="form-control form-control-lg" />
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+
+                <p class="mt-4">
+                    <span class="text-700 mr-2" style="font-size: 20px">3</span> Укажите сумму для вывода:
+                </p>
+
+                <div class="pl-4">
+                    <div class="col-lg-6">
+                        <div class="row">
+
+                            <input type="hidden" name="paywayId" value="4f229eed8f2a2da80a000385" />
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text pl-3 pr-3 text-700 font-size-18">₽</span>
+                                </div>
+                                <input type="text" name="amount" placeholder="100.00" class="form-control form-control-lg" />
+                                <input type="hidden" id="payway-id" name="paywayId" value="520500478f2a2d081000000a" />
+                                <input type="hidden" id="payway-name" name="paywayName" value="qiwi" />
+                                <input type="submit" value="Вывести" class="btn btn-cashin ml-3">
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            }
+
+
+        </div>
+
+    </div>
+</div>
+
+
+@section scripts
+{
+
+    <script>
+        
+        $(".payway").each(function () {
+            
+            $(this).on("click", function () {
+                $(".payway").each(function () {
+                    $(this).removeClass("active");
+                });
+                $(this).addClass("active");
+                
+                var paywayId = $(this).attr('id');
+                var paywayName = $(this).attr('name');
+                $('#payway-id').val(paywayId);
+                $('#payway-name').val(paywayName);
+                $.ajax({
+                    url: '/Checkout/GetFields',
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify({ paywayId: paywayId }),
+                    success: function (response) {
+                        $('#details-list').empty();
+                        
+                        for (var item in response) {
+                            
+                            var input = $('<input/>').addClass('form-control form-control-lg')
+                                .attr({ name: "details", placeholder: response[item].Example });     
+                            $('#details-list').append(input);
+                        }
+                       
+                    }
+                });
+                
+
+            });
+        });
+
+        function withdraw() {
+
+            var message = {
+                "paywayName": $('#payway-name').val(),
+                "amount": $('#amount').val(),
+                "details": $('#details').val()
+            };
+
+            $.ajax({
+                url: '/Checkout/Withdraw',
+                contentType: "application/json",
+                data: JSON.stringify({ model: message }),
+                type: 'POST',
+                dataType: "html",
+                success: function (d) {
+                    $('html').html(d);
+                }
+            });
+        }
+
+        
+    </script>
+}

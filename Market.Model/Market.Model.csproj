@@ -62,6 +62,7 @@
     <Compile Include="Models\StatusLog.cs" />
     <Compile Include="Models\Transaction.cs" />
     <Compile Include="Models\UserProfile.cs" />
+    <Compile Include="Models\Withdraw.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

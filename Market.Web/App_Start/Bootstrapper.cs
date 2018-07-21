@@ -55,6 +55,9 @@ namespace Market.Web.App_Start
             builder.RegisterAssemblyTypes(typeof(FilterItemRepository).Assembly)
                 .Where(t => t.Name.EndsWith("Repository"))
                 .AsImplementedInterfaces().InstancePerRequest();
+            builder.RegisterAssemblyTypes(typeof(WithdrawRepository).Assembly)
+                .Where(t => t.Name.EndsWith("Repository"))
+                .AsImplementedInterfaces().InstancePerRequest();
 
             #endregion
 
@@ -84,6 +87,9 @@ namespace Market.Web.App_Start
             builder.RegisterAssemblyTypes(typeof(FilterItemService).Assembly)
                .Where(t => t.Name.EndsWith("Service"))
                .AsImplementedInterfaces().InstancePerRequest();
+            builder.RegisterAssemblyTypes(typeof(WithdrawService).Assembly)
+              .Where(t => t.Name.EndsWith("Service"))
+              .AsImplementedInterfaces().InstancePerRequest();
 
             #endregion
 

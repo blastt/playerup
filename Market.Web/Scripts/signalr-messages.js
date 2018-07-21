@@ -20,6 +20,7 @@
 }
 
 function drowMessageInDialog(userName, companionId, companionName, count, lastMessage, newDate, dialogId) {
+    
     var trId = '#message-row-' + dialogId;
 
     var tr = $(trId);
@@ -63,7 +64,6 @@ $(function () {
     };
 
     messageHub.client.updateMessageInDialog = function (userName, companionId, companionName, counter, lastMessage, date, dialogId) {
-
         drowMessageInDialog(userName, companionId, companionName, counter, lastMessage, date, dialogId);
         $(".clickable").each(function () {
             $(this).on('click', function (e) {

@@ -8,6 +8,7 @@ using Microsoft.Owin.Security;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
@@ -30,8 +31,9 @@ namespace Market.Web.Controllers
         private readonly IFilterService _filterService;
         private readonly IFilterItemService _filterItemService;
         private readonly IDialogService _dialogService;
+        private readonly IWithdrawService _withdrawService;
         private readonly int offerDays = 30;
-        public AdminController(IOfferService offerService, IGameService gameService, IFilterService filterService, IDialogService dialogService, IFilterItemService filterItemService, IUserProfileService userProfileService)
+        public AdminController(IOfferService offerService, IGameService gameService, IFilterService filterService, IDialogService dialogService, IFilterItemService filterItemService, IUserProfileService userProfileService, IWithdrawService withdrawService)
         {
             _offerService = offerService;
             _gameService = gameService;
@@ -39,6 +41,7 @@ namespace Market.Web.Controllers
             _filterItemService = filterItemService;
             _userProfileService = userProfileService;
             _dialogService = dialogService;
+            _withdrawService = withdrawService;
         }
 
         public ApplicationUserManager UserManager
@@ -62,7 +65,7 @@ namespace Market.Web.Controllers
         {
             var model = new OfferListViewModel()
             {
-                Offers = Mapper.Map<IEnumerable<Offer>, IEnumerable<OfferViewModel>>(_offerService.GetOffers(i => i.Game))
+                Offers = Mapper.Map<IEnumerable<Offer>, IEnumerable<OfferViewModel>>(_offerService.GetOffers(i => i.Game, i => i.UserProfile, i => i.Order).ToList())
             };
             return View(model);
         }
@@ -81,7 +84,7 @@ namespace Market.Web.Controllers
 
         public ActionResult GameList()
         {
-            IEnumerable<GameViewModel> model = Mapper.Map<IEnumerable<Game>, IEnumerable<GameViewModel>>(_gameService.GetGamesAsNoTracking());
+            IEnumerable<GameViewModel> model = Mapper.Map<IEnumerable<Game>, IEnumerable<GameViewModel>>(_gameService.GetGamesAsNoTracking().ToList());
 
             return View(model);
         }
@@ -104,7 +107,7 @@ namespace Market.Web.Controllers
                     var fileName = $@"{Guid.NewGuid()}{extName}";
 
                     // сохраняем файл в папку Files в проекте
-                    var fullPath = Server.MapPath("~/Content/Images/GameIcons/" + fileName);
+                    string fullPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "\\Content\\Images\\GameIcons", fileName);
                     var urlPath = Url.Content("~/Content/Images/GameIcons/" + fileName);
                     image.SaveAs(fullPath);
                     Tinify.Key = ConfigurationManager.AppSettings["TINYPNG_APIKEY"];
@@ -168,7 +171,7 @@ namespace Market.Web.Controllers
                         string fileName = $@"{Guid.NewGuid()}{extName}";
 
                         // сохраняем файл в папку Files в проекте
-                        string fullPath = Server.MapPath("~/Content/Images/GameIcons/" + fileName);
+                        string fullPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "\\Content\\Images\\GameIcons", fileName);
                         string urlPath = Url.Content("~/Content/Images/GameIcons/" + fileName);
                         image.SaveAs(fullPath);
                         Tinify.Key = ConfigurationManager.AppSettings["TINYPNG_APIKEY"];
@@ -214,7 +217,7 @@ namespace Market.Web.Controllers
 
         public ActionResult FilterList()
         {
-            IEnumerable<FilterViewModel> model = Mapper.Map<IEnumerable<Model.Models.Filter>, IEnumerable<FilterViewModel>>(_filterService.GetFiltersAsNoTracking());
+            IEnumerable<FilterViewModel> model = Mapper.Map<IEnumerable<Model.Models.Filter>, IEnumerable<FilterViewModel>>(_filterService.GetFiltersAsNoTracking(i => i.Game).ToList());
 
             return View(model);
         }
@@ -297,7 +300,7 @@ namespace Market.Web.Controllers
 
         public ActionResult FilterItemList()
         {
-            IEnumerable<FilterItemViewModel> model = Mapper.Map<IEnumerable<FilterItem>, IEnumerable<FilterItemViewModel>>(_filterItemService.GetFilterItems());
+            IEnumerable<FilterItemViewModel> model = Mapper.Map<IEnumerable<FilterItem>, IEnumerable<FilterItemViewModel>>(_filterItemService.GetFilterItemsAsNoTracking(i => i.Filter, i => i.Filter.Game).ToList());
             model = model.OrderBy(m => m.Rank).ThenBy(m => m.FilterName).ThenBy(m => m.GameName);
             return View(model);
         }
@@ -332,7 +335,7 @@ namespace Market.Web.Controllers
                         string fileName = $@"{Guid.NewGuid()}{extName}";
 
                         // сохраняем файл в папку Files в проекте
-                        string fullPath = Server.MapPath("~/Content/Images/FilterItems/" + fileName);
+                        string fullPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "\\Content\\Images\\FilterItems", fileName);
                         string urlPath = Url.Content("~/Content/Images/FilterItems/" + fileName);
                         image.SaveAs(fullPath);
                         Tinify.Key = ConfigurationManager.AppSettings["TINYPNG_APIKEY"];
@@ -412,7 +415,7 @@ namespace Market.Web.Controllers
                         var fileName = $@"{Guid.NewGuid()}{extName}";
 
                         // сохраняем файл в папку Files в проекте
-                        var fullPath = Server.MapPath("~/Content/Images/FilterItems/" + fileName);
+                        string fullPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "\\Content\\Images\\FilterItems", fileName);
                         var urlPath = Url.Content("~/Content/Images/FilterItems/" + fileName);
                         image.SaveAs(fullPath);
                         try
@@ -464,7 +467,7 @@ namespace Market.Web.Controllers
             ViewData["SearchString"] = searchString;
             ViewData["CurrentFilter"] = currentFilter;
             var currentUser = _userProfileService.GetUserProfileById(id);
-            var dialogs = _dialogService.GetUserDialogs(currentUser.Id);
+            var dialogs = _dialogService.GetUserDialogs(currentUser.Id, i => i.Messages);
 
             //var messages = _db.Messages.Find(m => m.ReceiverId == User.Identity.GetUserId());
 
@@ -532,15 +535,15 @@ namespace Market.Web.Controllers
 
             DialogListViewModel model = new DialogListViewModel()
             {
-                Dialogs = Mapper.Map<IEnumerable<Dialog>, IEnumerable<DialogViewModel>>(dialogs)
+                Dialogs = Mapper.Map<IEnumerable<Dialog>, IEnumerable<DialogViewModel>>(dialogs.ToList())
 
 
             };
 
-            foreach (var d in model.Dialogs)
+            foreach (var d in model.Dialogs.ToList())
             {
                 var otherUserId = _dialogService.GetOtherUserInDialog(d.Id, id);
-                var otherUser = _userProfileService.GetUserProfileById(otherUserId);
+                var otherUser = _userProfileService.GetUserProfile(u => u.Id == otherUserId);
                 if (otherUser != null)
                 {
                     d.otherUserId = otherUser.Id;
@@ -559,7 +562,7 @@ namespace Market.Web.Controllers
             string dialogWithUserImage = null;
             if (dialogId != null)
             {
-                Dialog dialog = _dialogService.GetDialog(dialogId.Value);
+                Dialog dialog = _dialogService.GetDialog(d => d.Id == dialogId.Value, i => i.Messages, i => i.Companion, i => i.Creator);
                 if (dialog != null && (_dialogService.GetUserDialogs(currentUserId).Count() != 0))
                 {
 
@@ -595,7 +598,7 @@ namespace Market.Web.Controllers
 
         public ActionResult UserList()
         {
-            IEnumerable<UserProfileViewModel> model = Mapper.Map<IEnumerable<UserProfile>, IEnumerable<UserProfileViewModel>>(_userProfileService.GetUserProfiles());
+            IEnumerable<UserProfileViewModel> model = Mapper.Map<IEnumerable<UserProfile>, IEnumerable<UserProfileViewModel>>(_userProfileService.GetUserProfilesAsNoTracking(i => i.ApplicationUser).ToList());
             model = model.OrderBy(m => m.Name);
             return View(model);
         }
@@ -605,7 +608,7 @@ namespace Market.Web.Controllers
         {
             if (id != null)
             {
-                var user = _userProfileService.GetUserProfileById(id);
+                var user = _userProfileService.GetUserProfile(u => u.Id == id, i => i.ApplicationUser);
                 if (user != null)
                 {
                     var model = Mapper.Map<UserProfile, EditUserProfileViewModel>(user);
@@ -640,11 +643,11 @@ namespace Market.Web.Controllers
                         string fileName96 = String.Format(@"{0}{1}", System.Guid.NewGuid(), extName);
 
                         // сохраняем файл в папку Files в проекте
-                        string fullPath32 = Server.MapPath("~/Content/Images/Avatars/" + fileName32);
+                        string fullPath32 = Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "\\Content\\Images\\Avatars", fileName32);
                         string urlPath32 = Url.Content("~/Content/Images/Avatars/" + fileName32);
-                        string fullPath48 = Server.MapPath("~/Content/Images/Avatars/" + fileName48);
+                        string fullPath48 = Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "\\Content\\Images\\Avatars", fileName48);
                         string urlPath48 = Url.Content("~/Content/Images/Avatars/" + fileName48);
-                        string fullPath96 = Server.MapPath("~/Content/Images/Avatars/" + fileName96);
+                        string fullPath96 = Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "\\Content\\Images\\Avatars", fileName96);
                         string urlPath96 = Url.Content("~/Content/Images/Avatars/" + fileName96);
 
                         Tinify.Key = ConfigurationManager.AppSettings["TINYPNG_APIKEY"];
@@ -662,7 +665,6 @@ namespace Market.Web.Controllers
                                 System.IO.File.Delete(Server.MapPath(user.Avatar96Path));
                             }
                         }
-
 
                         image.SaveAs(fullPath32);
                         image.SaveAs(fullPath48);
@@ -718,6 +720,42 @@ namespace Market.Web.Controllers
             return HttpNotFound();
         }
 
+        public ActionResult WithdrawList()
+        {
+            IEnumerable<WithdrawViewModel> model = Mapper.Map<IEnumerable<Withdraw>, IEnumerable<WithdrawViewModel>>(_withdrawService.GetWithdrawsAsNoTracking(i => i.User).ToList());
+            model = model.OrderBy(m => m.DateCrated).OrderBy(m => m.UserName);
+            return View(model);
+        }
+
+        public ActionResult ApplyWithdraw(int? id)
+        {
+            if (id != null)
+            {
+                var withdraw = _withdrawService.GetWithdraw(id.Value);
+                withdraw.IsPaid = true;
+                _withdrawService.SaveWithdraw();
+                return RedirectToAction("WithdrawList");
+            }
+            return HttpNotFound();
+        }
+
+        public ActionResult CancelWithdraw(int? id)
+        {
+            if (id != null)
+            {
+                var withdraw = _withdrawService.GetWithdraw(id.Value);
+                withdraw.IsCanceled = true;
+                _withdrawService.SaveWithdraw();
+                return RedirectToAction("WithdrawList");
+            }
+            return HttpNotFound();
+        }
+
+
+
+
+
+
         public ActionResult LockoutUserAsync(string id)
         {
             if (id != null)
@@ -743,11 +781,12 @@ namespace Market.Web.Controllers
             if (result.Succeeded)
             {
                 
-                await UserManager.SetLockoutEndDateAsync(model.UserId, DateTimeOffset.MaxValue);
-                var user = UserManager.FindById(model.UserId);
-                user.UserProfile.LockoutReason = model.LockoutReason;
-                var updateStampResult = await UserManager.UpdateSecurityStampAsync(model.UserId);
                 
+                var user = _userProfileService.GetUserProfile(u => u.Id == model.UserId, i => i.ApplicationUser);
+                user.LockoutReason = model.LockoutReason;
+                await UserManager.SetLockoutEndDateAsync(model.UserId, DateTimeOffset.MaxValue);
+                var updateStampResult = await UserManager.UpdateSecurityStampAsync(model.UserId);
+                _userProfileService.SaveUserProfile();
                 if (result.Succeeded && updateStampResult.Succeeded)
                 {
                     TempData["message"] = "Пользователь заблокирован";
