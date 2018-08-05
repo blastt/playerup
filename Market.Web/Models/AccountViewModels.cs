@@ -77,7 +77,7 @@ namespace Market.Web.Models
         //"^[-0-9A-Za-z_]{5,15}$"
         //Имя пользователя должно быть не менее 5 и не более 15 символов
         [StringLength(maximumLength: 15, MinimumLength = 5,ErrorMessage = "Имя пользователя должно быть не менее 5 и не более 15 символов")]
-        [RegularExpression(pattern: "^[0-9A-Za-z]+$", ErrorMessage = "Имя пользователя не должно иметь символов и пробелов")]
+        [RegularExpression(pattern: "^[0-9A-Za-z]+$", ErrorMessage = "Имя пользователя не должно иметь специальных символов и состоять из букв кирилицы (a-z)")]
         //[CustomValidation(typeof(UserNameValidation), "ValidateUserName")]
         public string UserName { get; set; }
 

@@ -71,7 +71,7 @@ namespace Market.Web.Controllers
         public ActionResult MyOrderList()
         {
             var currentUserId = User.Identity.GetUserId();
-            var orders = _orderService.GetOrdersAsNoTracking(o => o.MiddlemanId == currentUserId, i => i.CurrentStatus, i => i.Offer, i => i.Seller, i => i.Buyer);
+            var orders = _orderService.GetOrdersAsNoTracking(o => o.MiddlemanId == currentUserId, i => i.CurrentStatus, i => i.Offer, i => i.Seller, i => i.Buyer).ToList();
             var ordersViewModel = Mapper.Map<IEnumerable<Order>, IEnumerable<OrderViewModel>>(orders);
 
             return View(ordersViewModel);
@@ -98,7 +98,7 @@ namespace Market.Web.Controllers
         {
             if (id != null)
             {
-                var order = _orderService.GetOrder(id.Value, i => i.CurrentStatus, i => i.Middleman, i => i.Seller.ApplicationUser, i => i.Buyer.ApplicationUser);
+                var order = _orderService.GetOrder(id.Value, i => i.CurrentStatus, i => i.Seller.ApplicationUser, i => i.Buyer.ApplicationUser, i => i.StatusLogs);
                 if (order.CurrentStatus != null)
                 {
                     if (order.CurrentStatus.Value == OrderStatuses.MiddlemanFinding)

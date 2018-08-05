@@ -84,7 +84,7 @@ namespace Trader.WEB.Controllers
         }
         public ActionResult Info(string userName)
         {
-            var profile = _userProfileService.GetUserProfiles(u => u.Name == userName, u => u.Offers, u => u.FeedbacksMy, u => u.OrdersAsSeller).SingleOrDefault();
+            var profile = _userProfileService.GetUserProfiles(u => u.Name == userName, u => u.Offers, u => u.FeedbacksMy, u => u.OrdersAsSeller, u => u.OrdersAsSeller.Select(m => m.StatusLogs), u => u.OrdersAsSeller.Select(m => m.StatusLogs.Select(f => f.NewStatus))).SingleOrDefault();
             if (profile == null)
             {
                 return HttpNotFound();
@@ -94,7 +94,7 @@ namespace Trader.WEB.Controllers
             model.InfoUserId = profile.Id;
             model.OffersViewModel.Offers = Mapper.Map<IEnumerable<Offer>, IEnumerable<OfferViewModel>>(profile.Offers.Where(o => o.State == OfferState.active));
             model.FeedbacksViewModel.Feedbacks = Mapper.Map<IEnumerable<Feedback>, IEnumerable<FeedbackViewModel>>(profile.FeedbacksMy);
-            model.SuccessOrderRate = profile.OrdersAsSeller.Count;
+            model.SuccessOrderRate = profile.OrdersAsSeller.Where(o => o.StatusLogs.Any(s => s.NewStatus.Value == OrderStatuses.ClosedSuccessfully)).Count();
             model.FeedbacksViewModel.PageInfo = new PageInfoViewModel
             {
                 PageSize = 4,
@@ -250,7 +250,6 @@ namespace Trader.WEB.Controllers
                     string urlPath96 = Url.Content("~/Content/Images/Avatars/" + fileName96);
 
                     Tinify.Key = ConfigurationManager.AppSettings["TINYPNG_APIKEY"];
-                    await Tinify.Validate();
                     //Default.png
                     
                         var name32 = user.Avatar32Path.Split('/').LastOrDefault();
@@ -266,7 +265,7 @@ namespace Trader.WEB.Controllers
                             }
                         }
                     
-
+                        
                     image.SaveAs(fullPath32);
                     image.SaveAs(fullPath48);
                     image.SaveAs(fullPath96);

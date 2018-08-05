@@ -32,10 +32,10 @@ namespace Market.Web
                 // Create a Web transport for sending email.
                 var apiKey = ConfigurationManager.AppSettings["SENDGRID_KEY"];
                 var client = new SendGridClient(apiKey);
-                var from = new EmailAddress("support@playerup.ru", "PlayerUp");
+                var to = new EmailAddress(message.Destination);
                 var subject = message.Subject;
 
-                var to = new EmailAddress(message.Destination);
+                var from = new EmailAddress("support@playerup.ru", "PlayerUp"); 
                 var plainTextContent = message.Body;
                 var htmlContent = message.Body;
                 var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);

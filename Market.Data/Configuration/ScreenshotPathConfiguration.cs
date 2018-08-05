@@ -9,7 +9,7 @@ namespace Market.Data.Configuration
         public ScreenshotPathConfiguration()
         {
             ToTable("ScreenshotPathes");
-            HasRequired(o => o.Offer).WithMany(a => a.ScreenshotPathes).HasForeignKey(a => a.OfferId);
+            HasRequired(o => o.Offer).WithMany(a => a.ScreenshotPathes).HasForeignKey(a => a.OfferId).WillCascadeOnDelete(true);
 
         }
     }

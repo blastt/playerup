@@ -9,7 +9,7 @@ namespace Market.Data.Configuration
         {
             ToTable("Feedbacks");
             Property(f => f.Comment).IsRequired().HasMaxLength(50);
-            HasRequired(f => f.Order).WithMany(o => o.Feedbacks).WillCascadeOnDelete(false);
+            HasRequired(f => f.Order).WithMany(o => o.Feedbacks).WillCascadeOnDelete(true);
             Property(f => f.Grade).IsRequired();
 
 

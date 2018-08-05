@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Hangfire;
 using Market.Model.Models;
 using Market.Service;
 using Market.Web.ViewModels;
@@ -27,14 +28,16 @@ namespace Market.Web.Controllers
         //}
         private readonly IUserProfileService _userProfileService;
         private readonly IOfferService _offerService;
+        private readonly IOrderService _orderService;
         private readonly IGameService _gameService;
         private readonly IFilterService _filterService;
         private readonly IFilterItemService _filterItemService;
         private readonly IDialogService _dialogService;
         private readonly IWithdrawService _withdrawService;
         private readonly int offerDays = 30;
-        public AdminController(IOfferService offerService, IGameService gameService, IFilterService filterService, IDialogService dialogService, IFilterItemService filterItemService, IUserProfileService userProfileService, IWithdrawService withdrawService)
+        public AdminController(IOfferService offerService, IGameService gameService, IFilterService filterService, IDialogService dialogService, IFilterItemService filterItemService, IUserProfileService userProfileService, IWithdrawService withdrawService, IOrderService orderService)
         {
+            _orderService = orderService;
             _offerService = offerService;
             _gameService = gameService;
             _filterService = filterService;
@@ -72,12 +75,34 @@ namespace Market.Web.Controllers
 
         public ActionResult DeleteOffer(int id)
         {
-            var offer = _offerService.GetOffer(id);
+            var offer = _offerService.GetOffer(id, i => i.Order, i => i.Order.AccountInfos, i => i.Order.Transactions, i => i.Order.StatusLogs, i => i.ScreenshotPathes, i => i.Order.Feedbacks);
             if (offer != null)
             {
+                
+                if (offer.Order != null && offer.Order.JobId != null)
+                {
+                    BackgroundJob.Delete(offer.Order.JobId);
+                }
+                if (offer.JobId != null)
+                {
+                    BackgroundJob.Delete(offer.JobId);
+                }
+
                 _offerService.Delete(offer);
                 TempData["message"] = "Предложение удалено";
                 _offerService.SaveOffer();
+            }
+            return RedirectToAction("OfferList");
+        }
+
+        public ActionResult DeleteOrder(int id)
+        {
+            var order = _orderService.GetOrder(id);
+            if (order != null)
+            {
+                _orderService.DeleteOrder(order);
+                TempData["message"] = "Предложение удалено";
+                _orderService.SaveOrder();
             }
             return RedirectToAction("OfferList");
         }

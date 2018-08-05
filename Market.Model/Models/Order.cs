@@ -88,5 +88,7 @@ namespace Market.Model.Models
         public IList<AccountInfo> AccountInfos { get; set; } = new List<AccountInfo>();
 
         public DateTime DateCreated { get; set; } = DateTime.Now;
+
+
     }
 }

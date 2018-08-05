@@ -40,19 +40,47 @@
     </div>
     <div class="col-lg-4">
         <div class="card p-4 text-center">
-            @using (Html.BeginForm("Checkoutme", "Checkout", FormMethod.Post))
+            @if (Model.UserCanPayWithBalance)
             {
-                <input type="hidden" name="offerId" value="@Model.OfferId" />
-                <input type="hidden" name="sellerId" value="@Model.SellerId" />
-                <p class="text-300 font-size-16 mb-3">Стоимость заказа:</p>
-                <div class="form-group">
-                    <div style="font-size:28px; width: 100%">@Html.DisplayFor(m => m.OrderSum)</div>
-                </div>
+                using (Html.BeginForm("Checkoutme", "Checkout", FormMethod.Post))
+                {
+                    <input type="hidden" name="offerId" value="@Model.OfferId" />
+                    <input type="hidden" name="sellerId" value="@Model.SellerId" />
+                    <p class="text-300 font-size-16 mb-3">Стоимость заказа:</p>
+                    <div class="form-group">
+                        <div style="font-size:28px; width: 100%">@Html.DisplayFor(m => m.OrderSum)</div>
+                    </div>
 
-                <div class="form-group">
-                    <input type="submit" class="btn btn-buy-big" value="Оплатить" />
-                </div>
+                    <div class="form-group">
+                        <input type="submit" class="btn btn-buy-big" value="Оплатить" />
+                    </div>
+                }
             }
+            else
+            {
+                    <form id="payment" name="payment" method="post" action="https://sci.interkassa.com/" enctype="utf-8">
+                        <p class="text-300 font-size-16 mb-3">Стоимость заказа:</p>
+                        <div class="form-group">
+                            <div style="font-size:28px; width: 100%">@Html.DisplayFor(m => m.OrderSum)</div>
+                        </div>
+                        <input type="hidden" name="ik_co_id" value="5b3932aa3d1eaf34748b4568" />
+                        <input type="hidden" name="ik_pm_no" value="@Guid.NewGuid().ToString("n")" />
+
+                        <input type="hidden" name="ik_cur" value="RUB" />
+                        <input type="hidden" name="ik_desc" value="Event Description" />
+                        <input type="hidden" name="ik_x_user_id" value="@Model.BuyerId" />
+                        <input type="hidden" name="ik_am" value="@Model.OrderSum" class="form-control form-control-lg" />
+
+                        <input type="hidden" name="ik_x_offer_id" value="@Model.OfferId" />
+                        <div class="form-group">
+
+                            <input type="submit" class="btn btn-buy-big" value="Оплатить" />
+                        </div>
+
+
+                    </form>
+            }
+
         </div>
     </div>
 </div>

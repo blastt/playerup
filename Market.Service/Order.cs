@@ -29,7 +29,7 @@ namespace Market.Service
         //IEnumerable<Offer> GetCategoryGadgets(string categoryName, string gadgetName = null);
         Order GetOrder(int id);
         Task<Order> GetOrderAsync(int id);
-
+        void DeleteOrder(Order order);
         Order GetOrder(string accountLogin, string moderatorId, string sellerId, string buyerId);
         Order GetOrder(string accountLogin, string moderatorId, string sellerId, string buyerId, params Expression<Func<Order, object>>[] include);
         Order GetOrder(int id, params Expression<Func<Order, object>>[] includes);
@@ -94,6 +94,11 @@ namespace Market.Service
         {
             var query = ordersRepository.GetManyAsNoTracking(where, includes);
             return query;
+        }
+
+        public void DeleteOrder(Order order)
+        {           
+            ordersRepository.Delete(order);
         }
 
         public void UpdateOrder(Order order)

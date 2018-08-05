@@ -86,7 +86,7 @@ namespace Market.Web.Controllers
                         Options = selectOptions
                     });
                 }
-                searchInfo.GameName = game.Name;
+                model.SearchInfo.GameName = game.Name;
             }
             model.SearchInfo.SelectsOptions = selects;
 
@@ -459,6 +459,7 @@ namespace Market.Web.Controllers
             return View("OfferCreated", offerModel);
         }
 
+        [AllowAnonymous]
         public ActionResult Details(int? id = 1)
         {
             if (id != null)
@@ -615,10 +616,10 @@ namespace Market.Web.Controllers
                 var appUser = userProfile.ApplicationUser;
                 if (appUser != null)
                 {
-                    //if(!(appUser.PhoneNumberConfirmed && appUser.EmailConfirmed))
-                    //{
-                    //    return HttpNotFound("you are not confirmed email or phone number");
-                    //}
+                    if (!(appUser.EmailConfirmed))
+                    {
+                        return HttpNotFound("you are not confirmed email or phone number");
+                    }
                 }
 
             }
@@ -639,7 +640,7 @@ namespace Market.Web.Controllers
                 offer.Header = model.Header;
 
 
-                var gameFilters = _filterService.GetFilters().Where(f => f.Game == game).ToList();
+                var gameFilters = _filterService.GetFilters(f => f.Game.Value == game.Value, i => i.FilterItems).ToList();
                 var modelFilters = model.FilterValues;
                 var modelFilterItems = model.FilterItemValues;
                 if (game != null && modelFilters.Length == gameFilters.Count)

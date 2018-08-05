@@ -52,9 +52,143 @@ namespace Trader.WEB.Controllers
             _withdrawService = withdrawService;
         }
 
+        [HttpPost]
+        [AllowAnonymous]
+        public void MoneyIn()
+        {
+
+            var secretKey = "LMcg7uCyA8I3injU";
+            var pars = new SortedDictionary<string, string>();
+            var keys = Request.Form.AllKeys;
+            foreach (var key in keys.Where(key => key.IndexOf("ik_") >= 0 && key != "ik_sign"))
+                pars.Add(key, Request.Form[key]);
+            var hash = string.Join(":", pars.Select(x => x.Value).ToArray().Concat(new[] { secretKey }));
+            var md5 = new MD5CryptoServiceProvider();
+            var isSame = Convert.ToBase64String(md5.ComputeHash(Encoding.UTF8.GetBytes(hash))) == Request.Form["ik_sign"];
+            bool isOrderPay = false;
+            if (isSame)
+            {
+                var userId = Request.Form["ik_x_user_id"];
+                
+                var offerId = Request.Form["ik_x_offer_id"];
+                var mainCup = _userProfileService.GetUserProfileByName("palyerup");
+                if (offerId != null && userId != null && mainCup != null)
+                {
+                    var user = _userProfileService.GetUserProfile(u => u.Id == userId, i => i.ApplicationUser);
+                    Offer offer = _offerService.GetOffer(int.Parse(offerId), o => o.UserProfile, o => o.UserProfile.ApplicationUser, o => o.Order, o => o.Order.StatusLogs, o => o.Order.CurrentStatus);
+                    decimal buyerPay = 0;
+                    if (offer.SellerPaysMiddleman)
+                    {
+                        buyerPay = offer.Price;
+                    }
+                    else
+                    {
+                        buyerPay = offer.Price + offer.MiddlemanPrice.Value;
+
+                    }
+
+                    if (buyerPay == Decimal.Parse(Request.Form["ik_am"]))
+                    {
+                        if (offer != null && offer.UserProfile.Id != User.Identity.GetUserId())
+                        {
+                            offer.Order = new Order
+                            {
+                                Buyer = user,
+                                Seller = offer.UserProfile,
+                                DateCreated = DateTime.Now
+                            };
+                            Order order = offer.Order;
+                            offer.State = OfferState.closed;
+
+                            order.StatusLogs.AddLast(new StatusLog()
+                            {
+                                OldStatus = _orderStatusService.GetOrderStatusByValue(OrderStatuses.OrderCreating),
+                                NewStatus = _orderStatusService.GetOrderStatusByValue(OrderStatuses.BuyerPaying),
+                                TimeStamp = DateTime.Now
+                            });
+
+                            order.StatusLogs.AddLast(new StatusLog()
+                            {
+                                OldStatus = _orderStatusService.GetOrderStatusByValue(OrderStatuses.BuyerPaying),
+                                NewStatus = _orderStatusService.GetOrderStatusByValue(OrderStatuses.MiddlemanFinding),
+                                TimeStamp = DateTime.Now
+                            });
+                            order.CurrentStatus = _orderStatusService.GetOrderStatusByValue(OrderStatuses.MiddlemanFinding);
+
+                            _transactionService.CreateTransaction(new Transaction
+                            {
+                                Amount = buyerPay,
+                                Order = order,
+                                Receiver = mainCup,
+                                Sender = user,
+                                TransactionDate = DateTime.Now
+                            });
+
+                            if (offer.JobId != null)
+                            {
+                                BackgroundJob.Delete(offer.JobId);
+                                offer.JobId = null;
+                            }
+                            _offerService.SaveOffer();
+                            isOrderPay = true;
+                            MarketHangfire.SetSendEmailChangeStatus(order.Id, offer.UserProfile.ApplicationUser.Email, order.CurrentStatus.DuringName, Url.Action("SellDetails", "Order", new { id = order.Id }, protocol: Request.Url.Scheme));
+
+                            MarketHangfire.SetSendEmailChangeStatus(order.Id, user.ApplicationUser.Email, order.CurrentStatus.DuringName, Url.Action("BuyDetails", "Order", new { id = order.Id }, protocol: Request.Url.Scheme));
+
+                            offer.Order.JobId = MarketHangfire.SetOrderCloseJob(order.Id, TimeSpan.FromDays(1));
+
+                            _orderService.SaveOrder();
+                        }
+
+                    }
+                }
+                // если  пополняем баланс
+                
+                if (userId != null && !isOrderPay)
+                {
+                    var user = _userProfileService.GetUserProfile(u => u.Id == userId);
+                    var amount = Decimal.Parse(Request.Form["ik_am"]);
+                    user.Balance += amount;
+                    _billingService.CreateBilling(new Billing
+                    {
+                        User = user,
+                        DateCeated = DateTime.Now,
+                        Amount = amount
+                    });
+                    _userProfileService.SaveUserProfile();
+                }                
+                else if (!isOrderPay)
+                {
+                    string currentUserId = User.Identity.GetUserId();
+                    var currentUser = _userProfileService.GetUserProfileById(currentUserId);
+                    if (currentUser != null)
+                    {
+                        var amount = Decimal.Parse(Request.Form["ik_am"]);
+                        currentUser.Balance += amount;
+                        _billingService.CreateBilling(new Billing
+                        {
+                            User = currentUser,
+                            DateCeated = DateTime.Now,
+                            Amount = amount
+                        });
+                        _userProfileService.SaveUserProfile();
+                    }
+                }
+            }
+        }
         public ActionResult Success()
         {
-            return View();
+
+            var offerId = Request.Form["ik_x_offer_id"];
+            if (offerId != null)
+            {
+                Offer offer = _offerService.GetOffer(int.Parse(offerId), o => o.UserProfile, o => o.UserProfile.ApplicationUser, o => o.Order);
+                if (offer != null)
+                {
+                    return View("OrderPaidSuccess", (object)offer.Order.Id);
+                }
+            }
+            return View("CashInSuccess");
         }
 
         public ActionResult Error()
@@ -69,6 +203,8 @@ namespace Trader.WEB.Controllers
                 var offer = _offerService.GetOffer(id.Value, o => o.Game, o => o.UserProfile);
                 if (offer != null && offer.Order == null && offer.State == OfferState.active && offer.UserProfileId != User.Identity.GetUserId())
                 {
+                    var userId = User.Identity.GetUserId();
+                    var user = _userProfileService.GetUserProfile(u => u.Id == userId);
                     CheckoutViewModel model = new CheckoutViewModel()
                     {
                         OfferHeader = offer.Header,
@@ -78,7 +214,8 @@ namespace Trader.WEB.Controllers
                         MiddlemanPrice = offer.MiddlemanPrice.Value,
                         OrderSum = offer.Price,
                         Quantity = 1,
-                        SellerId = offer.UserProfile.Id
+                        SellerId = offer.UserProfile.Id,
+                        BuyerId = userId
                     };
                     if (offer.SellerPaysMiddleman)
                     {
@@ -88,6 +225,7 @@ namespace Trader.WEB.Controllers
                     {
                         model.OrderSum = offer.Price + offer.MiddlemanPrice.Value;
                     }
+                    model.UserCanPayWithBalance = user.Balance >= model.OrderSum;
                     return View(model);
                 }
 
@@ -97,72 +235,121 @@ namespace Trader.WEB.Controllers
         // GET: Checkout
         // This method must be called after payment
         [HttpPost]
-        public ActionResult Checkoutme(CheckoutViewModel model)
+        public async Task<ActionResult> Checkoutme(CheckoutViewModel model)
         {
             //UserProfile buyer = _db.UserProfiles.Get(User.Identity.GetUserId());
-            Offer offer = _offerService.GetOffer(model.OfferId, o => o.UserProfile, o => o.Order, o => o.Order.StatusLogs, o => o.Order.CurrentStatus
-                , o => o.Order.Seller, o => o.Order.Buyer, o => o.Order.Seller.ApplicationUser, o => o.Order.Buyer.ApplicationUser, o => o.Order.CurrentStatus);
+            Offer offer = _offerService.GetOffer(model.OfferId, o => o.UserProfile, o => o.UserProfile.ApplicationUser, o => o.Order, o => o.Order.StatusLogs, o => o.Order.CurrentStatus);
             if (offer != null && offer.Order == null && offer.State == OfferState.active && offer.UserProfileId != User.Identity.GetUserId())
             {
                 var currentUserId = User.Identity.GetUserId();
-                var user = _userProfileService.GetUserProfile(u => u.Id == currentUserId);
-                offer.Order = new Order
+                var user = _userProfileService.GetUserProfile(u => u.Id == currentUserId, i => i.ApplicationUser);
+                var mainCup = _userProfileService.GetUserProfileByName("palyerup");
+                if (user != null && mainCup != null && user.Balance >= model.OrderSum)
                 {
-                    BuyerId = currentUserId,
-                    SellerId = offer.UserProfileId,
-                    DateCreated = DateTime.Now
-                };
-                offer.State = OfferState.closed;
+                    //var amount = Decimal.Parse(Request.Form["ik_am"]);
 
-                if (user != null)
-                {
-                    if (user.Balance >= model.OrderSum)
+                    offer.Order = new Order
                     {
-                        // withdraw
-                        // chenge status
-                        // return
-                    }
-                    else
+                        BuyerId = currentUserId,
+                        SellerId = offer.UserProfileId,
+                        DateCreated = DateTime.Now
+                    };
+                    offer.State = OfferState.closed;
+
+
+                    if (mainCup != null)
                     {
-                        //    HttpClient client = new HttpClient();
-                        //    client.DefaultRequestHeaders.Add("Authorization", "Basic " + Convert.ToBase64String(Encoding.GetEncoding("ISO-8859-1").GetBytes("5ac35eb73b1eaf90618b456b:49YehvH0IJr19yCNtmWxBR3TbuwKCCaN")));
-                        //    client.DefaultRequestHeaders.Add("Ik-Api-Account-Id", "5ac35ee33c1eafbd6d8b4572");
-                        //    var response = await client.GetAsync("https://api.interkassa.com/v1/purse");
-                        //    var responseString = await response.Content.ReadAsStringAsync();
+                        var seller = offer.UserProfile;
+                        var buyer = user;
+
+                        if (offer.SellerPaysMiddleman)
+                        {
+                            offer.Order.Sum = offer.Price;
+                            offer.Order.AmmountSellerGet = offer.Price - offer.MiddlemanPrice.Value;
+                            if (buyer.Balance >= offer.Order.Sum)
+                            {
+                                _transactionService.CreateTransaction(new Transaction
+                                {
+                                    Amount = offer.Order.Sum,
+                                    Order = offer.Order,
+                                    Receiver = mainCup,
+                                    Sender = buyer,
+                                    TransactionDate = DateTime.Now
+                                });
+                                buyer.Balance -= offer.Order.Sum;
+                                mainCup.Balance += offer.Order.Sum;
+                            }
+                            else
+                            {
+                                return View("NotEnoughMoney");
+                            }
+                        }
+                        else
+                        {
+                            offer.Order.Sum = offer.Price + offer.MiddlemanPrice.Value;
+                            offer.Order.AmmountSellerGet = offer.Price;
+                            if (buyer.Balance >= offer.Order.Sum)
+                            {
+                                _transactionService.CreateTransaction(new Transaction
+                                {
+                                    Amount = offer.Order.Sum,
+                                    Order = offer.Order,
+                                    Receiver = mainCup,
+                                    Sender = buyer,
+                                    TransactionDate = DateTime.Now
+                                });
+                                buyer.Balance -= offer.Order.Sum;
+                                mainCup.Balance += offer.Order.Sum;
+                            }
+                            else
+                            {
+                                return View("NotEnoughMoney");
+                            }
+                        }
+                        offer.Order.StatusLogs.AddLast(new StatusLog()
+                        {
+                            OldStatus = _orderStatusService.GetOrderStatusByValue(OrderStatuses.OrderCreating),
+                            NewStatus = _orderStatusService.GetOrderStatusByValue(OrderStatuses.BuyerPaying),
+                            TimeStamp = DateTime.Now
+                        });
+
+                        offer.Order.StatusLogs.AddLast(new StatusLog()
+                        {
+                            OldStatus = _orderStatusService.GetOrderStatusByValue(OrderStatuses.BuyerPaying),
+                            NewStatus = _orderStatusService.GetOrderStatusByValue(OrderStatuses.MiddlemanFinding),
+                            TimeStamp = DateTime.Now
+                        });
+                        offer.Order.CurrentStatus = _orderStatusService.GetOrderStatusByValue(OrderStatuses.MiddlemanFinding);
+
+                        offer.Order.BuyerChecked = false;
+                        offer.Order.SellerChecked = false;
+
+                        if (offer.Order.JobId != null)
+                        {
+                            BackgroundJob.Delete(offer.Order.JobId);
+                            offer.Order.JobId = null;
+                        }
+
+                        if (offer.JobId != null)
+                        {
+                            BackgroundJob.Delete(offer.JobId);
+                            offer.JobId = null;
+                        }
+
+                        _orderService.SaveOrder();
+
+                        MarketHangfire.SetSendEmailChangeStatus(offer.Order.Id, seller.ApplicationUser.Email, offer.Order.CurrentStatus.DuringName, Url.Action("SellDetails", "Order", new { id = offer.Order.Id }, protocol: Request.Url.Scheme));
+
+                        MarketHangfire.SetSendEmailChangeStatus(offer.Order.Id, buyer.ApplicationUser.Email, offer.Order.CurrentStatus.DuringName, Url.Action("BuyDetails", "Order", new { id = offer.Order.Id }, protocol: Request.Url.Scheme));
+                        offer.Order.JobId = MarketHangfire.SetOrderCloseJob(offer.Order.Id, TimeSpan.FromDays(1));
+                        //_orderService.UpdateOrder(order);
+                        _orderService.SaveOrder();
+                        TempData["orderBuyStatus"] = "Оплата прошла успешно";
+
+                        return RedirectToAction("BuyDetails", "Order", new { id = offer.Order.Id });
                     }
+
                 }
-
-                offer.Order.StatusLogs.AddLast(new StatusLog()
-                {
-                    OldStatus = _orderStatusService.GetOrderStatusByValue(OrderStatuses.OrderCreating),
-                    NewStatus = _orderStatusService.GetOrderStatusByValue(OrderStatuses.BuyerPaying),
-                    TimeStamp = DateTime.Now
-                });
-                offer.Order.CurrentStatus = _orderStatusService.GetOrderStatusByValue(OrderStatuses.BuyerPaying);
-
-                //_offerService.UpdateOffer(offer);
-
-
-
-                TempData["orderBuyStatus"] = "Заказ создан!";
-
-                if (offer.JobId != null)
-                {
-                    BackgroundJob.Delete(offer.JobId);
-                    offer.JobId = null;
-                }
-                _offerService.SaveOffer();
-                var order = _orderService.GetOrder(offer.Order.Id, o => o.Buyer.ApplicationUser, o => o.Seller.ApplicationUser, o => o.CurrentStatus);
-                MarketHangfire.SetSendEmailChangeStatus(order.Id, order.Seller.ApplicationUser.Email, order.CurrentStatus.DuringName, Url.Action("SellDetails", "Order", new { id = order.Id }, protocol: Request.Url.Scheme));
-
-                MarketHangfire.SetSendEmailChangeStatus(order.Id, order.Buyer.ApplicationUser.Email, order.CurrentStatus.DuringName, Url.Action("BuyDetails", "Order", new { id = order.Id }, protocol: Request.Url.Scheme));
-
-                offer.Order.JobId = MarketHangfire.SetOrderCloseJob(order.Id, TimeSpan.FromDays(1));
-
-                _orderService.SaveOrder();
-
-                return RedirectToAction("BuyDetails", "Order", new { id = offer.Order.Id });
-
             }
             return HttpNotFound();
 
@@ -181,39 +368,7 @@ namespace Trader.WEB.Controllers
         }
 
 
-        [HttpPost]
-        [AllowAnonymous]
-        public void MoneyIn()
-        {
-            var secretKey = "LMcg7uCyA8I3injU";
-            var pars = new SortedDictionary<string, string>();
-            var keys = Request.Form.AllKeys;
-            foreach (var key in keys.Where(key => key.IndexOf("ik_") >= 0 && key != "ik_sign"))
-                pars.Add(key, Request.Form[key]);
-            var hash = string.Join(":", pars.Select(x => x.Value).ToArray().Concat(new[] { secretKey }));
-            var md5 = new MD5CryptoServiceProvider();
-            var isSame = Convert.ToBase64String(md5.ComputeHash(Encoding.UTF8.GetBytes(hash))) == Request.Form["ik_sign"];
-            if (isSame)
-            {
-
-                var userId = Request.Form["ik_x_user_id"];
-                var user = _userProfileService.GetUserProfile(u => u.Id == userId);
-                if (user != null)
-                {
-                    var amount = Decimal.Parse(Request.Form["ik_am"]);
-                    user.Balance += amount;
-                    _billingService.CreateBilling(new Billing
-                    {
-                        User = user,
-                        DateCeated = DateTime.Now,
-                        Amount = amount
-                    });
-                    _userProfileService.SaveUserProfile();
-                }
-
-            }
-
-        }
+        
 
         [HttpGet]
         public ActionResult CashOut()
@@ -418,145 +573,145 @@ namespace Trader.WEB.Controllers
             }
             //return Content("Error");
         }
-        [HttpGet]
-        public ActionResult Paid()
-        {
-            return View();
-        }
+        //[HttpGet]
+        //public ActionResult Paid()
+        //{
+        //    return View();
+        //}
 
-        [HttpPost]
-        public ActionResult Paid(int? id)
-        {
-            // Добавить логику оплаты
-            if (id != null)
-            {
-                Order order = _orderService.GetOrder(id.Value, i => i.Seller, i => i.Buyer, i => i.Offer, i => i.CurrentStatus, i => i.Seller.ApplicationUser, i => i.Buyer.ApplicationUser);
-                if (order != null && order.CurrentStatus.Value == OrderStatuses.BuyerPaying)
-                {
-                    var mainCup = _userProfileService.GetUserProfileByName("palyerup");
-                    if (mainCup != null)
-                    {
-                        var seller = order.Seller;
-                        var buyer = order.Buyer;
+        //[HttpPost]
+        //public ActionResult Paid(int? id)
+        //{
+        //    // Добавить логику оплаты
+        //    if (id != null)
+        //    {
+        //        Order order = _orderService.GetOrder(id.Value, i => i.Seller, i => i.Buyer, i => i.Offer, i => i.CurrentStatus, i => i.Seller.ApplicationUser, i => i.Buyer.ApplicationUser);
+        //        if (order != null && order.CurrentStatus.Value == OrderStatuses.BuyerPaying)
+        //        {
+        //            var mainCup = _userProfileService.GetUserProfileByName("palyerup");
+        //            if (mainCup != null)
+        //            {
+        //                var seller = order.Seller;
+        //                var buyer = order.Buyer;
 
-                        if (order.Offer.SellerPaysMiddleman)
-                        {
-                            order.Sum = order.Offer.Price;
-                            order.AmmountSellerGet = order.Offer.Price - order.Offer.MiddlemanPrice.Value;
-                            if (buyer.Balance >= order.Sum)
-                            {
-                                _transactionService.CreateTransaction(new Transaction
-                                {
-                                    Amount = order.Sum,
-                                    Order = order,
-                                    Receiver = mainCup,
-                                    Sender = buyer,
-                                    TransactionDate = DateTime.Now
-                                });
-                                buyer.Balance -= order.Sum;
-                                mainCup.Balance += order.Sum;
-                            }
-                            else
-                            {
-                                return View("NotEnoughMoney");
-                            }
-                        }
-                        else
-                        {
-                            order.Sum = order.Offer.Price + order.Offer.MiddlemanPrice.Value;
-                            order.AmmountSellerGet = order.Offer.Price;
-                            if (buyer.Balance >= order.Offer.Order.Sum)
-                            {
-                                _transactionService.CreateTransaction(new Transaction
-                                {
-                                    Amount = order.Sum,
-                                    Order = order,
-                                    Receiver = mainCup,
-                                    Sender = buyer,
-                                    TransactionDate = DateTime.Now
-                                });
-                                buyer.Balance -= order.Sum;
-                                mainCup.Balance += order.Sum;
-                            }
-                            else
-                            {
-                                return View("NotEnoughMoney");
-                            }
-                        }
-                        order.StatusLogs.AddLast(new StatusLog()
-                        {
-                            OldStatus = order.CurrentStatus,
-                            NewStatus = _orderStatusService.GetOrderStatusByValue(OrderStatuses.MiddlemanFinding),
-                            TimeStamp = DateTime.Now
-                        });
-                        order.CurrentStatus = _orderStatusService.GetOrderStatusByValue(OrderStatuses.MiddlemanFinding);
+        //                if (order.Offer.SellerPaysMiddleman)
+        //                {
+        //                    order.Sum = order.Offer.Price;
+        //                    order.AmmountSellerGet = order.Offer.Price - order.Offer.MiddlemanPrice.Value;
+        //                    if (buyer.Balance >= order.Sum)
+        //                    {
+        //                        _transactionService.CreateTransaction(new Transaction
+        //                        {
+        //                            Amount = order.Sum,
+        //                            Order = order,
+        //                            Receiver = mainCup,
+        //                            Sender = buyer,
+        //                            TransactionDate = DateTime.Now
+        //                        });
+        //                        buyer.Balance -= order.Sum;
+        //                        mainCup.Balance += order.Sum;
+        //                    }
+        //                    else
+        //                    {
+        //                        return View("NotEnoughMoney");
+        //                    }
+        //                }
+        //                else
+        //                {
+        //                    order.Sum = order.Offer.Price + order.Offer.MiddlemanPrice.Value;
+        //                    order.AmmountSellerGet = order.Offer.Price;
+        //                    if (buyer.Balance >= order.Offer.Order.Sum)
+        //                    {
+        //                        _transactionService.CreateTransaction(new Transaction
+        //                        {
+        //                            Amount = order.Sum,
+        //                            Order = order,
+        //                            Receiver = mainCup,
+        //                            Sender = buyer,
+        //                            TransactionDate = DateTime.Now
+        //                        });
+        //                        buyer.Balance -= order.Sum;
+        //                        mainCup.Balance += order.Sum;
+        //                    }
+        //                    else
+        //                    {
+        //                        return View("NotEnoughMoney");
+        //                    }
+        //                }
+        //                order.StatusLogs.AddLast(new StatusLog()
+        //                {
+        //                    OldStatus = order.CurrentStatus,
+        //                    NewStatus = _orderStatusService.GetOrderStatusByValue(OrderStatuses.MiddlemanFinding),
+        //                    TimeStamp = DateTime.Now
+        //                });
+        //                order.CurrentStatus = _orderStatusService.GetOrderStatusByValue(OrderStatuses.MiddlemanFinding);
 
-                        order.BuyerChecked = false;
-                        order.SellerChecked = false;
+        //                order.BuyerChecked = false;
+        //                order.SellerChecked = false;
 
-                        if (order.JobId != null)
-                        {
-                            BackgroundJob.Delete(order.JobId);
-                            order.JobId = null;
-                        }
+        //                if (order.JobId != null)
+        //                {
+        //                    BackgroundJob.Delete(order.JobId);
+        //                    order.JobId = null;
+        //                }
 
-                        _orderService.SaveOrder();
+        //                _orderService.SaveOrder();
 
-                        MarketHangfire.SetSendEmailChangeStatus(order.Id, order.Seller.ApplicationUser.Email, order.CurrentStatus.DuringName, Url.Action("SellDetails", "Order", new { id = order.Id }, protocol: Request.Url.Scheme));
+        //                MarketHangfire.SetSendEmailChangeStatus(order.Id, order.Seller.ApplicationUser.Email, order.CurrentStatus.DuringName, Url.Action("SellDetails", "Order", new { id = order.Id }, protocol: Request.Url.Scheme));
 
-                        MarketHangfire.SetSendEmailChangeStatus(order.Id, order.Buyer.ApplicationUser.Email, order.CurrentStatus.DuringName, Url.Action("BuyDetails", "Order", new { id = order.Id }, protocol: Request.Url.Scheme));
-                        order.JobId = MarketHangfire.SetOrderCloseJob(order.Id, TimeSpan.FromDays(1));
-                        //_orderService.UpdateOrder(order);
-                        _orderService.SaveOrder();
-                        TempData["orderBuyStatus"] = "Оплата прошла успешно";
-                        return RedirectToAction("BuyDetails", "Order", new { id = order.Id });
-                    }
+        //                MarketHangfire.SetSendEmailChangeStatus(order.Id, order.Buyer.ApplicationUser.Email, order.CurrentStatus.DuringName, Url.Action("BuyDetails", "Order", new { id = order.Id }, protocol: Request.Url.Scheme));
+        //                order.JobId = MarketHangfire.SetOrderCloseJob(order.Id, TimeSpan.FromDays(1));
+        //                //_orderService.UpdateOrder(order);
+        //                _orderService.SaveOrder();
+        //                TempData["orderBuyStatus"] = "Оплата прошла успешно";
+        //                return RedirectToAction("BuyDetails", "Order", new { id = order.Id });
+        //            }
 
-                }
-            }
-            return View();
+        //        }
+        //    }
+        //    return View();
 
-        }
+        //}
 
         // этот метод вывызается когда средства были доставлены продавцу
-        [HttpPost]
-        public void SellerWasPaid(int? orderId)
-        {
-            // Добавить логику оплаты
-            if (orderId != null)
-            {
-                Order order = _orderService.GetOrder(orderId.Value, i => i.CurrentStatus, i => i.StatusLogs);
-                if (order != null && order.CurrentStatus.Value == OrderStatuses.PayingToSeller)
-                {
-                    order.StatusLogs.AddLast(new StatusLog()
-                    {
-                        OldStatus = order.CurrentStatus,
-                        NewStatus = _orderStatusService.GetOrderStatusByValue(OrderStatuses.ClosedSuccessfully),
-                        TimeStamp = DateTime.Now
-                    });
-                    order.CurrentStatus = _orderStatusService.GetOrderStatusByValue(OrderStatuses.ClosedSuccessfully);
-                    order.BuyerChecked = false;
-                    order.SellerChecked = false;
-                    //_orderService.UpdateOrder(order);
-                    _orderService.SaveOrder();
-                }
-            }
+        //[HttpPost]
+        //public void SellerWasPaid(int? orderId)
+        //{
+        //    // Добавить логику оплаты
+        //    if (orderId != null)
+        //    {
+        //        Order order = _orderService.GetOrder(orderId.Value, i => i.CurrentStatus, i => i.StatusLogs);
+        //        if (order != null && order.CurrentStatus.Value == OrderStatuses.PayingToSeller)
+        //        {
+        //            order.StatusLogs.AddLast(new StatusLog()
+        //            {
+        //                OldStatus = order.CurrentStatus,
+        //                NewStatus = _orderStatusService.GetOrderStatusByValue(OrderStatuses.ClosedSuccessfully),
+        //                TimeStamp = DateTime.Now
+        //            });
+        //            order.CurrentStatus = _orderStatusService.GetOrderStatusByValue(OrderStatuses.ClosedSuccessfully);
+        //            order.BuyerChecked = false;
+        //            order.SellerChecked = false;
+        //            //_orderService.UpdateOrder(order);
+        //            _orderService.SaveOrder();
+        //        }
+        //    }
 
-        }
+        //}
 
 
 
-        private bool CheckSign(HttpContext context)
-        {
-            var secretKey = "sfewkf342o";
-            var pars = new SortedDictionary<string, string>();
-            var keys = context.Request.Form.AllKeys;
-            foreach (var key in keys.Where(key => key.IndexOf("ik_") >= 0 && key != "ik_sign"))
-                pars.Add(key, context.Request.Form[key]);
-            var hash = string.Join(":", pars.Select(x => x.Value).ToArray().Concat(new[] { secretKey }));
-            var md5 = new MD5CryptoServiceProvider();
-            return Convert.ToBase64String(md5.ComputeHash(Encoding.UTF8.GetBytes(hash))) == context.Request.Form["ik_sign"];
-        }
+        //private bool CheckSign(HttpContext context)
+        //{
+        //    var secretKey = "sfewkf342o";
+        //    var pars = new SortedDictionary<string, string>();
+        //    var keys = context.Request.Form.AllKeys;
+        //    foreach (var key in keys.Where(key => key.IndexOf("ik_") >= 0 && key != "ik_sign"))
+        //        pars.Add(key, context.Request.Form[key]);
+        //    var hash = string.Join(":", pars.Select(x => x.Value).ToArray().Concat(new[] { secretKey }));
+        //    var md5 = new MD5CryptoServiceProvider();
+        //    return Convert.ToBase64String(md5.ComputeHash(Encoding.UTF8.GetBytes(hash))) == context.Request.Form["ik_sign"];
+        //}
 
 
         //public ActionResult Paid(int? Id, string moderatorId, string buyerId, string sellerId)

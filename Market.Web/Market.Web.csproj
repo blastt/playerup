@@ -20,7 +20,7 @@
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <Use64BitIISExpress />
-    <IISExpressSSLPort />
+    <IISExpressSSLPort>44325</IISExpressSSLPort>
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
@@ -284,6 +284,7 @@
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\FeedbackController.cs" />
     <Compile Include="Controllers\HelpController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\MessageController.cs" />
     <Compile Include="Controllers\MiddlemanController.cs" />
@@ -553,6 +554,13 @@
     <Content Include="Content\Images\smile-pos-green.png" />
     <Content Include="Content\Images\steam.png" />
     <Content Include="Content\Images\success.png" />
+    <Content Include="Content\Images\Titles\csgo-title.jpg" />
+    <Content Include="Content\Images\Titles\dota2-title.jpg" />
+    <Content Include="Content\Images\Titles\lol-title.jpg" />
+    <Content Include="Content\Images\Titles\pubg-title.jpg" />
+    <Content Include="Content\Images\Titles\warface-title.jpg" />
+    <Content Include="Content\Images\Titles\warframe-title.jpg" />
+    <Content Include="Content\Images\Titles\wot-title.jpg" />
     <Content Include="Content\Images\total-reviews.png" />
     <Content Include="Content\Images\trash.png" />
     <Content Include="Content\Images\icon.ico" />
@@ -599,6 +607,7 @@
     <Content Include="Content\bootstrap-grid.css.map" />
     <Content Include="Scripts\jquery-feedback-details.js" />
     <Content Include="Scripts\jquery-messages.js" />
+    <Content Include="Scripts\jquery-rollingslider.js" />
     <Content Include="Scripts\signalr-messages.js" />
     <Content Include="Views\Shared\_ConfirmEmail.cshtml" />
     <None Include="compilerconfig.json" />
@@ -782,6 +791,9 @@
     <Content Include="Views\Checkout\SuccessWithdraw.cshtml" />
     <Content Include="Views\Checkout\ErrorWithdraw.cshtml" />
     <Content Include="Views\Admin\WithdrawList.cshtml" />
+    <Content Include="Views\Checkout\OrderPaidSuccess.cshtml" />
+    <Content Include="Views\Checkout\CashInSuccess.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -385,8 +385,8 @@ namespace Market.Web.Controllers
             string currentUserId = User.Identity.GetUserId();
             int ordersCount = 0;
             string result = null;
-            var ordersBuyer = _orderService.GetOrders(o => o.BuyerId == currentUserId && !o.BuyerChecked, i => i.Buyer);
-            var ordersSeller = _orderService.GetOrders(o => o.SellerId == currentUserId && !o.SellerChecked, i => i.Seller);
+            var ordersBuyer = _orderService.GetOrders(o => o.BuyerId == currentUserId && !o.BuyerChecked, i => i.Buyer).ToList();
+            var ordersSeller = _orderService.GetOrders(o => o.SellerId == currentUserId && !o.SellerChecked, i => i.Seller).ToList();
             if (ordersBuyer != null && ordersSeller != null)
             {
                 ordersCount = ordersBuyer.Count() + ordersSeller.Count();

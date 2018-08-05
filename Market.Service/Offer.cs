@@ -34,11 +34,21 @@ namespace Market.Service
 
     public class OfferService : IOfferService
     {
+        private readonly IAccountInfoRepository accountInfosRepository;
+        private readonly ITransactionRepository transactionsRepository;
+        private readonly IFeedbackRepository feedbacksRepository;
+        private readonly IStatusLogRepository statusLogsRepository;
         private readonly IOfferRepository offersRepository;
+        private readonly IOrderRepository ordersRepository;
         private readonly IUnitOfWork unitOfWork;
 
-        public OfferService(IOfferRepository offersRepository, IUnitOfWork unitOfWork)
+        public OfferService(IOfferRepository offersRepository, IOrderRepository ordersRepository, IFeedbackRepository feedbacksRepository, IStatusLogRepository statusLogsRepository, IUnitOfWork unitOfWork, IAccountInfoRepository accountInfosRepository, ITransactionRepository transactionsRepository)
         {
+            this.ordersRepository = ordersRepository;
+            this.feedbacksRepository = feedbacksRepository;
+            this.statusLogsRepository = statusLogsRepository;
+            this.transactionsRepository = transactionsRepository;
+            this.accountInfosRepository = accountInfosRepository;
             this.offersRepository = offersRepository;
             this.unitOfWork = unitOfWork;
         }
@@ -137,7 +147,7 @@ namespace Market.Service
             IList<Offer> listOffers = new List<Offer>();
             if (filters != null)
             {
-                if (offers.Any() && offers.FirstOrDefault().FilterItems.Count != filters.Length)
+                if (offers.Any() && (offers.FirstOrDefault().FilterItems.Count != filters.Length || offers.FirstOrDefault().FilterItems.Count == 0))
                 {
                     listOffers = offers.ToList();
                 }

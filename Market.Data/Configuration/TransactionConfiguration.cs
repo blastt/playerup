@@ -9,7 +9,7 @@ namespace Market.Data.Configuration
         {
             ToTable("Transactions");
 
-            HasRequired(t => t.Order).WithMany(o => o.Transactions).HasForeignKey(t => t.OrderId).WillCascadeOnDelete(false);
+            HasRequired(t => t.Order).WithMany(o => o.Transactions).HasForeignKey(t => t.OrderId).WillCascadeOnDelete(true);
 
             HasRequired(t => t.Receiver).WithMany(o => o.TransactionsAsReceiver).HasForeignKey(t => t.ReceiverId).WillCascadeOnDelete(false);
             HasRequired(t => t.Sender).WithMany(o => o.TransactionsAsSender).HasForeignKey(t => t.SenderId).WillCascadeOnDelete(false);

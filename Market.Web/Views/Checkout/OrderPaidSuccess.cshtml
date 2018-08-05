@@ -1,0 +1,19 @@
+﻿@model object
+
+@{
+    ViewBag.Title = "Заказ оплачен";
+}
+
+
+<div class="text-center">
+    <div class="alert alert-success  success-block">
+        <p class="line-height-40">
+            <span>Ваш заказ успешно оплачен </span>
+
+        </p>
+    </div>
+    <p>
+        <span>@Html.ActionLink("Следить за статусом заказа", "BuyDetails", "Order", new { id = Model.ToString() }, new { }) |</span>
+
+    </p>
+</div>

@@ -88,6 +88,10 @@
     <Compile Include="Migrations\201807191115064_WithdrawDate.Designer.cs">
       <DependentUpon>201807191115064_WithdrawDate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201807241853246_cascadeOffer.cs" />
+    <Compile Include="Migrations\201807241853246_cascadeOffer.Designer.cs">
+      <DependentUpon>201807241853246_cascadeOffer.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\AccountInfoRepository.cs" />
@@ -128,6 +132,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201807191115064_WithdrawDate.resx">
       <DependentUpon>201807191115064_WithdrawDate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807241853246_cascadeOffer.resx">
+      <DependentUpon>201807241853246_cascadeOffer.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
