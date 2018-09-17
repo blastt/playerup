@@ -20,10 +20,24 @@ namespace Market.Web.Controllers
         // GET: Home
         public ActionResult Index()
         {
-            var offers = _offerService.GetOffersAsNoTracking(m => true, i => i.Game, i => i.FilterItems, i => i.FilterItems.Select(fi => fi.Filter), i => i.UserProfile).ToList();
+            var offers = _offerService.GetOffersAsNoTracking(m => true, i => i.Game,i => i.Filters, i => i.FilterItems, i => i.FilterItems.Select(fi => fi.Filter), i => i.UserProfile).ToList();
+
             
 
-            var model = Mapper.Map<IEnumerable<Offer>, IEnumerable<OfferViewModel>>(offers);
+            var model = Mapper.Map<IEnumerable<Offer>, IEnumerable<OfferViewModel>>(offers).ToList();
+            var filterDict = new Dictionary<Model.Models.Filter, FilterItem>();
+
+            foreach (var offer in model)
+            {
+                if (offer.Filters.Count != offer.FilterItems.Count) continue;
+                for (var i = 0; i < offer.Filters.Count; i++)
+                {
+
+                    filterDict.Add(offer.Filters[i], offer.FilterItems[i]);
+                }
+                offer.FilterFilterItem = filterDict;
+                filterDict = new Dictionary<Model.Models.Filter, FilterItem>();
+            }
 
             return View(model);
         }

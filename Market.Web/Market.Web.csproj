@@ -162,6 +162,7 @@
     <Reference Include="System.Console, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Console.4.3.0\lib\net46\System.Console.dll</HintPath>
     </Reference>
+    <Reference Include="System.Data" />
     <Reference Include="System.Diagnostics.DiagnosticSource, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Diagnostics.DiagnosticSource.4.4.0\lib\net46\System.Diagnostics.DiagnosticSource.dll</HintPath>
     </Reference>
@@ -370,6 +371,10 @@
     <Compile Include="ViewModels\Withdraw\WithdrawViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\PlayerupDb.mdf" />
+    <Content Include="App_Data\PlayerupDb_log.ldf">
+      <DependentUpon>PlayerupDb.mdf</DependentUpon>
+    </Content>
     <Content Include="Content\Accordion.css" />
     <Content Include="Content\bootstrap-grid.css" />
     <Content Include="Content\bootstrap-grid.min.css" />
@@ -568,6 +573,7 @@
     <Content Include="Content\Images\vk.png" />
     <Content Include="Content\Images\webmoney.png" />
     <Content Include="Content\Images\yandex.png" />
+    <Content Include="Content\Images\Без имени-1.jpg" />
     <Content Include="Content\jquery-ui.css" />
     <Content Include="Content\jquery-ui.min.css" />
     <Content Include="Content\jquery-ui.structure.css" />
@@ -740,7 +746,7 @@
     <Content Include="Views\Offer\_CreateOfferFilterError.cshtml" />
     <Content Include="Views\Error\NotFound.cshtml" />
     <Content Include="Views\Offer\Edit.cshtml" />
-    <Content Include="Views\Offer\_OfferItem.cshtml" />
+    <Content Include="Views\Shared\_OfferItem.cshtml" />
     <Content Include="Views\Offer\_OfferInfoItem.cshtml" />
     <Content Include="Views\Feedback\FeedbacksAsSeller.cshtml" />
     <Content Include="Views\Offer\_AccountOfferItem.cshtml" />
@@ -794,9 +800,9 @@
     <Content Include="Views\Checkout\OrderPaidSuccess.cshtml" />
     <Content Include="Views\Checkout\CashInSuccess.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Shared\_MainPageLayout.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\" />
     <Folder Include="Content\Fonts\" />
     <Folder Include="Views\FilterItem\" />
     <Folder Include="Views\Filter\" />

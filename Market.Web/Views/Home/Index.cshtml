@@ -1,45 +1,55 @@
 ﻿@model IEnumerable<Market.Web.ViewModels.OfferViewModel>
 @{
     ViewBag.Title = "Index";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_mainPageLayout.cshtml";
 }
 
 <div>
-    <div class="main-top-container">
+    <div class="main-top-container mb-5">
 
-       
-        <div class="main-title">
-            <div class="title-header">
-                Купить или продать аккаунт
-            </div>
-            <div class="title-body">
-                PlayerUp - торговая площадка для безопасной продажи и
-                покупки игровых аккаунтов. Сделки проходят под контролем,
-                с инструкциями и гарантиями системы. Удобно и безопасно.
-            </div>
-            <div class="mt-3">
-                @Html.ActionLink("Купить аккаунт", "Buy", "Offer", null, new { @class="btn btn-buy-title mr-3" })
-                @Html.ActionLink("Продать аккаунт", "Create", "Offer", null, new { @class = "btn btn-sell-title" })
-            </div>
+        <div class="container">
+            <div class="main-title">
+                <div class="title-header">
+                    Купить или продать аккаунт
+                </div>
+                <div class="title-body">
+                    PlayerUp - торговая площадка для безопасной продажи и
+                    покупки игровых аккаунтов. Сделки проходят под контролем,
+                    с инструкциями и гарантиями системы. Удобно и безопасно.
+                </div>
+                <div class="mt-3">
+                    @Html.ActionLink("Купить аккаунт", "Buy", "Offer", null, new { @class = "btn btn-buy-title mr-3" })
+                    @Html.ActionLink("Продать аккаунт", "Create", "Offer", null, new { @class = "btn btn-sell-title" })
+                </div>
 
 
+            </div>
         </div>
+        
 
         
     </div>
-    <div class="main-offer-container">
+    <div class="container main-offer-container">
         <div class="row">
+            <div class="col-lg-10">
+                <h1>Аккаунты на продажу</h1>
+                <table class="table table-hover">
 
-            @foreach (var offer in Model)
-            {
-                <div class="col-lg-3">
-                    <div class="card  mb-4">
-                        <div class="card-body">
-                            <div class="main-card-title" style="text-overflow: ellipsis">
+                    @foreach (var offer in Model)
+                    {
+                        <tr class="table-light">
+
+                            <td style="text-overflow: ellipsis">
+                                <img src="@offer.Game.ImagePath" alt="Alternate Text" />
+                            </td>
+                            <td style="text-overflow: ellipsis">
                                 @Html.ActionLink(offer.Header, "Details", "Offer", new { id = offer.Id }, null)
-                            </div>
+                            </td>
 
-                                <div class="row mt-2 mb-2">
+                            <td>
+                                <div class="row">
+
+
 
                                     @foreach (var filter in offer.FilterItems)
                                     {
@@ -56,31 +66,40 @@
 
                                         </div>
                                     }
+
                                 </div>
+                            </td>
 
-                            <span class="text-700 font-size-18">@Html.DisplayFor(m => offer.Price)</span>
-                        </div>
-                        
-                    </div>
-                </div>
-            }
+                            <td class="text-right">
+                                <span class="text-700 font-size-18">@Html.DisplayFor(m => offer.Price)</span>
+                            </td>
 
+                        </tr>
+                    }
+
+                </table>
+            </div>
         </div>
+        
+        
     </div>
 </div>
 
 
 @section scripts
 {
-    <script src="~/Scripts/jquery-rollingslider.js"></script>
+
     <script>
-        $('#demo').RollingSlider({
-            showArea: "#example",
-            prev: "#jprev",
-            next: "#jnext",
-            moveSpeed: 300,
-            autoPlay: false
-        });
+        
+        alert($(window).scrollTop() + 4);
+        $(window).scroll(
+            function () {
+                
+                if ($(window).scrollTop() > 0) {
+                    alert($(window).scrollTop);
+                }
+            }
+        )
     </script>
 
 

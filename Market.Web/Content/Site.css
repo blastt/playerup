@@ -36,8 +36,6 @@ ul{list-style-type:none;}
 .avatar-48{width:48px;height:48px}
 .avatar-32{width:32px;height:32px}
 .avatar-big{width:120px;height:120px;float:left;margin-right:10px}
-.navbar{position:absolute}
-.navbar-dark .navbar-nav .nav-link{color:#b9b9b9;}
 .btn-sell{background-color:#62b2e2;font-weight:700;color:#fff;margin-right:15px;box-shadow:0 0 15px 0 rgba(0, 0, 0, 0.21);}
 .img-messages{width:32px;margin-right:15px}
 .filter{font-size:14px;padding:25px 25px}
@@ -139,10 +137,30 @@ div#users-contain table td, div#users-contain table th{border:1px solid #eee;pad
 .btn-order-confirm:hover{border-radius:50px;border:1px solid #8ec3e2;background-color:#62b2e2;color:white;padding:6px 20px;font-weight:300}
 .btn-login-form{width:100%;border-radius:4px;background-color:#62b2e2;color:white;padding:6px 20px;font-weight:300;}
 .btn-login-form:hover{width:100%;border-radius:4px;background-color:rgba(98, 178, 226, 0.80);color:white;padding:6px 20px;font-weight:300;}
-.btn-signin{border-radius:50px;background-color:#62b2e2;color:white;padding:6px 20px;font-weight:300;}
-.btn-signin:hover{border-radius:50px;background-color:#72caff;color:white;padding:6px 20px;font-weight:300}
-.btn-signup{border-radius:10px;border:2px solid #62b2e2;color:#62b2e2;padding:6px 20px;font-weight:400;}
-.btn-signup:hover{border-radius:10px;border:2px solid #62b2e2;background-color:#62b2e2;color:#333;padding:6px 20px;font-weight:400}
+.btn-signin{color:white; font-weight:700;padding:6px 20px}
+    .btn-signin:hover {
+        border-radius: 10px;
+        background-color: rgba(98, 178, 226, 0.2);
+        
+        color: white;
+        padding: 6px 20px;
+        font-weight: 700
+    }
+.btn-signup {
+    border-radius: 10px;
+
+    color: #fff;
+    background-color: #62b2e2;
+    padding: 6px 20px;
+    font-weight: 400;
+}
+    .btn-signup:hover {
+        border-radius: 10px;
+        background-color:#7cbae0;
+        color: #fff;
+        padding: 6px 20px;
+        font-weight: 400
+    }
 .btn-close{border-radius:50px;background-color:#ff5656;color:white;padding:6px 20px;font-weight:300;box-shadow:0 4px 15px 0px rgba(255, 86, 86, 0.7);}
 .btn-close:hover{border-radius:50px;background-color:rgba(255, 86, 86, 0.75);color:white;padding:6px 20px;font-weight:300;}
 .btn-search{width:100%;border-radius:50px;background-color:#62b2e2;color:white;font-weight:300;box-shadow:0 4px 15px 0px rgba(98, 178, 226, 0.70);}
@@ -158,24 +176,40 @@ div#users-contain table td, div#users-contain table th{border:1px solid #eee;pad
 .btn-buy:hover{border-radius:50px;background-color:rgba(98, 178, 226, 0.75);color:white;padding:6px 20px;font-weight:300}
 .btn-buy-big{border-radius:50px;background-color:#62b2e2;color:white;padding:10px 50px;font-weight:400;box-shadow:0 4px 15px 0px rgba(98, 178, 226, 0.70);}
 .btn-buy-title {
-    border-radius: 10px;
+    border-radius: 50px;
     font-size: 20px;
     background-color: #62b2e2;
     color: white;
     padding: 10px 25px;
-    font-weight: 400;
-    box-shadow: 0 4px 15px 0px rgba(98, 178, 226, 0.70);
+    font-weight: 700;
 }
 
+    .btn-buy-title:hover {
+        border-radius: 50px;
+        font-size: 20px;
+        background-color: #86c0e2;
+        color: white;
+        padding: 10px 25px;
+        font-weight: 700;
+    }
+
 .btn-sell-title {
-    border-radius: 10px;
+    border-radius: 50px;
     font-size: 20px;
-    background-color: #62b2e2;
+    background-color: #CC6600;
     color: white;
     padding: 10px 25px;
-    font-weight: 400;
-    box-shadow: 0 4px 15px 0px rgba(98, 178, 226, 0.70);
+    font-weight: 700;
 }
+
+    .btn-sell-title:hover {
+        border-radius: 50px;
+        font-size: 20px;
+        background-color: #FF9933;
+        color: white;
+        padding: 10px 25px;
+        font-weight: 700;
+    }
 .loader{position:fixed;top:0;right:0;bottom:0;left:0;opacity:0;z-index:10;display:none;overflow:hidden;outline:0;background-color:rgba(0, 0, 0, 0.50);}
 
 .hidden{opacity:1;}
@@ -542,12 +576,16 @@ ul.ul-nav li a:hover{color:black}
 }
 
 .main-top-container {
+
+    background-image: url('Images/Без имени-1.jpg');
+    background-size:cover;
+    color:white;
     width: 100%;
     margin-right: 0px;
     margin-left: 0px;
     margin-top: -40px;
     padding-top: 40px;
-    padding-bottom: 40px;
+    padding-bottom: 60px;
     max-width: 100%;
 
 }
@@ -555,11 +593,17 @@ ul.ul-nav li a:hover{color:black}
 .title-header{
     padding-top: 10px;
     padding-bottom: 25px;
-    font-size: 32px;
+    font-size: 40px;
     font-weight: 700
 }
 
 .title-body {
-    font-size: 18px;
-    font-weight: 400
+    margin-bottom: 50px;
+    font-size: 22px;
+    font-weight: 700;
+    color: #bfbfbf;
+}
+
+.card-body-small{
+    padding: 10px 20px
 }
