@@ -1,4 +1,0 @@
-﻿namespace Market.Web.ModelBinders
-{
-    
-}
