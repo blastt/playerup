@@ -35,7 +35,7 @@ namespace Market.Web
                 var to = new EmailAddress(message.Destination);
                 var subject = message.Subject;
 
-                var from = new EmailAddress("support@playerup.ru", "PlayerUp"); 
+                var from = new EmailAddress("t.anatolii96@gmail.com", "PlayerUp"); 
                 var plainTextContent = message.Body;
                 var htmlContent = message.Body;
                 var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
