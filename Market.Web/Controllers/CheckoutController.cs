@@ -57,7 +57,7 @@ namespace Trader.WEB.Controllers
         public void MoneyIn()
         {
 
-            var secretKey = "LMcg7uCyA8I3injU";
+            var secretKey = "fVdVZaZjAkkd8h3A";
             var pars = new SortedDictionary<string, string>();
             var keys = Request.Form.AllKeys;
             foreach (var key in keys.Where(key => key.IndexOf("ik_") >= 0 && key != "ik_sign"))

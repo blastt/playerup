@@ -34,7 +34,7 @@
                     {
                         clsBold = "warning-row";
                     }
-                    <tr data-href="@Url.Action("Details","Dialog", new { id = dialog.Id })" id="message-row-@dialog.Id" class="@clsBold">
+                    <tr data-href="@Url.Action("Details","Dialog", new { dialogId = dialog.Id })" id="message-row-@dialog.Id" class="@clsBold">
 
                         <td class="clickable sender-table  position-relative" id="dialog-name" data-id="@dialog.Id">
                             @if (dialog.CountOfNewMessages != 0)

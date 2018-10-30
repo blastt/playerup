@@ -80,7 +80,7 @@ namespace Market.Web.Controllers
         }
 
 
-
+        [AllowAnonymous]
         public PartialViewResult FeedbackList(string userId, string filter, int page = 1)
         {
             FeedbackListViewModel model = new FeedbackListViewModel();

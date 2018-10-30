@@ -275,7 +275,7 @@ namespace Trader.WEB.Controllers
                         {
                             var resized = s.Resize(new
                             {
-                                method = "fit",
+                                method = "thumb",
                                 width = 32,
                                 height = 32
                             });
@@ -285,7 +285,7 @@ namespace Trader.WEB.Controllers
                         {
                             var resized = s.Resize(new
                             {
-                                method = "fit",
+                                method = "thumb",
                                 width = 48,
                                 height = 48
                             });
@@ -295,7 +295,7 @@ namespace Trader.WEB.Controllers
                         {
                             var resized = s.Resize(new
                             {
-                                method = "fit",
+                                method = "thumb",
                                 width = 96,
                                 height = 96
                             });

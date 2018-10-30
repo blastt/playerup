@@ -12,19 +12,16 @@
             <p class="lead">Здесь отображается информация по входящим и исходящим сообщениям</p>
         </div>
         @{Html.RenderAction("AccountMenu", "Account"); }
-
-
         <div class="account-container">
             @{Html.RenderPartial("_AccountMessagesMenu", Model); }
+
             <div class="form-inline form-offer-filter">
                 <h3 class="mb-0 text-gray text-300">
-                    Непрочитанные сообщения:
+                    Непрочитанные:
                 </h3>
             </div>
-
             <table class="table table-white" id="dialogs-table">
                 <tr>
-
                     <th>@Html.ActionLink("Отправитель", "Inbox", "Message", new { sortOrder = ViewData["NameSortParm"], currentFilter = ViewData["SearchString"] }, null)</th>
                     <th>Сообщение</th>
                     <th class="date-table">@Html.ActionLink("Дата", "Inbox", "Message", new { sortOrder = ViewData["DateSortParm"], currentFilter = ViewData["SearchString"] }, null)</th>
@@ -37,10 +34,9 @@
                     {
                         clsBold = "warning-row";
                     }
+                    <tr data-href="@Url.Action("Details","Dialog", new { dialogId = dialog.Id })" id="message-row-@dialog.Id" class="@clsBold">
 
-                    <tr id="message-row-@dialog.Id" class="@clsBold">
-
-                        <td class="clickable sender-table position-relative" id="dialog-name" data-id="@dialog.Id">
+                        <td class="clickable sender-table  position-relative" id="dialog-name" data-id="@dialog.Id">
                             @if (dialog.CountOfNewMessages != 0)
                             {
                                 <div class="messagess-count message-count-block-pos" id="dialog-block-counter">
@@ -52,11 +48,9 @@
 
                             @dialog.otherUserName
                         </td>
-
                         <td class="clickable" id="dialog-text" data-id="@dialog.Id" style=" max-width: 100px;overflow: hidden;text-overflow: ellipsis; white-space: nowrap; "><span id="message-text" class="wqe" style="">@dialog.Messages.LastOrDefault().MessageBody</span></td>
 
                         <td class="clickable date-table" id="dialog-date" data-id="@dialog.Id" title="@dialog.Messages.LastOrDefault().CreatedDate.ToShortTimeString()">@dialog.Messages.LastOrDefault().CreatedDate.ToShortDateString()</td>
-
                     </tr>
 
                 }
@@ -84,5 +78,10 @@
 
 @section scripts
 {
-    @Scripts.Render("~/bundles/jquery-dialogs")
+    <script>
+        $('tr[data-href]').on("click", function () {
+            document.location = $(this).data('href');
+        });
+    </script>
+
 }

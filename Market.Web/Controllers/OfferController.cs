@@ -94,6 +94,28 @@ namespace Market.Web.Controllers
             return View(model);
         }
 
+        [HttpGet]
+        public ActionResult Details(int? id = 1)
+        {
+            if (id != null)
+            {
+                Offer offer = _offerService.GetOffers(o => o.Id == id.Value, i => i.UserProfile,
+                    i => i.Game, i => i.FilterItems, i => i.FilterItems.Select(fi => fi.Filter),
+                    i => i.UserProfile.FeedbacksMy).SingleOrDefault();
+                if (offer != null)
+                {
+                    offer.Views++;
+                    _offerService.SaveOffer();
+                    var model = Mapper.Map<Offer, DetailsOfferViewModel>(offer);
+
+                    return View(model);
+                }
+
+            }
+            return HttpNotFound();
+
+        }
+
         [Authorize]
         public ViewResult Active()
         {
@@ -459,27 +481,7 @@ namespace Market.Web.Controllers
             return View("OfferCreated", offerModel);
         }
 
-        [AllowAnonymous]
-        public ActionResult Details(int? id = 1)
-        {
-            if (id != null)
-            {
-                Offer offer = _offerService.GetOffers(o => o.Id == id.Value, i => i.UserProfile,
-                    i => i.Game, i => i.FilterItems, i => i.FilterItems.Select(fi => fi.Filter),
-                    i => i.UserProfile.FeedbacksMy).SingleOrDefault();
-                if (offer != null)
-                {
-                    offer.Views++;
-                    _offerService.SaveOffer();
-                    var model = Mapper.Map<Offer, DetailsOfferViewModel>(offer);
-
-                    return View(model);
-                }
-
-            }
-            return HttpNotFound();
-
-        }
+        
 
 
         //[Authorize]

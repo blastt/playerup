@@ -706,7 +706,7 @@
     <Content Include="Views\Account\ChangePasswordConfirmation.cshtml" />
     <Content Include="Views\Feedback\_AccountFeedbacksMenu.cshtml" />
     <Content Include="Views\Shared\_AccountMenu.cshtml" />
-    <Content Include="Views\Message\_AccountMessagesMenu.cshtml" />
+    <Content Include="Views\Shared\_AccountMessagesMenu.cshtml" />
     <Content Include="Views\Offer\_AccountOffersMenu.cshtml" />
     <Content Include="Views\Order\_AccountOrdersMenu.cshtml" />
     <Content Include="Views\Offer\All.cshtml" />
